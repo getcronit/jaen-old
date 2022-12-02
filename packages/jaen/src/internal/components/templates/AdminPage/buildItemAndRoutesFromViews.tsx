@@ -1,8 +1,8 @@
-import { Circle, Icon } from "@chakra-ui/react"
+import {Circle} from '@chakra-ui/react'
 
 export type SidebarItem = {
   path: string
-  icon: JSX.Element
+  Icon: React.ComponentType | null
   label: string
 }
 
@@ -45,7 +45,7 @@ export const buildFromViews = (
   for (const view of views) {
     const item: SidebarItem = {
       path: view.path,
-      icon: view.Icon ? <Icon as={view.Icon} boxSize='4' />: <Circle bg="teal" size='2' />,
+      Icon: view.Icon || Circle,
       label: view.label
     }
 

@@ -28,12 +28,10 @@ export const upload = async (payload: object | Blob | File) => {
 /**
  * Upload function for NodeJS
  */
-/**
- * Upload function for NodeJS
- */
-export const nodejsSafeJsonUpload = async (
-  options: {payload: string, fileName?: string}
-): Promise<string> => {
+export const nodejsSafeJsonUpload = async (options: {
+  payload: string
+  fileName?: string
+}): Promise<string> => {
   const FormData = (await import('form-data')).default
   const form = new FormData({
     maxDataSize: 20971520

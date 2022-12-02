@@ -1,3 +1,7 @@
+import theme from '../src/internal/styles/theme'
+import {ModalProvider} from '../src/internal/context/Modals/ModalContext'
+import {ChakraProvider} from '@chakra-ui/react'
+
 // Gatsby's Link overrides:
 // Gatsby Link calls the `enqueue` & `hovering` methods on the global variable ___loader.
 // This global object isn't set in storybook context, requiring you to override it to empty functions (no-op),
@@ -15,11 +19,24 @@ window.___navigate = pathname => {
 }
 
 export const parameters = {
-  actions: { argTypesRegex: "^on[A-Z].*" },
+  chakra: {
+    theme
+  },
+  actions: {argTypesRegex: '^on[A-Z].*'},
   controls: {
     matchers: {
       color: /(background|color)$/i,
-      date: /Date$/,
-    },
-  },
+      date: /Date$/
+    }
+  }
 }
+
+export const decorators = [
+  Story => (
+    <ChakraProvider theme={theme}>
+      <ModalProvider>
+        <Story />
+      </ModalProvider>
+    </ChakraProvider>
+  )
+]

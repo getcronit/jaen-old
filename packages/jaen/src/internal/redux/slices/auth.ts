@@ -1,30 +1,46 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 
-import {IAuthLoginPayload, snekApi} from '@snek-at/snek-api-client'
-import {IJaenState} from '../types.js'
+import {IAuthState} from '../types.js'
 
-export const authInitialState: IJaenState['auth'] = {
+export const authInitialState: IAuthState = {
+  isLoading: false,
   isAuthenticated: false,
   user: null
 }
 
-export const login = createAsyncThunk<void, IAuthLoginPayload>(
+export const login = createAsyncThunk(
   'auth/login',
-  async (args, thunkAPI) => {
-    await snekApi.login(args)
+  async (
+    args: {
+      params: {
+        email: string
+        password: string
+      }
+      details: {
+        logMeOutAfterwards?: boolean
+      }
+    },
+    _thunkAPI
+  ) => {
+    // Timeout for testing purposes
+    await new Promise(resolve => setTimeout(resolve, 1000))
 
-    await thunkAPI.dispatch(fetchMe())
+    return {
+      isAuthenticated: true,
+      user: {
+        email: args.params.email
+      }
+    }
   }
 )
 
 export const logout = createAsyncThunk('auth/logout', async () => {
-  await snekApi.logout()
-})
+  // Timeout for testing purposes
+  await new Promise(resolve => setTimeout(resolve, 1000))
 
-export const fetchMe = createAsyncThunk('auth/fetchMe', async () => {
-  const response = await snekApi.getMe()
   return {
-    ...response
+    isAuthenticated: false,
+    user: null
   }
 })
 
@@ -34,12 +50,7 @@ const authSlice = createSlice({
   reducers: {
     demoLogin: state => {
       state.isAuthenticated = true
-      state.user = {
-        isDemo: true,
-        email: 'snekman@snek.at',
-        full_name: 'Snekman',
-        image_url: 'http://www.gravatar.com/avatar'
-      }
+      state.user = null
     },
     demoLogout: state => {
       state.isAuthenticated = false
@@ -47,15 +58,29 @@ const authSlice = createSlice({
     }
   },
   extraReducers: builder => {
+    builder.addCase(login.pending, state => {
+      state.isLoading = true
+    })
     builder.addCase(login.fulfilled, state => {
       state.isAuthenticated = true
+      state.isLoading = false
     })
-    builder.addCase(fetchMe.fulfilled, (state, action) => {
-      state.user = action.payload
+    builder.addCase(login.rejected, (state, action) => {
+      state.isLoading = false
+      state.error = action.error
+    })
+
+    builder.addCase(logout.pending, state => {
+      state.isLoading = true
     })
     builder.addCase(logout.fulfilled, state => {
       state.isAuthenticated = false
+      state.isLoading = false
       state.user = null
+    })
+    builder.addCase(logout.rejected, (state, action) => {
+      state.isLoading = false
+      state.error = action.error
     })
   }
 })

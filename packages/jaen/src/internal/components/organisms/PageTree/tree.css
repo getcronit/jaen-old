@@ -1,0 +1,25 @@
+.rc-tree-node-selected {
+  background-color: #EDF2F7;
+  box-shadow: 0 0 0 1px #edf2f7;
+}
+
+.rc-tree .rc-tree-treenode {
+  display: flex;
+  align-items: center;
+}
+
+.rc-tree .rc-tree-treenode .rc-tree-node-content-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border-radius: var(--chakra-radii-md);
+}
+
+.drop-target {
+  background-color: #E2E8F0 !important;
+  box-shadow: 0 0 0 1px #edf2f7;
+}
+
+.drag-over {
+  border-color: green;
+}

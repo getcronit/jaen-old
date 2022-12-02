@@ -1,4 +1,4 @@
-import { Box, Stack, Text } from '@chakra-ui/react'
+import {Box, Stack, Text} from '@chakra-ui/react'
 import * as React from 'react'
 
 interface NavGroupProps {
@@ -7,7 +7,7 @@ interface NavGroupProps {
 }
 
 export const NavGroup = (props: NavGroupProps) => {
-  const { label, children } = props
+  const {label, children} = props
   return (
     <Box>
       <Text
@@ -17,11 +17,10 @@ export const NavGroup = (props: NavGroupProps) => {
         textTransform="uppercase"
         letterSpacing="widest"
         color="gray.500"
-        mb="3"
-      >
+        mb="3">
         {label}
       </Text>
-      <Stack spacing="1">{children}</Stack>
+      <Stack spacing="2">{children}</Stack>
     </Box>
   )
 }

@@ -6,7 +6,21 @@ export default {
   component: Component,
   parameters: {
     layout: 'fullscreen'
-  }
+  },
+  decorators: [
+    story => (
+      <>
+        <iframe
+          src="https://chakra-ui.com/"
+          style={{
+            width: '100%',
+            height: '100vh'
+          }}
+        />
+        {story()}
+      </>
+    )
+  ]
 } as ComponentMeta<typeof Component>
 
 type ComponentProps = React.ComponentProps<typeof Component>

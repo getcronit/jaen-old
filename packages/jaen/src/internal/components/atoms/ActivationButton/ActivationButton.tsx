@@ -24,6 +24,10 @@ export const ActivationButton = (props: ActivationButtonProps) => {
   if (isClicked) {
     return (
       <HStack
+        mt={{
+          md: 16,
+          base: 24
+        }}
         spacing={6}
         h={{
           md: 16,
@@ -34,8 +38,9 @@ export const ActivationButton = (props: ActivationButtonProps) => {
         py={2}
         position={'fixed'}
         bottom={0}
-        bg="gray.900"
-        color="white"
+        boxShadow={'dark-lg'}
+        bg="white"
+        color="black"
         alignItems="center">
         <Flex
           h="full"
@@ -64,17 +69,9 @@ export const ActivationButton = (props: ActivationButtonProps) => {
         {divider}
 
         <Box>
-          <Text fontSize="sm">
+          <Text fontSize="sm" as="span">
             This site is powered by Snek Jaen. Visit the{' '}
-            <Link
-              onClick={props.onClick}
-              textDecoration={'underline'}
-              _hover={{
-                color: 'gray.300'
-              }}>
-              admin panel
-            </Link>{' '}
-            to edit this site.
+            <Link onClick={props.onClick}>admin panel</Link> to edit this site.
           </Text>
         </Box>
         <Spacer />
@@ -82,14 +79,7 @@ export const ActivationButton = (props: ActivationButtonProps) => {
         <HStack h="full">
           {divider}
 
-          <CloseButton
-            size={'lg'}
-            color="white"
-            _hover={{
-              bg: 'gray.700'
-            }}
-            onClick={() => setIsClicked(false)}
-          />
+          <CloseButton size={'lg'} onClick={() => setIsClicked(false)} />
         </HStack>
       </HStack>
     )
