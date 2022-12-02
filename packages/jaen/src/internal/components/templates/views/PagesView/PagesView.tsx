@@ -1,5 +1,5 @@
 import {AddIcon} from '@chakra-ui/icons'
-import {Button, Stack, StackDivider, Text} from '@chakra-ui/react'
+import {Button, Stack, StackDivider} from '@chakra-ui/react'
 import * as React from 'react'
 import {FaEye} from 'react-icons/fa'
 import {useModals} from '../../../../context/Modals/ModalContext.js'
@@ -210,8 +210,6 @@ export const PagesView: React.FC<PagesViewProps> = () => {
           onDeletePage={handleItemDelete}
           onMovePage={handlePageMove}
         />
-
-        <Text>Path: {selectedJaenPage?.path}</Text>
 
         {selectedJaenPage && (
           <PageProvider
