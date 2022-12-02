@@ -1,3 +1,4 @@
+import {Box, Flex} from '@chakra-ui/react'
 import {ComponentMeta, Story} from '@storybook/react'
 import React from 'react'
 import {FaEye} from 'react-icons/fa'
@@ -7,7 +8,24 @@ export default {
   component: AdminToolbar,
   parameters: {
     layout: 'fullscreen'
-  }
+  },
+  decorators: [
+    story => (
+      <Flex flexDir={'column'} h="100vh">
+        {story()}
+
+        <Box bg="red" flex="1">
+          <iframe
+            src="https://www.yubo.live"
+            style={{
+              width: '100%',
+              height: '100%'
+            }}
+          />
+        </Box>
+      </Flex>
+    )
+  ]
 } as ComponentMeta<typeof AdminToolbar>
 
 type ComponentProps = React.ComponentProps<typeof AdminToolbar>
@@ -17,39 +35,4 @@ const Template: Story<ComponentProps> = args => <AdminToolbar {...args} />
 
 export const Basic: Story<ComponentProps> = Template.bind({})
 
-Basic.args = {
-  toolbarItems: [
-    {
-      label: 'Back to my site',
-      leftIcon: <FaEye />,
-      onClick: () => {
-        console.log('clicked')
-      }
-    }
-  ],
-  logoText: 'Jaen Admin',
-  userMenu: {
-    user: {
-      name: 'Nico Schett',
-      email: 'schett@snek.at',
-      imageSrc:
-        'https://avatars.githubusercontent.com/u/125676?s=460&u=3d4d1c8b0f0f8b0c8c8c8c8c8c8c8c8c8c8c8c8c&v=4'
-    },
-    showNotification: true,
-    menuItems: [
-      {
-        label: 'Landing Page',
-        onClick: () => {
-          console.log('clicked')
-        },
-        divider: true
-      },
-      {
-        label: 'Logout',
-        onClick: () => {
-          console.log('clicked')
-        }
-      }
-    ]
-  }
-}
+Basic.args = {}

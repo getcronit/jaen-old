@@ -1,57 +1,196 @@
-import {Button, ButtonProps, Flex, Link, Spacer, Text} from '@chakra-ui/react'
-import {Link as GatsbyLink} from 'gatsby'
+import {ChevronLeftIcon, ChevronRightIcon} from '@chakra-ui/icons'
+import {
+  Avatar,
+  Button,
+  HStack,
+  Icon,
+  IconButton,
+  Link,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+  StackProps,
+  Text
+} from '@chakra-ui/react'
+import {navigate} from 'gatsby'
+import {AiOutlineUser} from 'react-icons/ai'
+import {FaFileImport, FaGithub, FaSignOutAlt} from 'react-icons/fa'
+import {IoHelpBuoySharp, IoNewspaperSharp} from 'react-icons/io5'
+import {useNewsSlide} from '../../../context/NewsSlideContext.js'
+import {useAuth} from '../../../hooks/auth/useAuth.js'
 import {JaenLogo} from '../../atoms/index.js'
-import {UserMenuButton, UserMenuButtonProps} from '../../molecules/index.js'
+import {ActionBar} from '../../molecules/index.js'
+import {PageNavigator} from '../PageNavigator/PageNavigator.js'
 
-export interface AdminToolbarProps {
-  logoText: string
-  toolbarItems: Array<{
-    leftIcon?: ButtonProps['leftIcon']
-    rightIcon?: ButtonProps['rightIcon']
-    label: string
-    to?: string
-    onClick: () => void
-  }>
-  userMenu: UserMenuButtonProps
+export interface AdminToolbarProps extends StackProps {
+  withoutShadow?: boolean
 }
 
-export const AdminToolbar = ({logoText, toolbarItems, userMenu}: AdminToolbarProps) => {
+export const AdminToolbar = ({
+  withoutShadow,
+  ...stackProps
+}: AdminToolbarProps) => {
+  const isOnJaenAdmin =
+    typeof window !== 'undefined' &&
+    window.location.pathname.startsWith('/admin')
+
+  const newsSlide = useNewsSlide()
+
+  const {logout, isLoading} = useAuth()
+
   return (
-    <Flex
-      zIndex={'banner'}
+    <HStack
+      {...stackProps}
+      spacing={{
+        base: 0,
+        md: 2,
+        lg: 4,
+        xl: 8
+      }}
+      alignItems={'center'}
+      justifyContent={'space-between'}
+      bg="gray.800"
+      position={'relative'}
       w="full"
-      bg="gray.900"
+      boxShadow={withoutShadow ? undefined : 'xl'}
       color="white"
-      h={'54px'}
+      h={14}
       py={{base: 2}}
       px={{base: 4}}
       align={'center'}>
-      <Link as={GatsbyLink} to="/admin">
-        <Flex w="52" justifyContent="center" alignItems="center">
-          <JaenLogo w="32px" h="32px" me="10px" color="white" />
-          <Text fontSize="sm" mt="3px" fontWeight="bold">
-            {logoText}
+      <Button
+        minW={{
+          base: 'auto',
+          lg: '48'
+        }}
+        display="flex"
+        alignItems="center"
+        rounded="full"
+        // bg="gray.900"
+        // color="white"
+        variant="darkGhost"
+        px="3"
+        py="1"
+        fontSize="sm"
+        userSelect="none"
+        cursor="pointer"
+        outline="0"
+        transition="all 0.2s"
+        // _hover={{bg: 'pink.50'}}
+        // _active={{bg: 'pink.100'}}
+        onClick={() => {
+          navigate(isOnJaenAdmin ? '/' : '/admin')
+        }}>
+        <HStack flex="1" spacing="2">
+          {isOnJaenAdmin ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+
+          <JaenLogo boxSize={8} color="white" />
+
+          <Text
+            display={{
+              base: 'none',
+              lg: 'block'
+            }}
+            fontWeight="bold"
+            fontFamily={'monospace'}>
+            {isOnJaenAdmin ? 'Jaen Site' : 'Jaen Admin'}{' '}
           </Text>
-        </Flex>
-      </Link>
-      <Flex gap={3} bg="white" borderRadius="lg" p="1" color="black">
-        {toolbarItems.map((item, key) => (
-          <Button
-            key={key}
-            onClick={item.onClick}
-            variant={'outline'}
-            size="sm"
-            fontWeight="normal"
-            leftIcon={item.leftIcon}
-            rightIcon={item.rightIcon}>
-            {item.label}
-          </Button>
-        ))}
-      </Flex>
-      <Spacer />
-      <Flex gap={5}>
-        <UserMenuButton {...userMenu} />
-      </Flex>
-    </Flex>
+        </HStack>
+      </Button>
+
+      <HStack
+        pos="relative"
+        w="full"
+        spacing={4}
+        justifyContent={{
+          base: 'center',
+          lg: 'space-between'
+        }}>
+        <PageNavigator />
+        <ActionBar />
+      </HStack>
+
+      <HStack>
+        <Menu>
+          <MenuButton
+            as={IconButton}
+            aria-label="Help"
+            icon={<Icon as={IoHelpBuoySharp} boxSize="5" />}
+            variant="darkGhost"
+            fontSize="xl"
+          />
+
+          <MenuList color="black">
+            <HStack p="2" justifyContent={'space-between'} fontWeight="bold">
+              <Text>Help</Text>
+              <Text>v 3.0.0</Text>
+            </HStack>
+
+            <MenuDivider />
+
+            <MenuItem as={Link} disabled={true}>
+              Jaen documentation
+            </MenuItem>
+            <MenuItem as={Link} disabled={true}>
+              Ask snek
+            </MenuItem>
+
+            <MenuItem>
+              <HStack>
+                <FaGithub />
+                <Link
+                  href="https://github.com/snek-at/jaen/issues/new/choose"
+                  isExternal>
+                  Open an issue in GitHub
+                </Link>
+              </HStack>
+            </MenuItem>
+          </MenuList>
+        </Menu>
+
+        <IconButton
+          aria-label="News"
+          icon={<Icon as={IoNewspaperSharp} boxSize="5" />}
+          variant="darkGhost"
+          fontSize="xl"
+          isActive={newsSlide.isOpen}
+          onClick={newsSlide.onToggle}
+        />
+
+        <Menu>
+          <MenuButton
+            as={IconButton}
+            aria-label="Account"
+            icon={<Avatar boxSize="6" size="sm" name="Nico Schett" />}
+            variant="darkGhost"
+            fontSize="xl"
+            isLoading={isLoading}
+          />
+
+          <MenuList color="black">
+            <HStack p="2" justifyContent={'space-between'} fontWeight="bold">
+              <Text>Name</Text>
+            </HStack>
+
+            <MenuDivider />
+
+            <MenuItem as={Link} disabled={true}>
+              Jaen documentation
+            </MenuItem>
+            <MenuItem icon={<AiOutlineUser />}>Edit profile</MenuItem>
+
+            <MenuItem icon={<FaFileImport />}>Import savefile</MenuItem>
+
+            <MenuDivider />
+
+            <MenuItem icon={<FaSignOutAlt />} onClick={logout}>
+              Sign out
+            </MenuItem>
+          </MenuList>
+        </Menu>
+      </HStack>
+    </HStack>
   )
 }

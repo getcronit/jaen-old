@@ -1,5 +1,10 @@
 import {HashRouter} from 'react-router-dom'
-import {buildFromViews, BuiltViews, View} from './buildItemAndRoutesFromViews'
+import {useAdminStaticQuery} from '../../../hooks/useAdminStaticQuery.js'
+import {
+  buildFromViews,
+  BuiltViews,
+  View
+} from './buildItemAndRoutesFromViews.js'
 
 export interface WithAdminRoutingProps {
   routes: BuiltViews['routes']
@@ -18,6 +23,14 @@ export function withAdminRouting<P>(
   }: P & {
     views: View[]
   }) => {
+    const data = useAdminStaticQuery()
+
+    console.log(data)
+
+    if (typeof window === 'undefined') {
+      return null
+    }
+
     // At this point, the props being passed in are the original props the component expects.
 
     const builtViews = buildFromViews(views)
@@ -26,7 +39,7 @@ export function withAdminRouting<P>(
       <HashRouter>
         {
           <WrappedComponent
-            {...props as P}
+            {...(props as P)}
             routes={builtViews.routes}
             items={builtViews.items}
           />
