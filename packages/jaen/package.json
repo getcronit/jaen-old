@@ -20,8 +20,7 @@
     "dev": "yarn build --watch",
     "build:cli": "microbundle -i src/cli/index.ts -o dist/index.cli.js --no-pkg-main --target node --generateTypes false --format modern",
     "dev:cli": "yarn build:cli --watch",
-    "build:gatsby": "microbundle src/gatsby/*.ts --format cjs --target node --generateTypes false",
-    "dev:gatsby": "yarn build:gatsby --watch",
+    "cli": "node ./dist/index.cli.mjs",
     "cli": "node ./dist/index.cli.js",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
@@ -55,7 +54,9 @@
     "react-icons": "^4.6.0",
     "react-redux": "^8.0.4",
     "react-router-dom": "^6.4.2",
-    "redux": "^4.2.0"
+    "redux": "^4.2.0",
+    "uuid": "^9.0.0",
+    "gatsby-plugin-jaen": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",
