@@ -1,6 +1,6 @@
 import type {GatsbyConfig as GatsbyConfigType} from 'gatsby'
 
-import {JaenData} from '../utils/JaenData.js'
+import {JaenData} from '@snek-at/jaen/unstable-node'
 
 const jaenData = new JaenData({jaenDataDir: './jaen-data'})
 
@@ -16,9 +16,7 @@ GatsbyConfig.plugins = [
   {
     resolve: `gatsby-plugin-compile-es6-packages`,
     options: {
-      modules: [
-        `@chakra-ui/gatsby-plugin`,
-      ]
+      modules: [`@chakra-ui/gatsby-plugin`]
     }
   },
   'gatsby-plugin-react-helmet-async',
