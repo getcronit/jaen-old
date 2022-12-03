@@ -14,7 +14,7 @@ export const useDynamicRedirect = () => {
     const pageId = dynamicPaths[withoutTrailingSlash]
 
     if (pageId) {
-      const withDynamicPrefix = `/jaen/r#${withoutTrailingSlash}`
+      const withDynamicPrefix = `/r#${withoutTrailingSlash}`
 
       navigate(withDynamicPrefix)
     }

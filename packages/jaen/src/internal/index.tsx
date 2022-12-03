@@ -11,10 +11,12 @@ import {SiteProvider} from './context/SiteContext.js'
 import {getAuth} from './hooks/auth/useAuth.js'
 import {useAdminStaticQuery} from './hooks/useAdminStaticQuery.js'
 import theme from './styles/theme.js'
+import {useInterceptGatsbyNavigate} from './hooks/useInterceptGatsbyNavigate'
 
 export {AdminPage, LoginPage} from './components/index.js'
-export {useIncomingBuildChecker} from './context/IncomingBuildChecker/index.js'
+export {RoutingPage} from './RoutingPage.js'
 
+export {useIncomingBuildChecker} from './context/IncomingBuildChecker/index.js'
 export * as views from './views/index.js'
 
 export interface WrapperProps {
@@ -26,6 +28,8 @@ export const GatsbyRootWrapper: React.FC<WrapperProps> = ({
   children,
   ssr = false
 }) => {
+  useInterceptGatsbyNavigate()
+
   console.log(`GatsbyRootWrapper `, {ssr})
 
   const {

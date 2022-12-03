@@ -154,7 +154,11 @@ export const PagesView: React.FC<PagesViewProps> = () => {
 
   React.useEffect(() => {
     toolbarActions.register([
-      <Button size="sm" leftIcon={<FaEye />} variant="link">
+      <Button
+        size="sm"
+        leftIcon={<FaEye />}
+        variant="link"
+        onClick={() => manager.onNavigate(selectedJaenPage?.path || '/')}>
         View
       </Button>,
       <Button
@@ -226,6 +230,7 @@ export const PagesView: React.FC<PagesViewProps> = () => {
           onAddPage={handleItemAdd}
           onDeletePage={handleItemDelete}
           onMovePage={handlePageMove}
+          onViewPage={manager.onNavigate}
         />
 
         {selectedJaenPage && (

@@ -43,7 +43,7 @@ export interface AdminPageManagerContext {
   ) => void
   onUpdate: (id: string, values: PageContentValues) => void
   onGet: (id: string) => IJaenPage | null
-  onNavigate: (id: string) => void
+  onNavigate: (path: string) => void
   pageTree: IJaenPage[]
   pagePaths: PageTreeItems
   templates: IJaenTemplate[]

@@ -35,8 +35,6 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
     state => state.page.pages.lastAddedNodeId
   )
 
-  const dynamicPaths = useAppSelector(state => state.page.routing.dynamicPaths)
-
   let [shouldUpdateDpathsFor, setShouldUpdateDpathsFor] =
     React.useState<{
       pageId: string
@@ -172,34 +170,9 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
     []
   )
 
-  const handlePageNavigate = React.useCallback(
-    (id: string) => {
-      // Check if the page is a dynamic or static page.
-      // Navigate to /jaen/r/:path if dynamic, else to /:path
-      let node = pageTree.find(p => p.id === id)
-
-      if (!node) {
-        node = pageTree.find(p => p.id === latestAddedPageId)!
-      }
-
-      let path = generatePageOriginPath(pageTree, node)
-
-      // if (path === '/') {
-      //   path += node.slug
-      // } else {
-      //   path += '/' + node.slug
-      // }
-
-      if (path) {
-        if (dynamicPaths && path in dynamicPaths) {
-          path = `/jaen/r#${path}`
-        }
-
-        navigate(path)
-      }
-    },
-    [pageTree, dynamicPaths]
-  )
+  const handlePageNavigate = React.useCallback((path: string) => {
+    navigate(path)
+  }, [])
 
   const pagePaths = React.useMemo(() => {
     const paths = generateAllPaths(pageTree)

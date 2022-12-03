@@ -274,6 +274,13 @@ export const createPages: GatsbyNode['createPages'] = async ({actions}) => {
     component: require.resolve('../LoginPage.tsx'),
     context: {}
   })
+
+  createPage({
+    path: '/r',
+    matchPath: '/r/*',
+    component: require.resolve('../RoutingPage.tsx'),
+    context: {}
+  })
 }
 
 export const onCreatePage: GatsbyNode['onCreatePage'] = async ({
