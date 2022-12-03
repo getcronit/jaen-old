@@ -23,6 +23,8 @@ export type PageContentValues = {
 
 export interface AdminPageManagerContext {
   getPageIdFromPath: (path: string) => string | null
+  getPathFromPageId: (pageId: string) => string | null
+  latestAddedPageId: string | undefined
   onCreate: (
     parentId: string | null,
     values: PageCreateValues
@@ -42,7 +44,8 @@ export interface AdminPageManagerContext {
   onUpdate: (id: string, values: PageContentValues) => void
   onGet: (id: string) => IJaenPage | null
   onNavigate: (id: string) => void
-  pageTree: PageTreeItems
+  pageTree: IJaenPage[]
+  pagePaths: PageTreeItems
   templates: IJaenTemplate[]
   isTemplatesLoading: boolean
   rootPageId: string

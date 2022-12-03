@@ -1,15 +1,11 @@
-import type {GatsbyConfig as GatsbyConfigType} from 'gatsby'
+import {GatsbyConfig as GatsbyConfigType} from 'gatsby'
 
-import {JaenData} from '@snek-at/jaen/unstable-node'
-
-const jaenData = new JaenData({jaenDataDir: './jaen-data'})
-
-const internalJaenData = jaenData.internal
+import {JaenSource} from '@snek-at/jaen/unstable-node'
 
 const GatsbyConfig: GatsbyConfigType = {
   jsxRuntime: 'automatic',
   jsxImportSource: '@emotion/react',
-  siteMetadata: internalJaenData?.site.siteMetadata
+  siteMetadata: JaenSource.jaenData.internal?.site.siteMetadata
 }
 
 GatsbyConfig.plugins = [
@@ -41,5 +37,34 @@ GatsbyConfig.plugins = [
   `gatsby-transformer-sharp`,
   `gatsby-plugin-image`
 ]
+
+const addSourcePluginIfPathExists = (
+  plugins: GatsbyConfigType['plugins'] = [],
+  options: {
+    name: string
+    path: string | null
+  }
+) => {
+  if (options.path) {
+    plugins.push({
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        name: options.name,
+        path: options.path,
+        ignore: [`**/.gitkeep`]
+      }
+    })
+  }
+}
+
+addSourcePluginIfPathExists(GatsbyConfig.plugins, {
+  name: 'jaen-pages',
+  path: JaenSource.sourcePagesPath
+})
+
+addSourcePluginIfPathExists(GatsbyConfig.plugins, {
+  name: 'jaen-templates',
+  path: JaenSource.sourceTemplatesPath
+})
 
 export default GatsbyConfig

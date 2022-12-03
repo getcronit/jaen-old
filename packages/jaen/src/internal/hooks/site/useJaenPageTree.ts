@@ -89,5 +89,7 @@ export const useJaenPageTree = (): IJaenPage[] => {
     throw new Error('No pages found')
   }
 
+  console.log('useJaenPageTree', filteredData)
+
   return filteredData
 }

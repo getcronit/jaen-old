@@ -24,7 +24,10 @@ export const generatePageOriginPath = (
     )
   }
 
-  return path
+  // with trailing slash
+  const normalizedPath = path.endsWith('/') ? path : `${path}/`
+
+  return normalizedPath
 }
 
 export const generatePagePaths = (allNodes: IJaenPage[], pageId: string) => {
@@ -32,6 +35,8 @@ export const generatePagePaths = (allNodes: IJaenPage[], pageId: string) => {
 
   if (originNode) {
     const paths: {[path: string]: string} = {}
+
+    console.log(`originNode`, originNode)
 
     const originPath = generatePageOriginPath(allNodes, originNode!)
 

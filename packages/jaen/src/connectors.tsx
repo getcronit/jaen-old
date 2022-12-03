@@ -1,11 +1,11 @@
 import {useEffect} from 'react'
-import {IJaenConnection, PageProps} from '../types.js'
-import {PageProvider} from './context/PageProvider.js'
+import {IJaenConnection, PageProps} from './types.js'
+import {PageProvider} from './internal/context/PageProvider.js'
 import {
   SectionOptionsContext,
   useSectionContext
-} from './context/SectionContext.js'
-import {useAuth} from './hooks/auth/useAuth.js'
+} from './internal/context/SectionContext.js'
+import {useAuth} from './internal/hooks/auth/useAuth.js'
 
 /**
  * @function connectPage Connects a gatsby page with Jaen.

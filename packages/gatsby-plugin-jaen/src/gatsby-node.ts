@@ -1,19 +1,65 @@
 import {GatsbyNode, Node} from 'gatsby'
 import path from 'path'
+import fs from 'fs'
 import {
   generatePageOriginPath,
   convertToSlug,
-  JaenData
+  JaenSource
 } from '@snek-at/jaen/unstable-node'
 import type {IJaenPage} from '@snek-at/jaen'
 
-const jaenData = new JaenData({jaenDataDir: './jaen-data'})
+export const onPreBootstrap: GatsbyNode['onPreBootstrap'] = async ({
+  reporter
+}) => {
+  await checkSourceFolder(JaenSource.sourcePagesPath)
+  await checkSourceFolder(JaenSource.sourceTemplatesPath)
+
+  async function checkSourceFolder(sourcePath: string | null) {
+    if (sourcePath) {
+      reporter.info(`Found jaen-pages at ${sourcePath}`)
+
+      // loop through all pages at pagesPath dir
+      const dir = await fs.promises.opendir(sourcePath)
+
+      for await (const dirent of dir) {
+        if (
+          dirent.isFile() &&
+          ['.tsx', '.ts', '.js', '.jsx'].includes(path.extname(dirent.name))
+        ) {
+          const pagePath = path.join(sourcePath, dirent.name)
+          // import as text
+          const moduleText = await fs.promises.readFile(pagePath, 'utf8')
+
+          // check if moduleText contains a graphql export
+          if (!moduleText.includes('export const query = graphql`')) {
+            reporter.warn(
+              `The page ${pagePath} does not contain a graphql export.\n` +
+                `Note: The graphql export must be in the form of 'export const query = graphql' and must contain the correct graphql query for jaen pages.`
+            )
+          }
+        }
+      }
+    }
+  }
+}
 
 export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = ({
   actions,
   loaders,
+  plugins,
   stage
 }) => {
+  actions.setWebpackConfig({
+    plugins: [
+      plugins.define({
+        ___JAEN_SOURCE_TEMPLATES___: JSON.stringify(
+          JaenSource.sourceTemplatesPath
+        ),
+        ___JAEN_SOURCE_PAGES___: JSON.stringify(JaenSource.sourcePagesPath)
+      })
+    ]
+  })
+
   if (stage === 'build-html' || stage === 'develop-html') {
     actions.setWebpackConfig({
       module: {
@@ -138,11 +184,16 @@ export const createSchemaCustomization: GatsbyNode['onCreateWebpackConfig'] = ({
               item.context.jaenPageId === source.id
           )
 
-          const sourcePages = path.resolve('./src/pages')
+          const sourcePages = JaenSource.sourcePagesPath
 
-          const componentName = page?.component?.includes()
-            ? page.component.replace(`${sourcePages}/`, sourcePages)
+          console.log(`sourcePages`, sourcePages)
+          console.log(page.component)
+
+          const componentName = page?.component?.includes(sourcePages)
+            ? page.component.replace(`${sourcePages}/`, '')
             : undefined
+
+          console.log(`componentName`, componentName)
 
           return componentName
         }
@@ -295,7 +346,7 @@ export const sourceNodes: GatsbyNode['onCreateWebpackConfig'] = async ({
 }) => {
   const {createNode} = actions
 
-  const internalData = jaenData.internal || {}
+  const internalData = JaenSource.jaenData.internal || {}
 
   const internalNode = {
     ...internalData,

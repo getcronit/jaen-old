@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {useAppDispatch} from '../redux'
-import {internalActions} from '../../redux/slices'
+import {actions} from '../redux/slices/page.js'
 import type {SectionType} from '../../types.js'
 import {usePageContext} from './PageProvider.js'
 
@@ -28,7 +28,7 @@ export const JaenSectionProvider = React.memo<
   const register = React.useCallback(
     (props: object) => {
       dispatch(
-        internalActions.section_register({
+        actions.section_register({
           pageId: jaenPage.id,
           path,
           props

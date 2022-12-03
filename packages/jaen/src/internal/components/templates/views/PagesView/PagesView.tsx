@@ -4,12 +4,13 @@ import * as React from 'react'
 import {FaEye} from 'react-icons/fa'
 import {useModals} from '../../../../context/Modals/ModalContext.js'
 
-import {PageProvider} from 'src/internal/context/PageProvider.js'
-import {IJaenPage} from 'src/types.js'
+import {pageUpdateValidation} from 'src/internal/helper/page/validators.js'
+import {IJaenPage} from '../../../../../types.js'
 import {
   PageContentValues,
   usePageManager
 } from '../../../../context/AdminPageManager/AdminPageManager.js'
+import {PageProvider} from '../../../../context/PageProvider.js'
 import {
   PageContent,
   PageTree,
@@ -49,24 +50,31 @@ export const PagesView: React.FC<PagesViewProps> = () => {
       jaenPage: IJaenPage
     } | null>(rootElement)
 
+  React.useEffect(() => {
+    if (manager.latestAddedPageId) {
+      onSelect(manager.latestAddedPageId, 'pageId')
+    }
+  }, [manager.latestAddedPageId])
+
   const onSelect = React.useCallback(
-    (path: string) => {
-      const pageId = manager.getPageIdFromPath(path)
+    (id: string, idType: 'path' | 'pageId' = 'path') => {
+      const path = idType === 'path' ? id : manager.getPathFromPageId(id)
+      const pageId = idType === 'pageId' ? id : manager.getPageIdFromPath(id)
 
-      if (pageId) {
-        const page = manager.onGet(pageId)
+      if (path && pageId) {
+        const jaenPage = manager.onGet(pageId)
 
-        if (page) {
+        if (jaenPage) {
           setSelectedJaenPage({
             path,
-            jaenPage: page
+            jaenPage
           })
         }
       } else {
         setSelectedJaenPage(rootElement)
       }
     },
-    [manager]
+    [manager, rootElement]
   )
 
   const handleSelectedJaenPageUpdate = React.useCallback(
@@ -204,7 +212,8 @@ export const PagesView: React.FC<PagesViewProps> = () => {
             md: 'full'
           }}
           defaultSelectedPath={'/'}
-          nodes={manager.pageTree}
+          selectedPath={selectedJaenPage?.path}
+          nodes={manager.pagePaths}
           onSelectPage={onSelect}
           onAddPage={handleItemAdd}
           onDeletePage={handleItemDelete}
@@ -224,21 +233,21 @@ export const PagesView: React.FC<PagesViewProps> = () => {
               }
               values={{
                 title: selectedJaenPage.jaenPage.jaenPageMetadata.title,
-                slug: selectedJaenPage.jaenPage.slug || 'root',
+                slug: selectedJaenPage.jaenPage.slug,
                 description:
                   selectedJaenPage.jaenPage.jaenPageMetadata.description,
                 image: selectedJaenPage.jaenPage.jaenPageMetadata.image,
                 excludedFromIndex: selectedJaenPage.jaenPage.excludedFromIndex
               }}
               onSubmit={handleSelectedJaenPageUpdate}
-              // externalValidation={(name, value) => {
-              //   return pageUpdateValidation({
-              //     name,
-              //     value,
-              //     parentId: selection.parent?.id,
-              //     treeItems: manager.tree
-              //   })
-              // }}
+              externalValidation={(name, value) => {
+                return pageUpdateValidation({
+                  name,
+                  value,
+                  parentId: selectedJaenPage.jaenPage.parent?.id,
+                  pageTree: manager.pageTree
+                })
+              }}
             />
           </PageProvider>
         )}

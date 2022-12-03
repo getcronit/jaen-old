@@ -12,6 +12,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Text,
   useToast
 } from '@chakra-ui/react'
 import * as React from 'react'
@@ -46,6 +47,14 @@ const TemplateSelector = ({
     onSelect(newSelectedTemplate)
   }
 
+  if (!templates.length) {
+    return (
+      <Text size="xs" color="gray.400">
+        No templates found.
+      </Text>
+    )
+  }
+
   return (
     <>
       {templates.map(({name, displayName}, key) => (
@@ -53,7 +62,7 @@ const TemplateSelector = ({
           key={key}
           variant="outline"
           colorScheme={
-            selectedTemplate && selectedTemplate === name ? 'blue' : 'gray'
+            selectedTemplate && selectedTemplate === name ? 'pink' : 'gray'
           }
           mr={2}
           onClick={() => handleSelect(name)}>

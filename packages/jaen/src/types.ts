@@ -1,6 +1,6 @@
 import type {IGatsbyImageData} from 'gatsby-plugin-image'
 import type {PageProps as GatsbyPageProps} from 'gatsby'
-import type {ISectionConnection} from './internal/connectors.js'
+import type {ISectionConnection} from './connectors.js'
 
 interface SiteMetadata {
   title: string

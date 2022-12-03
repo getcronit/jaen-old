@@ -14,7 +14,7 @@ import Tree, {TreeProps} from 'rc-tree'
 
 import 'rc-tree/assets/index.css'
 import {DataNode} from 'rc-tree/lib/interface.js'
-import React from 'react'
+import React, {useEffect, useMemo} from 'react'
 import {FaEye} from 'react-icons/fa'
 import {HiDocument, HiMinus, HiPlus} from 'react-icons/hi'
 
@@ -37,6 +37,7 @@ export interface PageTreeProps extends BoxProps {
   }[]
 
   defaultSelectedPath?: string
+  selectedPath?: string
 
   shouldPerformDrop?: (info: {dragNode: DataNode; node: DataNode}) => boolean
 
@@ -55,6 +56,7 @@ const useTreeState = (
   initTreeData: DataNode[],
   opt?: {
     defaultSelectedPath?: string
+    selectedPath?: string
     shouldPerformDrop?: PageTreeProps['shouldPerformDrop']
     onSelectPage?: PageTreeProps['onSelectPage']
     onMovePage?: PageTreeProps['onMovePage']
@@ -62,7 +64,11 @@ const useTreeState = (
 ) => {
   const [treeData, setTreeData] = React.useState<DataNode[]>(initTreeData)
 
-  const {shouldPerformDrop, defaultSelectedPath} = opt || {}
+  useEffect(() => {
+    setTreeData(initTreeData)
+  }, [initTreeData])
+
+  const {shouldPerformDrop, defaultSelectedPath, selectedPath} = opt || {}
 
   const onExpand = (expandedKeys: string[]) => {
     console.log('onExpand', expandedKeys)
@@ -72,13 +78,9 @@ const useTreeState = (
     console.log('onSelect', selectedKeys, info)
 
     if (opt?.onSelectPage) {
-      const path = selectedKeys[0]
+      const path = selectedKeys[0] || '/'
 
-      if (path) {
-        opt.onSelectPage(path)
-      } else {
-        opt.onSelectPage('/')
-      }
+      opt.onSelectPage(path)
     }
   }
 
@@ -163,12 +165,19 @@ const useTreeState = (
   const defaultCheckedKeys: string[] = []
   const defaultSelectedKeys = defaultSelectedPath ? [defaultSelectedPath] : []
 
+  const selectedKeys: string[] | undefined = selectedPath
+    ? [selectedPath]
+    : undefined
+
+  console.log('selectedPath', selectedPath, selectedKeys)
+
   return {
     onExpand,
     onSelect,
     onCheck,
     defaultCheckedKeys,
     defaultSelectedKeys,
+    selectedKeys,
     treeData,
     onDrop,
     onDragEnter,
@@ -239,6 +248,7 @@ export const PageTree: React.FC<PageTreeProps> = ({
   onMovePage,
   nodes,
   defaultSelectedPath,
+  selectedPath,
   ...boxProps
 }) => {
   nodes =
@@ -266,6 +276,8 @@ export const PageTree: React.FC<PageTreeProps> = ({
     return node
   }
 
+  const initTreeData = useMemo(() => nodesToTreeData(nodes), [nodes])
+
   const {
     onExpand,
     onSelect,
@@ -273,8 +285,9 @@ export const PageTree: React.FC<PageTreeProps> = ({
     onDrop,
     defaultCheckedKeys,
     defaultSelectedKeys,
+    selectedKeys,
     treeData
-  } = useTreeState(nodesToTreeData(nodes), {
+  } = useTreeState(initTreeData, {
     onSelectPage,
     shouldPerformDrop: ({dragNode}) => {
       // check if the dragNode is locked
@@ -284,7 +297,8 @@ export const PageTree: React.FC<PageTreeProps> = ({
 
       return true
     },
-    defaultSelectedPath
+    defaultSelectedPath,
+    selectedPath
   })
 
   const contextRefs = React.useRef<
@@ -363,6 +377,7 @@ export const PageTree: React.FC<PageTreeProps> = ({
         onDrop={onDrop}
         defaultSelectedKeys={defaultSelectedKeys}
         defaultCheckedKeys={defaultCheckedKeys}
+        selectedKeys={selectedKeys}
         onSelect={onSelect}
         onRightClick={info => {
           const {event, node} = info

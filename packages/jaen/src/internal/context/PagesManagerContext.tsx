@@ -18,6 +18,7 @@ import {
   PageTreeItems
 } from './AdminPageManager/AdminPageManager.js'
 import {AdminPageManagerProvider} from './AdminPageManager/AdminPageManagerProvider.js'
+import {pageUpdateValidation} from '../helper/page/validators.js'
 
 export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
   children
@@ -101,6 +102,19 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
     [pageTree]
   )
 
+  const getPathFromPageId = React.useCallback(
+    (pageId: string) => {
+      const page = pageTree.find(p => p.id === pageId)
+
+      if (!page) {
+        return null
+      }
+
+      return generatePageOriginPath(pageTree, page) || null
+    },
+    [pageTree]
+  )
+
   const handlePageCreate = React.useCallback(
     (parentId: string | null, values: PageCreateValues) =>
       dispatch(
@@ -140,7 +154,7 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
 
   const handlePageUpdate = React.useCallback(
     (id: string, values: PageContentValues) => {
-      setShouldUpdateDpathsFor({pageId: id, create: true})
+      setShouldUpdateDpathsFor({pageId: id, create: false})
 
       dispatch(
         actions.page_updateOrCreate({
@@ -187,7 +201,7 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
     [pageTree, dynamicPaths]
   )
 
-  const treeItems = React.useMemo(() => {
+  const pagePaths = React.useMemo(() => {
     const paths = generateAllPaths(pageTree)
 
     console.log(`PageManagerProvider paths`, {paths})
@@ -227,6 +241,8 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
 
   const templates = useTemplatesForPage(parentCreatorPage)
 
+  console.log(`PageManagerProvider templates`, {templates})
+
   const creator = useDisclosure()
 
   const handleCreatorToggle = (parentId: string | null) => {
@@ -251,14 +267,17 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
 
   return (
     <AdminPageManagerProvider
+      latestAddedPageId={latestAddedPageId}
       getPageIdFromPath={getPageIdFromPath}
+      getPathFromPageId={getPathFromPageId}
       onCreate={handlePageCreate}
       onDelete={handlePageDelete}
       onMove={handlePageMove}
       onUpdate={handlePageUpdate}
       onGet={handlePageGet}
       onNavigate={handlePageNavigate}
-      pageTree={treeItems}
+      pageTree={pageTree}
+      pagePaths={pagePaths}
       templates={templates.allTemplates}
       isTemplatesLoading={templates.isLoading}
       rootPageId={rootPageId}
@@ -278,15 +297,13 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
         isOpen={creator.isOpen}
         onClose={handleCreatorClose}
         onSubmit={handleCreatorSubmit}
-        externalValidation={() => {
-          // return pageUpdateValidation({
-          //   name,
-          //   value,
-          //   treeItems,
-          //   parentId: creatorState?.parentId
-          // })
-
-          return ''
+        externalValidation={(name, value) => {
+          return pageUpdateValidation({
+            name,
+            value,
+            pageTree,
+            parentId: creatorState?.parentId
+          })
         }}
       />
       {children}

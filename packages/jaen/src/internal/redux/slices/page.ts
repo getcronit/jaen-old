@@ -353,6 +353,7 @@ const pagesSlice = createSlice({
     },
 
     discardAllChanges(state) {
+      state.registeredPageFields = {}
       state.nodes = {}
       state.lastAddedNodeId = undefined
       return state
