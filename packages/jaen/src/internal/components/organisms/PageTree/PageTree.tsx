@@ -19,6 +19,7 @@ import {FaEye} from 'react-icons/fa'
 import {HiDocument, HiMinus, HiPlus} from 'react-icons/hi'
 
 import {matchPath} from '../../../helper/path.js'
+import {ContextMenuEvent} from '../../molecules/ContextMenu/ContextMenu.js'
 import {ContextMenu} from '../../molecules/index.js'
 import './tree.css'
 
@@ -371,13 +372,9 @@ export const PageTree: React.FC<PageTreeProps> = ({
 
           const ref = contextRefs.current[node.key]
 
-          // close all
-
-          console.log(contextRefs.current, node)
-
           if (ref?.current) {
             ref.current.dispatchEvent(
-              new MouseEvent('contextmenu', {
+              new MouseEvent(ContextMenuEvent.Open, {
                 bubbles: true,
                 cancelable: true,
                 view: window,
@@ -393,7 +390,7 @@ export const PageTree: React.FC<PageTreeProps> = ({
             for (const key in contextRefs.current) {
               if (key !== node.key) {
                 contextRefs.current[key]?.current?.dispatchEvent(
-                  new MouseEvent('closeContextMenu')
+                  new MouseEvent(ContextMenuEvent.Close)
                 )
               }
             }

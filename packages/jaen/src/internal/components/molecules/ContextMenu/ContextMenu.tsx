@@ -10,6 +10,11 @@ import {
   MenuProps
 } from '@chakra-ui/react'
 
+export enum ContextMenuEvent {
+  Open = 'contextmenu.open',
+  Close = 'contextmenu.close'
+}
+
 export interface ContextMenuProps<T extends HTMLElement> {
   renderMenu: () => JSX.Element | null
   children: (ref: MutableRefObject<T | null>) => JSX.Element | null
@@ -52,10 +57,8 @@ export function ContextMenu<T extends HTMLElement = HTMLElement>(
     }
   }, [isOpen])
 
-  useEventListener(
-    'contextmenu',
-    e => {
-      console.log('contextmenu', e.detail)
+  const handleEventOpen = useCallback(
+    (e: MouseEvent) => {
       if (
         e.detail === 27 ||
         targetRef.current?.contains(e.target as any) ||
@@ -68,16 +71,16 @@ export function ContextMenu<T extends HTMLElement = HTMLElement>(
         setIsOpen(false)
       }
     },
-    targetRef.current
+    [targetRef]
   )
 
-  useEventListener(
-    'closeContextMenu',
-    () => {
-      setIsOpen(false)
-    },
-    targetRef.current
-  )
+  const handleCloseEvent = useCallback(() => {
+    setIsOpen(false)
+  }, [])
+
+  useEventListener('contextmenu', handleEventOpen)
+  useEventListener(ContextMenuEvent.Open, handleEventOpen, targetRef.current)
+  useEventListener(ContextMenuEvent.Close, handleCloseEvent, targetRef.current)
 
   const onCloseHandler = useCallback(() => {
     props.menuProps?.onClose?.()
