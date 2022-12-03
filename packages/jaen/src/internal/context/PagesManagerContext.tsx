@@ -2,7 +2,7 @@ import {navigate} from 'gatsby'
 
 import {useDisclosure} from '@chakra-ui/react'
 import React from 'react'
-import {PageCreator} from '../components/index.js'
+import {PageCreator} from '../components/molecules/PageCreator/index.js'
 import {
   generateAllPaths,
   generatePageOriginPath,

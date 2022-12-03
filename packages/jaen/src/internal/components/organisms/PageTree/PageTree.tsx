@@ -24,6 +24,8 @@ import {ContextMenu} from '../../molecules/index.js'
 import './tree.css'
 
 export interface PageTreeProps extends BoxProps {
+  isNavigatorMode?: boolean
+
   nodes: {
     /**
      * Path:
@@ -55,11 +57,13 @@ export interface PageTreeProps extends BoxProps {
 const useTreeState = (
   initTreeData: DataNode[],
   opt?: {
+    isNavigatorMode?: boolean
     defaultSelectedPath?: string
     selectedPath?: string
     shouldPerformDrop?: PageTreeProps['shouldPerformDrop']
     onSelectPage?: PageTreeProps['onSelectPage']
     onMovePage?: PageTreeProps['onMovePage']
+    onViewPage?: PageTreeProps['onViewPage']
   }
 ) => {
   const [treeData, setTreeData] = React.useState<DataNode[]>(initTreeData)
@@ -68,19 +72,35 @@ const useTreeState = (
     setTreeData(initTreeData)
   }, [initTreeData])
 
-  const {shouldPerformDrop, defaultSelectedPath, selectedPath} = opt || {}
+  const {
+    shouldPerformDrop,
+    onViewPage,
+    onSelectPage,
+    defaultSelectedPath,
+    selectedPath,
+    isNavigatorMode
+  } = opt || {}
 
   const onExpand = (expandedKeys: string[]) => {
     console.log('onExpand', expandedKeys)
   }
 
-  const onSelect = (selectedKeys: string[], info: any) => {
+  const onSelect: TreeProps['onSelect'] = (selectedKeys, info) => {
     console.log('onSelect', selectedKeys, info)
 
-    if (opt?.onSelectPage) {
-      const path = selectedKeys[0] || '/'
+    const path = selectedKeys[0]?.toString() || '/'
 
-      opt.onSelectPage(path)
+    if (isNavigatorMode) {
+      onViewPage && onViewPage(path)
+    } else {
+      // check if the it is a deselection
+
+      if (selectedKeys.length === 0) {
+        // view info.node.key
+        onViewPage && onViewPage(info.node.key.toString())
+      }
+
+      onSelectPage && onSelectPage(path)
     }
   }
 
@@ -89,6 +109,10 @@ const useTreeState = (
   }
 
   const onDrop: TreeProps['onDrop'] = info => {
+    if (isNavigatorMode) {
+      return
+    }
+
     if (
       shouldPerformDrop &&
       !shouldPerformDrop({
@@ -241,6 +265,7 @@ const nodesToTreeData = (nodes: PageTreeProps['nodes']): DataNode[] => {
 }
 
 export const PageTree: React.FC<PageTreeProps> = ({
+  isNavigatorMode,
   onSelectPage,
   onViewPage,
   onAddPage,
@@ -288,6 +313,8 @@ export const PageTree: React.FC<PageTreeProps> = ({
     selectedKeys,
     treeData
   } = useTreeState(initTreeData, {
+    isNavigatorMode,
+    onViewPage,
     onSelectPage,
     shouldPerformDrop: ({dragNode}) => {
       // check if the dragNode is locked
@@ -314,36 +341,40 @@ export const PageTree: React.FC<PageTreeProps> = ({
           return (
             <ContextMenu<HTMLDivElement>
               renderMenu={() => (
-                <MenuList>
-                  <MenuItem
-                    icon={<AddIcon />}
-                    onClick={() => {
-                      console.log('add')
+                <>
+                  {!isNavigatorMode && (
+                    <MenuList>
+                      <MenuItem
+                        icon={<AddIcon />}
+                        onClick={() => {
+                          console.log('add')
 
-                      onAddPage?.(node.key.toString())
-                    }}>
-                    Add
-                  </MenuItem>
-                  <MenuItem
-                    icon={<FaEye />}
-                    onClick={() => {
-                      console.log('view')
+                          onAddPage?.(node.key.toString())
+                        }}>
+                        Add
+                      </MenuItem>
+                      <MenuItem
+                        icon={<FaEye />}
+                        onClick={() => {
+                          console.log('view')
 
-                      onViewPage?.(node.key.toString())
-                    }}>
-                    View
-                  </MenuItem>
+                          onViewPage?.(node.key.toString())
+                        }}>
+                        View
+                      </MenuItem>
 
-                  <MenuDivider />
-                  <MenuItem
-                    isDisabled={getNodeFromDataNode(node).isLocked}
-                    icon={<DeleteIcon color={'red'} />}
-                    onClick={() => {
-                      onViewPage?.(node.key.toString())
-                    }}>
-                    Delete
-                  </MenuItem>
-                </MenuList>
+                      <MenuDivider />
+                      <MenuItem
+                        isDisabled={getNodeFromDataNode(node).isLocked}
+                        icon={<DeleteIcon color={'red'} />}
+                        onClick={() => {
+                          onViewPage?.(node.key.toString())
+                        }}>
+                        Delete
+                      </MenuItem>
+                    </MenuList>
+                  )}
+                </>
               )}>
               {ref => {
                 contextRefs.current[node.key] = ref

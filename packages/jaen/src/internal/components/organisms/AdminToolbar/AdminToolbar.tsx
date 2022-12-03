@@ -18,6 +18,7 @@ import {navigate} from 'gatsby'
 import {AiOutlineUser} from 'react-icons/ai'
 import {FaFileImport, FaGithub, FaSignOutAlt} from 'react-icons/fa'
 import {IoHelpBuoySharp, IoNewspaperSharp} from 'react-icons/io5'
+import {PageManagerProvider} from 'src/internal/context/PagesManagerContext.js'
 import {useNewsSlide} from '../../../context/NewsSlideContext.js'
 import {useAuth} from '../../../hooks/auth/useAuth.js'
 import {JaenLogo} from '../../atoms/index.js'
@@ -108,7 +109,9 @@ export const AdminToolbar = ({
           base: 'center',
           lg: 'space-between'
         }}>
-        <PageNavigator />
+        <PageManagerProvider>
+          <PageNavigator />
+        </PageManagerProvider>
         <ActionBar />
       </HStack>
 

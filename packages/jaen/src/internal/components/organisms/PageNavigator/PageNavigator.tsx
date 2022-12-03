@@ -1,6 +1,15 @@
 import {ChevronDownIcon} from '@chakra-ui/icons'
-import {HStack, Link, Menu, MenuButton, MenuList, Text} from '@chakra-ui/react'
-import {useEffect, useState} from 'react'
+import {
+  HStack,
+  Link,
+  Menu,
+  MenuButton,
+  MenuList,
+  Tag,
+  Text
+} from '@chakra-ui/react'
+import {useEffect, useMemo, useState} from 'react'
+import {usePageManager} from 'src/internal/context/AdminPageManager/AdminPageManager.js'
 import {PageTree} from '../PageTree/PageTree.js'
 
 export interface PageNavigatorProps {}
@@ -13,6 +22,23 @@ export const PageNavigator: React.FC<PageNavigatorProps> = () => {
       setTitle(document.title)
     }
   }, [])
+
+  const path = useMemo(() => {
+    if (typeof window === 'undefined') return null
+
+    let pathname = window.location.pathname
+
+    const hash = window.location.hash
+
+    // return path after hash if hash is present
+    if (hash) {
+      pathname = hash.replace('#', '')
+    }
+
+    return pathname
+  }, [])
+
+  const manager = usePageManager()
 
   return (
     <Menu>
@@ -36,10 +62,16 @@ export const PageNavigator: React.FC<PageNavigatorProps> = () => {
           <Link noOfLines={1}>
             {title} <ChevronDownIcon />
           </Link>
+          <Tag rounded="full">{path}</Tag>
         </HStack>
       </MenuButton>
-      <MenuList bg="white" color="black" h="sm" overflowY={'auto'}>
-        <PageTree nodes={[]} />
+      <MenuList bg="white" color="black" h="xs" overflowY={'auto'}>
+        <PageTree
+          nodes={manager.pagePaths}
+          isNavigatorMode
+          selectedPath={path || '/'}
+          onViewPage={manager.onNavigate}
+        />
       </MenuList>
     </Menu>
   )

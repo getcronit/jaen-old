@@ -42,7 +42,8 @@ export default {
             }
           }}
           onNavigate={() => {}}
-          pageTree={[
+          pageTree={[]}
+          pagePaths={[
             {
               path: '/',
               title: 'Home'
@@ -72,7 +73,10 @@ export default {
           templates={[]}
           isTemplatesLoading={false}
           rootPageId="Page /"
-          onToggleCreator={() => {}}>
+          onToggleCreator={() => {}}
+          getPageIdFromPath={() => null}
+          getPathFromPageId={() => null}
+          latestAddedPageId={undefined}>
           <div style={{height: '70vh'}}>
             <Story />
           </div>
