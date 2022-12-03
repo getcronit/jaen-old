@@ -61,8 +61,8 @@ export const PageNavigator: React.FC<PageNavigatorProps> = () => {
           </Text>
           <Link noOfLines={1}>
             {title} <ChevronDownIcon />
+            <Tag rounded="full">{path}</Tag>
           </Link>
-          <Tag rounded="full">{path}</Tag>
         </HStack>
       </MenuButton>
       <MenuList bg="white" color="black" h="xs" overflowY={'auto'}>
