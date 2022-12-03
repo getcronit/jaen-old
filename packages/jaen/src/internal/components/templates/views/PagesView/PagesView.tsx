@@ -1,4 +1,4 @@
-import {AddIcon} from '@chakra-ui/icons'
+import {AddIcon, DeleteIcon} from '@chakra-ui/icons'
 import {Button, Stack, StackDivider} from '@chakra-ui/react'
 import * as React from 'react'
 import {FaEye} from 'react-icons/fa'
@@ -154,15 +154,23 @@ export const PagesView: React.FC<PagesViewProps> = () => {
 
   React.useEffect(() => {
     toolbarActions.register([
+      <Button size="sm" leftIcon={<FaEye />} variant="link">
+        View
+      </Button>,
       <Button
         size="sm"
         leftIcon={<AddIcon />}
         variant="link"
         onClick={() => handleItemAdd(selectedJaenPage?.path || '/')}>
-        Add page
+        Add
       </Button>,
-      <Button size="sm" leftIcon={<FaEye />} variant="link">
-        Page view
+      <Button
+        size="sm"
+        leftIcon={<DeleteIcon />}
+        variant="link"
+        disabled={!selectedJaenPage?.jaenPage.template}
+        onClick={() => handleItemDelete(selectedJaenPage?.path || '/')}>
+        Delete
       </Button>
     ])
 
