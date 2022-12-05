@@ -1,4 +1,4 @@
-import {IJaenPage} from 'src/types.js'
+import {IJaenPage} from '../../types.js'
 
 type PageNode = {
   id: string
@@ -73,9 +73,11 @@ export const generateAllPaths = (allNodes: IJaenPage[]) => {
   const paths: {[path: string]: string} = {}
 
   for (const node of allNodes) {
-    const nodePaths = generatePagePaths(allNodes, node.id)
+    const path = generatePageOriginPath(allNodes, node)
 
-    Object.assign(paths, nodePaths)
+    if (path) {
+      paths[path] = node.id
+    }
   }
 
   return paths

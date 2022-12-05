@@ -4,6 +4,7 @@ import {IJaenPage, SectionType} from '../../../types.js'
 import {findSection, insertSectionIntoTree} from '../../helper/page/section.js'
 import {generatePagePaths} from '../../helper/path.js'
 import {IPageState} from '../types.js'
+import {deepRemoveAllUndefinedFromObject} from '../../../utils/deepRemoveAllUndefinedFromObject'
 
 export const pageInitialState: IPageState = {
   pages: {
@@ -46,19 +47,26 @@ const pagesSlice = createSlice({
       // Check if the page is being updated or created
       if (id) {
         // Update the page
-        const toBeAddedData = {
+        let toBeAddedData = {
           id,
           ...(slug && {slug}),
           ...(jaenFields !== undefined && {jaenFields}),
-          ...(jaenPageMetadata && {jaenPageMetadata}),
+          jaenPageMetadata,
           ...(parent !== undefined && {parent}),
           ...(children && {children}),
           ...(excludedFromIndex !== undefined && {excludedFromIndex})
         }
 
+        // TODO: Use this instead of the above
+        toBeAddedData = deepRemoveAllUndefinedFromObject(toBeAddedData)
+
         state.nodes[id] = {
           ...state.nodes[id],
-          ...toBeAddedData
+          ...toBeAddedData,
+          jaenPageMetadata: {
+            ...state.nodes[id]?.jaenPageMetadata,
+            ...jaenPageMetadata
+          } as IJaenPage['jaenPageMetadata']
         }
 
         // If `fromId` then remove the page from the fromPage children

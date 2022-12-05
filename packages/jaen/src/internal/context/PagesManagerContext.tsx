@@ -29,8 +29,6 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
 
   const pageTree = useJaenPageTree()
 
-  console.log(`PageManagerProvider `, {pageTree})
-
   const latestAddedPageId = useAppSelector(
     state => state.page.pages.lastAddedNodeId
   )
@@ -152,7 +150,14 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
 
   const handlePageUpdate = React.useCallback(
     (id: string, values: PageContentValues) => {
-      setShouldUpdateDpathsFor({pageId: id, create: false})
+      // Only update if slug was changed because the slug is part of the path
+      // thus relavent for the dynamic paths
+      if ('slug' in values) {
+        setShouldUpdateDpathsFor({
+          pageId: id,
+          create: true
+        })
+      }
 
       dispatch(
         actions.page_updateOrCreate({
@@ -177,16 +182,12 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
   const pagePaths = React.useMemo(() => {
     const paths = generateAllPaths(pageTree)
 
-    console.log(`PageManagerProvider paths`, {paths})
-
     return Object.keys(paths)
       .map(path => {
         const pageId = paths[path]
         const page = pageTree.find(p => p.id === pageId)
 
-        console.log(`PageManagerProvider path`, {path}, page, pageTree, pageId)
-
-        if (!page) {
+        if (!page || page.deleted) {
           return undefined
         }
 
@@ -213,8 +214,6 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
   )
 
   const templates = useTemplatesForPage(parentCreatorPage)
-
-  console.log(`PageManagerProvider templates`, {templates})
 
   const creator = useDisclosure()
 

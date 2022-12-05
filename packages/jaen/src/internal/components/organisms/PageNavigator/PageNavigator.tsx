@@ -9,7 +9,7 @@ import {
   Text
 } from '@chakra-ui/react'
 import {useEffect, useMemo, useState} from 'react'
-import {usePageManager} from 'src/internal/context/AdminPageManager/AdminPageManager.js'
+import {usePageManager} from '../../../context/AdminPageManager/AdminPageManager.js'
 import {PageTree} from '../PageTree/PageTree.js'
 
 export interface PageNavigatorProps {}

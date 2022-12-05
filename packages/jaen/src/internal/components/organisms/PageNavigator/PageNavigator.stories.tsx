@@ -1,6 +1,6 @@
 import {ComponentMeta, Story} from '@storybook/react'
 import React from 'react'
-import {AdminPageManagerProvider} from 'src/internal/context/AdminPageManager/AdminPageManagerProvider.js'
+import {AdminPageManagerProvider} from '../../../context/AdminPageManager/AdminPageManagerProvider.js'
 import {PageNavigator} from './PageNavigator.js'
 export default {
   title: 'Components/PageNavigator',

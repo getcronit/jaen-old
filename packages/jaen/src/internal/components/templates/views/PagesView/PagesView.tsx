@@ -4,7 +4,7 @@ import * as React from 'react'
 import {FaEye} from 'react-icons/fa'
 import {useModals} from '../../../../context/Modals/ModalContext.js'
 
-import {pageUpdateValidation} from 'src/internal/helper/page/validators.js'
+import {pageUpdateValidation} from '../../../../helper/page/validators.js'
 import {IJaenPage} from '../../../../../types.js'
 import {
   PageContentValues,
@@ -113,19 +113,19 @@ export const PagesView: React.FC<PagesViewProps> = () => {
   }, [])
 
   const handlePageMove = React.useCallback(
-    (info: {path: string; dragPath: string; dropPath: string}) => {
-      const pageId = manager.getPageIdFromPath(info.path)
+    (info: {dragParentPath: string; dragPath: string; dropPath: string}) => {
+      const pageId = manager.getPageIdFromPath(info.dragPath)
 
       if (!pageId) {
         return
       }
 
-      const oldParentId = manager.getPageIdFromPath(info.dragPath)
+      const oldParentId = manager.getPageIdFromPath(info.dragParentPath)
       const newParentId = manager.getPageIdFromPath(info.dropPath)
 
       manager.onMove(pageId, oldParentId, newParentId)
     },
-    []
+    [manager]
   )
 
   const selectedTemplate = React.useMemo(

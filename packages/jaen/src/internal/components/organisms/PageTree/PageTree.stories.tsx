@@ -15,3 +15,37 @@ type ComponentProps = React.ComponentProps<typeof PageTree>
 const Template: Story<ComponentProps> = args => <PageTree {...args} />
 
 export const Basic: Story<ComponentProps> = Template.bind({})
+
+Basic.args = {
+  nodes: [
+    {
+      path: '/',
+      title: 'Home'
+    },
+    {
+      path: '/blog/',
+      title: 'Blog'
+    },
+    {
+      path: '/blog/first-post/',
+      title: 'First Post'
+    },
+    {
+      path: '/blog/second-post/',
+      title: 'Second Post'
+    },
+    {
+      path: '/blog/third-post/',
+      title: 'Third Post'
+    },
+    {
+      path: '/about/',
+      title: 'About',
+      isLocked: true
+    },
+    {
+      path: '/contact/',
+      title: 'Contact'
+    }
+  ]
+}

@@ -21,6 +21,7 @@ import {HiDocument, HiMinus, HiPlus} from 'react-icons/hi'
 import {matchPath} from '../../../helper/path.js'
 import {ContextMenuEvent} from '../../molecules/ContextMenu/ContextMenu.js'
 import {ContextMenu} from '../../molecules/index.js'
+
 import './tree.css'
 
 export interface PageTreeProps extends BoxProps {
@@ -41,16 +42,20 @@ export interface PageTreeProps extends BoxProps {
   defaultSelectedPath?: string
   selectedPath?: string
 
-  shouldPerformDrop?: (info: {dragNode: DataNode; node: DataNode}) => boolean
+  shouldPerformDrop?: (info: {
+    dragNode: DataNode
+    node: DataNode
+    dropPosition: number
+  }) => boolean
 
   onSelectPage?: (path: string) => void
   onViewPage?: (path: string) => void
   onAddPage?: (path: string) => void
   onDeletePage?: (path: string) => void
   onMovePage?: (info: {
-    dragPath: string
+    dragParentPath: string
     dropPath: string
-    path: string
+    dragPath: string
   }) => void
 }
 
@@ -98,9 +103,9 @@ const useTreeState = (
       if (selectedKeys.length === 0) {
         // view info.node.key
         onViewPage && onViewPage(info.node.key.toString())
+      } else {
+        onSelectPage && onSelectPage(path)
       }
-
-      onSelectPage && onSelectPage(path)
     }
   }
 
@@ -113,21 +118,21 @@ const useTreeState = (
       return
     }
 
-    if (
-      shouldPerformDrop &&
-      !shouldPerformDrop({
-        dragNode: info.dragNode,
-        node: info.node
-      })
-    ) {
-      return
-    }
-
-    console.log('drop', info)
     const dropKey = info.node.key
     const dragKey = info.dragNode.key
     const dropPos = info.node.pos.split('-')
     const dropPosition = info.dropPosition - Number(dropPos[dropPos.length - 1])
+
+    if (
+      shouldPerformDrop &&
+      !shouldPerformDrop({
+        dragNode: info.dragNode,
+        node: info.node,
+        dropPosition
+      })
+    ) {
+      return
+    }
 
     const loop = (data: any[], key: string | number, callback: any) => {
       data.forEach((item, index, arr) => {
@@ -177,7 +182,7 @@ const useTreeState = (
       opt.onMovePage({
         dragPath: dragKey.toString(),
         dropPath: dropKey.toString(),
-        path: dragObj.path
+        dragParentPath: getParentNodePath(dragKey.toString())
       })
     }
   }
@@ -193,7 +198,20 @@ const useTreeState = (
     ? [selectedPath]
     : undefined
 
-  console.log('selectedPath', selectedPath, selectedKeys)
+  const getParentNodePath = (path: string) => {
+    // remove the last slash
+    path = path.replace(/\/$/, '')
+
+    const parts = path.split('/')
+
+    if (parts.length === 1) {
+      return '/'
+    }
+
+    parts.pop()
+
+    return parts.join('/') + '/'
+  }
 
   return {
     onExpand,
@@ -290,8 +308,6 @@ export const PageTree: React.FC<PageTreeProps> = ({
   const getNodeFromDataNode = (
     dataNode: DataNode
   ): PageTreeProps['nodes'][0] => {
-    console.log('dataNode', dataNode, nodes)
-
     const node = nodes.find(node =>
       matchPath(node.path, dataNode.key.toString())
     )
@@ -316,9 +332,14 @@ export const PageTree: React.FC<PageTreeProps> = ({
     isNavigatorMode,
     onViewPage,
     onSelectPage,
-    shouldPerformDrop: ({dragNode}) => {
+    onMovePage,
+    shouldPerformDrop: ({dragNode, dropPosition}) => {
       // check if the dragNode is locked
       if (getNodeFromDataNode(dragNode).isLocked) {
+        return false
+      }
+
+      if (dropPosition === -1) {
         return false
       }
 
@@ -406,10 +427,23 @@ export const PageTree: React.FC<PageTreeProps> = ({
         onDragStart={_event => {}}
         onDragEnter={_event => {}}
         onDrop={onDrop}
+        autoExpandParent
         defaultSelectedKeys={defaultSelectedKeys}
         defaultCheckedKeys={defaultCheckedKeys}
         selectedKeys={selectedKeys}
-        onSelect={onSelect}
+        onSelect={(keys, info) => {
+          const {nativeEvent} = info
+
+          const ref = contextRefs.current[info.node.key]
+
+          // if the click was on the context menu, don't select the node
+          // @ts-ignore
+          if (!(ref?.current && ref?.current?.contains(nativeEvent.target))) {
+            return
+          }
+
+          onSelect(keys, info)
+        }}
         onRightClick={info => {
           const {event, node} = info
 

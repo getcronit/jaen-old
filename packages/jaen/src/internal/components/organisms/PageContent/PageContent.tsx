@@ -26,6 +26,7 @@ import {HiTemplate} from '@react-icons/all-files/hi/HiTemplate'
 
 import {IFormProps, IJaenTemplate} from '../../../../types.js'
 import {withDefaultTheme} from '../../../../utils/withDefaultTheme.js'
+import {dirtyValues} from '../../../../utils/forms/dirtyValues.js'
 
 export type ContentValues = {
   title: string
@@ -83,7 +84,7 @@ export const PageContent = (props: PageContentProps) => {
       ...values
     }
 
-    props.onSubmit(values)
+    props.onSubmit(dirtyValues(dirtyFields, values))
 
     setDefaultValues(vs)
     reset(vs)

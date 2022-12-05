@@ -1,6 +1,6 @@
 import {useCallback} from 'react'
-import {store} from 'src/internal/redux/index.js'
-import {actions} from 'src/internal/redux/slices/page.js'
+import {store} from '../../../redux/index.js'
+import {actions} from '../../../redux/slices/page.js'
 import {useModals} from '../../../context/Modals/index.js'
 
 export function useDiscard() {
