@@ -36,58 +36,75 @@ const AdminPage: React.FC<AdminPageProps> = withRedux(
     const navSliderDisclosure = useDisclosure()
 
     return (
-      <AdminShell withoutAdminToolbarShadow>
-        <Flex h="100%" flexDir={'column'}>
+      <AdminShell
+        withoutAdminToolbarShadow
+        beforeAdminShell={
           <AdminSecondaryToolbar
             isSidebarOpen={navSliderDisclosure.isOpen}
             onToggleSidebar={navSliderDisclosure.onToggle}
           />
+        }>
+        <Flex
+          flex="1"
+          position={'relative'}
+          onClick={e => {
+            // check if the click was inside the leftRef or rightRef
+            // if it was, don't close the slider
 
-          <Flex
-            flex="1"
-            position={'relative'}
-            onClick={e => {
-              // check if the click was inside the leftRef or rightRef
-              // if it was, don't close the slider
+            if (
+              leftRef.current &&
+              leftRef.current.contains(e.target as Node) &&
+              navSliderDisclosure.isOpen
+            ) {
+              return
+            }
 
-              if (
-                leftRef.current &&
-                leftRef.current.contains(e.target as Node) &&
-                navSliderDisclosure.isOpen
-              ) {
-                return
-              }
-
-              if (navSliderDisclosure.isOpen) {
-                navSliderDisclosure.onClose()
-              }
+            if (navSliderDisclosure.isOpen) {
+              navSliderDisclosure.onClose()
+            }
+          }}>
+          <SlideFade
+            in={navSliderDisclosure.isOpen}
+            offsetY="0"
+            style={{
+              height: '100%',
+              position: 'absolute',
+              left: 0,
+              top: 0,
+              zIndex: 2,
+              pointerEvents: navSliderDisclosure.isOpen ? 'all' : 'none'
             }}>
-            <SlideFade
-              in={navSliderDisclosure.isOpen}
-              offsetY="0"
-              style={{
-                height: '100%',
-                position: 'absolute',
-                left: 0,
-                top: 0,
-                zIndex: 2,
-                pointerEvents: navSliderDisclosure.isOpen ? 'all' : 'none'
-              }}>
-              <Box position={'relative'} h="full" w="80">
-                <Box
-                  borderY="1px"
-                  borderColor={'gray.200'}
-                  h="full"
-                  w="64"
-                  p="8"
-                  borderRightRadius={'md'}
-                  shadow="md"
-                  bg="white"
-                  ref={leftRef}>
-                  {/* <Lorem count={1} /> */}
-                  <Stack spacing="8" flex="1">
-                    <Stack spacing="4">
-                      {items.ungrouped.map(item => (
+            <Box position={'relative'} h="full" w="80">
+              <Box
+                borderY="1px"
+                borderColor={'gray.200'}
+                h="full"
+                w="64"
+                p="8"
+                borderRightRadius={'md'}
+                shadow="md"
+                bg="white"
+                ref={leftRef}>
+                {/* <Lorem count={1} /> */}
+                <Stack spacing="8" flex="1">
+                  <Stack spacing="4">
+                    {items.ungrouped.map(item => (
+                      <NavItem
+                        active={item.path === activePath}
+                        key={item.path}
+                        Icon={item.Icon}
+                        label={item.label}
+                        onClick={() => {
+                          onNavigate(item.path)
+                          navSliderDisclosure.onClose()
+                        }}
+                      />
+                    ))}
+                  </Stack>
+
+                  {Object.entries(items.grouped).map(([key, group]) => (
+                    <NavGroup key={key} label={group.label}>
+                      {group.items.map(item => (
                         <NavItem
                           active={item.path === activePath}
                           key={item.path}
@@ -99,39 +116,22 @@ const AdminPage: React.FC<AdminPageProps> = withRedux(
                           }}
                         />
                       ))}
-                    </Stack>
-
-                    {Object.entries(items.grouped).map(([key, group]) => (
-                      <NavGroup key={key} label={group.label}>
-                        {group.items.map(item => (
-                          <NavItem
-                            active={item.path === activePath}
-                            key={item.path}
-                            Icon={item.Icon}
-                            label={item.label}
-                            onClick={() => {
-                              onNavigate(item.path)
-                              navSliderDisclosure.onClose()
-                            }}
-                          />
-                        ))}
-                      </NavGroup>
-                    ))}
-                  </Stack>
-                </Box>
-                <Box position={'absolute'} right="0" top="2">
-                  <CloseButton
-                    bg="blackAlpha.100"
-                    onClick={navSliderDisclosure.onClose}
-                  />
-                </Box>
+                    </NavGroup>
+                  ))}
+                </Stack>
               </Box>
-            </SlideFade>
-
-            <Box boxSize={'full'} zIndex="1">
-              {children}
+              <Box position={'absolute'} right="0" top="2">
+                <CloseButton
+                  bg="blackAlpha.100"
+                  onClick={navSliderDisclosure.onClose}
+                />
+              </Box>
             </Box>
-          </Flex>
+          </SlideFade>
+
+          <Box boxSize={'full'} zIndex="1">
+            {children}
+          </Box>
         </Flex>
       </AdminShell>
     )

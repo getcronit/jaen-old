@@ -4,6 +4,7 @@ import {NewsSlide} from '../../molecules/index.js'
 import {AdminToolbar} from '../../organisms/AdminToolbar/AdminToolbar.js'
 
 export interface AdminShellProps {
+  beforeAdminShell?: React.ReactNode
   children: React.ReactNode
   renderChildrenAsIframe?: boolean
   withoutAdminToolbarShadow?: boolean
@@ -58,10 +59,11 @@ export const AdminShell: React.FC<AdminShellProps> = props => {
   return (
     <Flex flexDir={'column'} h="100vh" position="relative">
       <NewsSlideProvider>
-        <AdminToolbar
-          withoutShadow={props.withoutAdminToolbarShadow}
-          zIndex={2}
-        />
+        <Box zIndex={2}>
+          <AdminToolbar withoutShadow={props.withoutAdminToolbarShadow} />
+          {props.beforeAdminShell}
+        </Box>
+
         <Box
           zIndex={1}
           id="__jaen_admin_shell"
