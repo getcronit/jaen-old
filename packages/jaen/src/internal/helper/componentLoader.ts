@@ -1,4 +1,4 @@
-import type {IPageConnection, ITemplateConnection} from '../../connectors.js'
+import {ITemplateConnection, IPageConnection} from '../../connectors/index.js'
 
 export const templateLoader = async (
   relativePath: string

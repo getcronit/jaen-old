@@ -1,5 +1,5 @@
 import React from 'react'
-import type {IPageConnection, ITemplateConnection} from '../../connectors.js'
+import {ITemplateConnection, IPageConnection} from '../../connectors/index.js'
 import {withRedux} from '../redux/index.js'
 import {pageLoader, templateLoader} from '../helper/componentLoader.js'
 import {useDynamicRedirect} from '../hooks/routing/useDynamicRedirect.js'
