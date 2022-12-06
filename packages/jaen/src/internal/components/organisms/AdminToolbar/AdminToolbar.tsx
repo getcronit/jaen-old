@@ -27,10 +27,12 @@ import {PageNavigator} from '../PageNavigator/PageNavigator.js'
 
 export interface AdminToolbarProps extends StackProps {
   withoutShadow?: boolean
+  withoutPageNavigator?: boolean
 }
 
 export const AdminToolbar = ({
   withoutShadow,
+  withoutPageNavigator = false,
   ...stackProps
 }: AdminToolbarProps) => {
   const isOnJaenAdmin =
@@ -109,9 +111,12 @@ export const AdminToolbar = ({
           base: 'center',
           lg: 'space-between'
         }}>
-        <PageManagerProvider>
-          <PageNavigator />
-        </PageManagerProvider>
+        {}
+        {!withoutPageNavigator && (
+          <PageManagerProvider>
+            <PageNavigator />
+          </PageManagerProvider>
+        )}
         <ActionBar />
       </HStack>
 
