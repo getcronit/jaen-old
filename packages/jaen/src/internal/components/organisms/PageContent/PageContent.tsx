@@ -146,46 +146,49 @@ export const PageContent = (props: PageContentProps) => {
               <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl mt={4} isInvalid={!!errors.slug}>
-              <FormLabel>Slug</FormLabel>
-              <Input
-                // id="slug"
-                placeholder="the-slug"
-                disabled={!props.template}
-                {...register('slug', {
-                  required: 'This is required',
-                  pattern: {
-                    value: /^[a-z0-9-]+$/,
-                    message:
-                      'Only lowercase letters, numbers and hyphens are allowed'
-                  },
-                  validate: (value: string) => {
-                    // return if the form field is not dirty
-                    if (!dirtyFields.slug) {
+            {props.values.slug && props.template && (
+              <FormControl mt={4} isInvalid={!!errors.slug}>
+                <FormLabel>Slug</FormLabel>
+                <Input
+                  // id="slug"
+                  placeholder="the-slug"
+                  disabled={!props.template}
+                  {...register('slug', {
+                    required: 'This is required',
+                    pattern: {
+                      value: /^[a-z0-9-]+$/,
+                      message:
+                        'Only lowercase letters, numbers and hyphens are allowed'
+                    },
+                    validate: (value: string) => {
+                      // return if the form field is not dirty
+                      if (!dirtyFields.slug) {
+                        return true
+                      }
+
+                      const {externalValidation} = props
+
+                      if (externalValidation) {
+                        const validation = externalValidation('slug', value)
+
+                        if (validation) {
+                          return validation
+                        }
+                      }
+
                       return true
                     }
+                  })}
+                />
+                {!errors.slug && (
+                  <FormHelperText>
+                    Make sure the slug is unique between siblings.
+                  </FormHelperText>
+                )}
+                <FormErrorMessage>{errors.slug?.message}</FormErrorMessage>
+              </FormControl>
+            )}
 
-                    const {externalValidation} = props
-
-                    if (externalValidation) {
-                      const validation = externalValidation('slug', value)
-
-                      if (validation) {
-                        return validation
-                      }
-                    }
-
-                    return true
-                  }
-                })}
-              />
-              {!errors.slug && (
-                <FormHelperText>
-                  Make sure the slug is unique between siblings.
-                </FormHelperText>
-              )}
-              <FormErrorMessage>{errors.slug?.message}</FormErrorMessage>
-            </FormControl>
             <FormControl mt={4}>
               <FormLabel>Description</FormLabel>
               <Textarea
