@@ -1,14 +1,10 @@
-import {useState, useCallback} from 'react'
+import {useStatus} from '../../../hooks/useStatus.js'
 
 export function useEdit() {
-  const [isEditing, setIsEditing] = useState(false)
-
-  const toggleEditing = useCallback(() => {
-    setIsEditing(!isEditing)
-  }, [isEditing])
+  const status = useStatus()
 
   return {
-    isEditing,
-    toggleEditing
+    isEditing: status.isEditing,
+    toggleEditing: status.toggleIsEditing
   }
 }
