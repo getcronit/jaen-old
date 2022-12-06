@@ -20,6 +20,7 @@ import PersistState from './persist-state.js'
 
 import auth, {authInitialState} from './slices/auth.js'
 import page, {pageInitialState} from './slices/page.js'
+import status, {statusInitialState} from './slices/status.js'
 
 import {useDeepEqualSelector} from '../../utils/hooks/useDeepEqualSelector.js'
 import React from 'react'
@@ -31,7 +32,8 @@ const {loadState, persistState, persistMiddleware} =
 
 const combinedReducer = combineReducers({
   auth,
-  page
+  page,
+  status
 })
 
 // Reset state if action called
@@ -39,7 +41,8 @@ const rootReducer = (state: any, action: any) => {
   if (action.type === 'RESET_STATE') {
     return {
       auth: authInitialState,
-      page: pageInitialState
+      page: pageInitialState,
+      status: statusInitialState
     }
   }
 

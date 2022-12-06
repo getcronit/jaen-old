@@ -9,7 +9,7 @@ import {
   StatNumber
 } from '../../../molecules/index.js'
 
-import {useOptions} from '../../../../hooks/useOptions.js'
+import {useStatus} from '../../../../hooks/useStatus.js'
 import {useStatistics} from '../../../../hooks/useStatistics.js'
 import {ViewLayout} from '../../../organisms/index.js'
 
@@ -25,7 +25,7 @@ export const HomeView: React.FC<HomeViewProps> = () => {
     {label: 'Unpublished changes', value: totalChanges}
   ]
 
-  const {isPublishing} = useOptions()
+  const {isPublishing} = useStatus()
 
   return (
     <ViewLayout

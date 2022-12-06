@@ -37,7 +37,13 @@ export interface IPageState {
   }
 }
 
+export interface IStatusState {
+  isPublishing: boolean
+  isEditing: boolean
+}
+
 export interface IJaenState {
   auth: IAuthState
   page: IPageState
+  status: IStatusState
 }
