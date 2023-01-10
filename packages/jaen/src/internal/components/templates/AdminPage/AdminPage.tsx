@@ -74,7 +74,7 @@ const AdminPage: React.FC<AdminPageProps> = withRedux(
               zIndex: 2,
               pointerEvents: navSliderDisclosure.isOpen ? 'all' : 'none'
             }}>
-            <Box position={'relative'} h="full" w="80">
+            <Box position={'fixed'} h="full" w="80">
               <Box
                 borderY="1px"
                 borderColor={'gray.200'}
@@ -129,7 +129,7 @@ const AdminPage: React.FC<AdminPageProps> = withRedux(
             </Box>
           </SlideFade>
 
-          <Box boxSize={'full'} zIndex="1">
+          <Box boxSize={'full'} zIndex="1" bg="green">
             {children}
           </Box>
         </Flex>

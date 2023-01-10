@@ -64,7 +64,7 @@ export const AdminShell: React.FC<AdminShellProps> = props => {
           {props.beforeAdminShell}
         </Box>
 
-        <Box
+        <Flex
           zIndex={1}
           id="__jaen_admin_shell"
           flex="1"
@@ -85,7 +85,7 @@ export const AdminShell: React.FC<AdminShellProps> = props => {
           <NewsSlide zIndex={2} />
 
           {props.children}
-        </Box>
+        </Flex>
       </NewsSlideProvider>
     </Flex>
   )

@@ -1,5 +1,7 @@
 import theme from '../src/internal/styles/theme'
 import {ModalProvider} from '../src/internal/context/Modals/ModalContext'
+import {SiteProvider} from '../src/internal/context/SiteContext.js'
+
 import {ChakraProvider} from '@chakra-ui/react'
 
 // Gatsby's Link overrides:
@@ -35,7 +37,9 @@ export const decorators = [
   Story => (
     <ChakraProvider theme={theme}>
       <ModalProvider>
-        <Story />
+        <SiteProvider>
+          <Story />
+        </SiteProvider>
       </ModalProvider>
     </ChakraProvider>
   )
