@@ -88,15 +88,28 @@ export const insertSectionIntoTree = (
               section.ptrHead = next
             } else if (prev && next) {
               // If both prev and next are defined:
+              // If the section is deleted:
+              // - set the prev section's next pointer to next
+              // - set the next section's prev pointer to prev
+              // If the section is not deleted:
               // - set the prev section's next pointer to the next section's id
               // - set the next section's prev pointer to the prev section's id
 
-              updateItem(section.items, prev, {
-                ptrNext: null
-              })
-              updateItem(section.items, next, {
-                ptrPrev: null
-              })
+              if (shouldDelete) {
+                updateItem(section.items, prev, {
+                  ptrNext: next
+                })
+                updateItem(section.items, next, {
+                  ptrPrev: prev
+                })
+              } else {
+                updateItem(section.items, prev, {
+                  ptrNext: null
+                })
+                updateItem(section.items, next, {
+                  ptrPrev: null
+                })
+              }
             } else {
               // If both prev and next are not defined:
               // - set the head and tail pointers to null
