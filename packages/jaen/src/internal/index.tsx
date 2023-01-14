@@ -3,6 +3,7 @@ import {navigate} from 'gatsby'
 import {useEffect} from 'react'
 
 import {ActivationButton, AdminShell} from './components/index.js'
+import {HighlightProvider} from './context/HighlightContext.js'
 import {IncomingBuildCheckerProvider} from './context/IncomingBuildChecker/index.js'
 import {ModalProvider} from './context/Modals/ModalContext.js'
 import {SiteProvider} from './context/SiteContext.js'
@@ -42,7 +43,7 @@ export const GatsbyRootWrapper: React.FC<WrapperProps> = ({
       <ModalProvider>
         <SiteProvider>
           <IncomingBuildCheckerProvider>
-            {children}
+            <HighlightProvider>{children}</HighlightProvider>
           </IncomingBuildCheckerProvider>
         </SiteProvider>
       </ModalProvider>
