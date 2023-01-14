@@ -1,8 +1,7 @@
-import {ThemeProvider} from '@emotion/react'
 import {memo, useEffect} from 'react'
+import {ThemeProvider} from '../internal/styles/ChakraThemeProvider.js'
 import {useAuth} from '../internal/hooks/auth/useAuth.js'
 import {useField} from '../internal/hooks/field/useField.js'
-import theme from '../internal/styles/theme.js'
 import {IJaenConnection} from '../types.js'
 import {cleanObject} from '../utils/cleanObject.js'
 
@@ -63,7 +62,7 @@ export const connectField = <IValue, IDefaultValue = IValue, P = {}>(
       }, [isAuthenticated])
 
       return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider>
           <Component
             jaenField={{
               name: props.name,

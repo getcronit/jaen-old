@@ -12,6 +12,7 @@ import {getAuth} from './hooks/auth/useAuth.js'
 import {useAdminStaticQuery} from './hooks/useAdminStaticQuery.js'
 import theme from './styles/theme.js'
 import {useInterceptGatsbyNavigate} from './hooks/useInterceptGatsbyNavigate'
+import {ThemeProvider} from './styles/ChakraThemeProvider.js'
 
 export {AdminPage, LoginPage} from './components/index.js'
 export {RoutingPage} from './RoutingPage.js'
@@ -85,7 +86,7 @@ export const GatsbyPageWrapper: React.FC<PageWrapperProps> = ({
         <>
           <ActivationButton onClick={handleActivationButtonClick} />
 
-          {withDefaultTheme(children)}
+          <ThemeProvider>{children}</ThemeProvider>
         </>
       )
     }

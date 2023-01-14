@@ -1,4 +1,4 @@
-import {Box} from '@chakra-ui/react'
+import {Box, Button, Text} from '@chakra-ui/react'
 
 import Editor from '../../utils/CKEditor/index.js'
 import {connectField} from '../../connectors/index.js'
@@ -15,7 +15,13 @@ export const TextField = connectField<string, string, TextFieldProps>(
     return (
       <Box style={jaenField.style} className={jaenField.className}>
         <HighlightTooltip
-          actions={[`Text (${jaenField.name})`]}
+          actions={[
+            <Button variant="jaenHighlightTooltipText">
+              <Text as="span" noOfLines={1}>
+                Text {jaenField.name}
+              </Text>
+            </Button>
+          ]}
           isEditing={jaenField.isEditing}>
           <Editor
             defaultValue={jaenField.staticValue || jaenField.defaultValue}
