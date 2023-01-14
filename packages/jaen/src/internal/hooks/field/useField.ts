@@ -84,8 +84,6 @@ export function useField<IValue>(name: string, type: string) {
 
   const {isEditing} = useStatus()
 
-  console.log('isEditing', isEditing)
-
   const write = React.useCallback(
     (newValue: IValue | null) => {
       store.dispatch(

@@ -9,7 +9,9 @@ export interface IStatus {
 }
 
 export const useStatus = (): IStatus => {
-  const [isEditing, setIsEditing] = useState(false)
+  const [isEditing, setIsEditing] = useState(
+    (store.getState() as RootState).status.isEditing
+  )
 
   useEffect(() => {
     const unsubscribe = store.subscribe(() => {

@@ -2,8 +2,6 @@ import {ChakraProvider} from '@chakra-ui/react'
 import {navigate} from 'gatsby'
 import {useEffect} from 'react'
 
-import {withDefaultTheme} from '../utils/withDefaultTheme.js'
-
 import {ActivationButton, AdminShell} from './components/index.js'
 import {IncomingBuildCheckerProvider} from './context/IncomingBuildChecker/index.js'
 import {ModalProvider} from './context/Modals/ModalContext.js'
@@ -19,6 +17,8 @@ export {RoutingPage} from './RoutingPage.js'
 
 export {useIncomingBuildChecker} from './context/IncomingBuildChecker/index.js'
 export * as views from './views/index.js'
+
+export {useStatus} from './hooks/useStatus.js'
 
 export interface WrapperProps {
   children: React.ReactNode

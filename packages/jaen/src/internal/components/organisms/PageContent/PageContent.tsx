@@ -25,8 +25,8 @@ import {HiCloudUpload} from '@react-icons/all-files/hi/HiCloudUpload'
 import {HiTemplate} from '@react-icons/all-files/hi/HiTemplate'
 
 import {IFormProps, IJaenTemplate} from '../../../../types.js'
-import {withDefaultTheme} from '../../../../utils/withDefaultTheme.js'
 import {dirtyValues} from '../../../../utils/forms/dirtyValues.js'
+import {ThemeProvider} from '../../../styles/ChakraThemeProvider.js'
 
 export type ContentValues = {
   title: string
@@ -113,7 +113,7 @@ export const PageContent = (props: PageContentProps) => {
 
   return (
     <>
-      {withDefaultTheme(finder.finderElement)}
+      <ThemeProvider>{finder.finderElement}</ThemeProvider>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
