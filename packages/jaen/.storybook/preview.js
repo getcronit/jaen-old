@@ -1,6 +1,7 @@
 import theme from '../src/internal/styles/theme'
 import {ModalProvider} from '../src/internal/context/Modals/ModalContext'
 import {SiteProvider} from '../src/internal/context/SiteContext.js'
+import {HighlightProvider} from '../src/internal/context/HighlightContext.js'
 
 import {ChakraProvider} from '@chakra-ui/react'
 
@@ -38,7 +39,9 @@ export const decorators = [
     <ChakraProvider theme={theme}>
       <ModalProvider>
         <SiteProvider>
-          <Story />
+          <HighlightProvider>
+            <Story />
+          </HighlightProvider>
         </SiteProvider>
       </ModalProvider>
     </ChakraProvider>
