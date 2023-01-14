@@ -1,9 +1,9 @@
 import {AdminToolbar} from './internal/components/index.js'
-import {PageContext, PageProvider} from './internal/context/PageProvider.js'
+import {PageContextType, PageProvider} from './internal/context/PageProvider.js'
 import {withSnekFinder} from './internal/context/SnekFinder/withSnekFinder.js'
 import {GatsbyRootWrapper} from './internal/index.js'
 
-export type JaenMockProps = PageContext
+export type JaenMockProps = PageContextType
 
 export const withJaenMock = <P extends object>(
   Component: React.ComponentType,
