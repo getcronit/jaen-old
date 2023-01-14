@@ -1,7 +1,25 @@
 import {extendTheme, withDefaultColorScheme} from '@chakra-ui/react'
+import {CLASSNAMES} from './constants.js'
 
 const theme = extendTheme(
   {
+    styles: {
+      global: {
+        [`.${CLASSNAMES.JAEN_HIGHLIGHT}`]: {
+          outline: '2px solid var(--chakra-colors-pink-100)',
+          outlineOffset: '4px', // 'var(--chakra-space-1)',
+          borderRadius: '11px', // 'var(--chakra-radii-lg)',
+          zIndex: 'var(--chakra-zIndices-docked)'
+        },
+        [`.${CLASSNAMES.JAEN_HIGHLIGHT_TOOLTIP}`]: {
+          height: '100%',
+          width: '100%',
+          pointerEvents: 'none',
+          position: 'absolute',
+          top: 0
+        }
+      }
+    },
     components: {
       Link: {
         baseStyle: {
@@ -26,6 +44,34 @@ const theme = extendTheme(
             _active: {
               bg: 'gray.700'
             }
+          },
+          jaenHighlightTooltip: {
+            bg: 'pink.100',
+            color: 'pink.900',
+            _hover: {
+              bg: 'pink.200'
+            },
+            borderRadius: '0.5em',
+            fontWeight: 'normal',
+            fontSize: 'xs',
+            height: '6',
+            minWidth: '6',
+            px: '2'
+          },
+          jaenHighlightTooltipText: {
+            bg: 'pink.100',
+            color: 'pink.900',
+            _hover: {
+              bg: 'pink.100',
+              color: 'pink.900'
+            },
+            borderRadius: '0.5em',
+            fontWeight: 'normal',
+            cursor: 'default',
+            fontSize: 'xs',
+            height: '6',
+            minWidth: '6',
+            px: '2'
           }
         }
       }
