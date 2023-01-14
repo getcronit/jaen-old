@@ -37,13 +37,11 @@ export function withAdminRouting<P>(
 
     return (
       <HashRouter>
-        {
-          <WrappedComponent
-            {...(props as P)}
-            routes={builtViews.routes}
-            items={builtViews.items}
-          />
-        }
+        <WrappedComponent
+          {...(props as P)}
+          routes={builtViews.routes}
+          items={builtViews.items}
+        />
       </HashRouter>
     )
   }

@@ -1,14 +1,14 @@
-import * as React from 'react'
-import {MutableRefObject, useCallback, useEffect, useRef, useState} from 'react'
 import {
-  useEventListener,
-  Portal,
   Menu,
   MenuButton,
-  PortalProps,
   MenuButtonProps,
-  MenuProps
+  MenuProps,
+  Portal,
+  PortalProps,
+  useEventListener
 } from '@chakra-ui/react'
+import * as React from 'react'
+import {MutableRefObject, useCallback, useEffect, useRef, useState} from 'react'
 
 export enum ContextMenuEvent {
   Open = 'contextmenu.open',
@@ -53,7 +53,9 @@ export function ContextMenu<T extends HTMLElement = HTMLElement>(
       const timeout = setTimeout(() => {
         setIsRendered(isOpen)
       }, 1000)
-      return () => clearTimeout(timeout)
+      return () => {
+        clearTimeout(timeout)
+      }
     }
   }, [isOpen])
 

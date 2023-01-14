@@ -1,1 +1,1 @@
-export {default as migrate} from "./migrate.js";
+export {default as migrate} from './migrate.js'

@@ -27,7 +27,7 @@ import './tree.css'
 export interface PageTreeProps extends BoxProps {
   isNavigatorMode?: boolean
 
-  nodes: {
+  nodes: Array<{
     /**
      * Path:
      *  /
@@ -37,7 +37,7 @@ export interface PageTreeProps extends BoxProps {
     path: string
     title: string
     isLocked?: boolean
-  }[]
+  }>
 
   defaultSelectedPath?: string
   selectedPath?: string
@@ -96,15 +96,15 @@ const useTreeState = (
     const path = selectedKeys[0]?.toString() || '/'
 
     if (isNavigatorMode) {
-      onViewPage && onViewPage(path)
+      onViewPage?.(path)
     } else {
       // check if the it is a deselection
 
       if (selectedKeys.length === 0) {
         // view info.node.key
-        onViewPage && onViewPage(info.node.key.toString())
+        onViewPage?.(info.node.key.toString())
       } else {
-        onSelectPage && onSelectPage(path)
+        onSelectPage?.(path)
       }
     }
   }
@@ -311,7 +311,7 @@ export const PageTree: React.FC<PageTreeProps> = ({
     const node = nodes.find(node =>
       matchPath(node.path, dataNode.key.toString())
     )
-    if (!node) {
+    if (node == null) {
       throw new Error('Node not found')
     }
     return node
@@ -387,7 +387,7 @@ export const PageTree: React.FC<PageTreeProps> = ({
                       <MenuDivider />
                       <MenuItem
                         isDisabled={getNodeFromDataNode(node).isLocked}
-                        icon={<DeleteIcon color={'red'} />}
+                        icon={<DeleteIcon color="red" />}
                         onClick={() => {
                           onViewPage?.(node.key.toString())
                         }}>
@@ -403,7 +403,7 @@ export const PageTree: React.FC<PageTreeProps> = ({
                 return (
                   <HStack ref={ref}>
                     <Text
-                      whiteSpace={'break-spaces'}
+                      whiteSpace="break-spaces"
                       wordBreak="break-word"
                       noOfLines={1}
                       as="span">
@@ -411,7 +411,7 @@ export const PageTree: React.FC<PageTreeProps> = ({
                     </Text>
 
                     {childrenLength > 0 && (
-                      <Tag size={'sm'}>{childrenLength}</Tag>
+                      <Tag size="sm">{childrenLength}</Tag>
                     )}
                   </HStack>
                 )
@@ -437,7 +437,7 @@ export const PageTree: React.FC<PageTreeProps> = ({
           const ref = contextRefs.current[info.node.key]
 
           // if the click was on the context menu, don't select the node
-          // @ts-ignore
+          // @ts-expect-error
           if (!(ref?.current && ref?.current?.contains(nativeEvent.target))) {
             return
           }

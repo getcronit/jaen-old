@@ -1,5 +1,5 @@
 .rc-tree-node-selected {
-  background-color: #EDF2F7;
+  background-color: #edf2f7;
   box-shadow: 0 0 0 1px #edf2f7;
 }
 
@@ -16,7 +16,7 @@
 }
 
 .drop-target {
-  background-color: #E2E8F0 !important;
+  background-color: #e2e8f0 !important;
   box-shadow: 0 0 0 1px #edf2f7;
 }
 

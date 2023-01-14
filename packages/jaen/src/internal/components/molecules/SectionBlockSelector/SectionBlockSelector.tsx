@@ -7,9 +7,9 @@ import {
   Text,
   VStack
 } from '@chakra-ui/react'
-import {useEffect, useState} from 'react'
+import {useState} from 'react'
 
-export type SelectorBlockType = {
+export interface SelectorBlockType {
   slug: string
   title: string
   icon: React.ComponentType<{}>
@@ -86,9 +86,9 @@ export const SectionBlockSelector: React.FC<SectionBlockSelectorProps> = ({
             size="sm"
             colorScheme="pink"
             flex="1"
-            isDisabled={!selection}
+            isDisabled={selection == null}
             onClick={() => {
-              if (!selection) return
+              if (selection == null) return
 
               onBlockAdd(selection, 'add')
             }}>
@@ -99,9 +99,9 @@ export const SectionBlockSelector: React.FC<SectionBlockSelectorProps> = ({
             <Button
               colorScheme="pink"
               flex="1"
-              isDisabled={!selection}
+              isDisabled={selection == null}
               onClick={() => {
-                if (!selection) return
+                if (selection == null) return
                 onBlockAdd(selection, 'prepend')
               }}>
               Prepend
@@ -109,9 +109,9 @@ export const SectionBlockSelector: React.FC<SectionBlockSelectorProps> = ({
             <Button
               colorScheme="pink"
               flex="1"
-              isDisabled={!selection}
+              isDisabled={selection == null}
               onClick={() => {
-                if (!selection) return
+                if (selection == null) return
                 onBlockAdd(selection, 'append')
               }}>
               Append

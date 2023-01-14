@@ -1,8 +1,8 @@
 import React from 'react'
 import {IJaenPage} from '../../types.js'
+import {useAuth} from '../hooks/auth/useAuth.js'
 import {store, useAppDispatch, withRedux} from '../redux'
 import {actions} from '../redux/slices/page.js'
-import {useAuth} from '../hooks/auth/useAuth.js'
 import {IJaenState} from '../redux/types.js'
 
 export interface PageProviderProps {
@@ -13,10 +13,10 @@ export interface PageProviderProps {
   unregisterFields?: boolean
 }
 
-export interface PageContext extends PageProviderProps {}
+export interface PageContextType extends PageProviderProps {}
 
 export const PageContext =
-  React.createContext<PageContext | undefined>(undefined)
+  React.createContext<PageContextType | undefined>(undefined)
 
 const UnregisterFieldsHelper = withRedux(() => {
   const {jaenPage} = usePageContext()
@@ -96,7 +96,7 @@ export const useJaenPageIndex = (
   children: Array<{id: string} & Partial<IJaenPage>>
   withJaenPage: (childId: string, children: React.ReactNode) => React.ReactNode
 } => {
-  let {jaenPage, jaenPages} = usePageContext()
+  const {jaenPage, jaenPages} = usePageContext()
 
   let id = jaenPage.id
   let staticChildren = jaenPage.children
@@ -104,7 +104,7 @@ export const useJaenPageIndex = (
   if (props?.jaenPageId) {
     id = props?.jaenPageId
   } else if (props?.path) {
-    if (!jaenPages) {
+    if (jaenPages == null) {
       throw new Error('Unable to resolve page by path. No pages provided.')
     }
 

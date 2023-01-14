@@ -1,8 +1,8 @@
 import {Box} from '@chakra-ui/react'
 import {useSnekFinder} from '@jaenjs/snek-finder'
 
-import {ThemeProvider} from '../../../../styles/ChakraThemeProvider.js'
 import {withSnekFinder} from '../../../../context/SnekFinder/withSnekFinder.js'
+import {ThemeProvider} from '../../../../styles/ChakraThemeProvider.js'
 import {ViewLayout} from '../../../organisms/index.js'
 
 export const FilesViewWithBox = withSnekFinder(() => {
@@ -11,7 +11,7 @@ export const FilesViewWithBox = withSnekFinder(() => {
   return (
     <Box
       flex="1"
-      boxSize={'100%'}
+      boxSize="100%"
       bg="gray.50"
       p={{
         base: 2,
@@ -25,8 +25,8 @@ export const FilesViewWithBox = withSnekFinder(() => {
           base: '4',
           md: '8'
         }}
-        boxSize={'full'}
-        rounded={'lg'}>
+        boxSize="full"
+        rounded="lg">
         <ThemeProvider>{finder.finderElement}</ThemeProvider>
       </Box>
     </Box>

@@ -1,6 +1,6 @@
 import {IJaenPage} from '../../types.js'
 
-type PageNode = {
+interface PageNode {
   id: string
   slug: string
   parent: {
@@ -9,7 +9,7 @@ type PageNode = {
 }
 
 export const generatePageOriginPath = (
-  allNodes: Array<PageNode>,
+  allNodes: PageNode[],
   node: PageNode,
   path = node.id === 'JaenPage /' ? '/' : `/${node.slug}`
 ): string | undefined => {
@@ -34,18 +34,18 @@ export const generatePagePaths = (allNodes: IJaenPage[], pageId: string) => {
   const originNode = allNodes.find(node => node.id === pageId)
 
   if (originNode) {
-    const paths: {[path: string]: string} = {}
+    const paths: Record<string, string> = {}
 
     console.log(`originNode`, originNode)
 
-    const originPath = generatePageOriginPath(allNodes, originNode!)
+    const originPath = generatePageOriginPath(allNodes, originNode)
 
     console.log('originPath', originPath)
 
     const lookupPath = (node: IJaenPage, pathPrefix = '/') => {
       paths[pathPrefix] = node.id
 
-      if (node.children.length) {
+      if (node.children.length > 0) {
         for (const {id} of node.children) {
           const child = allNodes.find(n => n.id === id)
 
@@ -70,7 +70,7 @@ export const generatePagePaths = (allNodes: IJaenPage[], pageId: string) => {
 }
 
 export const generateAllPaths = (allNodes: IJaenPage[]) => {
-  const paths: {[path: string]: string} = {}
+  const paths: Record<string, string> = {}
 
   for (const node of allNodes) {
     const path = generatePageOriginPath(allNodes, node)

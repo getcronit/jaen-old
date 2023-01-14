@@ -1,10 +1,5 @@
-import {
-  AddIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  EditIcon
-} from '@chakra-ui/icons'
-import {Button, ButtonGroup, Select} from '@chakra-ui/react'
+import {ChevronLeftIcon, ChevronRightIcon, EditIcon} from '@chakra-ui/icons'
+import {Select} from '@chakra-ui/react'
 import {ComponentMeta, Story} from '@storybook/react'
 import React from 'react'
 import {HighlightTooltip} from './HighlightTooltip.js'
@@ -48,7 +43,7 @@ ImageField.args = {
       }}
     />
   ),
-  actions: ['Image', <EditIcon />]
+  actions: ['Image', <EditIcon key="edit" />]
 }
 
 export const SectionField: Story<ComponentProps> = Template.bind({})
@@ -66,15 +61,25 @@ SectionField.args = {
   actions: [
     'Section',
     <>
-      <ChevronLeftIcon onClick={() => alert('left')} cursor="pointer" />
+      <ChevronLeftIcon
+        onClick={() => {
+          alert('left')
+        }}
+        cursor="pointer"
+      />
 
-      <Select pos={'relative'} size="xs">
+      <Select pos="relative" size="xs">
         <option>1</option>
         <option>2</option>
         <option>3</option>
       </Select>
 
-      <ChevronRightIcon onClick={() => alert('right')} cursor="pointer" />
+      <ChevronRightIcon
+        onClick={() => {
+          alert('right')
+        }}
+        cursor="pointer"
+      />
     </>
   ]
 }

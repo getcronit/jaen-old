@@ -9,8 +9,8 @@ import {
   StatNumber
 } from '../../../molecules/index.js'
 
-import {useStatus} from '../../../../hooks/useStatus.js'
 import {useStatistics} from '../../../../hooks/useStatistics.js'
+import {useStatus} from '../../../../hooks/useStatus.js'
 import {ViewLayout} from '../../../organisms/index.js'
 
 export interface HomeViewProps {}
@@ -45,15 +45,11 @@ export const HomeView: React.FC<HomeViewProps> = () => {
           </Stat>
         ))}
         <Box>
-          <List
-            spacing="12"
-            overflowY="auto"
-            h={'xs'}
-            label="Previouse releases">
+          <List spacing="12" overflowY="auto" h="xs" label="Previouse releases">
             {isPublishing && (
               <ListItem
                 title="In progress"
-                subTitle={`Your website will be live in a few minutes.`}
+                subTitle="Your website will be live in a few minutes."
                 circleColor={useColorModeValue('orange.500', 'orange.300')}
                 icon={<Icon as={FaRocket} boxSize="6" />}
               />

@@ -8,6 +8,7 @@
 
 import {
   Button,
+  CreateToastFnReturn,
   Input,
   Modal,
   ModalBody,
@@ -16,8 +17,7 @@ import {
   ModalOverlay,
   Stack,
   Text,
-  useToast,
-  CreateToastFnReturn
+  useToast
 } from '@chakra-ui/react'
 import {
   createContext,
@@ -60,7 +60,7 @@ const defaultContext: Modals = {
 const Context = createContext<Modals>(defaultContext)
 
 interface AnyEvent {
-  preventDefault(): void
+  preventDefault: () => void
 }
 
 export const ModalProvider = ({children}: {children: ReactNode}) => {
@@ -77,8 +77,8 @@ export const ModalProvider = ({children}: {children: ReactNode}) => {
 
   const createOpener = useCallback(
     (type: ModalType) =>
-      (message: string, defaultValue = '') =>
-        new Promise(resolve => {
+      async (message: string, defaultValue = '') =>
+        await new Promise(resolve => {
           const handleClose = (e?: AnyEvent) => {
             e?.preventDefault()
             setModal(null)

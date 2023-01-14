@@ -1,5 +1,4 @@
-import {AddIcon, DeleteIcon} from '@chakra-ui/icons'
-import {Box, Button, ButtonGroup, HStack, IconButton} from '@chakra-ui/react'
+import {HStack} from '@chakra-ui/react'
 import React, {createContext, useContext, useEffect, useRef} from 'react'
 import {createRoot} from 'react-dom/client'
 
@@ -33,9 +32,9 @@ const Tooltip: React.FC<{
       <HStack
         w="fit-content"
         mx="auto"
-        justifyContent={'center'}
+        justifyContent="center"
         spacing="2"
-        pointerEvents={'all'}>
+        pointerEvents="all">
         {actions.map((action, index) => (
           <React.Fragment key={index}>{action}</React.Fragment>
         ))}
@@ -70,7 +69,11 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = ({
         tooltipButtons
       })
     } else {
-      itemsRef.current[index]!.tooltipButtons = tooltipButtons
+      const item = itemsRef.current[index]
+
+      if (item) {
+        item.tooltipButtons = tooltipButtons
+      }
     }
   }
 
@@ -121,7 +124,7 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = ({
   useEffect(() => {
     // Add event listeners to all items in the array
 
-    let parentElements: HTMLElement[] = []
+    const parentElements: HTMLElement[] = []
 
     const handleMouseEnter = (currentTarget: EventTarget) => {
       if (!isEditing) return
@@ -204,7 +207,7 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = ({
       return (event: Event) => {
         const target = event.currentTarget
 
-        if (!target) return
+        if (target == null) return
 
         fn(target)
       }
@@ -214,7 +217,7 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = ({
     const handleDelayedMouseLeave = withCurrentTarget(handleMouseLeave)
 
     itemsRef.current.forEach(({ref: item}) => {
-      if (!item) return
+      if (item == null) return
 
       item.addEventListener('mouseenter', handleDelayedMouseEnter)
       item.addEventListener('mouseleave', handleDelayedMouseLeave)
@@ -224,7 +227,7 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = ({
       // Remove event listeners from all items in the array
 
       itemsRef.current.forEach(({ref: item}) => {
-        if (!item) return
+        if (item == null) return
 
         item.removeEventListener('mouseenter', handleDelayedMouseEnter)
         item.removeEventListener('mouseleave', handleDelayedMouseLeave)
@@ -246,7 +249,9 @@ export interface UseHighlightProps {
 export const useHighlight = ({tooltipButtons}: UseHighlightProps) => {
   const {ref} = useContext(HighlightProviderContext)
 
-  const refOnly = (theRef: HTMLDivElement | null) => ref(theRef, tooltipButtons)
+  const refOnly = (theRef: HTMLDivElement | null) => {
+    ref(theRef, tooltipButtons)
+  }
 
   return {
     ref: refOnly

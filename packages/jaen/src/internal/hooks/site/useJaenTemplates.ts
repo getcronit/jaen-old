@@ -1,7 +1,7 @@
 import React from 'react'
 
-import {useSiteContext} from '../../context/SiteContext.js'
 import {IJaenTemplate} from '../../../types.js'
+import {useSiteContext} from '../../context/SiteContext.js'
 import {useAdminStaticQuery} from '../useAdminStaticQuery.js'
 
 /**
@@ -16,14 +16,12 @@ export const useJaenTemplates = () => {
   const [isLoading, setIsLoading] = React.useState(true)
 
   const [templates, setTemplates] =
-    React.useState<{
-      [name: string]: IJaenTemplate
-    } | null>(null)
+    React.useState<Record<string, IJaenTemplate> | null>(null)
 
   React.useEffect(() => {
     const load = async () => {
       setIsLoading(true)
-      const tmpls: {[name: string]: IJaenTemplate} = {}
+      const tmpls: Record<string, IJaenTemplate> = {}
 
       for (const templateNode of jaenTemplates) {
         const {name: loadTemplate} = templateNode
@@ -53,7 +51,7 @@ export const useJaenTemplates = () => {
       setIsLoading(false)
     }
 
-    load()
+    void load()
   }, [])
 
   const templatesArray = React.useMemo(

@@ -47,14 +47,15 @@ const EditorWrapper = styled(Box)`
   }
 `
 
-const LoadableCKEditor = React.lazy(() =>
-  // @ts-ignore
-  import('@ckeditor/ckeditor5-react').then(module => ({
-    default: module.CKEditor
-  }))
+const LoadableCKEditor = React.lazy(
+  async () =>
+    // @ts-expect-error
+    await import('@ckeditor/ckeditor5-react').then(module => ({
+      default: module.CKEditor
+    }))
 )
 
-type EditorProps = {
+interface EditorProps {
   defaultValue: string
   value?: string
   editing: boolean
@@ -69,14 +70,14 @@ type EditorProps = {
   onBlurValue: (data: string) => void
 }
 
-let BalloonEditor: any = undefined
+let BalloonEditor: any
 
 const cleanValue = (defaultValue: string, value?: string) => {
-  let v = value || defaultValue || ''
+  const v = value || defaultValue || ''
 
   // Check if the default value does not contain any HTML tags
   // If so, wrap it in a <p> tag, else return the default value
-  if (v.indexOf('<') === -1) {
+  if (!v.includes('<')) {
     return `<p>${v}</p>`
   }
 
@@ -105,7 +106,7 @@ const Editor: React.FC<EditorProps> = props => {
     }
   }, [props.value, props.editing])
 
-  const editorConfig: {[key: string]: any} = {
+  const editorConfig: Record<string, any> = {
     mediaEmbed: {
       previewsInData: true
     },
@@ -116,7 +117,7 @@ const Editor: React.FC<EditorProps> = props => {
   }
 
   if (props.disableToolbar) {
-    editorConfig['toolbar'] = []
+    editorConfig.toolbar = []
   }
 
   const [editor, setEditor] = React.useState(BalloonEditor)
@@ -124,14 +125,14 @@ const Editor: React.FC<EditorProps> = props => {
   React.useEffect(() => {
     async function load() {
       if (!BalloonEditor && !editor && props.editing) {
-        //@ts-ignore
+        // @ts-expect-error
         BalloonEditor = await import('@ckeditor/ckeditor5-build-balloon')
 
         setEditor(BalloonEditor)
       }
     }
 
-    load()
+    void load()
   })
 
   let hoverTimeout: NodeJS.Timeout
@@ -182,11 +183,10 @@ const Editor: React.FC<EditorProps> = props => {
         <>
           <LoadableCKEditor
             fallback={fallbackElement}
-            //@ts-ignore
             editor={editor?.default}
             config={editorConfig}
             data={value}
-            //@ts-ignore
+            // @ts-expect-error
             onBlur={(_, editor) => {
               const data = editor.getData()
 

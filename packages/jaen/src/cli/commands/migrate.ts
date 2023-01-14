@@ -13,11 +13,12 @@ export default async (options: CreateMigrationOptions) => {
   try {
     await createMigration({
       migrationUrl: JAEN_MIGRATION_URL,
-      jaenDataDir: options.jaenDataDir,
+      jaenDataDir: options.jaenDataDir
     })
   } catch (err) {
+    // rethrow error with a more helpful message
     throw new Error(
-      `An error occurred while running the migration from ${JAEN_MIGRATION_URL}` + err
+      `Error creating migration. Please make sure the migration url is correct. ${err.message}`
     )
   }
 }

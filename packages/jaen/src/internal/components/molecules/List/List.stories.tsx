@@ -1,4 +1,4 @@
-import {useColorModeValue, Icon} from '@chakra-ui/react'
+import {Icon, useColorModeValue} from '@chakra-ui/react'
 import {ComponentMeta, Story} from '@storybook/react'
 import React from 'react'
 import {FaRocket} from 'react-icons/fa'
@@ -21,7 +21,7 @@ export const Basic: Story<ComponentProps> = () => {
       <ListItem
         key="1"
         title="In progress"
-        subTitle={`Your website will be live in a few minutes.`}
+        subTitle="Your website will be live in a few minutes."
         circleColor={useColorModeValue('orange.500', 'orange.300')}
         icon={<Icon as={FaRocket} boxSize="6" />}
       />
@@ -29,7 +29,7 @@ export const Basic: Story<ComponentProps> = () => {
       <ListItem
         key="2"
         title="In progress"
-        subTitle={`Your website will be live in a few minutes.`}
+        subTitle="Your website will be live in a few minutes."
         circleColor={useColorModeValue('orange.500', 'orange.300')}
         icon={<Icon as={FaRocket} boxSize="6" />}
       />

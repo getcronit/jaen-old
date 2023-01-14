@@ -1,5 +1,5 @@
-import type {IGatsbyImageData} from 'gatsby-plugin-image'
 import type {PageProps as GatsbyPageProps} from 'gatsby'
+import type {IGatsbyImageData} from 'gatsby-plugin-image'
 import {ISectionConnection} from './connectors/index.js'
 
 interface SiteMetadata {
@@ -28,22 +28,24 @@ export interface Site {
 export interface IJaenTemplate {
   name: string
   displayName: string
-  children: {
+  children: Array<{
     name: string
     displayName: string
-  }[]
+  }>
   isRootTemplate?: boolean
 }
 
-export type IJaenFields = {
-  [type: string]: {
-    [name: string]: {
+export type IJaenFields = Record<
+  string,
+  Record<
+    string,
+    {
       position?: number
       props?: object
       value: any
     }
-  }
-} | null
+  >
+> | null
 
 export interface IJaenPage {
   id: string
@@ -58,12 +60,12 @@ export interface IJaenPage {
     canonical?: string
   }
   jaenFields: IJaenFields
-  jaenFiles: {
+  jaenFiles: Array<{
     id: string
     childImageSharp: {
       gatsbyImageData: IGatsbyImageData
     }
-  }[]
+  }>
   parent: {
     id: string
   } | null
@@ -95,7 +97,7 @@ export interface IJaenSection {
   props?: object
 }
 
-export type SectionType = {
+export interface SectionType {
   id: string
   /**
    * Position of the section inside its SectionField
@@ -108,7 +110,7 @@ export type SectionType = {
   Component?: ISectionConnection
 }
 
-export type IJaenSectionItem = {
+export interface IJaenSectionItem {
   [customFieldName: string]: any
   id: string
   type: string

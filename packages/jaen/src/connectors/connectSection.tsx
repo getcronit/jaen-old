@@ -6,7 +6,10 @@ import {
 import {useAuth} from '../internal/hooks/auth/useAuth.js'
 import {IJaenConnection} from '../types.js'
 
-export type ISectionOptions = {displayName: string; name: string}
+export interface ISectionOptions {
+  displayName: string
+  name: string
+}
 /**
  * @function connectSection Connects a section with Jaen.
  *
@@ -25,7 +28,7 @@ export const connectSection = <P extends {}>(
     useEffect(() => {
       if (isAuthenticated && section) {
         // clean up props to prevent circular reference, react items or other issues in redux store / local storage
-        //section.register(cleanObject(props))
+        // section.register(cleanObject(props))
       }
     }, [])
     return (

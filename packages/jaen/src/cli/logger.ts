@@ -1,5 +1,5 @@
 import pino from 'pino'
-import { cliName } from './constants.js'
+import {cliName} from './constants.js'
 
 export const logger = pino({
   name: cliName,

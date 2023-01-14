@@ -38,37 +38,41 @@ export const IncomingBuildAlert = ({
 
   const toast = useToast()
 
-  const handleConfirm = async () => {
-    setIsLoading(true)
+  const handleConfirm = () => {
+    const doConfirm = async () => {
+      setIsLoading(true)
 
-    const confirmed = await onConfirm()
+      const confirmed = await onConfirm()
 
-    setIsLoading(false)
-    if (confirmed) {
-      toast({
-        title: 'Success',
-        description:
-          'Your changes have been discarded. You are now in view mode.',
-        status: 'success',
-        duration: 5000,
-        isClosable: true
-      })
+      setIsLoading(false)
+      if (confirmed) {
+        toast({
+          title: 'Success',
+          description:
+            'Your changes have been discarded. You are now in view mode.',
+          status: 'success',
+          duration: 5000,
+          isClosable: true
+        })
 
-      onClose()
-    } else {
-      toast({
-        title: 'Error',
-        description: 'Something went wrong.',
-        status: 'error',
-        duration: 5000,
-        isClosable: true
-      })
+        onClose()
+      } else {
+        toast({
+          title: 'Error',
+          description: 'Something went wrong.',
+          status: 'error',
+          duration: 5000,
+          isClosable: true
+        })
+      }
     }
+
+    void doConfirm()
   }
 
   return (
     <AlertDialog
-      size={'xl'}
+      size="xl"
       motionPreset="slideInBottom"
       leastDestructiveRef={cancelRef}
       onClose={onClose}
@@ -79,7 +83,7 @@ export const IncomingBuildAlert = ({
       <AlertDialogContent>
         <AlertDialogCloseButton />
         <AlertDialogBody px={8} pt={12} pb={4}>
-          <VStack textAlign={'center'} spacing={4}>
+          <VStack textAlign="center" spacing={4}>
             <JaenLogo boxSize="16" mb={2} />
             <Heading size="md" fontWeight="bold">
               New version is now available
@@ -103,7 +107,7 @@ export const IncomingBuildAlert = ({
         <AlertDialogFooter>
           <HStack spacing={6}>
             <Button
-              colorScheme={'teal'}
+              colorScheme="teal"
               isLoading={isLoading}
               onClick={handleConfirm}
               size="lg"

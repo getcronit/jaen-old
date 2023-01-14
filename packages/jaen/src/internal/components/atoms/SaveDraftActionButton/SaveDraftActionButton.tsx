@@ -1,7 +1,7 @@
 import {
+  Badge,
   Button,
   Icon,
-  Badge,
   IconButton,
   useBreakpointValue
 } from '@chakra-ui/react'
@@ -22,7 +22,7 @@ export const SaveDraftActionButton: React.FC<SaveDraftActionButtonProps> =
       return (
         <IconButton
           display={{base: 'flex', lg: 'none'}}
-          borderRadius={'full'}
+          borderRadius="full"
           icon={<Icon as={BiSave} boxSize="5" />}
           aria-label="Save draft"
         />
@@ -32,7 +32,7 @@ export const SaveDraftActionButton: React.FC<SaveDraftActionButtonProps> =
     return (
       <Button
         display={{base: 'none', lg: 'flex'}}
-        borderRadius={'full'}
+        borderRadius="full"
         leftIcon={<Icon as={BiSave} boxSize="5" />}
         rightIcon={<Badge rounded="full">1</Badge>}>
         Save draft

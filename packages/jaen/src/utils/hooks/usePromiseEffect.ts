@@ -18,8 +18,12 @@ export function usePromiseEffect<T>(
 
   React.useEffect(() => {
     effect()
-      .then(value => setState({status: 'fulfilled', value, error: null}))
-      .catch(error => setState({status: 'rejected', value: null, error}))
+      .then(value => {
+        setState({status: 'fulfilled', value, error: null})
+      })
+      .catch(error => {
+        setState({status: 'rejected', value: null, error})
+      })
   }, deps)
 
   // chose the shape you prefer for the return type,

@@ -1,9 +1,9 @@
 import React from 'react'
 
+import {IJaenPage} from '../../../types'
 import {usePageContext} from '../../context/PageProvider.js'
 import {useSectionContext} from '../../context/SectionContext.js'
 import {findSection} from '../../helper/page/section.js'
-import {IJaenPage} from '../../../types'
 import {RootState, store} from '../../redux/index.js'
 import {actions} from '../../redux/slices/page.js'
 import {useStatus} from '../useStatus.js'
@@ -25,7 +25,7 @@ export function useField<IValue>(name: string, type: string) {
     if (page) {
       let fields
 
-      if (!sectionContext) {
+      if (sectionContext == null) {
         fields = page.jaenFields
       } else {
         fields = findSection(

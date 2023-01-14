@@ -5,9 +5,28 @@
   "repository": "https://github.com/snek-at/jaen",
   "author": "Nico Schett <52858351+schettn@users.noreply.github.com>",
   "license": "MIT",
+  "scripts": {
+    "lint:fix": "yarn eslint packages/jaen/src/ --fix",
+    "prettier:fix": "yarn prettier packages/jaen/src/ --write",
+    "format": "yarn prettier:fix && yarn lint:fix"
+  },
   "workspaces": [
     "packages/jaen",
     "packages/gatsby-plugin-jaen",
     "example"
-  ]
+  ],
+  "dependencies": {
+    "eslint-config-prettier": "^8.6.0",
+    "prettier-plugin-organize-imports": "^3.2.2"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "eslint": "^8.0.1",
+    "eslint-config-standard-with-typescript": "^27.0.1",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.32.0"
+  }
 }

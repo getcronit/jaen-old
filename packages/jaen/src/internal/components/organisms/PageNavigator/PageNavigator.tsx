@@ -47,7 +47,7 @@ export const PageNavigator: React.FC<PageNavigatorProps> = () => {
         bg="gray.50"
         color="gray.500"
         _hover={{bg: 'pink.50'}}
-        rounded={'full'}
+        rounded="full"
         py={{base: 1}}
         px={{base: 2}}
         _active={{bg: 'pink.100'}}>
@@ -65,7 +65,7 @@ export const PageNavigator: React.FC<PageNavigatorProps> = () => {
           </Link>
         </HStack>
       </MenuButton>
-      <MenuList bg="white" color="black" h="xs" overflowY={'auto'}>
+      <MenuList bg="white" color="black" h="xs" overflowY="auto">
         <PageTree
           nodes={manager.pagePaths}
           isNavigatorMode

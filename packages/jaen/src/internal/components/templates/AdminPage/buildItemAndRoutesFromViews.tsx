@@ -1,12 +1,12 @@
 import {Circle} from '@chakra-ui/react'
 
-export type SidebarItem = {
+export interface SidebarItem {
   path: string
   Icon: React.ComponentType | null
   label: string
 }
 
-export type View = {
+export interface View {
   path: string
   label: string
   Icon: React.ComponentType | null
@@ -24,7 +24,7 @@ export interface BuiltViews {
     grouped: Record<string, {label: string; items: SidebarItem[]}>
     ungrouped: SidebarItem[]
   }
-  routes: {[key: string]: {Component: React.ComponentType; hasRoutes: boolean}}
+  routes: Record<string, {Component: React.ComponentType; hasRoutes: boolean}>
   activePath: string
   onNavigate: (path: string) => void
 }
@@ -50,7 +50,7 @@ export const buildFromViews = (
     }
 
     if (view.group) {
-      if (!items.grouped[view.group]) {
+      if (items.grouped[view.group] == null) {
         items.grouped[view.group] = {
           label: view.group,
           items: []

@@ -1,12 +1,12 @@
-import {useEffect} from 'react'
 import {NavigateFn} from '@reach/router'
+import {useEffect} from 'react'
 import {RootState, store} from '../redux/index.js'
 
 export function useInterceptGatsbyNavigate() {
   useEffect(() => {
     const originalNavigate = window.___navigate
 
-    const jaenNavigate: NavigateFn = (to, options) => {
+    const jaenNavigate: NavigateFn = async (to, options) => {
       if (typeof to === 'string') {
         const state = store.getState() as RootState
 
@@ -20,10 +20,11 @@ export function useInterceptGatsbyNavigate() {
           to = `/r#${pathWithTrailingSlash}`
         }
 
-        return originalNavigate(to, options)
+        await originalNavigate(to, options)
+        return
       }
 
-      return originalNavigate(to, undefined)
+      await originalNavigate(to, undefined)
     }
 
     window.___navigate = jaenNavigate

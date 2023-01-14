@@ -1,5 +1,5 @@
 import {EditIcon} from '@chakra-ui/icons'
-import {Button, Badge, IconButton, useBreakpointValue} from '@chakra-ui/react'
+import {Badge, Button, IconButton, useBreakpointValue} from '@chakra-ui/react'
 
 import {useEdit} from './useEdit.js'
 
@@ -20,7 +20,7 @@ export const EditActionButton: React.FC<EditActionButtonProps> = () => {
       <IconButton
         onClick={toggleEditing}
         display={{base: 'flex', lg: 'none'}}
-        borderRadius={'full'}
+        borderRadius="full"
         icon={<EditIcon />}
         aria-label={`Edit ${isEditing ? 'off' : 'on'}`}
       />
@@ -31,11 +31,11 @@ export const EditActionButton: React.FC<EditActionButtonProps> = () => {
     <Button
       onClick={toggleEditing}
       display={{base: 'none', lg: 'flex'}}
-      borderRadius={'full'}
+      borderRadius="full"
       leftIcon={<EditIcon />}
       rightIcon={
         isEditing ? (
-          <Badge rounded="full" colorScheme={'green'}>
+          <Badge rounded="full" colorScheme="green">
             On
           </Badge>
         ) : (

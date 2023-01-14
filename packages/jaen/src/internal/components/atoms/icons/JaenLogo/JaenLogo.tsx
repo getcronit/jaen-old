@@ -162,7 +162,7 @@ export const JaenFullLogoWhite = createIcon({
       x="0px"
       y="0px"
       viewBox="0 0 1112 475"
-      enableBackground={'new 0 0 1112 475'}
+      enableBackground="new 0 0 1112 475"
       xmlSpace="preserve">
       <style type="text/css">
         {` .st0{fill:#FFFFFF;}

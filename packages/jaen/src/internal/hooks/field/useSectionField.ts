@@ -1,14 +1,14 @@
 import {useMemo} from 'react'
 
-import {actions} from '../../redux/slices/page.js'
-import {store} from '../../redux/index.js'
-import {usePageContext} from '../../context/PageProvider.js'
-import {useSectionData} from '../page/useSectionData.js'
-import {IJaenConnection, IJaenSection} from '../../../types.js'
 import {
   ISectionConnection,
   ISectionOptions
 } from '../../../connectors/connectSection.js'
+import {IJaenConnection, IJaenSection} from '../../../types.js'
+import {usePageContext} from '../../context/PageProvider.js'
+import {store} from '../../redux/index.js'
+import {actions} from '../../redux/slices/page.js'
+import {useSectionData} from '../page/useSectionData.js'
 
 export interface UseSectionField {
   onSectionAdd: (
@@ -41,10 +41,10 @@ export interface UseSectionField {
       }
     }
   >
-  sectionPath: {
+  sectionPath: Array<{
     fieldName: string
     sectionId?: string | undefined
-  }[]
+  }>
 }
 
 export interface UseSectionFieldOptions {

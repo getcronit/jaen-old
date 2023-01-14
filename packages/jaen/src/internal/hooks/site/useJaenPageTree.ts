@@ -1,16 +1,16 @@
-import {useMemo} from 'react'
 import deepmerge from 'deepmerge'
+import {useMemo} from 'react'
 
-import {RootState, useAppDeepEqualSelector} from '../../redux/index.js'
 import {IJaenPage} from '../../../types.js'
 import {deepmergeArrayIdMerge} from '../../../utils/deepmerge.js'
+import {RootState, useAppDeepEqualSelector} from '../../redux/index.js'
 import {useAdminStaticQuery} from '../useAdminStaticQuery.js'
 
 const getStatePages = (state: RootState) =>
   Object.keys(state.page.pages.nodes).map(id => {
     const page = state.page.pages.nodes[id]
 
-    if (!page) {
+    if (page == null) {
       throw new Error('Page not found')
     }
 

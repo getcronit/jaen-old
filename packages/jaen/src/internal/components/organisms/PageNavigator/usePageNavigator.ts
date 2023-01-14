@@ -7,7 +7,7 @@ export function usePageNavigator() {
     window.location.pathname.startsWith('/admin')
 
   const goto = useCallback((path: string) => {
-    navigate(path)
+    void navigate(path)
   }, [])
 
   return {

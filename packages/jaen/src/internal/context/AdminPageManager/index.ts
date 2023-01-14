@@ -1,1 +1,1 @@
-export {AdminPageManagerProvider} from './AdminPageManagerProvider';
+export {AdminPageManagerProvider} from './AdminPageManagerProvider'

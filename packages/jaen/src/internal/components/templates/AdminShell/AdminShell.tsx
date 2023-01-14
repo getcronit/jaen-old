@@ -57,7 +57,7 @@ export const AdminShell: React.FC<AdminShellProps> = props => {
   // )
 
   return (
-    <Flex flexDir={'column'} h="100vh" position="relative">
+    <Flex flexDir="column" h="100vh" position="relative">
       <NewsSlideProvider>
         <Box zIndex={2}>
           <AdminToolbar withoutShadow={props.withoutAdminToolbarShadow} />
@@ -68,7 +68,7 @@ export const AdminShell: React.FC<AdminShellProps> = props => {
           zIndex={1}
           id="__jaen_admin_shell"
           flex="1"
-          overflowY={'auto'}
+          overflowY="auto"
           sx={{
             '&::-webkit-scrollbar': {
               width: '6px',

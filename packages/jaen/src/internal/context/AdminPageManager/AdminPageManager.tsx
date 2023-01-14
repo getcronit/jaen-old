@@ -1,11 +1,11 @@
 import React from 'react'
 import {IJaenPage, IJaenTemplate} from '../../../types.js'
 
-export type PageTreeItems = {
+export type PageTreeItems = Array<{
   path: string
   title: string
   isLocked?: boolean
-}[]
+}>
 
 export interface PageCreateValues {
   slug: string
@@ -13,7 +13,7 @@ export interface PageCreateValues {
   template: Omit<IJaenTemplate, 'children'>
 }
 
-export type PageContentValues = {
+export interface PageContentValues {
   title: string
   slug: string
   image?: string
@@ -21,7 +21,7 @@ export type PageContentValues = {
   excludedFromIndex?: boolean
 }
 
-export interface AdminPageManagerContext {
+export interface AdminPageManagerContextType {
   getPageIdFromPath: (path: string) => string | null
   getPathFromPageId: (pageId: string) => string | null
   latestAddedPageId: string | undefined
@@ -53,11 +53,11 @@ export interface AdminPageManagerContext {
 }
 
 export const AdminPageManagerContext =
-  React.createContext<AdminPageManagerContext | undefined>(undefined)
+  React.createContext<AdminPageManagerContextType | undefined>(undefined)
 
 export const usePageManager = () => {
   const context = React.useContext(AdminPageManagerContext)
-  if (!context) {
+  if (context == null) {
     throw new Error(
       'usePageManager must be used within a AdminPageManagerContext'
     )

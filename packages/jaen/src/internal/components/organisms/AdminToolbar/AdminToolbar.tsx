@@ -18,8 +18,8 @@ import {navigate} from 'gatsby'
 import {AiOutlineUser} from 'react-icons/ai'
 import {FaFileImport, FaGithub, FaSignOutAlt} from 'react-icons/fa'
 import {IoHelpBuoySharp, IoNewspaperSharp} from 'react-icons/io5'
-import {PageManagerProvider} from '../../../context/PagesManagerContext.js'
 import {useNewsSlide} from '../../../context/NewsSlideContext.js'
+import {PageManagerProvider} from '../../../context/PagesManagerContext.js'
 import {useAuth} from '../../../hooks/auth/useAuth.js'
 import {JaenLogo} from '../../atoms/index.js'
 import {ActionBar} from '../../molecules/index.js'
@@ -52,17 +52,17 @@ export const AdminToolbar = ({
         lg: 4,
         xl: 8
       }}
-      alignItems={'center'}
-      justifyContent={'space-between'}
+      alignItems="center"
+      justifyContent="space-between"
       bg="gray.800"
-      position={'relative'}
+      position="relative"
       w="full"
       boxShadow={withoutShadow ? undefined : 'xl'}
       color="white"
       h={14}
       py={{base: 2}}
       px={{base: 4}}
-      align={'center'}>
+      align="center">
       <Button
         minW={{
           base: 'auto',
@@ -84,7 +84,7 @@ export const AdminToolbar = ({
         // _hover={{bg: 'pink.50'}}
         // _active={{bg: 'pink.100'}}
         onClick={() => {
-          navigate(isOnJaenAdmin ? '/' : '/admin')
+          void navigate(isOnJaenAdmin ? '/' : '/admin')
         }}>
         <HStack flex="1" spacing="2">
           {isOnJaenAdmin ? <ChevronLeftIcon /> : <ChevronRightIcon />}
@@ -97,7 +97,7 @@ export const AdminToolbar = ({
               lg: 'block'
             }}
             fontWeight="bold"
-            fontFamily={'monospace'}>
+            fontFamily="monospace">
             {isOnJaenAdmin ? 'Jaen Site' : 'Jaen Admin'}{' '}
           </Text>
         </HStack>
@@ -131,7 +131,7 @@ export const AdminToolbar = ({
           />
 
           <MenuList color="black">
-            <HStack p="2" justifyContent={'space-between'} fontWeight="bold">
+            <HStack p="2" justifyContent="space-between" fontWeight="bold">
               <Text>Help</Text>
               <Text>v 3.0.0</Text>
             </HStack>
@@ -178,7 +178,7 @@ export const AdminToolbar = ({
           />
 
           <MenuList color="black">
-            <HStack p="2" justifyContent={'space-between'} fontWeight="bold">
+            <HStack p="2" justifyContent="space-between" fontWeight="bold">
               <Text>Name</Text>
             </HStack>
 
@@ -193,7 +193,11 @@ export const AdminToolbar = ({
 
             <MenuDivider />
 
-            <MenuItem icon={<FaSignOutAlt />} onClick={logout}>
+            <MenuItem
+              icon={<FaSignOutAlt />}
+              onClick={() => {
+                void logout()
+              }}>
               Sign out
             </MenuItem>
           </MenuList>

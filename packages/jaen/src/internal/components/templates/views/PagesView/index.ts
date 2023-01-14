@@ -1,1 +1,1 @@
-export {PagesView, PagesViewProps} from './PagesView.js';
+export {PagesView, PagesViewProps} from './PagesView.js'

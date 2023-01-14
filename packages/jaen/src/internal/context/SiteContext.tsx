@@ -1,8 +1,8 @@
 import React from 'react'
-import {ITemplateConnection, IPageConnection} from '../../connectors/index.js'
-import {withRedux} from '../redux/index.js'
+import {IPageConnection, ITemplateConnection} from '../../connectors/index.js'
 import {pageLoader, templateLoader} from '../helper/componentLoader.js'
 import {useDynamicRedirect} from '../hooks/routing/useDynamicRedirect.js'
+import {withRedux} from '../redux/index.js'
 
 export interface ISiteContext {
   templateLoader: (name: string) => Promise<ITemplateConnection>
@@ -19,8 +19,8 @@ export const SiteProvider: React.FC<React.PropsWithChildren<{}>> = withRedux(
     return (
       <SiteContext.Provider
         value={{
-          templateLoader: templateLoader,
-          pageLoader: pageLoader
+          templateLoader,
+          pageLoader
         }}>
         {children}
       </SiteContext.Provider>

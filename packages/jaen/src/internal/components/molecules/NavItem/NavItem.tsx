@@ -22,11 +22,11 @@ export const NavItem = (props: NavItemProps) => {
       userSelect="none"
       rounded="md"
       transition="all 0.2s"
-      fontSize={'lg'}
+      fontSize="lg"
       bg={active ? 'pink.100' : undefined}
       _hover={{bg: active ? undefined : 'pink.50'}}
       _active={{bg: 'pink.100'}}
-      justifyContent={'flex-start'}
+      justifyContent="flex-start"
       flex="1"
       variant="ghost"
       leftIcon={<Icon as={IconComponent || Circle} color="pink.400" />}

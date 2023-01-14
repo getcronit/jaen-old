@@ -21,7 +21,7 @@ import React, {useEffect} from 'react'
 import {Controller, useForm} from 'react-hook-form'
 import {BsLaptop} from 'react-icons/bs'
 
-type LoginFormValues = {
+interface LoginFormValues {
   email: string
   password: string
   logMeOutAfterwards: boolean
@@ -83,7 +83,10 @@ export const LoginForm: React.FC<LoginFormProps> = props => {
   }, [])
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form
+      onSubmit={e => {
+        void handleSubmit(onSubmit)(e)
+      }}>
       <Stack spacing="4">
         <VStack spacing="6">
           <Heading
@@ -93,11 +96,11 @@ export const LoginForm: React.FC<LoginFormProps> = props => {
               xl: '3xl'
             }}
             fontWeight="semibold"
-            lineHeight={'3'}>
+            lineHeight="3">
             Sign in to your account
           </Heading>
           <HStack>
-            <Text>Don't have an account?</Text>
+            <Text>Don&apos;t have an account?</Text>
             <Link onClick={props.onSignUp}>Sign up</Link>
           </HStack>
 
@@ -111,8 +114,8 @@ export const LoginForm: React.FC<LoginFormProps> = props => {
 
         <Stack mt="8" spacing="6">
           <Stack spacing="4">
-            <FormControl id="email" isInvalid={!!errors.email}>
-              <FormLabel fontSize={'sm'} fontWeight="medium">
+            <FormControl id="email" isInvalid={!(errors.email == null)}>
+              <FormLabel fontSize="sm" fontWeight="medium">
                 Email
               </FormLabel>
               <Input
@@ -125,8 +128,8 @@ export const LoginForm: React.FC<LoginFormProps> = props => {
 
               <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
             </FormControl>
-            <FormControl id="password" isInvalid={!!errors.password}>
-              <FormLabel fontSize={'sm'} fontWeight="medium">
+            <FormControl id="password" isInvalid={!(errors.password == null)}>
+              <FormLabel fontSize="sm" fontWeight="medium">
                 Password
               </FormLabel>
               <Input
@@ -140,7 +143,7 @@ export const LoginForm: React.FC<LoginFormProps> = props => {
             </FormControl>
           </Stack>
         </Stack>
-        <HStack justifyContent={'space-between'}>
+        <HStack justifyContent="space-between">
           <Controller
             control={control}
             name="logMeOutAfterwards"
@@ -181,10 +184,10 @@ export const LoginForm: React.FC<LoginFormProps> = props => {
           }. You will be able to explore the platform and see how it works, but you won't be able to publish any changes.`}>
           <Button
             w="full"
-            colorScheme={'gray'}
+            colorScheme="gray"
             leftIcon={<BsLaptop fontSize="1.5em" />}
             fontWeight="normal"
-            fontSize={'sm'}
+            fontSize="sm"
             onClick={props.onTryDemo}>
             Launch demo
           </Button>

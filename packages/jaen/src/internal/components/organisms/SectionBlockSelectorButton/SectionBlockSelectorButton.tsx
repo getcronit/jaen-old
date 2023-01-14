@@ -45,7 +45,7 @@ export const SectionBlockSelectorButton: React.FC<SectionBlockSelectorButtonProp
 
     return (
       <Flex
-        pos={'relative'}
+        pos="relative"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}>
         <IconButton

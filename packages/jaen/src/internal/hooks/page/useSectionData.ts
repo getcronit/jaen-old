@@ -1,11 +1,11 @@
 import deepmerge from 'deepmerge'
 import * as React from 'react'
-import {findSection} from '../../helper/page/section.js'
+import {IJaenSectionItem} from '../../../types.js'
+import {deepmergeArrayIdMerge} from '../../../utils/deepmerge.js'
 import {usePageContext} from '../../context/PageProvider.js'
 import {useSectionContext} from '../../context/SectionContext.js'
-import {IJaenSectionItem} from '../../../types.js'
+import {findSection} from '../../helper/page/section.js'
 import {useAppSelector} from '../../redux/index.js'
-import {deepmergeArrayIdMerge} from '../../../utils/deepmerge.js'
 
 export function useSectionData(
   sectionName: string,
@@ -48,11 +48,11 @@ export function useSectionData(
         return false
       }
 
-      if (!l && !r) {
+      if (l == null && r == null) {
         return true
       }
 
-      if (!l || !r) {
+      if (l == null || r == null) {
         return false
       }
 
@@ -82,9 +82,7 @@ export function useSectionData(
       arrayMerge: deepmergeArrayIdMerge
     })
 
-    const sectionItemsDict: {
-      [id: string]: IJaenSectionItem
-    } = {}
+    const sectionItemsDict: Record<string, IJaenSectionItem> = {}
 
     mergedSection?.items?.forEach(item => {
       sectionItemsDict[item.id] = item
@@ -99,7 +97,7 @@ export function useSectionData(
     while (ptrHead && i < 50) {
       const item = sectionItemsDict[ptrHead]
 
-      if (!item) {
+      if (item == null) {
         throw new Error(`ptrHead ${ptrHead} is not found in section items!`)
       }
 

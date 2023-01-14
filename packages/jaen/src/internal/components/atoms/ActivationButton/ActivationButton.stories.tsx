@@ -1,6 +1,6 @@
 import {ComponentMeta, Story} from '@storybook/react'
 import React from 'react'
-import {default as Component} from './ActivationButton.js'
+import Component from './ActivationButton.js'
 export default {
   title: 'Atoms/ActivationButton',
   component: Component,

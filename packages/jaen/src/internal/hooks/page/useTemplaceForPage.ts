@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
-import {pageLoader} from '../../helper/componentLoader.js'
 import {IJaenPage, IJaenTemplate} from '../../../types.js'
+import {pageLoader} from '../../helper/componentLoader.js'
 import {useJaenTemplates} from '../site/useJaenTemplates.js'
 
 const loadTemplatesForPage = async ({
@@ -9,8 +9,8 @@ const loadTemplatesForPage = async ({
 }: {
   page: IJaenPage | null
   templates: IJaenTemplate[]
-}): Promise<{name: string; displayName: string}[]> => {
-  if (!page) {
+}): Promise<Array<{name: string; displayName: string}>> => {
+  if (page == null) {
     return templates
   } else if (page.template) {
     return (
@@ -24,7 +24,7 @@ const loadTemplatesForPage = async ({
       loadedPage?.options?.children?.map(child => {
         const t = templates.find(template => template.name === child)
 
-        if (!t) {
+        if (t == null) {
           throw new Error(`Could not find template ${child}`)
         }
 
@@ -52,10 +52,10 @@ const loadTemplatesForPage = async ({
 export const useTemplatesForPage = (page: IJaenPage | null) => {
   const [isLoading, setIsLoading] = useState(false)
   const [templates, setTemplates] = useState<
-    {
+    Array<{
       name: string
       displayName: string
-    }[]
+    }>
   >([])
 
   const jaenTemplates = useJaenTemplates()
@@ -72,7 +72,7 @@ export const useTemplatesForPage = (page: IJaenPage | null) => {
     }
 
     if (!jaenTemplates.isLoading) {
-      load()
+      void load()
     }
   }, [page, jaenTemplates.templates])
 

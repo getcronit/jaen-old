@@ -24,7 +24,7 @@ export function pageUpdateValidation({
       }
     } else {
       for (const page of pageTree) {
-        if (!page.parent) {
+        if (page.parent == null) {
           siblings.push(page.id)
         }
       }

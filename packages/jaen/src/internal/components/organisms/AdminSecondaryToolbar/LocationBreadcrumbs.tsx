@@ -1,15 +1,15 @@
 import {ChevronRightIcon} from '@chakra-ui/icons'
 import {Breadcrumb, BreadcrumbItem, BreadcrumbLink, Tag} from '@chakra-ui/react'
-import {useState, useEffect} from 'react'
+import {useEffect, useState} from 'react'
 
 export function LocationBreadcrumbs() {
   // Get breadcrumbs from location hash
   const [breadcrumbs, setBreadcrumbs] = useState<
-    {
+    Array<{
       name: string
       path: string
       isLast: boolean
-    }[]
+    }>
   >([])
 
   useEffect(() => {
@@ -48,9 +48,9 @@ export function LocationBreadcrumbs() {
           </BreadcrumbItem>
         ))
       ) : (
-        <BreadcrumbItem key={'/'}>
-          <BreadcrumbLink href={`#/`} textTransform="capitalize">
-            <Tag colorScheme={'gray'}>Home</Tag>
+        <BreadcrumbItem key="/">
+          <BreadcrumbLink href="#/" textTransform="capitalize">
+            <Tag colorScheme="gray">Home</Tag>
           </BreadcrumbLink>
         </BreadcrumbItem>
       )}

@@ -14,23 +14,27 @@ export const DiscardActionButton: React.FC<DiscardActionButtonProps> = () => {
 
   const {discardChanges} = useDiscard()
 
+  const handleClick = () => {
+    void discardChanges()
+  }
+
   if (isMobile) {
     return (
       <IconButton
         display={{base: 'flex', lg: 'none'}}
-        borderRadius={'full'}
+        borderRadius="full"
         icon={<DeleteIcon />}
         aria-label="Discard changes"
-        onClick={discardChanges}
+        onClick={handleClick}
       />
     )
   }
 
   return (
     <Button
-      onClick={discardChanges}
+      onClick={handleClick}
       display={{base: 'none', lg: 'flex'}}
-      borderRadius={'full'}
+      borderRadius="full"
       leftIcon={<DeleteIcon />}>
       Discard
     </Button>

@@ -42,7 +42,7 @@ export const nodejsSafeJsonUpload = async (options: {
   })
 
   // Here we create and await our promise:
-  return new Promise((resolve, reject) => {
+  return await new Promise((resolve, reject) => {
     form.submit(
       URL,
       (

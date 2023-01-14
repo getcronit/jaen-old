@@ -1,10 +1,9 @@
+import {DeleteIcon} from '@chakra-ui/icons'
 import {Box, Button, HStack, IconButton, Text} from '@chakra-ui/react'
 import * as React from 'react'
-import {DeleteIcon} from '@chakra-ui/icons'
 import {FiBox} from 'react-icons/fi'
 
 import {ISectionConnection} from '../../connectors/index.js'
-import {IJaenSectionItem} from '../../types.js'
 import {
   HighlightTooltip,
   SectionBlockSelectorButton,
@@ -12,17 +11,18 @@ import {
   SelectorBlockType
 } from '../../internal/components/index.js'
 import {HighlightProviderContext} from '../../internal/context/HighlightContext.js'
+import {useModals} from '../../internal/context/Modals/ModalContext.js'
 import {JaenSectionProvider} from '../../internal/context/SectionContext.js'
 import {useSectionField} from '../../internal/hooks/field/useSectionField.js'
 import {useStatus} from '../../internal/index.js'
 import {withRedux} from '../../internal/redux/index.js'
-import {useModals} from '../../internal/context/Modals/ModalContext.js'
+import {IJaenSectionItem} from '../../types.js'
 
 type SectionPropsCallback = (args: {
   count: number
   totalSections: number
   section: IJaenSectionItem
-}) => {[key: string]: any}
+}) => Record<string, any>
 
 export interface SectionFieldProps {
   name: string // chapterName
@@ -30,8 +30,8 @@ export interface SectionFieldProps {
   sections: ISectionConnection[]
   as?: React.ComponentType<React.HTMLAttributes<HTMLElement>>
   sectionAs?: React.ComponentType<React.HTMLAttributes<HTMLElement>>
-  props?: {[key: string]: any}
-  sectionProps?: {[key: string]: any} | SectionPropsCallback
+  props?: Record<string, any>
+  sectionProps?: Record<string, any> | SectionPropsCallback
   className?: string
   style?: React.CSSProperties
   sectionClassName?: string
@@ -59,7 +59,10 @@ export const SectionField = withRedux(
     const Wrapper = rest.as || Box
 
     let tooltipButtons = [
-      <Button variant="jaenHighlightTooltipText" size="xs">
+      <Button
+        key="section-field-tooltip-button-add"
+        variant="jaenHighlightTooltipText"
+        size="xs">
         <Text as="span" noOfLines={1}>
           Section {name}
         </Text>
@@ -123,7 +126,7 @@ export const SectionField = withRedux(
 
     if (sections.length > 0) {
       tooltipButtons = tooltipButtons.concat([
-        <HStack spacing="0.5">
+        <HStack spacing="0.5" key="section-field-tooltip-buttons">
           <SectionBlockSelectorButton
             onBlockAdd={handleSectionAdd}
             blocks={blocks}
@@ -150,7 +153,7 @@ export const SectionField = withRedux(
           {section.items.map((item, index) => {
             const s = sectionsDict[item.type]
 
-            if (!s) {
+            if (s == null) {
               console.error(
                 `Section type ${item.type} is not found in sections dictionary!`
               )
@@ -173,16 +176,20 @@ export const SectionField = withRedux(
                 key={item.id}
                 isEditing={isEditing}
                 actions={[
-                  <Button variant="jaenHighlightTooltipText">
+                  <Button
+                    variant="jaenHighlightTooltipText"
+                    key={`section-field-tooltip-button-${item.id}`}>
                     <Text as="span" noOfLines={1}>
                       Block {s.Component.options.name}
                     </Text>
                   </Button>,
-                  <HStack spacing="0.5">
+                  <HStack
+                    spacing="0.5"
+                    key={`section-field-tooltip-buttons-${item.id}`}>
                     <SectionBlockSelectorButton
-                      onBlockAdd={(block, type) =>
+                      onBlockAdd={(block, type) => {
                         handleSectionAdd(block, type, item)
-                      }
+                      }}
                       blocks={blocks}
                       onlyAdd={false}
                     />
@@ -190,9 +197,13 @@ export const SectionField = withRedux(
                       variant="jaenHighlightTooltip"
                       icon={<DeleteIcon />}
                       aria-label="Delete"
-                      onClick={() =>
-                        handleSectionDelete(item.id, item.ptrPrev, item.ptrNext)
-                      }
+                      onClick={() => {
+                        void handleSectionDelete(
+                          item.id,
+                          item.ptrPrev,
+                          item.ptrNext
+                        )
+                      }}
                     />
                   </HStack>
                   // <Box bg="pink.100" py={1} px={2}>

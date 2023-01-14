@@ -19,7 +19,7 @@ export const AdminSecondaryToolbar: React.FC<AdminSecondaryToolbarProps> = ({
       align="center"
       px={{base: 4}}
       boxShadow="md"
-      borderTop={'1px'}
+      borderTop="1px"
       borderTopColor="gray.200">
       <HStack>
         <IconButton
@@ -27,7 +27,7 @@ export const AdminSecondaryToolbar: React.FC<AdminSecondaryToolbarProps> = ({
           icon={<HamburgerIcon />}
           fontSize="xl"
           variant="ghost"
-          colorScheme={'gray'}
+          colorScheme="gray"
           onClick={onToggleSidebar}
           isActive={isSidebarOpen}
         />

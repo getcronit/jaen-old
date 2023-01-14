@@ -1,7 +1,7 @@
 import {memo, useEffect} from 'react'
-import {ThemeProvider} from '../internal/styles/ChakraThemeProvider.js'
 import {useAuth} from '../internal/hooks/auth/useAuth.js'
 import {useField} from '../internal/hooks/field/useField.js'
+import {ThemeProvider} from '../internal/styles/ChakraThemeProvider.js'
 import {IJaenConnection} from '../types.js'
 import {cleanObject} from '../utils/cleanObject.js'
 
@@ -13,6 +13,7 @@ export interface JaenFieldProps<IDefaultValue> {
   className?: string
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export interface FieldOptions<_IValue, _IDefaultValue, _IProps = {}> {
   fieldType: string
 }

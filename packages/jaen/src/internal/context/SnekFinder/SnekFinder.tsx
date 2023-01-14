@@ -2,10 +2,11 @@ import {OSGBackend} from '@jaenjs/snek-finder/dist/backends/OSGBackend'
 import React from 'react'
 import {useAdminStaticQuery} from '../../hooks/useAdminStaticQuery.js'
 
-const SnekFinderProvider = React.lazy(() =>
-  import('@jaenjs/snek-finder').then(module => ({
-    default: module.SnekFinderProvider
-  }))
+const SnekFinderProvider = React.lazy(
+  async () =>
+    await import('@jaenjs/snek-finder').then(module => ({
+      default: module.SnekFinderProvider
+    }))
 )
 
 export const Backend = new OSGBackend('snek-finder-osg-backend-root')

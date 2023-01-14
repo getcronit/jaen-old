@@ -1,6 +1,6 @@
 import {toCSSVar} from '@chakra-ui/react'
-import {useMemo} from 'react'
 import {ThemeProvider as EmotionThemeProvider} from '@emotion/react'
+import {useMemo} from 'react'
 import theme from './theme.js'
 
 export interface ThemeProviderProps {

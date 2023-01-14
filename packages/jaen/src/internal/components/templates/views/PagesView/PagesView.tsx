@@ -4,13 +4,13 @@ import * as React from 'react'
 import {FaEye} from 'react-icons/fa'
 import {useModals} from '../../../../context/Modals/ModalContext.js'
 
-import {pageUpdateValidation} from '../../../../helper/page/validators.js'
 import {IJaenPage} from '../../../../../types.js'
 import {
   PageContentValues,
   usePageManager
 } from '../../../../context/AdminPageManager/AdminPageManager.js'
 import {PageProvider} from '../../../../context/PageProvider.js'
+import {pageUpdateValidation} from '../../../../helper/page/validators.js'
 import {
   PageContent,
   PageTree,
@@ -36,7 +36,7 @@ export const PagesView: React.FC<PagesViewProps> = () => {
 
     const rootPage = manager.onGet(rootPageId)
 
-    if (!rootPage) return null
+    if (rootPage == null) return null
 
     return {
       path: '/',
@@ -155,25 +155,34 @@ export const PagesView: React.FC<PagesViewProps> = () => {
   React.useEffect(() => {
     toolbarActions.register([
       <Button
+        key="view"
         size="sm"
         leftIcon={<FaEye />}
         variant="link"
-        onClick={() => manager.onNavigate(selectedJaenPage?.path || '/')}>
+        onClick={() => {
+          manager.onNavigate(selectedJaenPage?.path || '/')
+        }}>
         View
       </Button>,
       <Button
+        key="add"
         size="sm"
         leftIcon={<AddIcon />}
         variant="link"
-        onClick={() => handleItemAdd(selectedJaenPage?.path || '/')}>
+        onClick={() => {
+          handleItemAdd(selectedJaenPage?.path || '/')
+        }}>
         Add
       </Button>,
       <Button
+        key="delete"
         size="sm"
         leftIcon={<DeleteIcon />}
         variant="link"
         disabled={!selectedJaenPage?.jaenPage.template}
-        onClick={() => handleItemDelete(selectedJaenPage?.path || '/')}>
+        onClick={() => {
+          void handleItemDelete(selectedJaenPage?.path || '/')
+        }}>
         Delete
       </Button>
     ])
@@ -214,7 +223,7 @@ export const PagesView: React.FC<PagesViewProps> = () => {
         }}>
         <PageTree
           px="2"
-          borderRadius={'md'}
+          borderRadius="md"
           minW={{
             base: 'full',
             md: 'xs'
@@ -223,12 +232,14 @@ export const PagesView: React.FC<PagesViewProps> = () => {
             base: 48,
             md: 'full'
           }}
-          defaultSelectedPath={'/'}
+          defaultSelectedPath="/"
           selectedPath={selectedJaenPage?.path}
           nodes={manager.pagePaths}
           onSelectPage={onSelect}
           onAddPage={handleItemAdd}
-          onDeletePage={handleItemDelete}
+          onDeletePage={path => {
+            void handleItemDelete(path)
+          }}
           onMovePage={handlePageMove}
           onViewPage={manager.onNavigate}
         />

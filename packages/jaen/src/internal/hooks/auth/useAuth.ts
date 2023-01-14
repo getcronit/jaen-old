@@ -2,8 +2,8 @@ import {useCallback, useEffect, useState} from 'react'
 import {store} from '../../redux/index.js'
 import {IAuthState} from '../../redux/types.js'
 
-import * as authActions from '../../redux/slices/auth.js'
 import {redirectAfterDelay} from '../../../utils/redirectAfterDelay.js'
+import * as authActions from '../../redux/slices/auth.js'
 
 export const useAuth = () => {
   const [state, setState] = useState<IAuthState>(store.getState().auth)

@@ -15,7 +15,7 @@ export const PublishActionButton: React.FC<PublishActionButtonProps> = () => {
     return (
       <IconButton
         display={{base: 'flex', lg: 'none'}}
-        borderRadius={'full'}
+        borderRadius="full"
         icon={<Icon as={BiRocket} boxSize="5" />}
         aria-label="Publish now"
       />
@@ -25,7 +25,7 @@ export const PublishActionButton: React.FC<PublishActionButtonProps> = () => {
   return (
     <Button
       display={{base: 'none', lg: 'flex'}}
-      borderRadius={'full'}
+      borderRadius="full"
       variant="solid"
       leftIcon={<Icon as={BiRocket} boxSize="5" />}>
       Publish now

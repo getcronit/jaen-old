@@ -63,7 +63,7 @@ type ComponentProps = React.ComponentProps<typeof SectionField>
 // Create a template for the component
 const Template: Story<ComponentProps> = args => <SectionField {...args} />
 
-//#region > Sections
+// #region > Sections
 const BoxSection = connectSection(
   () => (
     <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden" p="4">
@@ -81,7 +81,7 @@ const FieldsSection = connectSection(
   ),
   {name: 'FieldsSection', displayName: 'Fields Section'}
 )
-//#endregion
+// #endregion
 
 export const NoSections: Story<ComponentProps> = Template.bind({})
 NoSections.args = {

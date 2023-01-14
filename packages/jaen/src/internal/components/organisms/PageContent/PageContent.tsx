@@ -19,16 +19,16 @@ import {
   useToast
 } from '@chakra-ui/react'
 import {useSnekFinder} from '@jaenjs/snek-finder'
-import * as React from 'react'
-import {Controller, useForm} from 'react-hook-form'
 import {HiCloudUpload} from '@react-icons/all-files/hi/HiCloudUpload'
 import {HiTemplate} from '@react-icons/all-files/hi/HiTemplate'
+import * as React from 'react'
+import {Controller, useForm} from 'react-hook-form'
 
 import {IFormProps, IJaenTemplate} from '../../../../types.js'
 import {dirtyValues} from '../../../../utils/forms/dirtyValues.js'
 import {ThemeProvider} from '../../../styles/ChakraThemeProvider.js'
 
-export type ContentValues = {
+export interface ContentValues {
   title: string
   slug: string
   image?: string
@@ -116,12 +116,14 @@ export const PageContent = (props: PageContentProps) => {
       <ThemeProvider>{finder.finderElement}</ThemeProvider>
 
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={e => {
+          void handleSubmit(onSubmit)(e)
+        }}
         style={{
           width: '100%'
         }}>
-        <Stack boxSize={'full'} spacing="8">
-          <Stack flexGrow={'1'} overflowY="auto" spacing={'4'}>
+        <Stack boxSize="full" spacing="8">
+          <Stack flexGrow="1" overflowY="auto" spacing="4">
             <HStack mb="6">
               {props.template && (
                 <Tag my={4} size="md" variant="outline" colorScheme="teal">
@@ -134,7 +136,7 @@ export const PageContent = (props: PageContentProps) => {
               )}
             </HStack>
 
-            <FormControl isInvalid={!!errors.title}>
+            <FormControl isInvalid={!(errors.title == null)}>
               <FormLabel>Title</FormLabel>
               <Input
                 // id="title"
@@ -147,7 +149,7 @@ export const PageContent = (props: PageContentProps) => {
             </FormControl>
 
             {props.values.slug && props.template && (
-              <FormControl mt={4} isInvalid={!!errors.slug}>
+              <FormControl mt={4} isInvalid={!(errors.slug == null)}>
                 <FormLabel>Slug</FormLabel>
                 <Input
                   // id="slug"
@@ -180,7 +182,7 @@ export const PageContent = (props: PageContentProps) => {
                     }
                   })}
                 />
-                {!errors.slug && (
+                {errors.slug == null && (
                   <FormHelperText>
                     Make sure the slug is unique between siblings.
                   </FormHelperText>
@@ -212,10 +214,10 @@ export const PageContent = (props: PageContentProps) => {
                     <Box boxSize={36} borderRadius="lg" bg="gray.50">
                       <Image
                         borderRadius="lg"
-                        boxSize={'100%'}
+                        boxSize="100%"
                         src={value}
                         fallback={
-                          <Center boxSize={'100%'}>
+                          <Center boxSize="100%">
                             <Text color="gray.600" fontSize="sm">
                               No image
                             </Text>

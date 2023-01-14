@@ -1,7 +1,7 @@
 import {useCallback} from 'react'
+import {useModals} from '../../../context/Modals/index.js'
 import {store} from '../../../redux/index.js'
 import {actions} from '../../../redux/slices/page.js'
-import {useModals} from '../../../context/Modals/index.js'
 
 export function useDiscard() {
   const {confirm, toast} = useModals()

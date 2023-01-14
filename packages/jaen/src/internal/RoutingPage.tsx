@@ -22,7 +22,7 @@ const Dynamic = (props: RouteComponentProps & Partial<PageProps>) => {
   const TemplateLoader = ({path}: {path: string}) => {
     const dynamicPath = dynamicPaths[path]
 
-    if (!dynamicPath) {
+    if (dynamicPath == null) {
       return null
     }
 
@@ -38,10 +38,10 @@ const Dynamic = (props: RouteComponentProps & Partial<PageProps>) => {
 
         if (newPath) {
           // Page has been moved, update to the new path
-          navigate(newPath)
+          void navigate(newPath)
         } else {
           // Page has been deleted, redirect to the parent page
-          navigate('/')
+          void navigate('/')
         }
       }
     }, [dynamicPaths])
@@ -71,7 +71,7 @@ const Dynamic = (props: RouteComponentProps & Partial<PageProps>) => {
       return null
     }, [template])
 
-    if (!Component) {
+    if (Component == null) {
       return loadingComponent
     }
 
@@ -86,7 +86,7 @@ const Dynamic = (props: RouteComponentProps & Partial<PageProps>) => {
 
   console.log(`Dynamic `, {path, dynamicPaths})
 
-  if (!path || !dynamicPaths[path]) {
+  if (!path || dynamicPaths[path] == null) {
     return loadingComponent
   }
 

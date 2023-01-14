@@ -22,8 +22,8 @@ import auth, {authInitialState} from './slices/auth.js'
 import page, {pageInitialState} from './slices/page.js'
 import status, {statusInitialState} from './slices/status.js'
 
-import {useDeepEqualSelector} from '../../utils/hooks/useDeepEqualSelector.js'
 import React from 'react'
+import {useDeepEqualSelector} from '../../utils/hooks/useDeepEqualSelector.js'
 
 export const persistKey = 'jaenjs-state'
 

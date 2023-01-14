@@ -1,22 +1,21 @@
+import {Text} from '@chakra-ui/react'
 import * as React from 'react'
+import type {SectionType} from '../../types.js'
 import {useAppDispatch} from '../redux'
 import {actions} from '../redux/slices/page.js'
-import type {SectionType} from '../../types.js'
 import {usePageContext} from './PageProvider.js'
-import {Text} from '@chakra-ui/react'
 
 export const SectionOptionsContext =
   React.createContext<{name: string; displayName: string} | undefined>(
     undefined
   )
 
+export type SectionContextType = SectionType & {
+  register: (props: object) => void
+}
+
 export const SectionContext =
-  React.createContext<
-    | (SectionType & {
-        register: (props: object) => void
-      })
-    | undefined
-  >(undefined)
+  React.createContext<SectionContextType | undefined>(undefined)
 
 export const JaenSectionProvider: React.FC<SectionType> = React.memo(
   ({path, id, position, Component}) => {
@@ -63,7 +62,7 @@ export const JaenSectionProvider: React.FC<SectionType> = React.memo(
  * const { name } = useSectionContext()
  * ```
  */
-export const useSectionContext = () => {
+export const useSectionContext = (): SectionContextType | undefined => {
   const context = React.useContext(SectionContext)
 
   return context

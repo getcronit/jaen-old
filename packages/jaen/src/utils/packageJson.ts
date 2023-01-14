@@ -1,7 +1,7 @@
 import {readFileSync} from 'fs'
 import {resolve} from 'path'
 
-import { __dirname } from './dirname.js'
+import {__dirname} from './dirname.js'
 
 export interface PackageJson {
   name: string

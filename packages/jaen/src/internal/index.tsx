@@ -8,17 +8,15 @@ import {ModalProvider} from './context/Modals/ModalContext.js'
 import {SiteProvider} from './context/SiteContext.js'
 import {getAuth} from './hooks/auth/useAuth.js'
 import {useAdminStaticQuery} from './hooks/useAdminStaticQuery.js'
-import theme from './styles/theme.js'
 import {useInterceptGatsbyNavigate} from './hooks/useInterceptGatsbyNavigate'
 import {ThemeProvider} from './styles/ChakraThemeProvider.js'
+import theme from './styles/theme.js'
 
 export {AdminPage, LoginPage} from './components/index.js'
-export {RoutingPage} from './RoutingPage.js'
-
 export {useIncomingBuildChecker} from './context/IncomingBuildChecker/index.js'
-export * as views from './views/index.js'
-
 export {useStatus} from './hooks/useStatus.js'
+export {RoutingPage} from './RoutingPage.js'
+export * as views from './views/index.js'
 
 export interface WrapperProps {
   children: React.ReactNode
@@ -65,7 +63,7 @@ export const GatsbyPageWrapper: React.FC<PageWrapperProps> = ({
   const isAdmin = isAdminOrLogin && !isAdminLogin
 
   const handleActivationButtonClick = () => {
-    navigate('/admin')
+    void navigate('/admin')
   }
 
   const {isAuthenticated} = getAuth()
@@ -74,13 +72,13 @@ export const GatsbyPageWrapper: React.FC<PageWrapperProps> = ({
     console.log(`GatsbyPageWrapper`, {path})
 
     if (isAdmin && !isAuthenticated) {
-      navigate('/admin/login')
+      void navigate('/admin/login')
     } else if (isAdminLogin && isAuthenticated) {
-      navigate('/admin')
+      void navigate('/admin')
     }
   }, [path])
 
-  let Wrapper = () => {
+  const Wrapper = () => {
     if (!isAuthenticated && !isAdminOrLogin) {
       return (
         <>

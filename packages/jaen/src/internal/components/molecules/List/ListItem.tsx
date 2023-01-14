@@ -1,11 +1,11 @@
 import {
-  Stack,
-  Flex,
   Circle,
-  Text,
-  useColorModeValue,
+  Flex,
   Heading,
-  StackProps
+  Stack,
+  StackProps,
+  Text,
+  useColorModeValue
 } from '@chakra-ui/react'
 
 export interface ListItemProps extends StackProps {

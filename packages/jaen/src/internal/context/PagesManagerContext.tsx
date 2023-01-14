@@ -3,6 +3,7 @@ import {navigate} from 'gatsby'
 import {useDisclosure} from '@chakra-ui/react'
 import React from 'react'
 import {PageCreator} from '../components/molecules/PageCreator/index.js'
+import {pageUpdateValidation} from '../helper/page/validators.js'
 import {
   generateAllPaths,
   generatePageOriginPath,
@@ -18,7 +19,6 @@ import {
   PageTreeItems
 } from './AdminPageManager/AdminPageManager.js'
 import {AdminPageManagerProvider} from './AdminPageManager/AdminPageManagerProvider.js'
-import {pageUpdateValidation} from '../helper/page/validators.js'
 
 export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
   children
@@ -33,7 +33,7 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
     state => state.page.pages.lastAddedNodeId
   )
 
-  let [shouldUpdateDpathsFor, setShouldUpdateDpathsFor] =
+  const [shouldUpdateDpathsFor, setShouldUpdateDpathsFor] =
     React.useState<{
       pageId: string
       create: boolean
@@ -72,11 +72,11 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
       let jaenPage = pageTree.find(p => p.id === id)
 
       // TODO: Remove workaround
-      if (!jaenPage) {
+      if (jaenPage == null) {
         jaenPage = pageTree.find(p => p.id === latestAddedPageId)
       }
 
-      if (!jaenPage) {
+      if (jaenPage == null) {
         return null
       }
 
@@ -102,7 +102,7 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
     (pageId: string) => {
       const page = pageTree.find(p => p.id === pageId)
 
-      if (!page) {
+      if (page == null) {
         return null
       }
 
@@ -176,7 +176,7 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
   )
 
   const handlePageNavigate = React.useCallback((path: string) => {
-    navigate(path)
+    void navigate(path)
   }, [])
 
   const pagePaths = React.useMemo(() => {
@@ -187,7 +187,7 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
         const pageId = paths[path]
         const page = pageTree.find(p => p.id === pageId)
 
-        if (!page || page.deleted) {
+        if (page == null || page.deleted) {
           return undefined
         }
 

@@ -1,7 +1,7 @@
-import {ComponentStory, ComponentMeta} from '@storybook/react'
-import {ContextMenu} from './ContextMenu.js'
+import {MenuItem, MenuList} from '@chakra-ui/menu'
 import {Box, Button, ChakraProvider} from '@chakra-ui/react'
-import {MenuList, MenuItem} from '@chakra-ui/menu'
+import {ComponentMeta, ComponentStory} from '@storybook/react'
+import {ContextMenu} from './ContextMenu.js'
 
 export default {
   title: 'Molecules/ContextMenu',
@@ -119,7 +119,10 @@ export const ClickOtherTarget = () => (
         </div>
       )}
     </ContextMenu>
-    <Button onClick={() => alert('Click received!')}>
+    <Button
+      onClick={() => {
+        alert('Click received!')
+      }}>
       Click me while the context menu is open!
     </Button>
   </>

@@ -20,9 +20,9 @@ import {Controller, useForm} from 'react-hook-form'
 
 import {IFormProps, IJaenTemplate} from '../../../../types.js'
 
-type TemplateSelectorProps = {
+interface TemplateSelectorProps {
   selectedTemplate: string
-  templates: Omit<IJaenTemplate, 'children'>[]
+  templates: Array<Omit<IJaenTemplate, 'children'>>
   onSelect: (templateName: string) => void
 }
 
@@ -47,7 +47,7 @@ const TemplateSelector = ({
     onSelect(newSelectedTemplate)
   }
 
-  if (!templates.length) {
+  if (templates.length === 0) {
     return (
       <Text size="xs" color="gray.400">
         No templates found.
@@ -65,7 +65,9 @@ const TemplateSelector = ({
             selectedTemplate && selectedTemplate === name ? 'pink' : 'gray'
           }
           mr={2}
-          onClick={() => handleSelect(name)}>
+          onClick={() => {
+            handleSelect(name)
+          }}>
           {displayName}
         </Button>
       ))}
@@ -73,7 +75,7 @@ const TemplateSelector = ({
   )
 }
 
-export type CreateValues = {
+export interface CreateValues {
   slug: string
   title: string
   template: Omit<IJaenTemplate, 'children'>
@@ -143,11 +145,14 @@ export const PageCreator = ({
       onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form
+          onSubmit={e => {
+            void handleSubmit(onSubmit)(e)
+          }}>
           <ModalHeader>Create a page</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <FormControl isInvalid={!!errors.title}>
+            <FormControl isInvalid={!(errors.title == null)}>
               <FormLabel>Title</FormLabel>
               <Input
                 placeholder="Title"
@@ -158,7 +163,7 @@ export const PageCreator = ({
               <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl mt={4} isInvalid={!!errors.slug}>
+            <FormControl mt={4} isInvalid={!(errors.slug == null)}>
               <FormLabel>Slug</FormLabel>
               <Input
                 // id="slug"
@@ -185,14 +190,14 @@ export const PageCreator = ({
                   }
                 })}
               />
-              {!errors.slug && (
+              {errors.slug == null && (
                 <FormHelperText>
                   Make sure the slug is unique between siblings.
                 </FormHelperText>
               )}
               <FormErrorMessage>{errors.slug?.message}</FormErrorMessage>
             </FormControl>
-            <FormControl mt={4} isInvalid={!!errors.template?.name}>
+            <FormControl mt={4} isInvalid={!(errors.template?.name == null)}>
               <FormLabel>Template</FormLabel>
               <Controller
                 control={control}
@@ -214,7 +219,7 @@ export const PageCreator = ({
                   </>
                 )}
               />
-              {!errors.template?.name && (
+              {errors.template?.name == null && (
                 <FormHelperText>
                   Select the template to use for this page.
                 </FormHelperText>

@@ -1,8 +1,8 @@
 import deepmerge from 'deepmerge'
 import {v4 as uuidv4} from 'uuid'
 
-import {deepmergeArrayIdMerge} from '../../../utils/deepmerge.js'
 import {IJaenSection, IJaenSectionItem, SectionType} from '../../../types.js'
+import {deepmergeArrayIdMerge} from '../../../utils/deepmerge.js'
 
 export const updateItem = <T>(
   items: IJaenSectionItem[],
@@ -12,13 +12,13 @@ export const updateItem = <T>(
   const index = items.findIndex(item => item.id === id)
 
   if (index === -1) {
-    // @ts-ignore
+    // @ts-expect-error
     items.push({
       id,
       ...newData
     })
   } else {
-    // @ts-ignore
+    // @ts-expect-error
     items[index] = deepmerge(items[index], newData, {
       arrayMerge: deepmergeArrayIdMerge
     })
@@ -44,9 +44,11 @@ export const insertSectionIntoTree = (
 
   const [head, ...tail] = path
 
-  if (!sections.find(({fieldName}) => head && fieldName === head.fieldName)) {
+  if (
+    sections.find(({fieldName}) => head && fieldName === head.fieldName) == null
+  ) {
     if (head?.fieldName) {
-      // @ts-ignore
+      // @ts-expect-error
       sections.push({
         fieldName: head.fieldName,
         items: []
@@ -216,7 +218,7 @@ export const insertSectionIntoTree = (
 
       let item = section.items.find(({id}) => id === tail[0]?.sectionId)
 
-      if (!item) {
+      if (item == null) {
         item = {
           id: tail[0]?.sectionId
         } as IJaenSectionItem

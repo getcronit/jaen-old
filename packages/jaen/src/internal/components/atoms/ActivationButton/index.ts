@@ -1,1 +1,1 @@
-export {ActivationButton} from './ActivationButton.js';
+export {ActivationButton} from './ActivationButton.js'

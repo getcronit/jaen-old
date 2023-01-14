@@ -1,6 +1,6 @@
 export {
   SectionBlockSelector,
   SectionBlockSelectorProps,
-  SelectorBlockType,
-  SelectorBlockAddType
+  SelectorBlockAddType,
+  SelectorBlockType
 } from './SectionBlockSelector.js'

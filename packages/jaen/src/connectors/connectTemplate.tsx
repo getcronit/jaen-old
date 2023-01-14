@@ -64,9 +64,9 @@ export const connectTemplate = <P extends PageProps>(
   return MyComp
 }
 
-export type ITemplateOptions = {
+export interface ITemplateOptions {
   displayName: string
-  children: Array<string>
+  children: string[]
   isRootTemplate?: boolean
 }
 export type ITemplateConnection = ReturnType<typeof connectTemplate>

@@ -2,7 +2,7 @@ import {existsSync, readFileSync, writeFileSync} from 'fs'
 import {resolve} from 'path'
 import {Site} from '../types.js'
 
-export type RemoteFileMigration = {
+export interface RemoteFileMigration {
   createdAt: string
   fileUrl: string
 }
@@ -32,16 +32,12 @@ export const writeJSONFile = (filePath: string, data: any) => {
 export class JaenData {
   #jaenDataDir: string
 
-  pages: {
-    [pageId: string]: BaseEntity
-  }
-  notifications: {
-    [notificationId: string]: BaseEntity
-  }
+  pages: Record<string, BaseEntity>
+  notifications: Record<string, BaseEntity>
   internal?: {
     site: Site
     finderUrl?: string
-    migrationHistory: Array<RemoteFileMigration>
+    migrationHistory: RemoteFileMigration[]
   }
 
   constructor(options: {jaenDataDir: string}) {
@@ -61,7 +57,7 @@ export class JaenData {
   }
 
   private writeJSONFile(fileName: string, data: any) {
-    return writeJSONFile(`${this.#jaenDataDir}/${fileName}.json`, data)
+    writeJSONFile(`${this.#jaenDataDir}/${fileName}.json`, data)
   }
 
   read() {

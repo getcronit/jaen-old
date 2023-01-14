@@ -7,10 +7,7 @@ import {cliName} from './constants.js'
 
 export const program = new Command()
 
-program
-  .name(cliName)
-  .description('Snek Jaen CLI')
-  .version(packageJson.version)
+program.name(cliName).description('Snek Jaen CLI').version(packageJson.version)
 
 program
   .command('migrate')

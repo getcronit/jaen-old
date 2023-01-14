@@ -1,7 +1,6 @@
 import {Box, Flex} from '@chakra-ui/react'
 import {ComponentMeta, Story} from '@storybook/react'
 import React from 'react'
-import {FaEye} from 'react-icons/fa'
 import {AdminToolbar} from './AdminToolbar.js'
 export default {
   title: 'organisms/AdminToolbar',
@@ -11,7 +10,7 @@ export default {
   },
   decorators: [
     story => (
-      <Flex flexDir={'column'} h="100vh">
+      <Flex flexDir="column" h="100vh">
         {story()}
 
         <Box bg="red" flex="1">

@@ -36,9 +36,9 @@ export const ActivationButton = (props: ActivationButtonProps) => {
         w="full"
         px={4}
         py={2}
-        position={'fixed'}
+        position="fixed"
         bottom={0}
-        boxShadow={'dark-lg'}
+        boxShadow="dark-lg"
         bg="white"
         color="black"
         alignItems="center">
@@ -46,7 +46,7 @@ export const ActivationButton = (props: ActivationButtonProps) => {
           h="full"
           w="auto"
           cursor="pointer"
-          justifyContent={'space-around'}
+          justifyContent="space-around"
           align="center"
           gap={2}
           py={{
@@ -79,7 +79,12 @@ export const ActivationButton = (props: ActivationButtonProps) => {
         <HStack h="full">
           {divider}
 
-          <CloseButton size={'lg'} onClick={() => setIsClicked(false)} />
+          <CloseButton
+            size="lg"
+            onClick={() => {
+              setIsClicked(false)
+            }}
+          />
         </HStack>
       </HStack>
     )
@@ -89,12 +94,14 @@ export const ActivationButton = (props: ActivationButtonProps) => {
     <Tooltip hasArrow label="Activate Jaen" bg="gray.300" color="black">
       <JaenLogo
         zIndex={9999}
-        cursor={'pointer'}
-        boxSize={'14'}
-        position={'fixed'}
+        cursor="pointer"
+        boxSize="14"
+        position="fixed"
         left="5"
         bottom="5"
-        onClick={() => setIsClicked(true)}
+        onClick={() => {
+          setIsClicked(true)
+        }}
       />
     </Tooltip>
   )

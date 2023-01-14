@@ -1,8 +1,8 @@
 import {
   Box,
-  Stack,
   Heading,
   Progress,
+  Stack,
   Text,
   useColorModeValue
 } from '@chakra-ui/react'
@@ -20,9 +20,9 @@ export const LoadingAdminPage: React.FC<LoadingAdminPageProps> = props => {
       py="12"
       px={{base: '4', lg: '8'}}>
       <JaenLogo
-        mx={'auto'}
-        boxSize={'16'}
-        display={'block'}
+        mx="auto"
+        boxSize="16"
+        display="block"
         mb={{base: '10', md: '15'}}
       />
       <Stack maxW="md" mx="auto" spacing={6}>

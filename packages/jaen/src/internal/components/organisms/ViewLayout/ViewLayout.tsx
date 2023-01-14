@@ -9,7 +9,7 @@ export const ViewLayout: React.FC<ViewLayoutProps> = ({
   ...boxProps
 }) => {
   return (
-    <Box bg="gray.50" boxSize={'full'} {...boxProps}>
+    <Box bg="gray.50" boxSize="full" {...boxProps}>
       {children}
     </Box>
   )

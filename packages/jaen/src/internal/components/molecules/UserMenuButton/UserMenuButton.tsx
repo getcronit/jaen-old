@@ -12,8 +12,8 @@ import {
   useColorModeValue,
   useMenuButton
 } from '@chakra-ui/react'
-import {HiSelector} from 'react-icons/hi'
 import React from 'react'
+import {HiSelector} from 'react-icons/hi'
 
 export interface UserMenuButtonProps {
   user: {
@@ -91,7 +91,7 @@ export const UserMenuButton: React.FC<UserMenuButtonProps> = ({
       <MenuButton user={user} showNotification={showNotification} />
 
       <MenuList
-        fontSize={'sm'}
+        fontSize="sm"
         shadow="md"
         py="4"
         color={useColorModeValue('gray.600', 'gray.200')}

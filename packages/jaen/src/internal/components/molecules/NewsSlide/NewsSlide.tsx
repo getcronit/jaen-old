@@ -25,29 +25,29 @@ export const NewsSlide: React.FC<NewsSlideProps> = ({...flexProps}) => {
   return (
     <Flex
       {...flexProps}
-      pos={'fixed'}
+      pos="fixed"
       w="full"
       h="full"
-      flexDir={'row-reverse'}
+      flexDir="row-reverse"
       bg={isOpen ? 'rgba(0,0,0,0.3)' : 'transparent'}
       pointerEvents={isOpen ? undefined : 'none'}
-      cursor={'default'}
+      cursor="default"
       onClick={closeIfNotRefHandler}>
       <SlideFade offsetY={0} in={isOpen}>
         <Stack
           borderY="1px"
-          borderColor={'gray.200'}
+          borderColor="gray.200"
           ref={ref}
           bg="white"
           minW="lg"
           h="full"
-          borderLeftRadius={'md'}
+          borderLeftRadius="md"
           shadow="md"
           divider={<StackDivider />}>
           <Stack>
-            <HStack p="6" justifyContent={'space-between'}>
+            <HStack p="6" justifyContent="space-between">
               <Heading as="h2" fontSize="2xl" fontWeight="bold">
-                What's new at Jaen
+                What&apos;s new at Jaen
               </Heading>
               <CloseButton onClick={onClose} />
             </HStack>

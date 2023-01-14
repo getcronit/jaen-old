@@ -28,7 +28,7 @@ export const List: React.FC<ListProps> = props => {
       rounded="lg">
       {props.label && (
         <Text
-          fontSize={'sm'}
+          fontSize="sm"
           fontWeight="medium"
           noOfLines={1}
           color={useColorModeValue('gray.500', 'gray.400')}

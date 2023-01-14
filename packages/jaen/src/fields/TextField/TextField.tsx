@@ -1,8 +1,8 @@
 import {Box, Button, Text} from '@chakra-ui/react'
 
-import Editor from '../../utils/CKEditor/index.js'
 import {connectField} from '../../connectors/index.js'
 import {HighlightTooltip} from '../../internal/components/index.js'
+import Editor from '../../utils/CKEditor/index.js'
 
 export interface TextFieldProps {
   rtf?: boolean
@@ -16,7 +16,9 @@ export const TextField = connectField<string, string, TextFieldProps>(
       <Box style={jaenField.style} className={jaenField.className}>
         <HighlightTooltip
           actions={[
-            <Button variant="jaenHighlightTooltipText">
+            <Button
+              variant="jaenHighlightTooltipText"
+              key={`jaen-highlight-tooltip-text-${jaenField.name}`}>
               <Text as="span" noOfLines={1}>
                 Text {jaenField.name}
               </Text>
@@ -26,7 +28,9 @@ export const TextField = connectField<string, string, TextFieldProps>(
           <Editor
             defaultValue={jaenField.staticValue || jaenField.defaultValue}
             value={jaenField.value}
-            onBlurValue={data => jaenField.onUpdateValue(data)}
+            onBlurValue={data => {
+              jaenField.onUpdateValue(data)
+            }}
             editing={jaenField.isEditing}
             disableToolbar={!rtf}
           />

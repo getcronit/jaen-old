@@ -15,11 +15,11 @@ export interface NewsSlideContextValue {
   onToggle: () => void
 
   data: {
-    items: {
+    items: Array<{
       id: string
       title: string
       description: string
-    }[]
+    }>
   } | null
   isLoading: boolean
 }
@@ -75,7 +75,7 @@ export const NewsSlideProvider: React.FC<NewsSlideProviderProps> = ({
     }
 
     if (isOpen && data === null) {
-      fetchData()
+      void fetchData()
     }
   }, [isOpen])
 

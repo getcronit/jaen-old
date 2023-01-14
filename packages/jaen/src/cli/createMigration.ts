@@ -1,21 +1,19 @@
-import fetch from 'node-fetch'
 import deepmerge from 'deepmerge'
+import fetch from 'node-fetch'
 
-import {nodejsSafeJsonUpload} from '../utils/osg.js'
 import {deepmergeArrayIdMerge} from '../utils/deepmerge.js'
-import {logger} from './logger.js'
-import packageJson from '../utils/packageJson.js'
 import {JaenData, MigrationEntity, RemoteFileMigration} from '../utils/JaenData'
+import {nodejsSafeJsonUpload} from '../utils/osg.js'
+import packageJson from '../utils/packageJson.js'
+import {logger} from './logger.js'
 
 export interface BaseEntity extends MigrationEntity {
   migrations: RemoteFileMigration[]
 }
 
-type MigrationData = {
-  [key: string]: any
-}
+type MigrationData = Record<string, any>
 
-export type CreateMigrationOptions = {
+export interface CreateMigrationOptions {
   migrationUrl: string
   jaenDataDir: string
 }
@@ -135,7 +133,7 @@ const updateEntity = async (
 ): Promise<BaseEntity> => {
   // check if baseEntity is not a empty object
 
-  if (!baseEntity?.context) {
+  if (baseEntity?.context == null) {
     const newMigration = await uploadMigration(migrationData)
     return {
       context: newMigration,
@@ -146,7 +144,7 @@ const updateEntity = async (
     // !TODO: Implement merging logic
     const mergedData = deepmerge<any>(baseData, migrationData, {
       arrayMerge: deepmergeArrayIdMerge
-    }) //{...baseData, ...migrationData}
+    }) // {...baseData, ...migrationData}
 
     const newMigration = await uploadMigration(mergedData)
 

@@ -2,7 +2,7 @@ import {SerializedError} from '@reduxjs/toolkit'
 
 import {IJaenPage} from '../../types.js'
 
-export type IError = {
+export interface IError {
   code: string
   message: string
   details?: any
@@ -20,20 +20,17 @@ export interface IAuthState {
 export interface IPageState {
   pages: {
     lastAddedNodeId?: string
-    registeredPageFields: {
-      [uuid: string]: number
-    }
-    nodes: {
-      [uuid: string]: Partial<IJaenPage>
-    }
+    registeredPageFields: Record<string, number>
+    nodes: Record<string, Partial<IJaenPage>>
   }
   routing: {
-    dynamicPaths: {
-      [path: string]: {
+    dynamicPaths: Record<
+      string,
+      {
         pageId: string
         templateName: string
       }
-    }
+    >
   }
 }
 

@@ -1,10 +1,10 @@
 import {combineReducers, createSlice, PayloadAction} from '@reduxjs/toolkit'
 import {v4 as uuidv4} from 'uuid'
 import {IJaenPage, SectionType} from '../../../types.js'
+import {deepRemoveAllUndefinedFromObject} from '../../../utils/deepRemoveAllUndefinedFromObject'
 import {findSection, insertSectionIntoTree} from '../../helper/page/section.js'
 import {generatePagePaths} from '../../helper/path.js'
 import {IPageState} from '../types.js'
-import {deepRemoveAllUndefinedFromObject} from '../../../utils/deepRemoveAllUndefinedFromObject'
 
 export const pageInitialState: IPageState = {
   pages: {
@@ -223,13 +223,13 @@ const pagesSlice = createSlice({
       const section = findSection(sections, path)
 
       if (section) {
-        //section.position = position
+        // section.position = position
         section.props = props
       }
 
       page.sections = sections
 
-      //state.registeredPageFields[pageId] = position + 1
+      // state.registeredPageFields[pageId] = position + 1
 
       return state
     },
@@ -278,7 +278,7 @@ const pagesSlice = createSlice({
         insertSectionIntoTree(sections, section.path, {
           sectionId: section.id,
           sectionItemData: {
-            // @ts-ignore
+            // @ts-expect-error
             jaenFields: {
               [fieldType]: {
                 [fieldName]: {
@@ -291,7 +291,7 @@ const pagesSlice = createSlice({
         })
       } else {
         page.jaenFields = page.jaenFields || {}
-        // @ts-ignore
+        // @ts-expect-error
         page.jaenFields[fieldType] = {
           ...page.jaenFields[fieldType],
           [fieldName]: {
@@ -414,10 +414,10 @@ const routingSlice = createSlice({
             }
           }
 
-          if (create) {
+          if (create && node?.template) {
             state.dynamicPaths[path] = {
               pageId,
-              templateName: node?.template!
+              templateName: node.template
             }
           }
         }
