@@ -1,11 +1,11 @@
 import deepmerge from 'deepmerge'
 import {v4 as uuidv4} from 'uuid'
 
-import {IJaenSection, IJaenSectionItem, SectionType} from '../../../types.js'
+import {IJaenBlock, IJaenSection, SectionType} from '../../../types.js'
 import {deepmergeArrayIdMerge} from '../../../utils/deepmerge.js'
 
 export const updateItem = <T>(
-  items: IJaenSectionItem[],
+  items: IJaenBlock[],
   id: string,
   newData: Partial<T>
 ) => {
@@ -34,13 +34,13 @@ export const insertSectionIntoTree = (
     between?: [string | null, string | null]
     sectionId?: string
     shouldDelete?: true
-    sectionItemData?: Partial<IJaenSectionItem>
+    blockData?: Partial<IJaenBlock>
   }
 ): IJaenSection | null => {
   const between = options?.between
   const sectionId = options?.sectionId
   const shouldDelete = options?.shouldDelete
-  const sectionItemData = options?.sectionItemData || {}
+  const blockData = options?.blockData || {}
 
   const [head, ...tail] = path
 
@@ -61,7 +61,7 @@ export const insertSectionIntoTree = (
       if (tail.length === 0) {
         if (sectionId && shouldDelete) {
           updateItem(section.items, sectionId, {
-            ...sectionItemData,
+            ...blockData,
             deleted: true
           })
 
@@ -124,7 +124,7 @@ export const insertSectionIntoTree = (
           // Generate a new id in the pattern of `JaenSection {uuid}`
           const genSectionId = sectionId || `JaenSection ${uuidv4()}`
 
-          if (between && sectionItemData.type) {
+          if (between && blockData.type) {
             const [prev, next] = between
 
             if (!prev && !next) {
@@ -138,8 +138,8 @@ export const insertSectionIntoTree = (
                 ptrNext: null,
                 ptrPrev: null,
                 sections: [],
-                type: sectionItemData.type,
-                ...sectionItemData
+                type: blockData.type,
+                ...blockData
               })
 
               section.ptrHead = genSectionId
@@ -154,8 +154,8 @@ export const insertSectionIntoTree = (
                 ptrNext: null,
                 ptrPrev: prev,
                 sections: [],
-                type: sectionItemData.type,
-                ...sectionItemData
+                type: blockData.type,
+                ...blockData
               })
 
               updateItem(section.items, prev, {
@@ -173,8 +173,8 @@ export const insertSectionIntoTree = (
                 ptrNext: next,
                 ptrPrev: null,
                 sections: [],
-                type: sectionItemData.type,
-                ...sectionItemData
+                type: blockData.type,
+                ...blockData
               })
 
               updateItem(section.items, next, {
@@ -193,8 +193,8 @@ export const insertSectionIntoTree = (
                 ptrNext: next,
                 ptrPrev: prev,
                 sections: [],
-                type: sectionItemData.type,
-                ...sectionItemData
+                type: blockData.type,
+                ...blockData
               })
 
               updateItem(section.items, prev, {
@@ -207,7 +207,7 @@ export const insertSectionIntoTree = (
             }
           } else {
             updateItem(section.items, genSectionId, {
-              ...sectionItemData,
+              ...blockData,
               id: genSectionId
             })
           }
@@ -221,7 +221,7 @@ export const insertSectionIntoTree = (
       if (item == null) {
         item = {
           id: tail[0]?.sectionId
-        } as IJaenSectionItem
+        } as IJaenBlock
 
         section.items.push(item)
       }

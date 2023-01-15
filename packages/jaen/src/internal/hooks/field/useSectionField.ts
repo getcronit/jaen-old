@@ -1,9 +1,9 @@
 import {useMemo} from 'react'
 
 import {
-  ISectionConnection,
-  ISectionOptions
-} from '../../../connectors/connectSection.js'
+  IBlockConnection,
+  IBlockOptions
+} from '../../../connectors/connectBlock.js'
 import {IJaenConnection, IJaenSection} from '../../../types.js'
 import {usePageContext} from '../../context/PageProvider.js'
 import {store} from '../../redux/index.js'
@@ -34,7 +34,7 @@ export interface UseSectionField {
   sectionsDict: Record<
     string,
     {
-      Component: IJaenConnection<{}, ISectionOptions>
+      Component: IJaenConnection<{}, IBlockOptions>
       options: {
         displayName: string
         name: string
@@ -49,12 +49,12 @@ export interface UseSectionField {
 
 export interface UseSectionFieldOptions {
   sectionName: string
-  sections: ISectionConnection[]
+  blocks: IBlockConnection[]
 }
 
 export const useSectionField = ({
   sectionName,
-  sections
+  blocks
 }: UseSectionFieldOptions): UseSectionField => {
   const {jaenPage} = usePageContext()
 
@@ -65,7 +65,7 @@ export const useSectionField = ({
     Record<
       string,
       {
-        Component: IJaenConnection<{}, ISectionOptions>
+        Component: IBlockConnection
         options: {
           displayName: string
           name: string
@@ -73,11 +73,11 @@ export const useSectionField = ({
       }
     >
   >(() => {
-    return sections.reduce<
+    const t = blocks.reduce<
       Record<
         string,
         {
-          Component: ISectionConnection
+          Component: IBlockConnection
           options: {displayName: string; name: string}
         }
       >
@@ -91,7 +91,9 @@ export const useSectionField = ({
       }),
       {}
     )
-  }, [sections])
+
+    return t
+  }, [blocks])
 
   const onSectionAdd = (
     sectionItemType: string,

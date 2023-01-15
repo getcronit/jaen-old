@@ -3,7 +3,7 @@ import {Box, Button, HStack, IconButton, Text} from '@chakra-ui/react'
 import * as React from 'react'
 import {FiBox} from 'react-icons/fi'
 
-import {ISectionConnection} from '../../connectors/index.js'
+import {IBlockConnection} from '../../connectors/index.js'
 import {
   HighlightTooltip,
   SectionBlockSelectorButton,
@@ -12,22 +12,22 @@ import {
 } from '../../internal/components/index.js'
 import {HighlightProviderContext} from '../../internal/context/HighlightContext.js'
 import {useModals} from '../../internal/context/Modals/ModalContext.js'
-import {JaenSectionProvider} from '../../internal/context/SectionContext.js'
+import {JaenSectionBlockProvider} from '../../internal/context/SectionBlockContext.js'
 import {useSectionField} from '../../internal/hooks/field/useSectionField.js'
 import {useStatus} from '../../internal/index.js'
 import {withRedux} from '../../internal/redux/index.js'
-import {IJaenSectionItem} from '../../types.js'
+import {IJaenBlock} from '../../types.js'
 
 type SectionPropsCallback = (args: {
   count: number
   totalSections: number
-  section: IJaenSectionItem
+  section: IJaenBlock
 }) => Record<string, any>
 
 export interface SectionFieldProps {
   name: string // chapterName
   displayName: string
-  sections: ISectionConnection[]
+  blocks: IBlockConnection[]
   as?: React.ComponentType<React.HTMLAttributes<HTMLElement>>
   sectionAs?: React.ComponentType<React.HTMLAttributes<HTMLElement>>
   props?: Record<string, any>
@@ -39,7 +39,7 @@ export interface SectionFieldProps {
 }
 
 export const SectionField = withRedux(
-  ({name, displayName, sections, ...rest}: SectionFieldProps) => {
+  ({name, displayName, blocks, ...rest}: SectionFieldProps) => {
     const {confirm, toast} = useModals()
 
     const {
@@ -50,7 +50,7 @@ export const SectionField = withRedux(
       section,
       sectionsDict,
       sectionPath
-    } = useSectionField({sectionName: name, sections})
+    } = useSectionField({sectionName: name, blocks})
 
     const {isEditing} = useStatus()
 
@@ -69,7 +69,7 @@ export const SectionField = withRedux(
       </Button>
     ]
 
-    const blocks: SelectorBlockType[] = sections.map(({options}) => ({
+    const blocksForSelector: SelectorBlockType[] = blocks.map(({options}) => ({
       slug: options.name,
       title: options.displayName,
       icon: FiBox
@@ -78,7 +78,7 @@ export const SectionField = withRedux(
     const handleSectionAdd = (
       block: SelectorBlockType,
       type: SelectorBlockAddType,
-      item?: IJaenSectionItem
+      item?: IJaenBlock
     ) => {
       console.log('handleSectionAdd', block, type, item)
 
@@ -124,12 +124,12 @@ export const SectionField = withRedux(
       }
     }
 
-    if (sections.length > 0) {
+    if (blocks.length > 0) {
       tooltipButtons = tooltipButtons.concat([
         <HStack spacing="0.5" key="section-field-tooltip-buttons">
           <SectionBlockSelectorButton
             onBlockAdd={handleSectionAdd}
-            blocks={blocks}
+            blocks={blocksForSelector}
             onlyAdd={section.items.length === 0}
           />
           {/* <IconButton
@@ -190,7 +190,7 @@ export const SectionField = withRedux(
                       onBlockAdd={(block, type) => {
                         handleSectionAdd(block, type, item)
                       }}
-                      blocks={blocks}
+                      blocks={blocksForSelector}
                       onlyAdd={false}
                     />
                     <IconButton
@@ -246,7 +246,7 @@ export const SectionField = withRedux(
                   // </Box>
                 ]}>
                 <SectionWrapper {...sectionProps}>
-                  <JaenSectionProvider
+                  <JaenSectionBlockProvider
                     path={sectionPath}
                     id={item.id}
                     position={index}

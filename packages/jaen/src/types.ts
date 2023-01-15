@@ -1,6 +1,6 @@
 import type {PageProps as GatsbyPageProps} from 'gatsby'
 import type {IGatsbyImageData} from 'gatsby-plugin-image'
-import {ISectionConnection} from './connectors/index.js'
+import {IBlockConnection} from './connectors/index.js'
 
 interface SiteMetadata {
   title: string
@@ -90,7 +90,7 @@ export interface IJaenPage {
 
 export interface IJaenSection {
   fieldName: string
-  items: IJaenSectionItem[]
+  items: IJaenBlock[]
   ptrHead: string | null
   ptrTail: string | null
   position?: number
@@ -107,10 +107,10 @@ export interface SectionType {
     fieldName: string
     sectionId?: string
   }>
-  Component?: ISectionConnection
+  Component?: IBlockConnection
 }
 
-export interface IJaenSectionItem {
+export interface IJaenBlock {
   [customFieldName: string]: any
   id: string
   type: string

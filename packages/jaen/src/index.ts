@@ -1,7 +1,7 @@
 export {
+  connectBlock,
   connectField,
   connectPage,
-  connectSection,
   connectTemplate
 } from './connectors/index.js'
 export {Field} from './fields/index.js'

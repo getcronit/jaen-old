@@ -1,27 +1,26 @@
 import {useEffect} from 'react'
 import {
-  SectionOptionsContext,
-  useSectionContext
-} from '../internal/context/SectionContext.js'
+  BlockContext,
+  useSectionBlockContext
+} from '../internal/context/SectionBlockContext.js'
 import {useAuth} from '../internal/hooks/auth/useAuth.js'
 import {IJaenConnection} from '../types.js'
 
-export interface ISectionOptions {
+export interface IBlockOptions {
   displayName: string
   name: string
 }
 /**
- * @function connectSection Connects a section with Jaen.
+ * @function connectBlock Connects a block to to section with Jaen.
  *
  * @param Component The component to wrap
  */
-
-export const connectSection = <P extends {}>(
+export const connectBlock = <P extends {}>(
   Component: React.ComponentType<P>,
-  options: ISectionOptions
+  options: IBlockOptions
 ) => {
   const MyComp: IJaenConnection<P, typeof options> = props => {
-    const section = useSectionContext()
+    const section = useSectionBlockContext()
 
     const {isAuthenticated} = useAuth()
 
@@ -32,9 +31,9 @@ export const connectSection = <P extends {}>(
       }
     }, [])
     return (
-      <SectionOptionsContext.Provider value={options}>
+      <BlockContext.Provider value={options}>
         <Component {...props} />
-      </SectionOptionsContext.Provider>
+      </BlockContext.Provider>
     )
   }
 
@@ -42,4 +41,4 @@ export const connectSection = <P extends {}>(
 
   return MyComp
 }
-export type ISectionConnection = ReturnType<typeof connectSection>
+export type IBlockConnection = ReturnType<typeof connectBlock>

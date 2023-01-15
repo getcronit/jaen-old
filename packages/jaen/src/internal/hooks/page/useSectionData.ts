@@ -1,9 +1,9 @@
 import deepmerge from 'deepmerge'
 import * as React from 'react'
-import {IJaenSectionItem} from '../../../types.js'
+import {IJaenBlock} from '../../../types.js'
 import {deepmergeArrayIdMerge} from '../../../utils/deepmerge.js'
 import {usePageContext} from '../../context/PageProvider.js'
-import {useSectionContext} from '../../context/SectionContext.js'
+import {useSectionBlockContext} from '../../context/SectionBlockContext.js'
 import {findSection} from '../../helper/page/section.js'
 import {useAppSelector} from '../../redux/index.js'
 
@@ -13,7 +13,7 @@ export function useSectionData(
 ) {
   const {forceUpdate = false} = options || {}
 
-  const jaenSection = useSectionContext()
+  const jaenSection = useSectionBlockContext()
 
   const sectionPath = React.useMemo(
     () =>
@@ -82,13 +82,13 @@ export function useSectionData(
       arrayMerge: deepmergeArrayIdMerge
     })
 
-    const sectionItemsDict: Record<string, IJaenSectionItem> = {}
+    const sectionItemsDict: Record<string, IJaenBlock> = {}
 
     mergedSection?.items?.forEach(item => {
       sectionItemsDict[item.id] = item
     })
 
-    const orderedSectionItems: IJaenSectionItem[] = []
+    const orderedSectionItems: IJaenBlock[] = []
 
     let ptrHead = mergedSection?.ptrHead
 

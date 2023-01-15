@@ -5,19 +5,19 @@ import {useAppDispatch} from '../redux'
 import {actions} from '../redux/slices/page.js'
 import {usePageContext} from './PageProvider.js'
 
-export const SectionOptionsContext =
+export const BlockContext =
   React.createContext<{name: string; displayName: string} | undefined>(
     undefined
   )
 
-export type SectionContextType = SectionType & {
+export type SectionBlockContextType = SectionType & {
   register: (props: object) => void
 }
 
-export const SectionContext =
-  React.createContext<SectionContextType | undefined>(undefined)
+export const SectionBlockContext =
+  React.createContext<SectionBlockContextType | undefined>(undefined)
 
-export const JaenSectionProvider: React.FC<SectionType> = React.memo(
+export const JaenSectionBlockProvider: React.FC<SectionType> = React.memo(
   ({path, id, position, Component}) => {
     const {jaenPage} = usePageContext()
     const dispatch = useAppDispatch()
@@ -36,7 +36,7 @@ export const JaenSectionProvider: React.FC<SectionType> = React.memo(
     )
 
     return (
-      <SectionContext.Provider
+      <SectionBlockContext.Provider
         value={{
           path,
           id,
@@ -47,23 +47,30 @@ export const JaenSectionProvider: React.FC<SectionType> = React.memo(
         {Component ? (
           <Component />
         ) : (
-          <Text>Section not found. Please contact the site administrator.</Text>
+          <Text>
+            <>
+              No block component found for section {id} at path {path}. Please
+              contact the site administrator.
+            </>
+          </Text>
         )}
-      </SectionContext.Provider>
+      </SectionBlockContext.Provider>
     )
   }
 )
 
 /**
- * Access the SectionContext.
+ * Access the SectionBlockContext.
  *
  * @example
  * ```
- * const { name } = useSectionContext()
+ * const { name } = useSectionBlockContext()
  * ```
  */
-export const useSectionContext = (): SectionContextType | undefined => {
-  const context = React.useContext(SectionContext)
+export const useSectionBlockContext = ():
+  | SectionBlockContextType
+  | undefined => {
+  const context = React.useContext(SectionBlockContext)
 
   return context
 }

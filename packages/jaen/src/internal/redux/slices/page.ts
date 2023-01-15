@@ -159,7 +159,7 @@ const pagesSlice = createSlice({
 
       insertSectionIntoTree(sections, path, {
         between,
-        sectionItemData: {
+        blockData: {
           type: sectionItemType
         }
       })
@@ -277,7 +277,7 @@ const pagesSlice = createSlice({
 
         insertSectionIntoTree(sections, section.path, {
           sectionId: section.id,
-          sectionItemData: {
+          blockData: {
             // @ts-expect-error
             jaenFields: {
               [fieldType]: {
@@ -336,7 +336,7 @@ const pagesSlice = createSlice({
 
         insertSectionIntoTree(page.sections, section.path, {
           sectionId: section.id,
-          sectionItemData: {
+          blockData: {
             jaenFields: {
               [fieldType]: {
                 [fieldName]: {

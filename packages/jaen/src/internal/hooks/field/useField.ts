@@ -2,7 +2,7 @@ import React from 'react'
 
 import {IJaenPage} from '../../../types'
 import {usePageContext} from '../../context/PageProvider.js'
-import {useSectionContext} from '../../context/SectionContext.js'
+import {useSectionBlockContext} from '../../context/SectionBlockContext.js'
 import {findSection} from '../../helper/page/section.js'
 import {RootState, store} from '../../redux/index.js'
 import {actions} from '../../redux/slices/page.js'
@@ -17,7 +17,7 @@ export function useField<IValue>(name: string, type: string) {
     )
   }
 
-  const sectionContext = useSectionContext()
+  const SectionBlockContext = useSectionBlockContext()
 
   function getPageField(
     page: IJaenPage | Partial<IJaenPage> | null
@@ -25,13 +25,13 @@ export function useField<IValue>(name: string, type: string) {
     if (page) {
       let fields
 
-      if (sectionContext == null) {
+      if (SectionBlockContext == null) {
         fields = page.jaenFields
       } else {
         fields = findSection(
           page.sections || [],
-          sectionContext.path
-        )?.items.find(({id}) => id === sectionContext.id)?.jaenFields
+          SectionBlockContext.path
+        )?.items.find(({id}) => id === SectionBlockContext.id)?.jaenFields
       }
 
       return fields?.[type]?.[name]?.value
@@ -89,10 +89,10 @@ export function useField<IValue>(name: string, type: string) {
       store.dispatch(
         actions.field_write({
           pageId: jaenPage.id,
-          section: sectionContext
+          section: SectionBlockContext
             ? {
-                path: sectionContext.path,
-                id: sectionContext.id
+                path: SectionBlockContext.path,
+                id: SectionBlockContext.id
               }
             : undefined,
           fieldType: type,
@@ -101,7 +101,7 @@ export function useField<IValue>(name: string, type: string) {
         })
       )
     },
-    [jaenPage.id, sectionContext, type, name, value]
+    [jaenPage.id, SectionBlockContext, type, name, value]
   )
 
   const register = React.useCallback(
@@ -111,17 +111,17 @@ export function useField<IValue>(name: string, type: string) {
           pageId: jaenPage.id,
           fieldType: type,
           fieldName: name,
-          section: sectionContext
+          section: SectionBlockContext
             ? {
-                path: sectionContext.path,
-                id: sectionContext.id
+                path: SectionBlockContext.path,
+                id: SectionBlockContext.id
               }
             : undefined,
           props
         })
       )
     },
-    [jaenPage.id, sectionContext, type, name]
+    [jaenPage.id, SectionBlockContext, type, name]
   )
 
   return {
@@ -129,7 +129,7 @@ export function useField<IValue>(name: string, type: string) {
     staticValue,
     jaenPageId: jaenPage.id,
     isEditing,
-    sectionContext,
+    SectionBlockContext,
     write,
     register
   }

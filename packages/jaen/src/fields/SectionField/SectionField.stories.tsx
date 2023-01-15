@@ -1,7 +1,7 @@
 import {Box, Wrap, WrapItem} from '@chakra-ui/react'
 import {ComponentMeta, Story} from '@storybook/react'
 import React from 'react'
-import {connectSection} from '../../connectors/connectSection.js'
+import {connectBlock} from '../../connectors/connectBlock.js'
 import {withJaenMock} from '../../withJaenMock.js'
 import {TextField} from '../TextField/TextField.js'
 import {SectionField} from './SectionField.js'
@@ -33,7 +33,7 @@ export default {
             'section-field-filled': {
               ptrHead: 'JaenSection foo-bar-baz-1',
               ptrTail: 'JaenSection foo-bar-baz-2',
-              sections: {
+              blocks: {
                 'JaenSection foo-bar-baz-1': {
                   jaenFields: null,
                   name: 'BoxSection',
@@ -64,7 +64,7 @@ type ComponentProps = React.ComponentProps<typeof SectionField>
 const Template: Story<ComponentProps> = args => <SectionField {...args} />
 
 // #region > Sections
-const BoxSection = connectSection(
+const BoxBlock = connectBlock(
   () => (
     <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden" p="4">
       BoxSection
@@ -73,7 +73,7 @@ const BoxSection = connectSection(
   {name: 'BoxSection', displayName: 'Box Section'}
 )
 
-const FieldsSection = connectSection(
+const FieldsBlock = connectBlock(
   () => (
     <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden" p="4">
       <TextField name="tf" defaultValue="sample value" />
@@ -83,46 +83,46 @@ const FieldsSection = connectSection(
 )
 // #endregion
 
-export const NoSections: Story<ComponentProps> = Template.bind({})
-NoSections.args = {
+export const NoBlocks: Story<ComponentProps> = Template.bind({})
+NoBlocks.args = {
   name: 'section-field',
   displayName: 'Section Field',
-  sections: []
+  blocks: []
 }
 
 export const Empty: Story<ComponentProps> = Template.bind({})
 Empty.args = {
   name: 'section-field',
   displayName: 'Section Field',
-  sections: [BoxSection]
+  blocks: [BoxBlock]
 }
 
 export const Filled: Story<ComponentProps> = Template.bind({})
 Filled.args = {
   name: 'section-field-filled',
   displayName: 'Section Field',
-  sections: [BoxSection]
+  blocks: [BoxBlock]
 }
 
 export const WithFields: Story<ComponentProps> = Template.bind({})
 WithFields.args = {
   name: 'section-field-filled',
   displayName: 'Section Field with inner fields',
-  sections: [FieldsSection]
+  blocks: [FieldsBlock]
 }
 
-export const MultipleSections: Story<ComponentProps> = Template.bind({})
-MultipleSections.args = {
+export const MultipleBlocks: Story<ComponentProps> = Template.bind({})
+MultipleBlocks.args = {
   name: 'section-field-filled',
   displayName: 'Section Field with multiple sections',
-  sections: [BoxSection, FieldsSection]
+  blocks: [BoxBlock, FieldsBlock]
 }
 
 export const Styled: Story<ComponentProps> = Template.bind({})
 Styled.args = {
   name: 'section-field-filled',
   displayName: 'Section Field with inner fields',
-  sections: [BoxSection],
+  blocks: [BoxBlock],
   style: {
     border: 'red 1px solid'
   },
@@ -136,7 +136,7 @@ export const Wrapped: Story<ComponentProps> = Template.bind({})
 Wrapped.args = {
   name: 'section-field-filled',
   displayName: 'Section Field with inner fields',
-  sections: [BoxSection],
+  blocks: [BoxBlock],
   as: Wrap,
   sectionAs: WrapItem,
   props: {
