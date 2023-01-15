@@ -12,13 +12,13 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Text,
-  useToast
+  Text
 } from '@chakra-ui/react'
 import * as React from 'react'
 import {Controller, useForm} from 'react-hook-form'
 
 import {IFormProps, IJaenTemplate} from '../../../../types.js'
+import {useModals} from '../../../context/Modals/ModalContext.js'
 
 interface TemplateSelectorProps {
   selectedTemplate: string
@@ -103,7 +103,7 @@ export const PageCreator = ({
 }: PageCreatorProps) => {
   const initialFocusRef = React.useRef<any>()
 
-  const toast = useToast()
+  const {toast} = useModals()
 
   const {
     register,

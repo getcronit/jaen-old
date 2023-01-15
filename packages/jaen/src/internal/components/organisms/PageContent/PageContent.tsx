@@ -15,8 +15,7 @@ import {
   Tag,
   TagLabel,
   Text,
-  Textarea,
-  useToast
+  Textarea
 } from '@chakra-ui/react'
 import {useSnekFinder} from '@jaenjs/snek-finder'
 import {HiCloudUpload} from '@react-icons/all-files/hi/HiCloudUpload'
@@ -26,6 +25,7 @@ import {Controller, useForm} from 'react-hook-form'
 
 import {IFormProps, IJaenTemplate} from '../../../../types.js'
 import {dirtyValues} from '../../../../utils/forms/dirtyValues.js'
+import {useModals} from '../../../context/Modals/ModalContext.js'
 import {ThemeProvider} from '../../../styles/ChakraThemeProvider.js'
 
 export interface ContentValues {
@@ -48,7 +48,7 @@ export interface PageContentProps extends IFormProps<ContentValues> {
  * It includes Accordion that can be used to expand/collapse the page content.
  */
 export const PageContent = (props: PageContentProps) => {
-  const toast = useToast()
+  const {toast} = useModals()
 
   const [defaultValues, setDefaultValues] = React.useState<ContentValues>(
     props.values

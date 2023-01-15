@@ -10,10 +10,10 @@ import {
   Heading,
   HStack,
   Text,
-  useToast,
   VStack
 } from '@chakra-ui/react'
 import * as React from 'react'
+import {useModals} from '../../../../context/Modals/ModalContext.js'
 
 import {JaenLogo} from '../../../atoms/index.js'
 
@@ -36,7 +36,7 @@ export const IncomingBuildAlert = ({
 
   const [isLoading, setIsLoading] = React.useState(false)
 
-  const toast = useToast()
+  const {toast} = useModals()
 
   const handleConfirm = () => {
     const doConfirm = async () => {
