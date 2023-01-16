@@ -1,4 +1,7 @@
 import {Circle} from '@chakra-ui/react'
+import {IJaenView} from '../../../../types.js'
+
+export type View = IJaenView
 
 export interface SidebarItem {
   path: string
@@ -6,17 +9,8 @@ export interface SidebarItem {
   label: string
 }
 
-export interface View {
-  path: string
-  label: string
-  Icon: React.ComponentType | null
-  Component: React.ComponentType
-  group?: string
-  hasRoutes?: boolean
-}
-
 export interface UseSidebarItemsProps {
-  views: View[]
+  views: IJaenView[]
 }
 
 export interface BuiltViews {
@@ -30,7 +24,7 @@ export interface BuiltViews {
 }
 
 export const buildFromViews = (
-  views: View[]
+  views: IJaenView[]
 ): {
   items: BuiltViews['items']
   routes: BuiltViews['routes']

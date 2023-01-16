@@ -2,7 +2,8 @@ export {
   connectBlock,
   connectField,
   connectPage,
-  connectTemplate
+  connectTemplate,
+  connectView
 } from './connectors/index.js'
 export {Field} from './fields/index.js'
 export * as internal from './internal/index.js'

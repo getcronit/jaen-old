@@ -20,3 +20,4 @@ const loadPathOrNull = (p: string) => {
 export const jaenData = new JaenData({jaenDataDir: './jaen-data'})
 export const sourcePagesPath = loadPathOrNull('./src/pages')
 export const sourceTemplatesPath = loadPathOrNull('./src/jaen-templates')
+export const sourceViewsPath = loadPathOrNull('./src/jaen-views')

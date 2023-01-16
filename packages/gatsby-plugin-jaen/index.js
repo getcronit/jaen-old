@@ -1,1 +1,1 @@
-export {useAdminStaticQuery} from './fragments/staticQuery'
+export {useAdminStaticQuery} from './fragments/adminStaticQuery'

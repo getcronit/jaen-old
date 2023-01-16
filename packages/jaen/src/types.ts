@@ -35,6 +35,15 @@ export interface IJaenTemplate {
   isRootTemplate?: boolean
 }
 
+export interface IJaenView {
+  path: string
+  label: string
+  Icon: React.ComponentType | null
+  Component: React.ComponentType
+  group?: string
+  hasRoutes?: boolean
+}
+
 export type IJaenFields = Record<
   string,
   Record<

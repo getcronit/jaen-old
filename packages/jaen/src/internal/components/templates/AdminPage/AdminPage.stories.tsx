@@ -5,7 +5,7 @@ import {BiCog, BiNotification} from 'react-icons/bi'
 import {BsFiles, BsHouse} from 'react-icons/bs'
 import {FaPager} from 'react-icons/fa'
 
-import AdminPage from './AdminPage.js'
+import {AdminPage} from './AdminPage.js'
 import {LoadingAdminPage} from './LoadingAdminPage.js'
 export default {
   title: 'templates/AdminPage',

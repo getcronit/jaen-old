@@ -1,4 +1,8 @@
-import {IPageConnection, ITemplateConnection} from '../../connectors/index.js'
+import {
+  IPageConnection,
+  ITemplateConnection,
+  IViewConnection
+} from '../../connectors/index.js'
 
 export const templateLoader = async (
   relativePath: string
@@ -13,4 +17,11 @@ export const pageLoader = async (
 ): Promise<IPageConnection> => {
   // @ts-expect-error
   return (await import(`${___JAEN_SOURCE_PAGES___}/${relativePath}`)).default
+}
+
+export const viewLoader = async (
+  relativePath: string
+): Promise<IViewConnection> => {
+  // @ts-expect-error
+  return (await import(`${___JAEN_SOURCE_VIEWS___}/${relativePath}`)).default
 }

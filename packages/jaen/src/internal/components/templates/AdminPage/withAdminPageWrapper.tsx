@@ -1,21 +1,22 @@
 import {HashRouter} from 'react-router-dom'
 import {useAdminStaticQuery} from '../../../hooks/useAdminStaticQuery.js'
+import {useCustomViews} from '../../../hooks/useCustomViews.js'
 import {
   buildFromViews,
   BuiltViews,
   View
 } from './buildItemAndRoutesFromViews.js'
 
-export interface WithAdminRoutingProps {
+export interface WithAdminWrapperProps {
   routes: BuiltViews['routes']
   items: BuiltViews['items']
 }
 
-export function withAdminRouting<P>(
+export function withAdminPageWrapper<P>(
   // Then we need to type the incoming component.
   // This creates a union type of whatever the component
   // already accepts AND our extraInfo prop
-  WrappedComponent: React.ComponentType<P & WithAdminRoutingProps>
+  WrappedComponent: React.ComponentType<P & WithAdminWrapperProps>
 ) {
   const ComponentWithExtraInfo = ({
     views,
@@ -32,6 +33,16 @@ export function withAdminRouting<P>(
     }
 
     // At this point, the props being passed in are the original props the component expects.
+
+    const {isLoading, customViews} = useCustomViews()
+
+    if (isLoading) {
+      console.log(`Loading custom views...`)
+    } else {
+      console.log(`Custom views loaded.`)
+    }
+
+    views = views.concat(customViews)
 
     const builtViews = buildFromViews(views)
 

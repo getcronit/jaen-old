@@ -67,4 +67,9 @@ addSourcePluginIfPathExists(GatsbyConfig.plugins, {
   path: JaenSource.sourceTemplatesPath
 })
 
+addSourcePluginIfPathExists(GatsbyConfig.plugins, {
+  name: 'jaen-views',
+  path: JaenSource.sourceViewsPath
+})
+
 export default GatsbyConfig

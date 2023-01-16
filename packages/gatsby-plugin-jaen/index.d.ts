@@ -11,4 +11,10 @@ export declare const useAdminStaticQuery: <JaenPageNode>() => {
       relativePath: string
     }>
   }
+  jaenView: {
+    nodes: Array<{
+      name: string
+      relativePath: string
+    }>
+  }
 }

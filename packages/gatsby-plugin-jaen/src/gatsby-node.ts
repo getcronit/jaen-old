@@ -55,7 +55,8 @@ export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = ({
         ___JAEN_SOURCE_TEMPLATES___: JSON.stringify(
           JaenSource.sourceTemplatesPath
         ),
-        ___JAEN_SOURCE_PAGES___: JSON.stringify(JaenSource.sourcePagesPath)
+        ___JAEN_SOURCE_PAGES___: JSON.stringify(JaenSource.sourcePagesPath),
+        ___JAEN_SOURCE_VIEWS___: JSON.stringify(JaenSource.sourceViewsPath)
       })
     ]
   })

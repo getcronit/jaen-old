@@ -19,7 +19,7 @@ import {
 } from '../../organisms/index.js'
 import {AdminShell} from '../AdminShell/AdminShell.js'
 import {BuiltViews} from './buildItemAndRoutesFromViews.js'
-import {withAdminRouting} from './withAdminRouting.js'
+import {withAdminPageWrapper} from './withAdminPageWrapper.js'
 
 export interface AdminPageProps {
   items: BuiltViews['items']
@@ -128,7 +128,7 @@ const AdminPage: React.FC<AdminPageProps> = withRedux(
             </Box>
           </SlideFade>
 
-          <Box boxSize="full" zIndex="1" bg="green">
+          <Box boxSize="full" zIndex="1">
             {children}
           </Box>
         </Flex>
@@ -137,8 +137,8 @@ const AdminPage: React.FC<AdminPageProps> = withRedux(
   }
 )
 
-export default withAdminRouting(({routes, items}) => {
-  console.log(`withAdminRouting`, items, routes)
+export default withAdminPageWrapper(({routes, items}) => {
+  console.log(`withAdminPageWrapper`, items, routes)
   const activePath = !isSSR() ? window.location.hash.replace('#', '') : null
 
   const routerNavigate = useNavigate()

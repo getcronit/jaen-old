@@ -30,6 +30,12 @@ export const useAdminStaticQuery = () => {
             relativePath
           }
         }
+        jaenView: allFile(filter: {sourceInstanceName: {eq: "jaen-views"}}) {
+          nodes {
+            name
+            relativePath
+          }
+        }
       }
     `)
   } catch (e) {
