@@ -15,7 +15,6 @@ GatsbyConfig.plugins = [
       modules: [`@chakra-ui/gatsby-plugin`]
     }
   },
-  'gatsby-plugin-react-helmet-async',
   {
     resolve: `gatsby-plugin-sharp`,
     options: {
@@ -35,16 +34,16 @@ GatsbyConfig.plugins = [
     }
   },
   `gatsby-transformer-sharp`,
-  `gatsby-plugin-image`,
-  {
-    resolve: `gatsby-plugin-nprogress`,
-    options: {
-      // Setting a color is optional.
-      color: `tomato`,
-      // Disable the loading spinner.
-      showSpinner: false,
-    },
-  },
+  `gatsby-plugin-image`
+  // {
+  //   resolve: `gatsby-plugin-nprogress`,
+  //   options: {
+  //     // Setting a color is optional.
+  //     color: `tomato`,
+  //     // Disable the loading spinner.
+  //     showSpinner: false,
+  //   },
+  // },
 ]
 
 const addSourcePluginIfPathExists = (
