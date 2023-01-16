@@ -1,7 +1,7 @@
 import React from 'react'
 import {IJaenPage} from '../../types.js'
 import {useAuth} from '../hooks/auth/useAuth.js'
-import {store, useAppDispatch, withRedux} from '../redux'
+import {RootState, store, useAppDispatch, withRedux} from '../redux'
 import {actions} from '../redux/slices/page.js'
 import {IJaenState} from '../redux/types.js'
 
@@ -149,8 +149,9 @@ export const useJaenPageIndex = (
 
   React.useEffect(() => {
     const unsubscribe = store.subscribe(() => {
-      const state = store.getState()
-      const page = state.internal.pages.nodes[id]
+      const state = store.getState() as RootState
+
+      const page = state.page.pages.nodes[id]
       if (page) {
         setDynamicChildrenIds(page.children)
       }
