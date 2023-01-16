@@ -2,6 +2,7 @@ export {
   connectBlock,
   connectField,
   connectPage,
+  connectPopup,
   connectTemplate,
   connectView
 } from './connectors/index.js'

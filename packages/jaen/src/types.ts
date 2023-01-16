@@ -138,6 +138,12 @@ export interface IJaenBlock {
   deleted?: true
 }
 
+export interface IJaenPopup {
+  id: string // relative path to the notification file
+  active: boolean
+  jaenFields: IJaenFields
+}
+
 export interface IJaenConnection<ReactProps, Options>
   extends React.FC<ReactProps> {
   options: Options

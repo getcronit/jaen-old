@@ -1,8 +1,7 @@
-import * as React from 'react'
-
 import {internal} from '@snek-at/jaen'
 
-import {BsHouse, BsFiles, BsLayoutTextSidebar} from 'react-icons/bs'
+import {BiNotification} from 'react-icons/bi'
+import {BsFiles, BsHouse, BsLayoutTextSidebar} from 'react-icons/bs'
 
 const {AdminPage} = internal
 
@@ -29,6 +28,13 @@ const AdminPageContainer = () => {
           label: 'Files',
           group: 'Your Site',
           Icon: BsFiles
+        },
+        {
+          path: '/popups',
+          Component: internal.views.PopupsView,
+          label: 'Popups',
+          group: 'Your Site',
+          Icon: BiNotification
         }
       ]}
     />

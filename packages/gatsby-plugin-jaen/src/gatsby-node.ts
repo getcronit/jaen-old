@@ -56,7 +56,8 @@ export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = ({
           JaenSource.sourceTemplatesPath
         ),
         ___JAEN_SOURCE_PAGES___: JSON.stringify(JaenSource.sourcePagesPath),
-        ___JAEN_SOURCE_VIEWS___: JSON.stringify(JaenSource.sourceViewsPath)
+        ___JAEN_SOURCE_VIEWS___: JSON.stringify(JaenSource.sourceViewsPath),
+        ___JAEN_SOURCE_POPUPS___: JSON.stringify(JaenSource.sourcePopupsPath)
       })
     ]
   })
@@ -207,6 +208,12 @@ export const createSchemaCustomization: GatsbyNode['onCreateWebpackConfig'] = ({
   actions.createTypes(`
     type JaenInternal implements Node {
       finderUrl: String
+    }
+
+    type JaenPopup implements Node {
+      id: ID!
+      jaenFields: JSON
+      active: Boolean
     }
 
     type JaenPage implements Node {

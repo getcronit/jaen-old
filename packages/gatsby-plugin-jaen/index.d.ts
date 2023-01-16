@@ -18,3 +18,19 @@ export declare const useAdminStaticQuery: <JaenPageNode>() => {
     }>
   }
 }
+
+export declare const usePopupStaticQuery: () => {
+  jaenPopup: {
+    nodes: Array<{
+      name: string
+      relativePath: string
+    }>
+  }
+  allJaenPopup: {
+    nodes: Array<{
+      id: string
+      active: boolean
+      jaenFields: object
+    }>
+  }
+}

@@ -1,3 +1,4 @@
+import {IPopupConnection} from '../../connectors/connectPopup.js'
 import {
   IPageConnection,
   ITemplateConnection,
@@ -24,4 +25,11 @@ export const viewLoader = async (
 ): Promise<IViewConnection> => {
   // @ts-expect-error
   return (await import(`${___JAEN_SOURCE_VIEWS___}/${relativePath}`)).default
+}
+
+export const popupLoader = async (
+  relativePath: string
+): Promise<IPopupConnection> => {
+  // @ts-expect-error
+  return (await import(`${___JAEN_SOURCE_POPUPS___}/${relativePath}`)).default
 }

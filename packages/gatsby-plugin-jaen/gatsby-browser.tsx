@@ -19,5 +19,5 @@ export const wrapPageElement: GatsbyBrowser['wrapPageElement'] = ({
   props
 }) => {
   // @ts-expect-error
-  return <GatsbyPageWrapper path={props.path}>{element}</GatsbyPageWrapper>
+  return <GatsbyPageWrapper pageProps={props}>{element}</GatsbyPageWrapper>
 }

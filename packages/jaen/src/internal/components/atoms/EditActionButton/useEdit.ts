@@ -7,23 +7,30 @@ export function useEdit() {
   const {toast} = useModals()
 
   const toggleEditing = () => {
-    if (status.isEditing) {
+    setEditing(!status.isEditing)
+  }
+
+  const setEditing = (isEditing: boolean) => {
+    if (isEditing) {
       toast({
-        title: 'Editing mode disabled',
-        description: 'You can now view the content of this page'
+        title: 'Editing mode enabled',
+        description:
+          'You can now make changes to the content. Don’t forget to save your changes.',
+        status: 'warning'
       })
     } else {
       toast({
-        title: 'Editing mode enabled',
-        description: 'You can now edit the content of this page'
+        title: 'Editing mode disabled',
+        description: 'You can no longer make changes to the content.'
       })
     }
 
-    status.toggleIsEditing()
+    status.setEditing(isEditing)
   }
 
   return {
     isEditing: status.isEditing,
-    toggleEditing
+    toggleEditing,
+    setEditing
   }
 }

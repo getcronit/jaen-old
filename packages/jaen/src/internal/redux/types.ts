@@ -1,6 +1,6 @@
 import {SerializedError} from '@reduxjs/toolkit'
 
-import {IJaenPage} from '../../types.js'
+import {IJaenPage, IJaenPopup} from '../../types.js'
 
 export interface IError {
   code: string
@@ -37,6 +37,17 @@ export interface IPageState {
 export interface IStatusState {
   isPublishing: boolean
   isEditing: boolean
+}
+
+export interface IPopupState {
+  nodes: {
+    [id: string]: IJaenPopup
+  }
+  advanced: {
+    [id: string]: {
+      pageViews: number
+    }
+  }
 }
 
 export interface IJaenState {

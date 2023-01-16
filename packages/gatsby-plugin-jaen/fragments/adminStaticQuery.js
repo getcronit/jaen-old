@@ -5,7 +5,7 @@ export const useAdminStaticQuery = () => {
 
   try {
     staticData = useStaticQuery(graphql`
-      query StaticQuery {
+      query AdminStaticQuery {
         jaenInternal {
           finderUrl
         }
@@ -36,6 +36,19 @@ export const useAdminStaticQuery = () => {
             relativePath
           }
         }
+        jaenPopup: allFile(filter: {sourceInstanceName: {eq: "jaen-popups"}}) {
+          nodes {
+            name
+            relativePath
+          }
+        }
+        allJaenPopup {
+          nodes {
+            id
+            active
+            jaenFields
+          }
+        }
       }
     `)
   } catch (e) {
@@ -48,6 +61,15 @@ export const useAdminStaticQuery = () => {
         nodes: []
       },
       jaenTemplate: {
+        nodes: []
+      },
+      jaenView: {
+        nodes: []
+      },
+      jaenNotification: {
+        nodes: []
+      },
+      allJaenNotification: {
         nodes: []
       }
     }

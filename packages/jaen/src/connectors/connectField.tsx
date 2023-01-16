@@ -1,6 +1,8 @@
 import {memo, useEffect} from 'react'
+import {SectionBlockContextType} from '../internal/context/SectionBlockContext.js'
 import {useAuth} from '../internal/hooks/auth/useAuth.js'
 import {useField} from '../internal/hooks/field/useField.js'
+import {usePopupField} from '../internal/hooks/field/usePopupField.js'
 import {ThemeProvider} from '../internal/styles/ChakraThemeProvider.js'
 import {IJaenConnection} from '../types.js'
 import {cleanObject} from '../utils/cleanObject.js'
@@ -51,7 +53,22 @@ export const connectField = <IValue, IDefaultValue = IValue, P = {}>(
     typeof options
   > = props => {
     const RegisterHelper: React.FC = () => {
-      const field = useField<IValue>(props.name, options.fieldType)
+      let field: {
+        register: any
+        staticValue: any
+        value: any
+        isEditing: any
+        write: any
+        jaenPopupId?: string
+        jaenPageId?: string
+        SectionBlockContext?: SectionBlockContextType | undefined
+      }
+
+      try {
+        field = usePopupField<IValue>(props.name, options.fieldType)
+      } catch {
+        field = useField<IValue>(props.name, options.fieldType)
+      }
 
       const {isAuthenticated} = useAuth()
 

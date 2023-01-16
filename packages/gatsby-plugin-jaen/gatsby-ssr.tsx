@@ -17,7 +17,7 @@ export const wrapPageElement: GatsbySSR['wrapPageElement'] = ({
 }) => {
   return (
     // @ts-expect-error
-    <GatsbyPageWrapper path={props.path} ssr>
+    <GatsbyPageWrapper pageProps={props} ssr>
       {element}
     </GatsbyPageWrapper>
   )

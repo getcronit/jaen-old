@@ -1,6 +1,7 @@
 import {ChakraProvider} from '@chakra-ui/react'
 import {navigate} from 'gatsby'
 import {useEffect} from 'react'
+import {PageProps} from '../types.js'
 
 import {ActivationButton, AdminShell} from './components/index.js'
 import {HighlightProvider} from './context/HighlightContext.js'
@@ -9,6 +10,7 @@ import {ModalProvider} from './context/Modals/ModalContext.js'
 import {SiteProvider} from './context/SiteContext.js'
 import {getAuth} from './hooks/auth/useAuth.js'
 import {useInterceptGatsbyNavigate} from './hooks/useInterceptGatsbyNavigate'
+import {usePopupsInject} from './hooks/usePopupsInject.js'
 import {ThemeProvider} from './styles/ChakraThemeProvider.js'
 import theme from './styles/theme.js'
 
@@ -40,15 +42,15 @@ export const GatsbyRootWrapper: React.FC<WrapperProps> = ({children}) => {
 }
 
 export interface PageWrapperProps extends WrapperProps {
-  path: string
+  pageProps: PageProps
 }
 
 export const GatsbyPageWrapper: React.FC<PageWrapperProps> = ({
   children,
-  path
+  pageProps
 }) => {
-  const isAdminOrLogin = path.startsWith('/admin')
-  const isAdminLogin = path.startsWith('/admin/login')
+  const isAdminOrLogin = pageProps.path.startsWith('/admin')
+  const isAdminLogin = pageProps.path.startsWith('/admin/login')
   const isAdmin = isAdminOrLogin && !isAdminLogin
 
   const handleActivationButtonClick = () => {
@@ -58,14 +60,24 @@ export const GatsbyPageWrapper: React.FC<PageWrapperProps> = ({
   const {isAuthenticated} = getAuth()
 
   useEffect(() => {
-    console.log(`GatsbyPageWrapper`, {path})
+    console.log(`GatsbyPageWrapper`, {path: pageProps.path})
 
     if (isAdmin && !isAuthenticated) {
       void navigate('/admin/login')
     } else if (isAdminLogin && isAuthenticated) {
       void navigate('/admin')
     }
-  }, [path])
+  }, [pageProps.path])
+
+  const InjectPopups: React.FC<{
+    pageProps: PageProps
+  }> = ({pageProps}) => {
+    const {elements} = usePopupsInject({
+      pageProps
+    })
+
+    return <>{elements}</>
+  }
 
   const Wrapper = () => {
     if (!isAuthenticated && !isAdminOrLogin) {
@@ -93,11 +105,16 @@ export const GatsbyPageWrapper: React.FC<PageWrapperProps> = ({
   //   )
   // }
 
-  console.log(path, {
+  console.log(pageProps, {
     isAdminOrLogin,
     isAdminLogin,
     isAdmin
   })
 
-  return <Wrapper />
+  return (
+    <>
+      <InjectPopups pageProps={pageProps} />
+      <Wrapper />
+    </>
+  )
 }

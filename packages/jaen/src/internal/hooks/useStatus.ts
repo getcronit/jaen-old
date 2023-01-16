@@ -6,6 +6,7 @@ export interface IStatus {
   isPublishing: boolean
   isEditing: boolean
   toggleIsEditing: () => void
+  setEditing: (isEditing: boolean) => void
 }
 
 export const useStatus = (): IStatus => {
@@ -25,11 +26,15 @@ export const useStatus = (): IStatus => {
     }
   }, [])
 
-  const toggleIsEditing = () => store.dispatch(actions.setIsEditing(!isEditing))
+  const toggleIsEditing = () => setEditing(!isEditing)
+
+  const setEditing = (isEditing: boolean) =>
+    store.dispatch(actions.setIsEditing(isEditing))
 
   return {
     isPublishing: true,
     isEditing,
-    toggleIsEditing
+    toggleIsEditing,
+    setEditing
   }
 }

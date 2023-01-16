@@ -82,4 +82,9 @@ addSourcePluginIfPathExists(GatsbyConfig.plugins, {
   path: JaenSource.sourceViewsPath
 })
 
+addSourcePluginIfPathExists(GatsbyConfig.plugins, {
+  name: 'jaen-popups',
+  path: JaenSource.sourcePopupsPath
+})
+
 export default GatsbyConfig

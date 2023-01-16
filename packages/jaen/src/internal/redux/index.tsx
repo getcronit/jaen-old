@@ -20,6 +20,7 @@ import PersistState from './persist-state.js'
 
 import auth, {authInitialState} from './slices/auth.js'
 import page, {pageInitialState} from './slices/page.js'
+import popup, {popupInitialState} from './slices/popup.js'
 import status, {statusInitialState} from './slices/status.js'
 
 import React from 'react'
@@ -33,7 +34,8 @@ const {loadState, persistState, persistMiddleware} =
 const combinedReducer = combineReducers({
   auth,
   page,
-  status
+  status,
+  popup
 })
 
 // Reset state if action called
@@ -42,7 +44,8 @@ const rootReducer = (state: any, action: any) => {
     return {
       auth: authInitialState,
       page: pageInitialState,
-      status: statusInitialState
+      status: statusInitialState,
+      popup: popupInitialState
     }
   }
 
