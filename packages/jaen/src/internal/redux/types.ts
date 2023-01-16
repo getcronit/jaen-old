@@ -40,14 +40,13 @@ export interface IStatusState {
 }
 
 export interface IPopupState {
-  nodes: {
-    [id: string]: IJaenPopup
-  }
-  advanced: {
-    [id: string]: {
+  nodes: Record<string, IJaenPopup>
+  advanced: Record<
+    string,
+    {
       pageViews: number
     }
-  }
+  >
 }
 
 export interface IJaenState {

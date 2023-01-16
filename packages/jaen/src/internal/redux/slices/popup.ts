@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 import {IJaenPopup} from '../../../types.js'
 
@@ -14,13 +15,13 @@ const statusSlice = createSlice({
   reducers: {
     setActive: (state, action: PayloadAction<string>) => {
       state.nodes[action.payload] = {
-        ...state.nodes[action.payload]!,
+        ...(state.nodes[action.payload] as IJaenPopup),
         active: true
       }
     },
     setInactive: (state, action: PayloadAction<string>) => {
       state.nodes[action.payload] = {
-        ...state.nodes[action.payload]!,
+        ...(state.nodes[action.payload] as IJaenPopup),
         active: false
       }
     },
@@ -55,7 +56,8 @@ const statusSlice = createSlice({
         }
       }
 
-      state.advanced[popupId]!.pageViews++
+      // @ts-expect-error
+      state.advanced[popupId].pageViews++
     }
   }
 })

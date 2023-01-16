@@ -18,7 +18,7 @@ export const loadNotificationsForPage = async (
 
   const popups = await loadPopupComponents(jaenPopup, allJaenPopup)
 
-  const allNotificationElement: Array<JSX.Element> = []
+  const allNotificationElement: JSX.Element[] = []
 
   for (const {Component, id, isActive, popup} of popups) {
     const isDynamicActive: boolean | undefined =
@@ -29,7 +29,7 @@ export const loadNotificationsForPage = async (
     }
 
     if (isDynamicActive === undefined) {
-      if (isActive === false) {
+      if (!isActive) {
         continue
       }
     }
@@ -40,7 +40,7 @@ export const loadNotificationsForPage = async (
 
     const {advanced, conditions, customCondition} = Component.options
 
-    //> Advanced
+    // > Advanced
     const notificationAdvanced = stateAdvanced[id]
     if (advanced && notificationAdvanced) {
       if (advanced.showAfterXPageViews) {
@@ -58,7 +58,7 @@ export const loadNotificationsForPage = async (
       }
     }
 
-    //> Conditions
+    // > Conditions
     if (customCondition) {
       const condition = customCondition(pageProps)
 
@@ -70,13 +70,13 @@ export const loadNotificationsForPage = async (
 
     if (conditions) {
       const {entireSite, templates, urlPatterns} = conditions
-      //> Entire site
+      // > Entire site
       if (entireSite) {
         pushNotification()
         continue
       }
 
-      //> Templates
+      // > Templates
       if (templates) {
         const staticTemplate = pageProps.data?.jaenPage?.template
 
@@ -86,7 +86,7 @@ export const loadNotificationsForPage = async (
         }
       }
 
-      //> Url patterns
+      // > Url patterns
       if (urlPatterns) {
         const staticUrl = pageProps.location.pathname
 

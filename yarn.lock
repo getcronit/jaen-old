@@ -10294,7 +10294,7 @@ gatsby-worker@^2.4.0:
     fs-extra "^10.0.0"
     signal-exit "^3.0.7"
 
-gatsby@^5, gatsby@^5.4.1:
+gatsby@^5:
   version "5.4.1"
   resolved "https://registry.yarnpkg.com/gatsby/-/gatsby-5.4.1.tgz#4787e8a9517aec91fb2c692b91187dc0233f6a92"
   integrity sha512-3UcqiHGB+DgqQyGM8p6o69QQDLKm/050nHVz/qWpZCzN11/wyyvvz3P41zLLFc7FtyLoW5sqxIgvP++BkyIb2g==

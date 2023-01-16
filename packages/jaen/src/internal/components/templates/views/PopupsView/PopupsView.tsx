@@ -34,10 +34,10 @@ export const PopupCard: React.FC<PopupCardProps> = ({
   onEdit,
   onEnableToggle
 }) => {
-  let boxBg = 'white'
-  let mainText = 'gray.800'
-  let iconBox = 'gray.100'
-  let iconColor = 'pink.500'
+  const boxBg = 'white'
+  const mainText = 'gray.800'
+  const iconBox = 'gray.100'
+  const iconColor = 'pink.500'
   return (
     <Flex
       borderRadius="20px"
@@ -47,7 +47,7 @@ export const PopupCard: React.FC<PopupCardProps> = ({
       w={{base: '315px', md: '345px'}}
       alignItems="center"
       direction="column">
-      <Flex w="100%" mb="18px" align="center" justifyContent={'space-between'}>
+      <Flex w="100%" mb="18px" align="center" justifyContent="space-between">
         <Flex
           w="38px"
           h="38px"
@@ -100,7 +100,7 @@ export const PopupCard: React.FC<PopupCardProps> = ({
         justify="space-between"
         w="100%"
         align="center"
-        justifyContent={'right'}>
+        justifyContent="right">
         <Button size="sm" onClick={onEdit}>
           Edit
         </Button>
@@ -149,8 +149,12 @@ export const PopupsView: React.FC<PopupsViewProps> = ({
               title={popup.Component.options.displayName}
               description={popup.Component.options.description}
               imageURL={popup.Component.options.imageURL}
-              onEdit={() => onPopupEdit(popup)}
-              onEnableToggle={() => onPopupEnableToggle(popup)}
+              onEdit={() => {
+                onPopupEdit(popup)
+              }}
+              onEnableToggle={() => {
+                onPopupEnableToggle(popup)
+              }}
               isEnabled={popup.isActive}
             />
           ))}

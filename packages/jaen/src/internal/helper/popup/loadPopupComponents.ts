@@ -3,7 +3,7 @@ import {IJaenPopup} from 'packages/jaen/src/types.js'
 import {popupLoader} from '../componentLoader.js'
 import {QueryData} from './types.js'
 
-export type LoadedPopupComponent = {
+export interface LoadedPopupComponent {
   id: string
   isActive: boolean
   popup?: IJaenPopup
@@ -14,7 +14,7 @@ export const loadPopupComponents = async (
   jaenPopup: QueryData['jaenPopup'],
   allJaenPopup: QueryData['allJaenPopup']
 ) => {
-  const popups: Array<LoadedPopupComponent> = []
+  const popups: LoadedPopupComponent[] = []
 
   for (const {relativePath} of jaenPopup.nodes) {
     const Popup = await popupLoader(relativePath)

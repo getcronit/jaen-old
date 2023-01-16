@@ -106,8 +106,6 @@ export const PopupProvider: React.FC<
         setEditing(true)
       }
     }
-
-    return
   }, [isEditing, isOpen, editable])
 
   const handleClose = React.useCallback(() => {
@@ -116,12 +114,16 @@ export const PopupProvider: React.FC<
   }, [onCloseProp, onClose])
 
   React.useEffect(() => {
-    customTrigger &&
-      customTrigger().then(shouldOpen => {
+    const handleOpen = async () => {
+      if (customTrigger) {
+        const shouldOpen = await customTrigger()
         if (shouldOpen) {
           onOpen()
         }
-      })
+      }
+    }
+
+    void handleOpen()
   }, [isOpen])
 
   React.useEffect(() => {
@@ -149,7 +151,9 @@ export const PopupProvider: React.FC<
           }
         }
         window.addEventListener('scroll', handleScroll)
-        return () => window.removeEventListener('scroll', handleScroll)
+        return () => {
+          window.removeEventListener('scroll', handleScroll)
+        }
       }
     }
 
