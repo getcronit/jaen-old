@@ -1,12 +1,12 @@
-import {GatsbyNode, Node} from 'gatsby'
-import path from 'path'
-import fs from 'fs'
+import type {IJaenPage} from '@snek-at/jaen'
 import {
-  generatePageOriginPath,
   convertToSlug,
+  generatePageOriginPath,
   JaenSource
 } from '@snek-at/jaen/unstable-node'
-import type {IJaenPage} from '@snek-at/jaen'
+import fs from 'fs'
+import {GatsbyNode, Node} from 'gatsby'
+import path from 'path'
 
 export const onPreBootstrap: GatsbyNode['onPreBootstrap'] = async ({
   reporter
@@ -141,6 +141,7 @@ export const createSchemaCustomization: GatsbyNode['onCreateWebpackConfig'] = ({
           context: any,
           _info: any
         ) {
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
           const items = Array.from(
             (await context.nodeModel.findAll({type: `JaenPage`})).entries
           ) as any[]
@@ -175,6 +176,7 @@ export const createSchemaCustomization: GatsbyNode['onCreateWebpackConfig'] = ({
       return {
         args: {},
         async resolve(source: Node, _args: any, context: any, _info: any) {
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
           const items = Array.from(
             (await context.nodeModel.findAll({type: `SitePage`})).entries
           ) as any[]
@@ -325,7 +327,7 @@ export const onCreatePage: GatsbyNode['onCreatePage'] = async ({
           template: null
         }
 
-        createNode({
+        await createNode({
           ...jaenPage,
           parent: null,
           children: [],
@@ -367,5 +369,5 @@ export const sourceNodes: GatsbyNode['onCreateWebpackConfig'] = async ({
     }
   }
 
-  createNode(internalNode)
+  await createNode(internalNode)
 }
