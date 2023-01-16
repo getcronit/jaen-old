@@ -8,7 +8,6 @@ import {IncomingBuildCheckerProvider} from './context/IncomingBuildChecker/index
 import {ModalProvider} from './context/Modals/ModalContext.js'
 import {SiteProvider} from './context/SiteContext.js'
 import {getAuth} from './hooks/auth/useAuth.js'
-import {useAdminStaticQuery} from './hooks/useAdminStaticQuery.js'
 import {useInterceptGatsbyNavigate} from './hooks/useInterceptGatsbyNavigate'
 import {ThemeProvider} from './styles/ChakraThemeProvider.js'
 import theme from './styles/theme.js'
@@ -24,19 +23,8 @@ export interface WrapperProps {
   ssr?: boolean
 }
 
-export const GatsbyRootWrapper: React.FC<WrapperProps> = ({
-  children,
-  ssr = false
-}) => {
+export const GatsbyRootWrapper: React.FC<WrapperProps> = ({children}) => {
   useInterceptGatsbyNavigate()
-
-  console.log(`GatsbyRootWrapper `, {ssr})
-
-  const {
-    allJaenPage: {nodes: staticPages}
-  } = useAdminStaticQuery()
-
-  console.log(`GatsbyRootWrapper `, {staticPages})
 
   return (
     <ChakraProvider resetCSS={true} theme={theme}>
