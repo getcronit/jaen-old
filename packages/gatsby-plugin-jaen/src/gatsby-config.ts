@@ -34,16 +34,18 @@ GatsbyConfig.plugins = [
     }
   },
   `gatsby-transformer-sharp`,
-  `gatsby-plugin-image`
-  // {
-  //   resolve: `gatsby-plugin-nprogress`,
-  //   options: {
-  //     // Setting a color is optional.
-  //     color: `tomato`,
-  //     // Disable the loading spinner.
-  //     showSpinner: false,
-  //   },
-  // },
+  `gatsby-plugin-image`,
+  {
+    resolve: `gatsby-plugin-nprogress`,
+    options: {
+      // Setting a color is optional.
+      // color: `tomato`,
+      // Disable the loading spinner.
+      showSpinner: false,
+      trickle: false,
+      minimum: 0.4
+    }
+  }
 ]
 
 const addSourcePluginIfPathExists = (
