@@ -7,5 +7,11 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w"
+  },
+  "peerDependencies": {
+    "gatsby": "^5"
+  },
+  "dependencies": {
+    "gatsby-plugin-nprogress": "^5.4.0"
   }
 }
