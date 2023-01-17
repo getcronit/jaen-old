@@ -13,18 +13,18 @@ export const TextField = connectField<string, string, TextFieldProps>(
     console.log(jaenField)
 
     return (
-      <Box style={jaenField.style} className={jaenField.className}>
-        <HighlightTooltip
-          actions={[
-            <Button
-              variant="jaenHighlightTooltipText"
-              key={`jaen-highlight-tooltip-text-${jaenField.name}`}>
-              <Text as="span" noOfLines={1}>
-                Text {jaenField.name}
-              </Text>
-            </Button>
-          ]}
-          isEditing={jaenField.isEditing}>
+      <HighlightTooltip
+        actions={[
+          <Button
+            variant="jaenHighlightTooltipText"
+            key={`jaen-highlight-tooltip-text-${jaenField.name}`}>
+            <Text as="span" noOfLines={1}>
+              Text {jaenField.name}
+            </Text>
+          </Button>
+        ]}
+        isEditing={jaenField.isEditing}>
+        <Box style={jaenField.style} className={jaenField.className}>
           <Editor
             defaultValue={jaenField.staticValue || jaenField.defaultValue}
             value={jaenField.value}
@@ -34,8 +34,8 @@ export const TextField = connectField<string, string, TextFieldProps>(
             editing={jaenField.isEditing}
             disableToolbar={!rtf}
           />
-        </HighlightTooltip>
-      </Box>
+        </Box>
+      </HighlightTooltip>
     )
   },
   {

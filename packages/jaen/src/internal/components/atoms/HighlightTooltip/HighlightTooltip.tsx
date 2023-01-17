@@ -1,3 +1,4 @@
+import React from 'react'
 import {useHighlight} from '../../../context/HighlightContext.js'
 
 export interface HighlightTooltipProps {
@@ -11,16 +12,17 @@ export const HighlightTooltip: React.FC<HighlightTooltipProps> = props => {
 
   const {ref} = useHighlight({tooltipButtons: actions})
 
-  return (
-    <div
-      ref={ref}
-      style={{
-        position: 'relative',
-        display: 'inline-block',
-        width: '100%',
-        height: '100%'
-      }}>
-      {children}
-    </div>
-  )
+  const Child: React.FC<{
+    children: React.ReactNode
+  }> = ({children}) => {
+    const childrenWithRef = React.Children.map(
+      children,
+      (child: React.ReactElement<any>) => {
+        return React.cloneElement(child, {ref})
+      }
+    )
+    return <>{childrenWithRef}</>
+  }
+
+  return <Child>{children}</Child>
 }

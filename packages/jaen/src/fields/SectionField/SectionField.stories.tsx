@@ -66,7 +66,7 @@ const Template: Story<ComponentProps> = args => <SectionField {...args} />
 // #region > Sections
 const BoxBlock = connectBlock(
   () => (
-    <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden" p="4">
+    <Box w="sm" borderWidth="1px" borderRadius="lg" overflow="hidden" p="4">
       BoxSection
     </Box>
   ),
@@ -75,7 +75,7 @@ const BoxBlock = connectBlock(
 
 const FieldsBlock = connectBlock(
   () => (
-    <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden" p="4">
+    <Box w="sm" borderWidth="1px" borderRadius="lg" overflow="hidden" p="4">
       <TextField name="tf" defaultValue="sample value" />
     </Box>
   ),

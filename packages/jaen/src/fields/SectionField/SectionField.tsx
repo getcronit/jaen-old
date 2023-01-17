@@ -150,6 +150,8 @@ export const SectionField = withRedux(
           style={rest.style}
           minH="64"
           w="full">
+          <Box w="100%">test</Box>
+
           {section.items.map((item, index) => {
             const s = sectionsDict[item.type]
 
@@ -245,7 +247,10 @@ export const SectionField = withRedux(
                   //   </ButtonGroup>
                   // </Box>
                 ]}>
-                <SectionWrapper {...sectionProps}>
+                <SectionWrapper
+                  {...sectionProps}
+                  w="fit-content"
+                  h="fit-content">
                   <JaenSectionBlockProvider
                     path={sectionPath}
                     id={item.id}

@@ -6,10 +6,25 @@ const theme = extendTheme(
     styles: {
       global: {
         [`.${CLASSNAMES.JAEN_HIGHLIGHT}`]: {
+          // // boxShadow: 'inset 5px 5px 10px #555;',
+          // outline: '2px solid var(--chakra-colors-pink-100)',
+          // outlineOffset: '4px', // 'var(--chakra-space-1)',
+          // 'outline-radius': '11px', // 'var(--chakra-radii-lg)',
+          // zIndex: 'var(--chakra-zIndices-docked)'
+          position: 'relative'
+        },
+        [`.${CLASSNAMES.JAEN_HIGHLIGHT}:before`]: {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 'var(--chakra-zIndices-docked)',
           outline: '2px solid var(--chakra-colors-pink-100)',
           outlineOffset: '4px', // 'var(--chakra-space-1)',
-          borderRadius: '11px', // 'var(--chakra-radii-lg)',
-          zIndex: 'var(--chakra-zIndices-docked)'
+          borderRadius: '11px', // 'var(--chakra-radii-lg)'
+          pointerEvents: 'none'
         },
         [`.${CLASSNAMES.JAEN_HIGHLIGHT_TOOLTIP}`]: {
           height: '100%',
