@@ -84,11 +84,6 @@ export const useJaenPageTree = (): IJaenPage[] => {
     [mergeData]
   )
 
-  // throw error if there are no pages
-  if (filteredData.length === 0) {
-    throw new Error('No pages found')
-  }
-
   console.log('useJaenPageTree', filteredData)
 
   return filteredData
