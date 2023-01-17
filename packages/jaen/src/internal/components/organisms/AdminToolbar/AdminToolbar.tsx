@@ -60,10 +60,7 @@ export const AdminToolbar = ({
       px={{base: 4}}
       align="center">
       <Button
-        minW={{
-          base: 'auto',
-          lg: '48'
-        }}
+        minW="unset"
         display="flex"
         alignItems="center"
         rounded="full"
