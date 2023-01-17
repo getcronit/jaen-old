@@ -294,17 +294,6 @@ export const PageTree: React.FC<PageTreeProps> = ({
   selectedPath,
   ...boxProps
 }) => {
-  nodes =
-    nodes?.length > 0
-      ? nodes
-      : [
-          {
-            path: '/',
-            title: 'root',
-            isLocked: true
-          }
-        ]
-
   const getNodeFromDataNode = (
     dataNode: DataNode
   ): PageTreeProps['nodes'][0] => {
@@ -317,7 +306,21 @@ export const PageTree: React.FC<PageTreeProps> = ({
     return node
   }
 
-  const initTreeData = useMemo(() => nodesToTreeData(nodes), [nodes])
+  const initTreeData = useMemo(
+    () =>
+      nodesToTreeData(
+        nodes?.length > 0
+          ? nodes
+          : [
+              {
+                path: '/',
+                title: 'root',
+                isLocked: true
+              }
+            ]
+      ),
+    [nodes]
+  )
 
   const {
     onExpand,
