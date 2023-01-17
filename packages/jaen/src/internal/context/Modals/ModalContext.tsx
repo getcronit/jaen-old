@@ -65,8 +65,8 @@ interface AnyEvent {
 
 export const ModalProvider = ({children}: {children: ReactNode}) => {
   const toast = useToast({
-    position: 'top',
-    duration: 3000,
+    position: 'bottom',
+    duration: 2000,
     isClosable: true,
     variant: 'subtle'
   })
