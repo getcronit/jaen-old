@@ -1,3 +1,5 @@
+import {Button, Text} from '@chakra-ui/react'
+import {HighlightTooltip} from '../../internal/components/index.js'
 import {useJaenPageIndex} from '../../internal/context/PageProvider.js'
 import {withRedux} from '../../internal/redux/index.js'
 import {IJaenPage} from '../../types.js'
@@ -33,7 +35,20 @@ export interface IndexFieldProps {
 export const IndexField: React.FC<IndexFieldProps> = withRedux(
   ({renderPage, ...rest}: IndexFieldProps) => {
     const {children, withJaenPage} = useJaenPageIndex(rest)
-    return <>{children.map(page => withJaenPage(page.id, renderPage(page)))}</>
+    return (
+      <HighlightTooltip
+        actions={[
+          <Button
+            variant="jaenHighlightTooltipText"
+            key="jaen-highlight-tooltip-text-index">
+            <Text as="span" noOfLines={1}>
+              Index
+            </Text>
+          </Button>
+        ]}>
+        {children.map(page => withJaenPage(page.id, renderPage(page)))}
+      </HighlightTooltip>
+    )
   }
 )
 
