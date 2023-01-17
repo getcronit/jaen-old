@@ -20,7 +20,6 @@ export const EditActionButton: React.FC<EditActionButtonProps> = () => {
       <IconButton
         onClick={toggleEditing}
         display={{base: 'flex', lg: 'none'}}
-        borderRadius="full"
         icon={<EditIcon />}
         aria-label={`Edit ${isEditing ? 'off' : 'on'}`}
       />
@@ -31,7 +30,6 @@ export const EditActionButton: React.FC<EditActionButtonProps> = () => {
     <Button
       onClick={toggleEditing}
       display={{base: 'none', lg: 'flex'}}
-      borderRadius="full"
       leftIcon={<EditIcon />}
       rightIcon={
         isEditing ? (

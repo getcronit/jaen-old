@@ -19,20 +19,16 @@ import {AiOutlineUser} from 'react-icons/ai'
 import {FaFileImport, FaGithub, FaSignOutAlt} from 'react-icons/fa'
 import {IoHelpBuoySharp, IoNewspaperSharp} from 'react-icons/io5'
 import {useNewsSlide} from '../../../context/NewsSlideContext.js'
-import {PageManagerProvider} from '../../../context/PagesManagerContext.js'
 import {useAuth} from '../../../hooks/auth/useAuth.js'
 import {JaenLogo} from '../../atoms/index.js'
 import {ActionBar} from '../../molecules/index.js'
-import {PageNavigator} from '../PageNavigator/PageNavigator.js'
 
 export interface AdminToolbarProps extends StackProps {
   withoutShadow?: boolean
-  withoutPageNavigator?: boolean
 }
 
 export const AdminToolbar = ({
   withoutShadow,
-  withoutPageNavigator = false,
   ...stackProps
 }: AdminToolbarProps) => {
   const isOnJaenAdmin =
@@ -103,22 +99,7 @@ export const AdminToolbar = ({
         </HStack>
       </Button>
 
-      <HStack
-        pos="relative"
-        w="full"
-        spacing={4}
-        justifyContent={{
-          base: 'center',
-          lg: 'space-between'
-        }}>
-        {}
-        {!withoutPageNavigator && (
-          <PageManagerProvider>
-            <PageNavigator />
-          </PageManagerProvider>
-        )}
-        <ActionBar />
-      </HStack>
+      <ActionBar />
 
       <HStack>
         <Menu>

@@ -12,7 +12,7 @@ export const withJaenMock = <P extends object>(
   const WithJaenMock: React.FC<P> = props => {
     return (
       <GatsbyRootWrapper {...mockProps}>
-        <AdminToolbar withoutPageNavigator />
+        <AdminToolbar />
         <PageProvider {...mockProps}>
           <Component {...props} />
         </PageProvider>
