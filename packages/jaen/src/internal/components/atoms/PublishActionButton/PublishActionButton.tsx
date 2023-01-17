@@ -5,7 +5,7 @@ export interface PublishActionButtonProps {}
 
 export const PublishActionButton: React.FC<PublishActionButtonProps> = () => {
   const isMobile = useBreakpointValue(
-    {base: true, lg: false},
+    {base: true, md: false},
     {
       ssr: false
     }
@@ -14,7 +14,6 @@ export const PublishActionButton: React.FC<PublishActionButtonProps> = () => {
   if (isMobile) {
     return (
       <IconButton
-        display={{base: 'flex', lg: 'none'}}
         icon={<Icon as={BiRocket} boxSize="5" />}
         aria-label="Publish now"
       />
@@ -22,10 +21,7 @@ export const PublishActionButton: React.FC<PublishActionButtonProps> = () => {
   }
 
   return (
-    <Button
-      display={{base: 'none', lg: 'flex'}}
-      variant="solid"
-      leftIcon={<Icon as={BiRocket} boxSize="5" />}>
+    <Button variant="solid" leftIcon={<Icon as={BiRocket} boxSize="5" />}>
       Publish now
     </Button>
   )

@@ -21,7 +21,6 @@ export const DiscardActionButton: React.FC<DiscardActionButtonProps> = () => {
   if (isMobile) {
     return (
       <IconButton
-        display={{base: 'flex', lg: 'none'}}
         borderRadius="full"
         icon={<DeleteIcon />}
         aria-label="Discard changes"
@@ -31,11 +30,7 @@ export const DiscardActionButton: React.FC<DiscardActionButtonProps> = () => {
   }
 
   return (
-    <Button
-      onClick={handleClick}
-      display={{base: 'none', lg: 'flex'}}
-      borderRadius="full"
-      leftIcon={<DeleteIcon />}>
+    <Button onClick={handleClick} borderRadius="full" leftIcon={<DeleteIcon />}>
       Discard
     </Button>
   )

@@ -21,7 +21,6 @@ export const SaveDraftActionButton: React.FC<SaveDraftActionButtonProps> =
     if (isMobile) {
       return (
         <IconButton
-          display={{base: 'flex', lg: 'none'}}
           borderRadius="full"
           icon={<Icon as={BiSave} boxSize="5" />}
           aria-label="Save draft"
@@ -31,7 +30,6 @@ export const SaveDraftActionButton: React.FC<SaveDraftActionButtonProps> =
 
     return (
       <Button
-        display={{base: 'none', lg: 'flex'}}
         borderRadius="full"
         leftIcon={<Icon as={BiSave} boxSize="5" />}
         rightIcon={<Badge rounded="full">1</Badge>}>
