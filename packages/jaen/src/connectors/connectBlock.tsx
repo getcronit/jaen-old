@@ -9,6 +9,7 @@ import {IJaenConnection} from '../types.js'
 export interface IBlockOptions {
   label: string
   name: string
+  Icon?: React.ComponentType
 }
 /**
  * @function connectBlock Connects a block to to section with Jaen.

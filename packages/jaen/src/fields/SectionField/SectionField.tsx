@@ -69,7 +69,7 @@ export const SectionField = withRedux(
     const blocksForSelector: SelectorBlockType[] = blocks.map(({options}) => ({
       slug: options.name,
       label: options.label,
-      icon: FiBox
+      Icon: options.Icon || FiBox
     }))
 
     const handleSectionAdd = (

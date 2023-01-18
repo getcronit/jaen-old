@@ -12,7 +12,7 @@ import {useState} from 'react'
 export interface SelectorBlockType {
   slug: string
   label: string
-  icon: React.ComponentType<{}>
+  Icon: React.ComponentType<{}>
 }
 
 export type SelectorBlockAddType = 'append' | 'prepend' | 'add'
@@ -74,7 +74,7 @@ export const SectionBlockSelector: React.FC<SectionBlockSelectorProps> = ({
                   setSelection(block)
                 }
               }}>
-              <Icon as={block.icon} />
+              <Icon as={block.Icon} />
               <Text fontSize="sm">{block.label}</Text>
             </HStack>
           )

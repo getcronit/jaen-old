@@ -81,6 +81,15 @@ const FieldsBlock = connectBlock(
   ),
   {name: 'FieldsBlock', label: 'Block /w fields'}
 )
+
+const BlockWithIcon = connectBlock(
+  () => (
+    <Box w="sm" borderWidth="1px" borderRadius="lg" overflow="hidden" p="4">
+      BlockWithIcon
+    </Box>
+  ),
+  {name: 'iconbox', label: 'The Box', Icon: () => <span>📦</span>}
+)
 // #endregion
 
 export const NoBlocks: Story<ComponentProps> = Template.bind({})
@@ -115,7 +124,7 @@ export const MultipleBlocks: Story<ComponentProps> = Template.bind({})
 MultipleBlocks.args = {
   name: 'section-field-filled',
   label: 'Section Field with multiple sections',
-  blocks: [BoxBlock, FieldsBlock]
+  blocks: [BoxBlock, FieldsBlock, BlockWithIcon]
 }
 
 export const Styled: Story<ComponentProps> = Template.bind({})
