@@ -2,6 +2,7 @@ import {Box, Button, Text} from '@chakra-ui/react'
 
 import {connectField} from '../../connectors/index.js'
 import {HighlightTooltip} from '../../internal/components/index.js'
+import {useModals} from '../../internal/context/Modals/ModalContext.js'
 import Editor from '../../utils/CKEditor/index.js'
 
 export interface TextFieldProps {
@@ -10,7 +11,17 @@ export interface TextFieldProps {
 
 export const TextField = connectField<string, string, TextFieldProps>(
   ({jaenField, rtf = false}) => {
-    console.log(jaenField)
+    const {toast} = useModals()
+
+    const handleTextSave = (data: string) => {
+      jaenField.onUpdateValue(data)
+
+      toast({
+        title: 'Text saved',
+        description: 'The text has been saved',
+        status: 'info'
+      })
+    }
 
     return (
       <HighlightTooltip
@@ -28,9 +39,7 @@ export const TextField = connectField<string, string, TextFieldProps>(
           <Editor
             defaultValue={jaenField.staticValue || jaenField.defaultValue}
             value={jaenField.value}
-            onBlurValue={data => {
-              jaenField.onUpdateValue(data)
-            }}
+            onBlurValue={handleTextSave}
             editing={jaenField.isEditing}
             disableToolbar={!rtf}
           />

@@ -100,6 +100,12 @@ export const SectionField = withRedux(
         }
       }
 
+      toast({
+        title: 'Section added',
+        description: `Section ${displayName} has been added`,
+        status: 'info'
+      })
+
       refresh()
     }
 

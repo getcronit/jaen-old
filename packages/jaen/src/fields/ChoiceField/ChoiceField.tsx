@@ -1,11 +1,12 @@
 import {Button, Icon, Text} from '@chakra-ui/react'
-import {CgOptions} from 'react-icons/cg'
+import {IoOptions} from 'react-icons/io5'
 
 import {connectField} from '../../connectors/index.js'
 import {
   HighlightTooltip,
   SelectorButton
 } from '../../internal/components/index.js'
+import {useModals} from '../../internal/context/Modals/ModalContext.js'
 
 type Options = string[]
 type Option = Options[number] | null
@@ -41,17 +42,32 @@ export const ChoiceField = connectField<
       </Button>
     ]
 
+    const {toast} = useModals()
+
+    const selectAndClose = (onClose: () => void) => (value: Option) => {
+      jaenField.onUpdateValue(value)
+      onClose()
+
+      toast({
+        title: 'Choice saved',
+        description: 'The choice has been saved',
+        status: 'info'
+      })
+    }
+
     if (renderPopover) {
       actions.push(
         <SelectorButton
           key={`jaen-highlight-tooltip-button-${jaenField.name}`}
-          icon={<Icon as={CgOptions} />}>
-          {renderPopover(
-            selection,
-            options,
-            jaenField.onUpdateValue,
-            jaenField.isEditing
-          )}
+          icon={<Icon as={IoOptions} />}>
+          {({onClose}) =>
+            renderPopover(
+              selection,
+              options,
+              selectAndClose(onClose),
+              jaenField.isEditing
+            )
+          }
         </SelectorButton>
       )
     }
