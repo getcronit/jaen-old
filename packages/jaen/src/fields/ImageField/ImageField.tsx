@@ -50,24 +50,28 @@ export const ImageField = connectField<
       })
     }
 
-    const handleImageClearClick = async () => {
+    const handleImageClearClick = () => {
       console.log('handleImageClearClick')
 
-      const confirmed = await confirm(
-        'Are you sure you want to clear the image?'
-      )
+      const updateWhenConfirmed = async () => {
+        const confirmed = await confirm(
+          'Are you sure you want to clear the image?'
+        )
 
-      if (confirmed) {
-        jaenField.onUpdateValue({
-          internalImageUrl: null
-        })
+        if (confirmed) {
+          jaenField.onUpdateValue({
+            internalImageUrl: null
+          })
 
-        toast({
-          title: 'Image cleared',
-          description: 'The image has been cleared',
-          status: 'info'
-        })
+          toast({
+            title: 'Image cleared',
+            description: 'The image has been cleared',
+            status: 'info'
+          })
+        }
       }
+
+      void updateWhenConfirmed()
     }
 
     const handleImageAltSaveClick = (value: string) => {
