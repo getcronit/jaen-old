@@ -45,7 +45,7 @@ export default {
     Story => {
       const Mocked = withJaenMock(Story, {
         jaenPage: {
-          id: `JaenPage jaen-page-1}`,
+          id: `JaenPage jaen-page-1`,
           slug: 'jaen-page-1',
           parent: null,
           children: [JaenPage],
