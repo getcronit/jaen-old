@@ -80,7 +80,7 @@ const theme = extendTheme(
               bg: 'pink.100',
               color: 'pink.900'
             },
-            borderRadius: '0.5em',
+            borderRadius: 'full',
             fontWeight: 'normal',
             cursor: 'default',
             fontSize: 'xs',
