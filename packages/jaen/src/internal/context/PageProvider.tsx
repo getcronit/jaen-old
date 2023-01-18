@@ -112,8 +112,8 @@ export const useJaenPageIndex = (
       path: string,
       staticPages: Array<Partial<IJaenPage>>
     ) => {
-      const dynamicPageId =
-        store.getState().internal.routing.dynamicPaths[path]?.pageId
+      const state = store.getState() as IJaenState
+      const dynamicPageId = state.page.routing.dynamicPaths[path]?.pageId
 
       if (dynamicPageId) {
         return dynamicPageId
@@ -164,7 +164,9 @@ export const useJaenPageIndex = (
 
   const dynamicChildren = React.useMemo(() => {
     if (dynamicChildrenIds) {
-      const dynamicJaenPages = store.getState().internal.pages.nodes
+      const state = store.getState() as IJaenState
+
+      const dynamicJaenPages = state.page.pages.nodes
       return dynamicChildrenIds.map(({id}) => ({
         id,
         ...dynamicJaenPages[id]
