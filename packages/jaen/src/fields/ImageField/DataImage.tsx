@@ -20,12 +20,6 @@ export const DataImage: React.FC<DataImageProps> = ({
 }) => {
   let imageElement
 
-  imageFieldProps.style = {
-    ...imageFieldProps.style,
-    width: '100%',
-    height: '100%'
-  }
-
   if (internalImageUrl) {
     imageElement = (
       <GatsbyImage

@@ -105,53 +105,56 @@ export const ImageField = connectField<
       alt: value.alt || 'Image',
       title: value.title || 'Image',
       style: {
-        ...jaenField.style
+        ...jaenField.style,
+        width: '100%',
+        height: '100%'
       },
       ...props
     }
 
     return (
-      <>
-        <HighlightTooltip
-          actions={[
-            <Button
-              variant="jaenHighlightTooltipText"
-              key={`jaen-highlight-tooltip-text-${jaenField.name}`}>
-              <Text as="span" noOfLines={1}>
-                Image {jaenField.name}
-              </Text>
-            </Button>,
-            <ButtonGroup
-              key={`jaen-highlight-tooltip-buttons-${jaenField.name}`}
-              size="xs"
-              spacing="0.5">
-              <ImageChooseButton onClick={handleImageChooseClick} />
+      <HighlightTooltip
+        actions={[
+          <Button
+            variant="jaenHighlightTooltipText"
+            key={`jaen-highlight-tooltip-text-${jaenField.name}`}>
+            <Text as="span" noOfLines={1}>
+              Image {jaenField.name}
+            </Text>
+          </Button>,
+          <ButtonGroup
+            key={`jaen-highlight-tooltip-buttons-${jaenField.name}`}
+            size="xs"
+            spacing="0.5">
+            <ImageChooseButton onClick={handleImageChooseClick} />
 
-              <IconButton
-                variant="jaenHighlightTooltip"
-                icon={<BsEraser />}
-                aria-label="Clear content"
-                onClick={handleImageClearClick}
-              />
-
-              <ImageAltSelector
-                value={value?.alt || ''}
-                onSave={handleImageAltSaveClick}
-              />
-            </ButtonGroup>
-          ]}
-          isEditing={jaenField.isEditing}>
-          <Box boxSize="full">
-            <DataImage
-              imageFieldProps={imageFieldProps}
-              internalImageUrl={value.internalImageUrl}
-              defaultImageUrl={jaenField.defaultValue}
-              imageData={gatsbyImage}
-              alt={value.alt}
+            <IconButton
+              variant="jaenHighlightTooltip"
+              icon={<BsEraser />}
+              aria-label="Clear content"
+              onClick={handleImageClearClick}
             />
-          </Box>
-        </HighlightTooltip>
-      </>
+
+            <ImageAltSelector
+              value={value?.alt || ''}
+              onSave={handleImageAltSaveClick}
+            />
+          </ButtonGroup>
+        ]}
+        isEditing={jaenField.isEditing}>
+        {
+          // The box is needed because the highlight tooltip will not work if the image is the only child
+        }
+        <Box boxSize="full">
+          <DataImage
+            imageFieldProps={imageFieldProps}
+            internalImageUrl={value.internalImageUrl}
+            defaultImageUrl={jaenField.defaultValue}
+            imageData={gatsbyImage}
+            alt={value.alt}
+          />
+        </Box>
+      </HighlightTooltip>
     )
   },
   {

@@ -44,6 +44,7 @@ const Template: Story<ComponentProps> = args => <ChoiceField {...args} />
 export const Basic: Story<ComponentProps> = Template.bind({})
 Basic.args = {
   name: 'choice-field-1',
+  label: 'Choice Field',
   options: ['1x', '2x', '3x', '4x', '5x'],
   defaultValue: null,
   render: (selectedOption, options) => (

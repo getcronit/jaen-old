@@ -37,7 +37,7 @@ export const ChoiceField = connectField<
         variant="jaenHighlightTooltipText"
         key={`jaen-highlight-tooltip-text-${jaenField.name}`}>
         <Text as="span" noOfLines={1}>
-          Choice {jaenField.name}
+          Choice {jaenField.label}
         </Text>
       </Button>
     ]

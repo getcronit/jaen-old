@@ -6,9 +6,7 @@ import {actions} from '../redux/slices/page.js'
 import {usePageContext} from './PageProvider.js'
 
 export const BlockContext =
-  React.createContext<{name: string; displayName: string} | undefined>(
-    undefined
-  )
+  React.createContext<{name: string; label: string} | undefined>(undefined)
 
 export type SectionBlockContextType = SectionType & {
   register: (props: object) => void

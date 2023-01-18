@@ -70,58 +70,58 @@ const BoxBlock = connectBlock(
       BoxSection
     </Box>
   ),
-  {name: 'BoxSection', displayName: 'Box Section'}
+  {name: 'box', label: 'The Box'}
 )
 
 const FieldsBlock = connectBlock(
   () => (
     <Box w="sm" borderWidth="1px" borderRadius="lg" overflow="hidden" p="4">
-      <TextField name="tf" defaultValue="sample value" />
+      <TextField name="tf" defaultValue="sample value" label="Important Text" />
     </Box>
   ),
-  {name: 'FieldsSection', displayName: 'Fields Section'}
+  {name: 'FieldsBlock', label: 'Block /w fields'}
 )
 // #endregion
 
 export const NoBlocks: Story<ComponentProps> = Template.bind({})
 NoBlocks.args = {
   name: 'section-field',
-  displayName: 'Section Field',
+  label: 'Section Field',
   blocks: []
 }
 
 export const Empty: Story<ComponentProps> = Template.bind({})
 Empty.args = {
   name: 'section-field',
-  displayName: 'Section Field',
+  label: 'Section Field',
   blocks: [BoxBlock]
 }
 
 export const Filled: Story<ComponentProps> = Template.bind({})
 Filled.args = {
   name: 'section-field-filled',
-  displayName: 'Section Field',
+  label: 'Section Field',
   blocks: [BoxBlock]
 }
 
 export const WithFields: Story<ComponentProps> = Template.bind({})
 WithFields.args = {
   name: 'section-field-filled',
-  displayName: 'Section Field with inner fields',
+  label: 'Section Field with inner fields',
   blocks: [FieldsBlock]
 }
 
 export const MultipleBlocks: Story<ComponentProps> = Template.bind({})
 MultipleBlocks.args = {
   name: 'section-field-filled',
-  displayName: 'Section Field with multiple sections',
+  label: 'Section Field with multiple sections',
   blocks: [BoxBlock, FieldsBlock]
 }
 
 export const Styled: Story<ComponentProps> = Template.bind({})
 Styled.args = {
   name: 'section-field-filled',
-  displayName: 'Section Field with inner fields',
+  label: 'Section Field with inner fields',
   blocks: [BoxBlock],
   style: {
     border: 'red 1px solid'
@@ -135,7 +135,7 @@ Styled.args = {
 export const Wrapped: Story<ComponentProps> = Template.bind({})
 Wrapped.args = {
   name: 'section-field-filled',
-  displayName: 'Section Field with inner fields',
+  label: 'Section Field with inner fields',
   blocks: [BoxBlock],
   as: Wrap,
   sectionAs: WrapItem,

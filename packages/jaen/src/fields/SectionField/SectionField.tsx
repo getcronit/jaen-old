@@ -25,7 +25,7 @@ type SectionPropsCallback = (args: {
 
 export interface SectionFieldProps {
   name: string // chapterName
-  displayName: string
+  label: string
   blocks: IBlockConnection[]
   as?: React.ComponentType<React.HTMLAttributes<HTMLElement>>
   sectionAs?: React.ComponentType<React.HTMLAttributes<HTMLElement>>
@@ -38,7 +38,7 @@ export interface SectionFieldProps {
 }
 
 export const SectionField = withRedux(
-  ({name, displayName, blocks, ...rest}: SectionFieldProps) => {
+  ({name, label, blocks, ...rest}: SectionFieldProps) => {
     const {confirm, toast} = useModals()
 
     const {
@@ -61,14 +61,14 @@ export const SectionField = withRedux(
         variant="jaenHighlightTooltipText"
         size="xs">
         <Text as="span" noOfLines={1}>
-          Section {name}
+          {label}
         </Text>
       </Button>
     ]
 
     const blocksForSelector: SelectorBlockType[] = blocks.map(({options}) => ({
       slug: options.name,
-      title: options.displayName,
+      label: options.label,
       icon: FiBox
     }))
 
@@ -98,8 +98,8 @@ export const SectionField = withRedux(
       }
 
       toast({
-        title: 'Section added',
-        description: `Section ${displayName} has been added`,
+        title: 'Block added',
+        description: `Block has been added to the ${label} section`,
         status: 'info'
       })
     }
@@ -110,15 +110,15 @@ export const SectionField = withRedux(
       ptrNext: string | null
     ) => {
       const shouldDelete = await confirm(
-        `Are you sure you want to delete this section?`
+        `Are you sure you want to remove this block from the ${label} section?`
       )
 
       if (shouldDelete) {
         onSectionDelete(id, ptrPrev, ptrNext)
 
         toast({
-          title: 'Section deleted',
-          description: `Section ${displayName} has been deleted`,
+          title: 'Block deleted',
+          description: `Block has been removed from the ${label} section`,
           status: 'info',
           variant: 'subtle'
         })
@@ -133,12 +133,6 @@ export const SectionField = withRedux(
             blocks={blocksForSelector}
             onlyAdd={section.items.length === 0}
           />
-          {/* <IconButton
-            size="xs"
-            variant="jaenHighlightTooltip"
-            icon={<DeleteIcon />}
-            aria-label="Add"
-          /> */}
         </HStack>
       ])
     }
@@ -151,8 +145,6 @@ export const SectionField = withRedux(
           style={rest.style}
           minH="64"
           w="full">
-          <Box w="100%">test</Box>
-
           {section.items.map((item, index) => {
             const s = sectionsDict[item.type]
 
@@ -183,7 +175,7 @@ export const SectionField = withRedux(
                     variant="jaenHighlightTooltipText"
                     key={`section-field-tooltip-button-${item.id}`}>
                     <Text as="span" noOfLines={1}>
-                      Block {s.Component.options.name}
+                      {s.Component.options.name}
                     </Text>
                   </Button>,
                   <HStack
@@ -209,44 +201,6 @@ export const SectionField = withRedux(
                       }}
                     />
                   </HStack>
-                  // <Box bg="pink.100" py={1} px={2}>
-                  //   SectionItem {s.Component.options.name}
-                  // </Box>,
-                  // <Box bg="white">
-                  //   <Box>
-                  //     <Box>
-                  //       <Text>Text</Text>
-                  //     </Box>
-                  //     <StackDivider />
-                  //     <Box>
-                  //       <Button w="full" variant="ghost">
-                  //         Item Type
-                  //       </Button>
-                  //       <Button w="full" variant="ghost">
-                  //         Item Type
-                  //       </Button>
-                  //     </Box>
-                  //   </Box>
-
-                  //   <ButtonGroup isAttached>
-                  //     <Button
-                  //       size="xs"
-                  //       onClick={() => {
-                  //         console.log(item.type, [item.ptrPrev, item.ptrNext])
-                  //         onSectionPrepend(item.type, item.id, item.ptrPrev)
-                  //       }}>
-                  //       Prepend
-                  //     </Button>
-                  //     <Button
-                  //       size="xs"
-                  //       onClick={() => {
-                  //         console.log(item.type, [item.ptrPrev, item.ptrNext])
-                  //         onSectionAppend(item.type, item.id, item.ptrNext)
-                  //       }}>
-                  //       Append
-                  //     </Button>
-                  //   </ButtonGroup>
-                  // </Box>
                 ]}>
                 <SectionWrapper
                   {...sectionProps}

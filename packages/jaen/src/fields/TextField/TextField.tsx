@@ -30,14 +30,14 @@ export const TextField = connectField<string, string, TextFieldProps>(
             variant="jaenHighlightTooltipText"
             key={`jaen-highlight-tooltip-text-${jaenField.name}`}>
             <Text as="span" noOfLines={1}>
-              Text {jaenField.name}
+              {jaenField.label}
             </Text>
           </Button>
         ]}
         isEditing={jaenField.isEditing}>
         <Box style={jaenField.style} className={jaenField.className}>
           <Editor
-            defaultValue={jaenField.staticValue || jaenField.defaultValue}
+            defaultValue={jaenField.staticValue || jaenField.defaultValue || ''}
             value={jaenField.value}
             onBlurValue={handleTextSave}
             editing={jaenField.isEditing}

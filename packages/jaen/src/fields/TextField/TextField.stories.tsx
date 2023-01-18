@@ -51,5 +51,7 @@ export const Basic: Story<ComponentProps> = Template.bind({})
 
 Basic.args = {
   name: 'rich-text-field-1',
+  label: 'Rich Text Field',
+  defaultValue: '<p>this is a default rtf value</p>',
   rtf: true
 }

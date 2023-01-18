@@ -7,7 +7,7 @@ import {useAuth} from '../internal/hooks/auth/useAuth.js'
 import {IJaenConnection} from '../types.js'
 
 export interface IBlockOptions {
-  displayName: string
+  label: string
   name: string
 }
 /**

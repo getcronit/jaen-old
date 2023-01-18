@@ -11,7 +11,7 @@ import {useState} from 'react'
 
 export interface SelectorBlockType {
   slug: string
-  title: string
+  label: string
   icon: React.ComponentType<{}>
 }
 
@@ -75,7 +75,7 @@ export const SectionBlockSelector: React.FC<SectionBlockSelectorProps> = ({
                 }
               }}>
               <Icon as={block.icon} />
-              <Text fontSize="sm">{block.title}</Text>
+              <Text fontSize="sm">{block.label}</Text>
             </HStack>
           )
         })}

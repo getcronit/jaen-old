@@ -9,7 +9,7 @@ import {cleanObject} from '../utils/cleanObject.js'
 
 export interface JaenFieldProps<IDefaultValue> {
   name: string
-  displayName?: string
+  label: string
   defaultValue: IDefaultValue
   style?: React.CSSProperties
   className?: string
@@ -51,7 +51,7 @@ export const connectField = <IValue, IDefaultValue = IValue, P = {}>(
   const MyComp: IJaenConnection<
     P & JaenFieldProps<IDefaultValue>,
     typeof options
-  > = props => {
+  > = ({name, label, defaultValue, style, className, ...rest}) => {
     const RegisterHelper: React.FC = () => {
       let field: {
         register: any
@@ -65,9 +65,9 @@ export const connectField = <IValue, IDefaultValue = IValue, P = {}>(
       }
 
       try {
-        field = usePopupField<IValue>(props.name, options.fieldType)
+        field = usePopupField<IValue>(name, options.fieldType)
       } catch {
-        field = useField<IValue>(props.name, options.fieldType)
+        field = useField<IValue>(name, options.fieldType)
       }
 
       const {isAuthenticated} = useAuth()
@@ -75,7 +75,7 @@ export const connectField = <IValue, IDefaultValue = IValue, P = {}>(
       useEffect(() => {
         if (isAuthenticated) {
           // clean up props to prevent circular reference, react items or other issues in redux store / local storage
-          field.register(cleanObject(props))
+          field.register(cleanObject(rest))
         }
       }, [isAuthenticated])
 
@@ -83,16 +83,17 @@ export const connectField = <IValue, IDefaultValue = IValue, P = {}>(
         <ThemeProvider>
           <Component
             jaenField={{
-              name: props.name,
-              defaultValue: props.defaultValue,
+              name,
+              label,
+              defaultValue,
               staticValue: field.staticValue,
               value: field.value,
               isEditing: field.isEditing,
               onUpdateValue: field.write,
-              style: props.style,
-              className: props.className
+              style,
+              className
             }}
-            {...props}
+            {...(rest as P)}
           />
         </ThemeProvider>
       )
