@@ -129,12 +129,12 @@ export const ImageField = connectField<
                 aria-label="Clear content"
                 onClick={handleImageClearClick}
               />
-            </ButtonGroup>,
-            <ImageAltSelector
-              key={`jaen-highlight-tooltip-image-alt-${jaenField.name}`}
-              value={value?.alt || ''}
-              onSave={handleImageAltSaveClick}
-            />
+
+              <ImageAltSelector
+                value={value?.alt || ''}
+                onSave={handleImageAltSaveClick}
+              />
+            </ButtonGroup>
           ]}
           isEditing={jaenField.isEditing}>
           <Box boxSize="full">
