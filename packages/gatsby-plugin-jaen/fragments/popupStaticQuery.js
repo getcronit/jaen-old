@@ -22,7 +22,6 @@ export const usePopupStaticQuery = () => {
       }
     `)
   } catch (e) {
-    console.error('usePopupStaticQuery', e)
     staticData = {
       jaenPopup: {
         nodes: []

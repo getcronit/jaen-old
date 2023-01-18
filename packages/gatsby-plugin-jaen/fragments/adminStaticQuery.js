@@ -52,7 +52,6 @@ export const useAdminStaticQuery = () => {
       }
     `)
   } catch (e) {
-    console.error('useStaticJaenPages', e)
     staticData = {
       jaenInternal: {
         finderUrl: null
