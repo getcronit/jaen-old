@@ -22,7 +22,7 @@ export default {
           onUpdate={() => {}}
           onGet={() => {
             return {
-              id: `JaenPage jaen-page-1}`,
+              id: `JaenPage jaen-page-1`,
               slug: 'jaen-page-1',
               parent: null,
               children: [],
