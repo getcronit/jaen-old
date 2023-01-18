@@ -86,7 +86,8 @@ const theme = extendTheme(
             fontSize: 'xs',
             height: '6',
             minWidth: '6',
-            px: '2'
+            px: '2',
+            mr: '2'
           }
         }
       }

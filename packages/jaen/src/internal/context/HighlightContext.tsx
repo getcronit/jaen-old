@@ -33,7 +33,7 @@ const Tooltip: React.FC<{
         w="fit-content"
         mx="auto"
         justifyContent="center"
-        spacing="2"
+        spacing="1"
         pointerEvents="all">
         {actions.map((action, index) => (
           <React.Fragment key={index}>{action}</React.Fragment>
