@@ -29,6 +29,10 @@ export const ImageAltSelector: React.FC<ImageAltSelectorProps> = props => {
     optionalProps.variant = 'solid'
     optionalProps.backgroundColor = 'orange.100'
     optionalProps.color = 'orange.500'
+
+    optionalProps._hover = {
+      backgroundColor: 'orange.200'
+    }
   }
 
   return (
