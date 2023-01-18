@@ -1,5 +1,7 @@
 export * from './ActionBar/index.js'
 export * from './ContextMenu/index.js'
+export * from './ImageAltSelector/index.js'
+export * from './ImageChooseButton/index.js'
 export * from './List/index.js'
 export * from './NavGroup/index.js'
 export * from './NavItem/index.js'
