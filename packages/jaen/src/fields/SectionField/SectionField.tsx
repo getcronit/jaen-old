@@ -10,7 +10,6 @@ import {
   SelectorBlockAddType,
   SelectorBlockType
 } from '../../internal/components/index.js'
-import {HighlightProviderContext} from '../../internal/context/HighlightContext.js'
 import {useModals} from '../../internal/context/Modals/ModalContext.js'
 import {JaenSectionBlockProvider} from '../../internal/context/SectionBlockContext.js'
 import {useSectionField} from '../../internal/hooks/field/useSectionField.js'
@@ -53,8 +52,6 @@ export const SectionField = withRedux(
     } = useSectionField({sectionName: name, blocks})
 
     const {isEditing} = useStatus()
-
-    const {refresh} = React.useContext(HighlightProviderContext)
 
     const Wrapper = rest.as || Box
 
@@ -105,8 +102,6 @@ export const SectionField = withRedux(
         description: `Section ${displayName} has been added`,
         status: 'info'
       })
-
-      refresh()
     }
 
     const handleSectionDelete = async (

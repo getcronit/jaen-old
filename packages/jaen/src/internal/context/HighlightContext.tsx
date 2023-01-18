@@ -7,17 +7,12 @@ import {ThemeProvider} from '../styles/ChakraThemeProvider.js'
 import {CLASSNAMES} from '../styles/constants.js'
 
 export interface HighlightProviderContextValue {
-  // tooltips: TooltipRef[]
-  // toggleTooltip: (index: number) => void
   ref: (ref: HTMLDivElement | null, actions: React.ReactNode[]) => void
-
-  refresh: () => void
 }
 
 export const HighlightProviderContext =
   createContext<HighlightProviderContextValue>({
-    ref: () => {},
-    refresh: () => {}
+    ref: () => {}
   })
 
 export interface HighlightProviderProps {
@@ -53,46 +48,11 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = ({
     }>
   >([])
 
-  const ref = (
-    ref: HTMLDivElement | null,
-    tooltipButtons: React.ReactNode[]
-  ) => {
-    // append if not exists
-
-    // find and update if exists else append
-
-    const index = itemsRef.current.findIndex(item => item.ref === ref)
-
-    if (index === -1) {
-      itemsRef.current.push({
-        ref,
-        tooltipButtons
-      })
-    } else {
-      const item = itemsRef.current[index]
-
-      if (item) {
-        item.tooltipButtons = tooltipButtons
-      }
-    }
-  }
-
-  const [shouldRefresh, setIsRefreshing] = React.useState(false)
-
-  const refresh = () => {
-    setIsRefreshing(true)
-
-    setTimeout(() => {
-      setIsRefreshing(false)
-    }, 0)
-  }
-
-  const {isEditing} = useStatus()
-
   const positionTooltip = (element: HTMLElement) => {
     if (getTooltips(element).length > 0) return
 
     const item = itemsRef.current.find(item => item.ref === element)
+
     const tooltipButtons = item?.tooltipButtons || []
 
     const tooltipRoot = element.appendChild(document.createElement('div'))
@@ -102,6 +62,74 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = ({
     const root = createRoot(tooltipRoot)
 
     root.render(<Tooltip actions={tooltipButtons} />)
+  }
+
+  const handleMouseOver = (event: MouseEvent) => {
+    const target = event.currentTarget as HTMLDivElement
+
+    // find child element with classname JAEN_HIGHLIGHT
+    const childElement = target.querySelector(
+      `.${CLASSNAMES.JAEN_HIGHLIGHT}`
+    ) as HTMLElement
+
+    if (!childElement) {
+      positionTooltip(target)
+
+      target.classList.add(CLASSNAMES.JAEN_HIGHLIGHT)
+
+      const parentElement = target.parentElement?.closest(
+        `.${CLASSNAMES.JAEN_HIGHLIGHT}`
+      ) as HTMLElement
+
+      if (parentElement) {
+        // Remove classname from parent
+        parentElement.classList.remove(CLASSNAMES.JAEN_HIGHLIGHT)
+
+        // Find JAEN_HIGHLIGHT_TOOLTIP and remove it
+        parentFindAndRemoveTooltip(parentElement)
+      }
+    }
+  }
+
+  const handleMouseLeave = (event: MouseEvent) => {
+    const target = event.currentTarget as HTMLDivElement
+
+    target.classList.remove(CLASSNAMES.JAEN_HIGHLIGHT)
+
+    parentFindAndRemoveTooltip(target)
+  }
+
+  const {isEditing} = useStatus()
+
+  useEffect(() => {
+    if (!isEditing) {
+      itemsRef.current = []
+    }
+  }, [isEditing])
+
+  const ref = (
+    ref: HTMLDivElement | null,
+    tooltipButtons: React.ReactNode[]
+  ) => {
+    const index = itemsRef.current.findIndex(item => item.ref === ref)
+
+    if (ref) {
+      // handle event listeners
+
+      if (isEditing) {
+        ref.addEventListener('mouseover', handleMouseOver)
+        ref.addEventListener('mouseleave', handleMouseLeave)
+      } else {
+        ref.removeEventListener('mouseover', handleMouseOver)
+        ref.removeEventListener('mouseleave', handleMouseLeave)
+      }
+
+      if (index === -1) {
+        itemsRef.current.push({ref, tooltipButtons})
+      } else {
+        itemsRef.current[index] = {ref, tooltipButtons}
+      }
+    }
   }
 
   const getTooltips = (parentElement: HTMLElement) => {
@@ -121,122 +149,8 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = ({
     })
   }
 
-  useEffect(() => {
-    // Add event listeners to all items in the array
-
-    const parentElements: HTMLElement[] = []
-
-    const handleMouseEnter = (currentTarget: EventTarget) => {
-      if (!isEditing) return
-
-      const target = currentTarget as HTMLDivElement
-
-      positionTooltip(target)
-
-      target.classList.add(CLASSNAMES.JAEN_HIGHLIGHT)
-
-      // find nearest parent with classname
-      const parentElement = target.parentElement?.closest(
-        `.${CLASSNAMES.JAEN_HIGHLIGHT}`
-      ) as HTMLElement
-
-      if (parentElement) {
-        // Remove classname from parent
-        parentElement.classList.remove(CLASSNAMES.JAEN_HIGHLIGHT)
-        parentElements.push(parentElement)
-
-        // Find JAEN_HIGHLIGHT_TOOLTIP and remove it
-        parentFindAndRemoveTooltip(parentElement)
-      }
-    }
-
-    const handleMouseLeave = (currentTarget: EventTarget) => {
-      const target = currentTarget as HTMLDivElement
-
-      // Remove classname from target
-      target.classList.remove(CLASSNAMES.JAEN_HIGHLIGHT)
-
-      // Remove tooltip from target
-      if (target) {
-        parentFindAndRemoveTooltip(target)
-      }
-
-      const parentElement = parentElements.at(-1)
-
-      if (parentElement) {
-        // Re-add classname to last
-        parentElement.classList.add(CLASSNAMES.JAEN_HIGHLIGHT)
-
-        // Re-add tooltip to last
-        positionTooltip(parentElement)
-
-        parentElements.pop()
-      }
-    }
-
-    // cancel previouse pending fn calls
-    // const delayEventWithConcurrency = (
-    //   fn: (currentTarget: Event['currentTarget']) => void,
-    //   delay = 300
-    // ) => {
-    //   let timeout: ReturnType<typeof setTimeout>
-    //   let target: Event['currentTarget']
-
-    //   return (event: Event) => {
-    //     const newTarget = event.currentTarget
-
-    //     console.log(event.type, target, newTarget)
-
-    //     if (newTarget !== target) {
-    //       clearTimeout(timeout)
-    //       target = newTarget
-
-    //       timeout = setTimeout(() => {
-    //         fn(target)
-    //       }, delay)
-    //     }
-    //   }
-    // }
-
-    // const handleDelayedMouseEnter = delayEventWithConcurrency(handleMouseEnter)
-    // const handleDelayedMouseLeave = delayEventWithConcurrency(handleMouseLeave)
-
-    const withCurrentTarget = (
-      fn: (currentTarget: Event['currentTarget']) => void
-    ) => {
-      return (event: Event) => {
-        const target = event.currentTarget
-
-        if (target == null) return
-
-        fn(target)
-      }
-    }
-
-    const handleDelayedMouseEnter = withCurrentTarget(handleMouseEnter)
-    const handleDelayedMouseLeave = withCurrentTarget(handleMouseLeave)
-
-    itemsRef.current.forEach(({ref: item}) => {
-      if (item == null) return
-
-      item.addEventListener('mouseenter', handleDelayedMouseEnter)
-      item.addEventListener('mouseleave', handleDelayedMouseLeave)
-    })
-
-    return () => {
-      // Remove event listeners from all items in the array
-
-      itemsRef.current.forEach(({ref: item}) => {
-        if (item == null) return
-
-        item.removeEventListener('mouseenter', handleDelayedMouseEnter)
-        item.removeEventListener('mouseleave', handleDelayedMouseLeave)
-      })
-    }
-  }, [isEditing, shouldRefresh])
-
   return (
-    <HighlightProviderContext.Provider value={{ref, refresh}}>
+    <HighlightProviderContext.Provider value={{ref}}>
       {children}
     </HighlightProviderContext.Provider>
   )
