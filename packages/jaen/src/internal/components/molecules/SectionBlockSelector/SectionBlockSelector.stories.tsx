@@ -21,18 +21,18 @@ const Template: Story<ComponentProps> = args => (
 const BLOCK_TYPES = [
   {
     slug: 'text',
-    title: 'Text',
-    icon: FiFileText
+    label: 'Text',
+    Icon: FiFileText
   },
   {
     slug: 'image',
-    title: 'Image',
-    icon: FiImage
+    label: 'Image',
+    Icon: FiImage
   },
   {
     slug: 'threecard',
-    title: 'Three Card',
-    icon: FiBox
+    label: 'Three Card',
+    Icon: FiBox
   }
 ]
 
