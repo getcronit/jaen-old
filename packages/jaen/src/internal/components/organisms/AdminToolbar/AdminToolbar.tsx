@@ -15,11 +15,14 @@ import {
   Text
 } from '@chakra-ui/react'
 import {navigate} from 'gatsby'
+import {useEffect} from 'react'
 import {AiOutlineUser} from 'react-icons/ai'
 import {FaFileImport, FaGithub, FaSignOutAlt} from 'react-icons/fa'
 import {IoHelpBuoySharp, IoNewspaperSharp} from 'react-icons/io5'
+import {useModals} from '../../../context/Modals/ModalContext.js'
 import {useNewsSlide} from '../../../context/NewsSlideContext.js'
 import {useAuth} from '../../../hooks/auth/useAuth.js'
+import {useImportDraft} from '../../../hooks/draft/useImportDraft.js'
 import {JaenLogo} from '../../atoms/index.js'
 import {ActionBar} from '../../molecules/index.js'
 
@@ -37,7 +40,23 @@ export const AdminToolbar = ({
 
   const newsSlide = useNewsSlide()
 
+  const {toast} = useModals()
+
   const {logout, isLoading} = useAuth()
+
+  const {handleImportClick, isImported} = useImportDraft()
+
+  useEffect(() => {
+    if (isImported) {
+      window.location.reload()
+
+      toast({
+        title: 'Draft imported',
+        description: 'Your draft has been imported',
+        status: 'success'
+      })
+    }
+  }, [isImported])
 
   return (
     <HStack
@@ -167,7 +186,9 @@ export const AdminToolbar = ({
             </MenuItem>
             <MenuItem icon={<AiOutlineUser />}>Edit profile</MenuItem>
 
-            <MenuItem icon={<FaFileImport />}>Import savefile</MenuItem>
+            <MenuItem icon={<FaFileImport />} onClick={handleImportClick}>
+              Import savefile
+            </MenuItem>
 
             <MenuDivider />
 

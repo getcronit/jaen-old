@@ -21,8 +21,10 @@ import PersistState from './persist-state.js'
 import auth, {authInitialState} from './slices/auth.js'
 import page, {pageInitialState} from './slices/page.js'
 import popup, {popupInitialState} from './slices/popup.js'
+import site, {siteInitialState} from './slices/site.js'
 import status, {statusInitialState} from './slices/status.js'
 
+import deepmerge from 'deepmerge'
 import React from 'react'
 import {useDeepEqualSelector} from '../../utils/hooks/useDeepEqualSelector.js'
 
@@ -33,6 +35,7 @@ const {loadState, persistState, persistMiddleware} =
 
 const combinedReducer = combineReducers({
   auth,
+  site,
   page,
   status,
   popup
@@ -41,11 +44,22 @@ const combinedReducer = combineReducers({
 // Reset state if action called
 const rootReducer = (state: any, action: any) => {
   if (action.type === 'RESET_STATE') {
+    console.log('RESET_STATE', action)
+
+    const payload: {
+      site?: typeof siteInitialState
+      page?: typeof pageInitialState
+      popup?: typeof popupInitialState
+    } = action.payload || {}
+
+    console.log('payload', payload)
+
     return {
       auth: authInitialState,
-      page: pageInitialState,
+      site: deepmerge(siteInitialState, payload.site || {}),
+      page: deepmerge(pageInitialState, payload.page || {}),
       status: statusInitialState,
-      popup: popupInitialState
+      popup: deepmerge(popupInitialState, payload.popup || {})
     }
   }
 

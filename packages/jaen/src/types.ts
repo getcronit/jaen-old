@@ -2,7 +2,7 @@ import type {PageProps as GatsbyPageProps} from 'gatsby'
 import type {IGatsbyImageData} from 'gatsby-plugin-image'
 import {IBlockConnection} from './connectors/index.js'
 
-interface SiteMetadata {
+export interface SiteMetadata {
   title: string
   description: string
   siteUrl: string
@@ -21,7 +21,7 @@ interface SiteMetadata {
   }
 }
 
-export interface Site {
+export interface ISite {
   siteMetadata: Partial<SiteMetadata>
 }
 
@@ -165,3 +165,5 @@ export interface IFormProps<Values> {
     value: string
   ) => string | undefined
 }
+
+export type MigrationData = Record<string, any>

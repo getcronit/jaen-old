@@ -29,11 +29,12 @@ export default <RootState extends {}>(persistKey: string) => {
       saveState(store.getState() as RootState)
     })
 
-    const resetState = () => {
+    const resetState = (payload?: {}) => {
       localStorage.removeItem(persistKey)
 
       store.dispatch({
-        type: 'RESET_STATE'
+        type: 'RESET_STATE',
+        payload
       })
     }
 

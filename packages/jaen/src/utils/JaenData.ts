@@ -1,6 +1,6 @@
 import {existsSync, readFileSync, writeFileSync} from 'fs'
 import {resolve} from 'path'
-import {Site} from '../types.js'
+import {ISite} from '../types.js'
 
 export interface RemoteFileMigration {
   createdAt: string
@@ -33,9 +33,9 @@ export class JaenData {
   #jaenDataDir: string
 
   pages: Record<string, BaseEntity>
-  notifications: Record<string, BaseEntity>
+  popups: Record<string, BaseEntity>
   internal?: {
-    site: Site
+    site: ISite
     finderUrl?: string
     migrationHistory: RemoteFileMigration[]
   }
@@ -62,7 +62,7 @@ export class JaenData {
 
   read() {
     this.pages = this.readJSONFile('pages')
-    this.notifications = this.readJSONFile('notifications')
+    this.popups = this.readJSONFile('popups')
     this.internal = this.readJSONFile('internal', {
       site: {},
       migrationHistory: []
@@ -71,7 +71,7 @@ export class JaenData {
 
   write() {
     this.writeJSONFile('pages', this.pages)
-    this.writeJSONFile('notifications', this.notifications)
+    this.writeJSONFile('popups', this.popups)
     this.writeJSONFile('internal', this.internal)
   }
 }

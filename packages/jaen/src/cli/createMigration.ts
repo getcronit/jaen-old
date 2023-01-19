@@ -1,5 +1,6 @@
 import deepmerge from 'deepmerge'
 import fetch from 'node-fetch'
+import {MigrationData} from '../types.js'
 
 import {deepmergeArrayIdMerge} from '../utils/deepmerge.js'
 import {JaenData, MigrationEntity, RemoteFileMigration} from '../utils/JaenData'
@@ -10,8 +11,6 @@ import {logger} from './logger.js'
 export interface BaseEntity extends MigrationEntity {
   migrations: RemoteFileMigration[]
 }
-
-type MigrationData = Record<string, any>
 
 export interface CreateMigrationOptions {
   migrationUrl: string
@@ -111,11 +110,11 @@ const processMigration = async ({
         }
 
         break
-      case 'notifications':
-        for (const id of Object.keys(value.notifications)) {
-          jaenData.notifications[id] = await updateEntity(
-            jaenData.notifications[id],
-            value.notifications[id]
+      case 'popups':
+        for (const id of Object.keys(value.popups)) {
+          jaenData.popups[id] = await updateEntity(
+            jaenData.popups[id],
+            value.popups[id]
           )
         }
         break
