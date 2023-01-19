@@ -11,7 +11,7 @@ const IndexPage = connectPage(
         <h1>Hello Gatsby!</h1>
         <p>Now go build something great.</p>
         <Button colorScheme="teal">Button</Button>
-        <Field.Text name="test" defaultValue={"teest"} />
+        <Field.Text name="test" defaultValue={"teest"} label="Test" />
       </div>
     )
   },

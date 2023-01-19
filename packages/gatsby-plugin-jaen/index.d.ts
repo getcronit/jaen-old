@@ -1,4 +1,5 @@
-export declare const useAdminStaticQuery: <JaenPageNode>() => {
+export declare const useAdminStaticQuery: <JaenSite, JaenPageNode>() => {
+  site: JaenSite
   jaenInternal: {
     finderUrl: string | null
   }

@@ -6,6 +6,9 @@ export const useAdminStaticQuery = () => {
   try {
     staticData = useStaticQuery(graphql`
       query AdminStaticQuery {
+        site {
+          siteMetadata
+        }
         jaenInternal {
           finderUrl
         }
@@ -53,6 +56,9 @@ export const useAdminStaticQuery = () => {
     `)
   } catch (e) {
     staticData = {
+      site: {
+        siteMetadata: {}
+      },
       jaenInternal: {
         finderUrl: null
       },

@@ -1,7 +1,6 @@
 import {useCallback} from 'react'
 import {useModals} from '../../../context/Modals/index.js'
-import {store} from '../../../redux/index.js'
-import {actions} from '../../../redux/slices/page.js'
+import {resetState} from '../../../redux/index.js'
 
 export function useDiscard() {
   const {confirm, toast} = useModals()
@@ -17,8 +16,7 @@ export function useDiscard() {
       return
     }
 
-    store.dispatch(actions.discardAllChanges())
-    store.dispatch(actions.discardDynamicPaths())
+    resetState()
 
     toast({
       title: 'Changes discarded',
