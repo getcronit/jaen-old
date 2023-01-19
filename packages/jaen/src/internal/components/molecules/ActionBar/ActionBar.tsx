@@ -7,7 +7,7 @@ import {
   PublishActionButton,
   SaveDraftActionButton
 } from '../../atoms/index.js'
-import {PageNavigator} from '../../organisms/index.js'
+import {PageNavigator} from '../../organisms/PageNavigator/index.js'
 
 export interface ActionBarProps {}
 

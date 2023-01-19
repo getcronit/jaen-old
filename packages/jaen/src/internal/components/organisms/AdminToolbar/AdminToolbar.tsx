@@ -24,7 +24,7 @@ import {useNewsSlide} from '../../../context/NewsSlideContext.js'
 import {useAuth} from '../../../hooks/auth/useAuth.js'
 import {useImportDraft} from '../../../hooks/draft/useImportDraft.js'
 import {JaenLogo} from '../../atoms/index.js'
-import {ActionBar} from '../../molecules/index.js'
+import {ActionBar} from '../../molecules/ActionBar/index.js'
 
 export interface AdminToolbarProps extends StackProps {
   withoutShadow?: boolean

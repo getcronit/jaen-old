@@ -20,7 +20,7 @@ import {HiDocument, HiMinus, HiPlus} from 'react-icons/hi'
 
 import {matchPath} from '../../../helper/path.js'
 import {ContextMenuEvent} from '../../molecules/ContextMenu/ContextMenu.js'
-import {ContextMenu} from '../../molecules/index.js'
+import {ContextMenu} from '../../molecules/ContextMenu/index.js'
 
 import './tree.css'
 
