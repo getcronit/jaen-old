@@ -210,8 +210,14 @@ export const createSchemaCustomization: GatsbyNode['onCreateWebpackConfig'] = ({
       siteMetadata: JSON
     }
 
+    type JaenWidget {
+      name: String!
+      data: JSON
+    }
+
     type JaenInternal implements Node {
       finderUrl: String
+      widgets: [JaenWidget!]
     }
 
     type JaenPopup implements Node {

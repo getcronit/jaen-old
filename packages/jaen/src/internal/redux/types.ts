@@ -1,6 +1,6 @@
 import {SerializedError} from '@reduxjs/toolkit'
 
-import {IJaenPage, IJaenPopup, ISite} from '../../types.js'
+import {IJaenPage, IJaenPopup, ISite, IWidget} from '../../types.js'
 
 export interface IError {
   code: string
@@ -59,4 +59,5 @@ export interface IJaenState {
   page: IPageState
   status: IStatusState
   popup: IPopupState
+  widget: IWidget
 }

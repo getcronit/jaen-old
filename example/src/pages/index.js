@@ -1,11 +1,26 @@
 import * as React from "react"
 import { Button } from "@chakra-ui/react"
-import { connectPage, Field } from "@snek-at/jaen"
+import { connectPage, Field, useWidget } from "@snek-at/jaen"
 
 import { graphql } from "gatsby"
 
 const IndexPage = connectPage(
   () => {
+    const menuWidget = useWidget("menu")
+
+    React.useEffect(() => {
+      console.log(menuWidget.data)
+
+      menuWidget.writeData({
+        items: [
+          {
+            label: "Home",
+            url: "/",
+          },
+        ],
+      })
+    }, [])
+
     return (
       <div style={{ color: `purple`, fontSize: `72px`, height: "5000px" }}>
         <h1>Hello Gatsby!</h1>

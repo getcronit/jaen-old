@@ -11,7 +11,8 @@ export const prepareMigration = async () => {
   // jaen internal
   migrationData.jaen = {
     site: state.site,
-    finderUrl: await Backend.uploadIndex()
+    finderUrl: await Backend.uploadIndex(),
+    widgets: state.widget.nodes
   }
 
   // pages
@@ -37,6 +38,9 @@ export const insertMigration = async (migrationData: MigrationData) => {
     },
     popup: {
       nodes: migrationData.popups
+    },
+    widget: {
+      nodes: migrationData.jaen.widgets
     }
   })
 

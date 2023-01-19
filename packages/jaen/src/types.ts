@@ -2,6 +2,13 @@ import type {PageProps as GatsbyPageProps} from 'gatsby'
 import type {IGatsbyImageData} from 'gatsby-plugin-image'
 import {IBlockConnection} from './connectors/index.js'
 
+export interface IWidget {
+  nodes: Array<{
+    name: string
+    data: any
+  }>
+}
+
 export interface SiteMetadata {
   title: string
   description: string

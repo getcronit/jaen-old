@@ -23,6 +23,7 @@ import page, {pageInitialState} from './slices/page.js'
 import popup, {popupInitialState} from './slices/popup.js'
 import site, {siteInitialState} from './slices/site.js'
 import status, {statusInitialState} from './slices/status.js'
+import widget, {widgetInitialState} from './slices/widget.js'
 
 import deepmerge from 'deepmerge'
 import React from 'react'
@@ -38,7 +39,8 @@ const combinedReducer = combineReducers({
   site,
   page,
   status,
-  popup
+  popup,
+  widget
 })
 
 // Reset state if action called
@@ -50,6 +52,7 @@ const rootReducer = (state: any, action: any) => {
       site?: typeof siteInitialState
       page?: typeof pageInitialState
       popup?: typeof popupInitialState
+      widget?: typeof widgetInitialState
     } = action.payload || {}
 
     console.log('payload', payload)
@@ -59,7 +62,8 @@ const rootReducer = (state: any, action: any) => {
       site: deepmerge(siteInitialState, payload.site || {}),
       page: deepmerge(pageInitialState, payload.page || {}),
       status: statusInitialState,
-      popup: deepmerge(popupInitialState, payload.popup || {})
+      popup: deepmerge(popupInitialState, payload.popup || {}),
+      widget: deepmerge(widgetInitialState, payload.widget || {})
     }
   }
 

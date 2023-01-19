@@ -35,3 +35,12 @@ export declare const usePopupStaticQuery: () => {
     }>
   }
 }
+
+export declare const useWidgetStaticQuery: () => {
+  jaenInternal: {
+    widgets: Array<{
+      name: string
+      data: object
+    }>
+  }
+}
