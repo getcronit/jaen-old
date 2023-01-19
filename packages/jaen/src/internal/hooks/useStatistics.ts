@@ -3,7 +3,7 @@ import {RemoteFileMigration} from '../../utils/JaenData.js'
 export interface IStatistics {
   totalChanges: number
   totalPages: number
-  totalNotificatons: number
+  totalPopups: number
   migrations: RemoteFileMigration[]
 }
 
@@ -21,7 +21,7 @@ export const useStatistics = (): IStatistics => {
   return {
     totalChanges: 0,
     totalPages: 0,
-    totalNotificatons: 0,
+    totalPopups: 0,
     migrations: sortedMigration
   }
 }

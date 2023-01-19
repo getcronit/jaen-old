@@ -16,12 +16,11 @@ import {ViewLayout} from '../../../organisms/index.js'
 export interface HomeViewProps {}
 
 export const HomeView: React.FC<HomeViewProps> = () => {
-  const {totalChanges, totalPages, totalNotificatons, migrations} =
-    useStatistics()
+  const {totalChanges, totalPages, totalPopups, migrations} = useStatistics()
 
   const data = [
     {label: 'Total pages', value: totalPages},
-    {label: 'Total notifications', value: totalNotificatons},
+    {label: 'Total popups', value: totalPopups},
     {label: 'Unpublished changes', value: totalChanges}
   ]
 
