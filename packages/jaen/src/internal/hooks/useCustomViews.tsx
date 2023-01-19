@@ -40,7 +40,7 @@ export const useCustomViews = () => {
           const view: IJaenView = {
             path: normalizePath(`/views/${Connection.options.path}`),
             Component: withCustomViewLayout(Connection),
-            label: Connection.options.displayName,
+            label: Connection.options.label,
             group: 'Views',
             Icon: Connection.options.Icon || null,
             hasRoutes: true // assume that the view uses the <Routes> component to render its routes

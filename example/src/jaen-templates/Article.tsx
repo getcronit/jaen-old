@@ -9,7 +9,7 @@ export default connectTemplate(
     )
   },
   {
-    displayName: "Simple Blog Page",
+    label: "Simple Blog Page",
     children: ["Article"],
   }
 )

@@ -24,7 +24,7 @@ Basic.args = {
       id: '1',
       isActive: true,
       Component: connectPopup(() => <div>1</div>, {
-        displayName: 'Popup 1',
+        label: 'Popup 1',
         description: 'Popup 1 description',
         imageURL: 'https://via.placeholder.com/150',
         conditions: {

@@ -12,7 +12,7 @@ import {IJaenConnection, PageProps} from '../types.js'
 export const connectPage = <P extends PageProps>(
   Component: React.ComponentType<P>,
   options: {
-    displayName: string
+    label: string
     children?: string[]
   }
 ) => {

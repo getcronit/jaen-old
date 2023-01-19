@@ -27,10 +27,10 @@ export interface ISite {
 
 export interface IJaenTemplate {
   name: string
-  displayName: string
+  label: string
   children: Array<{
     name: string
-    displayName: string
+    label: string
   }>
   isRootTemplate?: boolean
 }

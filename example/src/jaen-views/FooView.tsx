@@ -19,7 +19,7 @@ import {
   InputGroup,
   Textarea,
   FormHelperText,
-  InputRightElement
+  InputRightElement,
 } from "@chakra-ui/react"
 
 import { useToast } from "@chakra-ui/react"
@@ -89,7 +89,7 @@ const Form2 = () => {
           fontWeight="md"
           color="gray.700"
           _dark={{
-            color: "gray.50"
+            color: "gray.50",
           }}
         >
           Country / Region
@@ -118,7 +118,7 @@ const Form2 = () => {
           fontWeight="md"
           color="gray.700"
           _dark={{
-            color: "gray.50"
+            color: "gray.50",
           }}
           mt="2%"
         >
@@ -144,7 +144,7 @@ const Form2 = () => {
           fontWeight="md"
           color="gray.700"
           _dark={{
-            color: "gray.50"
+            color: "gray.50",
           }}
           mt="2%"
         >
@@ -170,7 +170,7 @@ const Form2 = () => {
           fontWeight="md"
           color="gray.700"
           _dark={{
-            color: "gray.50"
+            color: "gray.50",
           }}
           mt="2%"
         >
@@ -196,7 +196,7 @@ const Form2 = () => {
           fontWeight="md"
           color="gray.700"
           _dark={{
-            color: "gray.50"
+            color: "gray.50",
           }}
           mt="2%"
         >
@@ -231,7 +231,7 @@ const Form3 = () => {
             fontWeight="md"
             color="gray.700"
             _dark={{
-              color: "gray.50"
+              color: "gray.50",
             }}
           >
             Website
@@ -240,7 +240,7 @@ const Form3 = () => {
             <InputLeftAddon
               bg="gray.50"
               _dark={{
-                bg: "gray.800"
+                bg: "gray.800",
               }}
               color="gray.500"
               rounded="md"
@@ -262,7 +262,7 @@ const Form3 = () => {
             fontWeight="md"
             color="gray.700"
             _dark={{
-              color: "gray.50"
+              color: "gray.50",
             }}
           >
             About
@@ -273,7 +273,7 @@ const Form3 = () => {
             shadow="sm"
             focusBorderColor="brand.400"
             fontSize={{
-              sm: "sm"
+              sm: "sm",
             }}
           />
           <FormHelperText>
@@ -353,7 +353,7 @@ const Multistep: React.FC<{}> = () => {
                     description: "We've created your account for you.",
                     status: "success",
                     duration: 3000,
-                    isClosable: true
+                    isClosable: true,
                   })
                 }}
               >
@@ -369,9 +369,9 @@ const Multistep: React.FC<{}> = () => {
 
 const FooView = connectView(Multistep, {
   path: "/foo",
-  displayName: "Foo",
+  label: "Foo",
   description: "This view demonstrates how to create a custom view.",
-  Icon: AddIcon
+  Icon: AddIcon,
 })
 
 export default FooView

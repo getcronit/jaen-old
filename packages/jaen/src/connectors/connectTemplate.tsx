@@ -25,7 +25,7 @@ import {IJaenConnection, PageProps} from '../types.js'
  *     )
  *   },
  *   {
- *     displayName: 'Simple Blog Page'
+ *     label: 'Simple Blog Page'
  *   }
  * )
  *
@@ -65,7 +65,7 @@ export const connectTemplate = <P extends PageProps>(
 }
 
 export interface ITemplateOptions {
-  displayName: string
+  label: string
   children: string[]
   isRootTemplate?: boolean
 }

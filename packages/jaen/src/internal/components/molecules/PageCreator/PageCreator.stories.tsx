@@ -18,11 +18,11 @@ Basic.args = {
   values: {
     slug: '',
     title: '',
-    template: {name: '', displayName: ''}
+    template: {name: '', label: ''}
   },
   templates: [
-    {name: 'page', displayName: 'Page'},
-    {name: 'blog', displayName: 'Blog'}
+    {name: 'page', label: 'Page'},
+    {name: 'blog', label: 'Blog'}
   ],
   onSubmit: values => {
     console.log('🚀 ~ file: PageCreator.stories.tsx ~ line 43 ~ values', values)

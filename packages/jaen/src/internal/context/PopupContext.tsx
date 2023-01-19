@@ -17,7 +17,7 @@ import {useAppDispatch} from '../redux/index.js'
 import * as internalActions from '../redux/slices/popup.js'
 
 export interface IPopupOptions {
-  displayName: string
+  label: string
   description: string
   imageURL: string
   modalProps?: Omit<ModalProps, 'isOpen' | 'onClose' | 'children'>

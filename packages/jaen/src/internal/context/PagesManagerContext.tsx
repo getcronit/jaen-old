@@ -262,7 +262,7 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
           slug: '',
           template: {
             name: '',
-            displayName: ''
+            label: ''
           }
         }}
         templates={templates.templates}

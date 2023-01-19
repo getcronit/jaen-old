@@ -9,7 +9,7 @@ const loadTemplatesForPage = async ({
 }: {
   page: IJaenPage | null
   templates: IJaenTemplate[]
-}): Promise<Array<{name: string; displayName: string}>> => {
+}): Promise<Array<{name: string; label: string}>> => {
   if (page == null) {
     return templates
   } else if (page.template) {
@@ -30,7 +30,7 @@ const loadTemplatesForPage = async ({
 
         return {
           name: child,
-          displayName: t.displayName
+          label: t.label
         }
       }) || []
     )
@@ -54,7 +54,7 @@ export const useTemplatesForPage = (page: IJaenPage | null) => {
   const [templates, setTemplates] = useState<
     Array<{
       name: string
-      displayName: string
+      label: string
     }>
   >([])
 

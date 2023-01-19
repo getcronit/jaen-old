@@ -34,13 +34,13 @@ export const useJaenTemplates = () => {
             const ad = await site.templateLoader(child)
             children.push({
               name: child,
-              displayName: ad.options.displayName
+              label: ad.options.label
             })
           }
 
           tmpls[loadTemplate] = {
             name: loadTemplate,
-            displayName: Component.options.displayName,
+            label: Component.options.label,
             children,
             isRootTemplate: Component.options.isRootTemplate
           }

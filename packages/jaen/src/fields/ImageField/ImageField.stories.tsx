@@ -44,7 +44,7 @@ export const Basic: Story<ComponentProps> = () => {
     <Box bg="red" height={64}>
       <ImageField
         name="image"
-        displayName="Image"
+        label="Image"
         defaultValue={undefined}
         objectFit="contain"
       />

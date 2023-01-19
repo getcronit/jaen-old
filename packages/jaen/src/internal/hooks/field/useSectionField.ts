@@ -36,7 +36,7 @@ export interface UseSectionField {
     {
       Component: IJaenConnection<{}, IBlockOptions>
       options: {
-        displayName: string
+        label: string
         name: string
       }
     }
@@ -67,7 +67,7 @@ export const useSectionField = ({
       {
         Component: IBlockConnection
         options: {
-          displayName: string
+          label: string
           name: string
         }
       }
@@ -78,7 +78,7 @@ export const useSectionField = ({
         string,
         {
           Component: IBlockConnection
-          options: {displayName: string; name: string}
+          options: {label: string; name: string}
         }
       >
     >(

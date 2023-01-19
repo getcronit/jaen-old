@@ -16,7 +16,7 @@ const IndexPage = connectPage(
     )
   },
   {
-    displayName: "IndexPage",
+    label: "IndexPage",
     children: ["Article"],
   }
 )

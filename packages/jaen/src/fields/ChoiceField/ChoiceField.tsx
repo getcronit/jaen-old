@@ -22,7 +22,7 @@ export const ChoiceField = connectField<
   Option,
   Option,
   {
-    displayName?: React.ReactNode
+    label?: React.ReactNode
     options: Options
     render: ChoiceRenderFn
     renderPopover: ChoiceRenderFn | null

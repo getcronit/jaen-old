@@ -26,7 +26,7 @@ export const Basic: Story<ComponentProps> = Template.bind({})
 Basic.args = {
   template: {
     name: 'page',
-    displayName: 'Page',
+    label: 'Page',
     children: []
   },
   values: {

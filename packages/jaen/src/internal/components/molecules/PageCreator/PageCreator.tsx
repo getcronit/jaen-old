@@ -57,7 +57,7 @@ const TemplateSelector = ({
 
   return (
     <>
-      {templates.map(({name, displayName}, key) => (
+      {templates.map(({name, label}, key) => (
         <Button
           key={key}
           variant="outline"
@@ -68,7 +68,7 @@ const TemplateSelector = ({
           onClick={() => {
             handleSelect(name)
           }}>
-          {displayName}
+          {label}
         </Button>
       ))}
     </>
@@ -116,7 +116,7 @@ export const PageCreator = ({
   })
 
   const onSubmit = (values: CreateValues) => {
-    // update template displayName
+    // update template object with the full template object
     values.template = templates.find(
       e => e.name === values.template.name
     ) as IJaenTemplate

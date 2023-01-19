@@ -131,7 +131,7 @@ export const PageContent = (props: PageContentProps) => {
                     <HiTemplate />
                   </Box>
 
-                  <TagLabel>{props.template.displayName}</TagLabel>
+                  <TagLabel>{props.template.label}</TagLabel>
                 </Tag>
               )}
             </HStack>

@@ -146,7 +146,7 @@ export const PopupsView: React.FC<PopupsViewProps> = ({
           {popups.map(popup => (
             <PopupCard
               key={popup.id}
-              title={popup.Component.options.displayName}
+              title={popup.Component.options.label}
               description={popup.Component.options.description}
               imageURL={popup.Component.options.imageURL}
               onEdit={() => {

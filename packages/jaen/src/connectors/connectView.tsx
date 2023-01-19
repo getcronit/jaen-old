@@ -3,7 +3,7 @@ import {IJaenConnection} from '../types.js'
 
 export interface ViewOptions {
   path: string
-  displayName: string
+  label: string
   description: string
   Icon: React.ComponentType<{}>
   controls?: React.ReactNode[]
