@@ -17,7 +17,30 @@ export default <RootState extends {}>(persistKey: string) => {
 
   const saveState = (state: RootState) => {
     try {
-      const serialState = JSON.stringify(state)
+      // recursively remove all isLoading and error properties
+      const removeLoadingAndError = (obj: Record<string, any>) => {
+        const keysToRemove = ['isLoading', 'error']
+
+        if (obj && typeof obj === 'object') {
+          keysToRemove.forEach(key => {
+            if (key in obj) {
+              console.log('deleting', key)
+              delete obj[key]
+            }
+          })
+
+          Object.keys(obj).forEach(key => {
+            removeLoadingAndError(obj[key])
+          })
+        }
+      }
+
+      const cleanState = Object.assign({}, state)
+
+      removeLoadingAndError(cleanState)
+
+      const serialState = JSON.stringify(cleanState)
+
       localStorage.setItem(persistKey, serialState)
     } catch (err) {
       console.log(err)
