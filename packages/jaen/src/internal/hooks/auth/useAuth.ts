@@ -1,20 +1,21 @@
 import {useCallback, useEffect, useState} from 'react'
-import {store} from '../../redux/index.js'
-import {IAuthState} from '../../redux/types.js'
 
 import {redirectAfterDelay} from '../../../utils/redirectAfterDelay.js'
+import {store, useAppDispatch, useAppSelector} from '../../redux/index.js'
 import * as authActions from '../../redux/slices/auth.js'
+import {IAuthState} from '../../redux/types.js'
 
 export const useAuth = () => {
-  const [state, setState] = useState<IAuthState>(store.getState().auth)
+  const dispatch = useAppDispatch()
+  const auth = useAppSelector(state => state.auth)
+
+  const [isReady, setIsReady] = useState(false)
 
   useEffect(() => {
-    const unsubscribe = store.subscribe(() => {
-      setState(store.getState().auth)
-    })
-
-    return unsubscribe
+    setIsReady(true)
   }, [])
+
+  console.log('auth', auth)
 
   const login = useCallback(
     async (
@@ -24,7 +25,7 @@ export const useAuth = () => {
       }
     ) => {
       try {
-        await store.dispatch(
+        await dispatch(
           authActions.login({
             params,
             details
@@ -43,19 +44,20 @@ export const useAuth = () => {
   )
 
   const demoLogin = useCallback(() => {
-    store.dispatch(authActions.demoLogin())
+    dispatch(authActions.demoLogin())
 
     redirectAfterDelay('/admin')
   }, [])
 
   const logout = useCallback(async () => {
-    await store.dispatch(authActions.logout())
+    await dispatch(authActions.logout())
 
     redirectAfterDelay('/admin/login?loggedOut=true')
   }, [])
 
   return {
-    ...state,
+    ...auth,
+    isLoading: !isReady && auth.isLoading,
     login,
     demoLogin,
     logout

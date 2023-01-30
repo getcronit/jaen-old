@@ -6,11 +6,13 @@ import {
   Stack,
   useDisclosure
 } from '@chakra-ui/react'
+import {navigate} from 'gatsby'
 import * as React from 'react'
 import {Outlet, Route, Routes, useNavigate} from 'react-router-dom'
 
 import {isSSR} from '../../../../utils/isSSR.js'
 import {SnekFinder} from '../../../context/SnekFinder/SnekFinder.js'
+import {useAuth} from '../../../hooks/auth/useAuth.js'
 import {withRedux} from '../../../redux/index.js'
 import {NavGroup, NavItem} from '../../molecules/index.js'
 import {
@@ -18,6 +20,7 @@ import {
   ToolbarActionProvider
 } from '../../organisms/index.js'
 import {AdminShell} from '../AdminShell/AdminShell.js'
+import {LoadingPage} from '../LoadingPage/LoadingPage.js'
 import {BuiltViews} from './buildItemAndRoutesFromViews.js'
 import {withAdminPageWrapper} from './withAdminPageWrapper.js'
 
@@ -146,6 +149,20 @@ export default withAdminPageWrapper(({routes, items}) => {
   const onNavigate = React.useCallback((path: string) => {
     routerNavigate(path)
   }, [])
+
+  const {isLoading, isAuthenticated} = useAuth()
+
+  React.useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      void navigate('/admin/login')
+    }
+  }, [isLoading, isAuthenticated])
+
+  console.log('isLoading', isLoading)
+
+  if (isLoading || !isAuthenticated) {
+    return <LoadingPage />
+  }
 
   return (
     <SnekFinder>

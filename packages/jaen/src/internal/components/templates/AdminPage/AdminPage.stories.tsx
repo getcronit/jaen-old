@@ -5,8 +5,7 @@ import {BiCog, BiNotification} from 'react-icons/bi'
 import {BsFiles, BsHouse} from 'react-icons/bs'
 import {FaPager} from 'react-icons/fa'
 
-import {AdminPage} from './AdminPage.js'
-import {LoadingAdminPage} from './LoadingAdminPage.js'
+import AdminPage from './AdminPage.js'
 export default {
   title: 'templates/AdminPage',
   component: AdminPage,
@@ -150,8 +149,4 @@ Basic.args = {
       Icon: BiCog
     }
   ]
-}
-
-export const Loading: Story = () => {
-  return <LoadingAdminPage heading="Welcome to Jaen Admin" />
 }

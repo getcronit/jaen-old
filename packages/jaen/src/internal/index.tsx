@@ -1,6 +1,5 @@
 import {ChakraProvider} from '@chakra-ui/react'
 import {navigate} from 'gatsby'
-import {useEffect} from 'react'
 import {PageProps} from '../types.js'
 
 import {ActivationButton, AdminShell} from './components/index.js'
@@ -50,24 +49,12 @@ export const GatsbyPageWrapper: React.FC<PageWrapperProps> = ({
   pageProps
 }) => {
   const isAdminOrLogin = pageProps.path.startsWith('/admin')
-  const isAdminLogin = pageProps.path.startsWith('/admin/login')
-  const isAdmin = isAdminOrLogin && !isAdminLogin
 
   const handleActivationButtonClick = () => {
     void navigate('/admin')
   }
 
   const {isAuthenticated} = getAuth()
-
-  useEffect(() => {
-    console.log(`GatsbyPageWrapper`, {path: pageProps.path})
-
-    if (isAdmin && !isAuthenticated) {
-      void navigate('/admin/login')
-    } else if (isAdminLogin && isAuthenticated) {
-      void navigate('/admin')
-    }
-  }, [pageProps.path])
 
   const InjectPopups: React.FC<{
     pageProps: PageProps
@@ -96,20 +83,6 @@ export const GatsbyPageWrapper: React.FC<PageWrapperProps> = ({
 
     return <>{children}</>
   }
-
-  // if (isOnAdminPage) {
-  //   return (
-  //     <SnekFinder>
-  //       <Wrapper />
-  //     </SnekFinder>
-  //   )
-  // }
-
-  console.log(pageProps, {
-    isAdminOrLogin,
-    isAdminLogin,
-    isAdmin
-  })
 
   return (
     <>
