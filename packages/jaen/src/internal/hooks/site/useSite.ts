@@ -1,5 +1,5 @@
 import deepmerge from 'deepmerge'
-import {deepmergeArrayIdMerge} from 'packages/jaen/src/utils/deepmerge.js'
+import {deepmergeArrayIdMerge} from '../../../utils/deepmerge.js'
 import {useAppSelector} from '../../redux/index.js'
 import {useAdminStaticQuery} from '../useAdminStaticQuery.js'
 
