@@ -3,6 +3,7 @@ import {ComponentMeta, Story} from '@storybook/react'
 import React from 'react'
 import {connectBlock} from '../../connectors/connectBlock.js'
 import {withJaenMock} from '../../withJaenMock.js'
+import {ImageField} from '../ImageField/ImageField.js'
 import {TextField} from '../TextField/TextField.js'
 import {SectionField} from './SectionField.js'
 export default {
@@ -76,6 +77,9 @@ const BoxBlock = connectBlock(
 const FieldsBlock = connectBlock(
   () => (
     <Box w="sm" borderWidth="1px" borderRadius="lg" overflow="hidden" p="4">
+      <Box h="sm">
+        <ImageField name="image" label="Image" defaultValue={undefined} />
+      </Box>
       <TextField name="tf" defaultValue="sample value" label="Important Text" />
     </Box>
   ),
