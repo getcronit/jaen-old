@@ -1,3 +1,4 @@
+import {ChevronLeftIcon} from '@chakra-ui/icons'
 import {
   Avatar,
   AvatarGroup,
@@ -5,9 +6,12 @@ import {
   Flex,
   Heading,
   HStack,
+  Link,
   Stack,
   Text
 } from '@chakra-ui/react'
+import {navigate} from 'gatsby'
+
 import {useAuth} from '../../../hooks/auth/useAuth.js'
 import {withRedux} from '../../../redux/index.js'
 import {JaenFullLogoWhite} from '../../atoms/icons/JaenLogo/JaenLogo.js'
@@ -21,7 +25,7 @@ export const LoginPage: React.FC<LoginPageProps> = withRedux(() => {
   return (
     <Flex
       w="100%"
-      minH="100vh"
+      h="100vh"
       bgGradient={{
         lg: 'linear(to-r, pink.500 50%, white 50%)'
       }}>
@@ -75,7 +79,7 @@ export const LoginPage: React.FC<LoginPageProps> = withRedux(() => {
           justifyContent="center"
           alignItems="center"
           align="center">
-          <Box py="48" mx="auto" maxW="md" w="full">
+          <Stack mx="4" maxW="md" w="full" spacing={8}>
             <LoginForm
               onSubmit={async data => {
                 const res = await login(
@@ -97,7 +101,18 @@ export const LoginPage: React.FC<LoginPageProps> = withRedux(() => {
                 demoLogin()
               }}
             />
-          </Box>
+            <Link
+              display="flex"
+              alignItems="center"
+              onClick={() => {
+                void navigate('/')
+              }}>
+              <ChevronLeftIcon />{' '}
+              <Text as="span" fontWeight="medium">
+                Back to site
+              </Text>
+            </Link>
+          </Stack>
         </Flex>
       </Flex>
     </Flex>
