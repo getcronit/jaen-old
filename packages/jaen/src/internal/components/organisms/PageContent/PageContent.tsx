@@ -54,10 +54,6 @@ export const PageContent = (props: PageContentProps) => {
     props.values
   )
 
-  React.useEffect(() => {
-    setDefaultValues(props.values)
-  }, [props.values])
-
   const {
     register,
     reset,
@@ -68,6 +64,11 @@ export const PageContent = (props: PageContentProps) => {
   } = useForm<ContentValues>({
     defaultValues
   })
+
+  React.useEffect(() => {
+    setDefaultValues(props.values)
+    reset(props.values)
+  }, [props.values])
 
   const finder = useSnekFinder({
     mode: 'selector',
