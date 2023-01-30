@@ -101,13 +101,15 @@ export const AdminToolbar = ({
         <HStack flex="1" spacing="2">
           {isOnJaenAdmin ? <ChevronLeftIcon /> : <ChevronRightIcon />}
 
-          <JaenLogo boxSize={8} color="white" />
+          <JaenLogo w="10" h="full" color="white" />
 
           <Text
+            textAlign="left"
             display={{
               base: 'none',
               lg: 'block'
             }}
+            minW="24"
             fontWeight="bold"
             fontFamily="monospace">
             {isOnJaenAdmin ? 'Jaen Site' : 'Jaen Admin'}{' '}
