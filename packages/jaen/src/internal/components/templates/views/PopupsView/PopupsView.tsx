@@ -43,7 +43,6 @@ export const PopupCard: React.FC<PopupCardProps> = ({
       borderRadius="20px"
       bg={boxBg}
       p="20px"
-      h="345px"
       w={{base: '315px', md: '345px'}}
       alignItems="center"
       direction="column">
