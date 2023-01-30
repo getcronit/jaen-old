@@ -1,6 +1,6 @@
 import {useCallback} from 'react'
 import {useModals} from '../../../context/Modals/index.js'
-import {resetState} from '../../../redux/index.js'
+import {resetState, store} from '../../../redux/index.js'
 
 export function useDiscard() {
   const {confirm, toast} = useModals()
@@ -16,7 +16,10 @@ export function useDiscard() {
       return
     }
 
-    resetState()
+    // Wipe out all changes except for auth
+    resetState({
+      auth: store.getState().auth
+    })
 
     toast({
       title: 'Changes discarded',

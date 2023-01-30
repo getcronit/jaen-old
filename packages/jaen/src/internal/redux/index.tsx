@@ -50,6 +50,7 @@ const rootReducer = (state: any, action: any) => {
 
     const payload: {
       site?: typeof siteInitialState
+      auth?: typeof authInitialState
       page?: typeof pageInitialState
       popup?: typeof popupInitialState
       widget?: typeof widgetInitialState
@@ -58,7 +59,7 @@ const rootReducer = (state: any, action: any) => {
     console.log('payload', payload)
 
     return {
-      auth: authInitialState,
+      auth: deepmerge(authInitialState, payload.auth || {}),
       site: deepmerge(siteInitialState, payload.site || {}),
       page: deepmerge(pageInitialState, payload.page || {}),
       status: statusInitialState,

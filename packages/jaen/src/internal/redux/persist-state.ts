@@ -24,7 +24,6 @@ export default <RootState extends {}>(persistKey: string) => {
         if (obj && typeof obj === 'object') {
           keysToRemove.forEach(key => {
             if (key in obj) {
-              console.log('deleting', key)
               delete obj[key]
             }
           })
