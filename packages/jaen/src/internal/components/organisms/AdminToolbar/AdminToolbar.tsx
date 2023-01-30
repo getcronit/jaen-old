@@ -105,10 +105,6 @@ export const AdminToolbar = ({
 
           <Text
             textAlign="left"
-            display={{
-              base: 'none',
-              lg: 'block'
-            }}
             minW="24"
             fontWeight="bold"
             fontFamily="monospace">

@@ -13,17 +13,26 @@ export interface ActionBarProps {}
 
 export const ActionBar: React.FC<ActionBarProps> = () => {
   return (
-    <HStack color="gray.500" w="full" justifyItems="start">
-      <PageManagerProvider>
-        <PageNavigator />
-      </PageManagerProvider>
+    <>
+      <HStack
+        color="gray.500"
+        w="full"
+        justifyItems="start"
+        display={{
+          base: 'none',
+          md: 'flex'
+        }}>
+        <PageManagerProvider>
+          <PageNavigator />
+        </PageManagerProvider>
 
-      <ButtonGroup isAttached variant="solid" size="sm">
-        <EditActionButton />
-        <DiscardActionButton />
-        <SaveDraftActionButton />
-        <PublishActionButton />
-      </ButtonGroup>
-    </HStack>
+        <ButtonGroup isAttached variant="solid" size="sm">
+          <EditActionButton />
+          <DiscardActionButton />
+          <SaveDraftActionButton />
+          <PublishActionButton />
+        </ButtonGroup>
+      </HStack>
+    </>
   )
 }
