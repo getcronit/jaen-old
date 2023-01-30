@@ -363,11 +363,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({data, onUpdate}) => {
           <FieldGroup mt="8">
             <HStack width="full">
               <ButtonGroup isDisabled={disabled}>
-                <Button
-                  type="submit"
-                  mr="4"
-                  colorScheme="blue"
-                  isLoading={isSubmitting}>
+                <Button type="submit" mr="4" isLoading={isSubmitting}>
                   Save Changes
                 </Button>
                 <Button variant="outline" onClick={onReset}>
