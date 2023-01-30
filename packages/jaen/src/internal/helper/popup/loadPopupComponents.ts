@@ -18,7 +18,7 @@ export const loadPopupComponents = async (
 
   for (const {relativePath} of jaenPopup.nodes) {
     const Popup = await popupLoader(relativePath)
-    if (Notification) {
+    if (Popup) {
       console.log(`Popup`, allJaenPopup, relativePath)
 
       const popup = allJaenPopup.nodes.find(
