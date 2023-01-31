@@ -1,10 +1,11 @@
-import {Box, Flex} from '@chakra-ui/react'
+import {Box} from '@chakra-ui/react'
 import {NewsSlideProvider} from '../../../context/NewsSlideContext.js'
 import {NewsSlide} from '../../molecules/index.js'
-import {AdminToolbar} from '../../organisms/AdminToolbar/AdminToolbar.js'
+import {AdminToolbar} from '../../organisms/index.js'
 
 export interface AdminShellProps {
   beforeAdminShell?: React.ReactNode
+  contentOffset?: string | number
   children: React.ReactNode
   renderChildrenAsIframe?: boolean
   withoutAdminToolbarShadow?: boolean
@@ -53,40 +54,43 @@ export const AdminShell: React.FC<AdminShellProps> = props => {
   //         props.children
   //       )}
   //     </Box>
-  //   </Flex>
-  // )
+
+  const marginTop = props.contentOffset ? `calc(${props.contentOffset})` : 14
+
+  const contentHeight = `calc(100% - ${
+    props.contentOffset || 'var(--chakra-sizes-14)'
+  })`
 
   return (
-    <Flex flexDir="column" h="100vh" position="relative">
+    <>
       <NewsSlideProvider>
-        <Box zIndex={2}>
+        <Box pos="fixed" top="0" w="full" zIndex={2}>
           <AdminToolbar withoutShadow={props.withoutAdminToolbarShadow} />
           {props.beforeAdminShell}
         </Box>
 
-        <Flex
-          zIndex={1}
-          id="__jaen_admin_shell"
-          flex="1"
-          overflowY="auto"
-          sx={{
-            '&::-webkit-scrollbar': {
-              width: '6px',
-              height: '6px'
-            },
-            '&::-webkit-scrollbar-track': {
-              background: 'transparent'
-            },
-            '&::-webkit-scrollbar-thumb': {
-              background: 'gray.300',
-              borderRadius: '3px'
-            }
-          }}>
-          <NewsSlide zIndex={2} />
-
-          {props.children}
-        </Flex>
+        <Box mt={marginTop} h={contentHeight} pos="relative">
+          <NewsSlide
+            top="0"
+            right="0"
+            mt={marginTop}
+            h={contentHeight}
+            pos="fixed"
+            zIndex={1}
+          />
+          <Box
+            zIndex={0}
+            pos="absolute"
+            top="0"
+            bottom="0"
+            left="0"
+            right="0"
+            w="100%"
+            h="100%">
+            {props.children}
+          </Box>
+        </Box>
       </NewsSlideProvider>
-    </Flex>
+    </>
   )
 }

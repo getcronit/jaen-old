@@ -20,7 +20,8 @@ export const AdminSecondaryToolbar: React.FC<AdminSecondaryToolbarProps> = ({
       px={{base: 4}}
       boxShadow="md"
       borderTop="1px"
-      borderTopColor="gray.200">
+      borderTopColor="gray.200"
+      bg="white">
       <HStack>
         <IconButton
           aria-label="Open sidebar"

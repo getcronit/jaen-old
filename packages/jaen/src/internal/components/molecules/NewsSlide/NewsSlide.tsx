@@ -24,15 +24,14 @@ export const NewsSlide: React.FC<NewsSlideProps> = ({...flexProps}) => {
 
   return (
     <Flex
-      {...flexProps}
-      pos="fixed"
-      w="full"
       h="full"
+      w="full"
       flexDir="row-reverse"
       bg={isOpen ? 'rgba(0,0,0,0.3)' : 'transparent'}
       pointerEvents={isOpen ? undefined : 'none'}
       cursor="default"
-      onClick={closeIfNotRefHandler}>
+      onClick={closeIfNotRefHandler}
+      {...flexProps}>
       <SlideFade offsetY={0} in={isOpen}>
         <Stack
           borderY="1px"

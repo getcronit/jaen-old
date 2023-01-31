@@ -40,6 +40,7 @@ const AdminPage: React.FC<AdminPageProps> = withRedux(
 
     return (
       <AdminShell
+        contentOffset="var(--chakra-sizes-14) * 2"
         withoutAdminToolbarShadow
         beforeAdminShell={
           <AdminSecondaryToolbar
@@ -148,6 +149,8 @@ export default withAdminPageWrapper(({routes, items}) => {
 
   const onNavigate = React.useCallback((path: string) => {
     routerNavigate(path)
+
+    window.scrollTo(0, 0)
   }, [])
 
   const {isLoading, isAuthenticated} = useAuth()
@@ -156,6 +159,8 @@ export default withAdminPageWrapper(({routes, items}) => {
     if (!isLoading && !isAuthenticated) {
       void navigate('/admin/login')
     }
+
+    window.scrollTo(0, 0)
   }, [isLoading, isAuthenticated])
 
   console.log('isLoading', isLoading)

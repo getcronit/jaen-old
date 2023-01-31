@@ -32,6 +32,27 @@ const theme = extendTheme(
           pointerEvents: 'none',
           position: 'absolute',
           top: 0
+        },
+        'html, body, #root, #___gatsby, #gatsby-focus-wrapper': {
+          height: '100%',
+          width: '100%',
+          margin: 0,
+          display: 'block',
+
+          // 'overscroll-behavior-x': 'none',
+          '&::-webkit-scrollbar': {
+            width: '16px',
+            height: '16px'
+          },
+          '&::-webkit-scrollbar-corner, &::-webkit-scrollbar-track': {
+            background: 'rgb(240, 241, 244)'
+          },
+          '&::-webkit-scrollbar-thumb': {
+            background: 'rgba(105, 112, 125, 0.5)',
+            backgroundClip: 'content-box',
+            borderRadius: '16px',
+            border: '4px solid rgb(240, 241, 244)'
+          }
         }
       }
     },
