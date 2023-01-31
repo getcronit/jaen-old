@@ -11,8 +11,13 @@ export const useAdminStaticQuery = () => {
         }
         jaenInternal {
           finderUrl
+          migrationHistory {
+            createdAt
+            fileUrl
+          }
         }
         allJaenPage {
+          totalCount
           nodes {
             ...JaenPageData
             parent {
@@ -46,6 +51,7 @@ export const useAdminStaticQuery = () => {
           }
         }
         allJaenPopup {
+          totalCount
           nodes {
             id
             active
@@ -60,7 +66,9 @@ export const useAdminStaticQuery = () => {
         siteMetadata: {}
       },
       jaenInternal: {
-        finderUrl: null
+        finderUrl: null,
+        migrationHistory: [],
+        widgets: []
       },
       allJaenPage: {
         nodes: []

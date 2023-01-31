@@ -1,7 +1,7 @@
 import {
-  Badge,
   Button,
   ButtonProps,
+  Circle,
   Icon,
   IconButton,
   useBreakpointValue
@@ -11,6 +11,7 @@ import {BiSave} from 'react-icons/bi'
 
 import {useModals} from '../../../context/Modals/ModalContext.js'
 import {useSaveDraft} from '../../../hooks/draft/useSaveDraft.js'
+import {useHasChanges} from '../../../hooks/useHasChanges.js'
 
 export interface SaveDraftActionButtonProps {}
 
@@ -26,6 +27,8 @@ export const SaveDraftActionButton: React.FC<SaveDraftActionButtonProps> =
     const {toast} = useModals()
 
     const {isSaving, isSaved, saveDraft} = useSaveDraft()
+
+    const hasChanges = useHasChanges()
 
     useEffect(() => {
       if (isSaved) {
@@ -48,7 +51,13 @@ export const SaveDraftActionButton: React.FC<SaveDraftActionButtonProps> =
       return (
         <IconButton
           borderRadius="full"
-          icon={<Icon as={BiSave} boxSize="5" />}
+          icon={
+            <Icon
+              as={BiSave}
+              boxSize="5"
+              color={hasChanges ? 'orange.200' : 'white'}
+            />
+          }
           aria-label="Save draft"
           {...saveProps}
         />
@@ -59,7 +68,7 @@ export const SaveDraftActionButton: React.FC<SaveDraftActionButtonProps> =
       <Button
         borderRadius="full"
         leftIcon={<Icon as={BiSave} boxSize="5" />}
-        rightIcon={<Badge rounded="full">1</Badge>}
+        rightIcon={hasChanges ? <Circle size="4" bg="orange.200" /> : undefined}
         {...saveProps}>
         Save draft
       </Button>

@@ -37,6 +37,10 @@ export class JaenData {
   internal?: {
     site: ISite
     finderUrl?: string
+    widgets: Array<{
+      name: string
+      data: object
+    }>
     migrationHistory: RemoteFileMigration[]
   }
 
@@ -65,7 +69,8 @@ export class JaenData {
     this.popups = this.readJSONFile('popups')
     this.internal = this.readJSONFile('internal', {
       site: {},
-      migrationHistory: []
+      migrationHistory: [],
+      widgets: []
     })
   }
 

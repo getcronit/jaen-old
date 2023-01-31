@@ -215,9 +215,15 @@ export const createSchemaCustomization: GatsbyNode['onCreateWebpackConfig'] = ({
       data: JSON
     }
 
+    type RemoteFileMigration {
+      createdAt: Date!
+      fileUrl: String!
+    }
+
     type JaenInternal implements Node {
       finderUrl: String
-      widgets: [JaenWidget!]
+      widgets: [JaenWidget!]!
+      migrationHistory: [RemoteFileMigration!]!
     }
 
     type JaenPopup implements Node {
@@ -373,7 +379,11 @@ export const sourceNodes: GatsbyNode['onCreateWebpackConfig'] = async ({
 }) => {
   const {createNode} = actions
 
+  JaenSource.jaenData.read()
+
   const internalData = JaenSource.jaenData.internal || {}
+
+  console.log(`internalData`, internalData)
 
   const internalNode = {
     ...internalData,

@@ -4,12 +4,14 @@ import {
   ButtonGroup,
   Center,
   Divider,
+  Flex,
   FormControl,
   FormErrorMessage,
   FormHelperText,
   FormLabel,
   Heading,
   HStack,
+  Icon,
   Image,
   Input,
   Stack,
@@ -23,8 +25,13 @@ import {
 import {useSnekFinder} from '@jaenjs/snek-finder'
 import React from 'react'
 import {Controller, useForm} from 'react-hook-form'
+import {FaRocket} from 'react-icons/fa'
 import {HiCloudUpload} from 'react-icons/hi'
+
 import {ISite, SiteMetadata} from '../../../../../types.js'
+import {useStatistics} from '../../../../hooks/useStatistics.js'
+import {useStatus} from '../../../../hooks/useStatus.js'
+import {List, ListItem} from '../../../molecules/index.js'
 import {FieldGroup} from './FieldGroup.js'
 
 export interface FormDataType {
@@ -39,6 +46,9 @@ export interface SettingsViewProps {
 export const SettingsView: React.FC<SettingsViewProps> = ({data, onUpdate}) => {
   const toast = useToast()
   const [defaultValues, setDefaultValues] = React.useState(data)
+
+  const {migrations} = useStatistics()
+  const {isPublishing} = useStatus()
 
   React.useEffect(() => {
     setDefaultValues(data)
@@ -247,6 +257,41 @@ export const SettingsView: React.FC<SettingsViewProps> = ({data, onUpdate}) => {
                   />
                 </FormControl>
               </VStack>
+            </FieldGroup>
+
+            <FieldGroup title="Migrations">
+              <Flex direction="column" width="full">
+                <List
+                  spacing="12"
+                  overflowY="auto"
+                  h="xs"
+                  label="Previouse releases">
+                  {isPublishing && (
+                    <ListItem
+                      title="In progress"
+                      subTitle="Your website will be live in a few minutes."
+                      circleColor={useColorModeValue(
+                        'orange.500',
+                        'orange.300'
+                      )}
+                      icon={<Icon as={FaRocket} boxSize="6" />}
+                    />
+                  )}
+
+                  {migrations.map((m, i) => (
+                    <ListItem
+                      key={i}
+                      title="Published site"
+                      subTitle={`Published on ${new Date(
+                        m.createdAt
+                      ).toLocaleString()}`}
+                      circleColor={useColorModeValue('teal.500', 'teal.300')}
+                      icon={<Icon as={FaRocket} boxSize="6" />}
+                      isLastItem={i === migrations.length - 1}
+                    />
+                  ))}
+                </List>
+              </Flex>
             </FieldGroup>
 
             <FieldGroup title="Author">

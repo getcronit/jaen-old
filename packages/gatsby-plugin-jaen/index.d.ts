@@ -2,9 +2,22 @@ export declare const useAdminStaticQuery: <JaenSite, JaenPageNode>() => {
   site: JaenSite
   jaenInternal: {
     finderUrl: string | null
+    migrationHistory: Array<{
+      createdAt: string
+      fileUrl: string
+    }>
   }
   allJaenPage: {
+    totalCount: number
     nodes: JaenPageNode[]
+  }
+  allJaenPopup: {
+    totalCount: number
+    nodes: Array<{
+      id: string
+      active: boolean
+      jaenFields: object
+    }>
   }
   jaenTemplate: {
     nodes: Array<{

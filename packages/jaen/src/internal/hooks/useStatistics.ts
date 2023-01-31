@@ -1,27 +1,26 @@
 import {RemoteFileMigration} from '../../utils/JaenData.js'
+import {useAdminStaticQuery} from './useAdminStaticQuery.js'
 
 export interface IStatistics {
-  totalChanges: number
   totalPages: number
   totalPopups: number
   migrations: RemoteFileMigration[]
 }
 
 export const useStatistics = (): IStatistics => {
-  const migrations: RemoteFileMigration[] = [
-    {
-      createdAt: '2021-01-01T00:00:00.000Z',
-      fileUrl: 'https://example.com/2021-01-01T00:00:00.000Z.json'
-    }
-  ]
-  const sortedMigration = migrations.sort((a, b) =>
+  const {
+    jaenInternal: {migrationHistory},
+    allJaenPage,
+    allJaenPopup
+  } = useAdminStaticQuery()
+
+  const sortedMigration = migrationHistory.sort((a, b) =>
     new Date(a.createdAt) > new Date(b.createdAt) ? -1 : 1
-  )
+  ) as RemoteFileMigration[]
 
   return {
-    totalChanges: 0,
-    totalPages: 0,
-    totalPopups: 0,
+    totalPages: allJaenPage.totalCount,
+    totalPopups: allJaenPopup.totalCount,
     migrations: sortedMigration
   }
 }

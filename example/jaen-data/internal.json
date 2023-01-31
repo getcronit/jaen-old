@@ -1,0 +1,10 @@
+{
+  "site": {},
+  "migrationHistory": [
+    {
+      "createdAt": "2019-03-27T15:00:00.000Z",
+      "fileUrl": "https://s3.amazonaws.com/.../2019-03-27T15:00:00.000Z.json"
+    }
+  ],
+  "widgets": []
+}
