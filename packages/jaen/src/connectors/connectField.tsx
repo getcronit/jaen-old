@@ -1,11 +1,9 @@
-import {memo, useEffect} from 'react'
+import {memo} from 'react'
 import {SectionBlockContextType} from '../internal/context/SectionBlockContext.js'
-import {useAuth} from '../internal/hooks/auth/useAuth.js'
 import {useField} from '../internal/hooks/field/useField.js'
 import {usePopupField} from '../internal/hooks/field/usePopupField.js'
 import {ThemeProvider} from '../internal/styles/ChakraThemeProvider.js'
 import {IJaenConnection} from '../types.js'
-import {cleanObject} from '../utils/cleanObject.js'
 
 export interface JaenFieldProps<IDefaultValue> {
   name: string
@@ -52,54 +50,41 @@ export const connectField = <IValue, IDefaultValue = IValue, P = {}>(
     P & JaenFieldProps<IDefaultValue>,
     typeof options
   > = ({name, label, defaultValue, style, className, ...rest}) => {
-    const RegisterHelper: React.FC = () => {
-      let field: {
-        register: any
-        staticValue: any
-        value: any
-        isEditing: any
-        write: any
-        jaenPopupId?: string
-        jaenPageId?: string
-        SectionBlockContext?: SectionBlockContextType | undefined
-      }
-
-      try {
-        field = usePopupField<IValue>(name, options.fieldType)
-      } catch {
-        field = useField<IValue>(name, options.fieldType)
-      }
-
-      const {isAuthenticated} = useAuth()
-
-      useEffect(() => {
-        if (isAuthenticated) {
-          // clean up props to prevent circular reference, react items or other issues in redux store / local storage
-          field.register(cleanObject(rest))
-        }
-      }, [isAuthenticated])
-
-      return (
-        <ThemeProvider>
-          <Component
-            jaenField={{
-              name,
-              label,
-              defaultValue,
-              staticValue: field.staticValue,
-              value: field.value,
-              isEditing: field.isEditing,
-              onUpdateValue: field.write,
-              style,
-              className
-            }}
-            {...(rest as P)}
-          />
-        </ThemeProvider>
-      )
+    let field: {
+      register: any
+      staticValue: any
+      value: any
+      isEditing: any
+      write: any
+      jaenPopupId?: string
+      jaenPageId?: string
+      SectionBlockContext?: SectionBlockContextType | undefined
     }
 
-    return <RegisterHelper />
+    try {
+      field = usePopupField<IValue>(name, options.fieldType)
+    } catch {
+      field = useField<IValue>(name, options.fieldType)
+    }
+
+    return (
+      <ThemeProvider>
+        <Component
+          jaenField={{
+            name,
+            label,
+            defaultValue,
+            staticValue: field.staticValue,
+            value: field.value,
+            isEditing: field.isEditing,
+            onUpdateValue: field.write,
+            style,
+            className
+          }}
+          {...(rest as P)}
+        />
+      </ThemeProvider>
+    )
   }
 
   MyComp.options = options
