@@ -34,7 +34,10 @@ export default <RootState extends {}>(persistKey: string) => {
         }
       }
 
-      const cleanState = Object.assign({}, state)
+      const cleanState = JSON.parse(JSON.stringify(state))
+
+      console.log('state', state)
+      console.log('cleanState', cleanState)
 
       removeLoadingAndError(cleanState)
 
@@ -48,6 +51,7 @@ export default <RootState extends {}>(persistKey: string) => {
 
   const persistState = (store: Store) => {
     store.subscribe(() => {
+      console.log('persisting state')
       saveState(store.getState() as RootState)
     })
 
