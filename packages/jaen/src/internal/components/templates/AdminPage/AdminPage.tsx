@@ -155,19 +155,23 @@ export default withAdminPageWrapper(({routes, items}) => {
 
   const {isLoading, isAuthenticated} = useAuth()
 
+  const [isNavigating, setIsNavigating] = React.useState(false)
+
   React.useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      void navigate('/admin/login')
+      const nav = async () => {
+        setIsNavigating(true)
+        await navigate('/admin/login')
+        setIsNavigating(false)
+      }
+
+      void nav()
     }
 
     window.scrollTo(0, 0)
   }, [isLoading, isAuthenticated])
 
-  console.log('isLoading', isLoading)
-
-  if (isLoading || !isAuthenticated) {
-    return <LoadingPage />
-  }
+  const shouldRedirectToLogin = !isAuthenticated && !isLoading
 
   return (
     <SnekFinder>
@@ -175,12 +179,16 @@ export default withAdminPageWrapper(({routes, items}) => {
         <Routes>
           <Route
             element={
-              <AdminPage
-                items={items}
-                activePath={activePath}
-                onNavigate={onNavigate}>
-                <Outlet />
-              </AdminPage>
+              isNavigating || shouldRedirectToLogin ? (
+                <LoadingPage />
+              ) : (
+                <AdminPage
+                  items={items}
+                  activePath={activePath}
+                  onNavigate={onNavigate}>
+                  <Outlet />
+                </AdminPage>
+              )
             }>
             <Route
               path="/"

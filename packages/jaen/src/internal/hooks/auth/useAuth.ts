@@ -57,7 +57,7 @@ export const useAuth = () => {
 
   return {
     ...auth,
-    isLoading: !isReady && auth.isLoading,
+    isLoading: !isReady || auth.isLoading,
     login,
     demoLogin,
     logout
