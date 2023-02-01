@@ -65,10 +65,12 @@ export const PageContent = (props: PageContentProps) => {
     defaultValues
   })
 
-  React.useEffect(() => {
-    setDefaultValues(props.values)
-    reset(props.values)
-  }, [props.values])
+  // React.useEffect(() => {
+  //   setDefaultValues(props.values)
+  //   reset(props.values)
+
+  //   console.log('PageContent: props.values changed', props.values)
+  // }, [props.values])
 
   const finder = useSnekFinder({
     mode: 'selector',
