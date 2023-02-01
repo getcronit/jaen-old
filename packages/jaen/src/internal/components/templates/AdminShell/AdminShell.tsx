@@ -57,10 +57,6 @@ export const AdminShell: React.FC<AdminShellProps> = props => {
 
   const marginTop = props.contentOffset ? `calc(${props.contentOffset})` : 14
 
-  const contentHeight = `calc(100% - ${
-    props.contentOffset || 'var(--chakra-sizes-14)'
-  })`
-
   return (
     <>
       <NewsSlideProvider>
@@ -69,24 +65,9 @@ export const AdminShell: React.FC<AdminShellProps> = props => {
           {props.beforeAdminShell}
         </Box>
 
-        <Box mt={marginTop} h={contentHeight} pos="relative">
-          <NewsSlide
-            top="0"
-            right="0"
-            mt={marginTop}
-            h={contentHeight}
-            pos="fixed"
-            zIndex={1}
-          />
-          <Box
-            zIndex={0}
-            pos="absolute"
-            top="0"
-            bottom="0"
-            left="0"
-            right="0"
-            w="100%"
-            h="100%">
+        <Box mt={marginTop} pos="relative">
+          <NewsSlide top="0" right="0" mt={marginTop} pos="fixed" zIndex={1} />
+          <Box zIndex={0} position="relative">
             {props.children}
           </Box>
         </Box>

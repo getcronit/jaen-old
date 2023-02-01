@@ -220,7 +220,8 @@ export const PagesView: React.FC<PagesViewProps> = () => {
         direction={{
           base: 'column',
           md: 'row'
-        }}>
+        }}
+        justifyContent="center">
         <PageTree
           px="2"
           borderRadius="md"

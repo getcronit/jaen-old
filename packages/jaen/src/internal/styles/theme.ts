@@ -33,9 +33,9 @@ const theme = extendTheme(
           position: 'absolute',
           top: 0
         },
-        'html, body, #root, #___gatsby, #gatsby-focus-wrapper': {
-          height: '100%',
-          width: '100%',
+        'html, body, #root, #___gatsby': {
+          // height: '100%',
+          // width: '100%',
           margin: 0,
           display: 'block',
 
