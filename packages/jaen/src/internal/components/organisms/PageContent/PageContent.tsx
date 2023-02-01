@@ -124,7 +124,7 @@ export const PageContent = (props: PageContentProps) => {
           width: '100%'
         }}>
         <Stack boxSize="full" spacing="8">
-          <Stack flexGrow="1" overflowY="auto" spacing="4">
+          <Stack flexGrow="1" overflowY="auto" spacing="6">
             <HStack mb="6">
               {props.template && (
                 <Tag my={4} size="md" variant="outline" colorScheme="teal">

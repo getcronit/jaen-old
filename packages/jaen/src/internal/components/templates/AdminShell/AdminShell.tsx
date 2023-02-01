@@ -66,7 +66,20 @@ export const AdminShell: React.FC<AdminShellProps> = props => {
         </Box>
 
         <Box mt={marginTop} pos="relative">
-          <NewsSlide top="0" right="0" mt={marginTop} pos="fixed" zIndex={1} />
+          <NewsSlide
+            top="0"
+            right="0"
+            mt={marginTop}
+            pos="fixed"
+            zIndex={1}
+            h={
+              props.contentOffset
+                ? `calc(100vh - ${
+                    props.contentOffset || 'var(--chakra-sizes-14)'
+                  })`
+                : undefined
+            }
+          />
           <Box zIndex={0} position="relative">
             {props.children}
           </Box>

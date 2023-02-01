@@ -129,15 +129,7 @@ export const PopupsView: React.FC<PopupsViewProps> = ({
   }
 
   return (
-    <ViewLayout
-      px={{
-        base: 2,
-        md: 4
-      }}
-      py={{
-        base: 4,
-        md: 8
-      }}>
+    <ViewLayout heading="Popups">
       {isLoading ? (
         <Text>Loading...</Text>
       ) : (

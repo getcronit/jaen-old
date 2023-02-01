@@ -193,35 +193,17 @@ export const PagesView: React.FC<PagesViewProps> = () => {
   }, [selectedJaenPage?.path])
 
   return (
-    <ViewLayout
-      px={{
-        base: 2,
-        md: 4
-      }}
-      py={{
-        base: 4,
-        md: 8
-      }}>
+    <ViewLayout heading="Pages">
       <Stack
-        rounded="lg"
-        px={{
-          base: 2,
-          md: 4
-        }}
-        py={{
-          base: 4,
-          md: 8
-        }}
-        bg="white"
         shouldWrapChildren
         divider={<StackDivider />}
         spacing="4"
+        px={{base: '4', md: '10'}}
         h="full"
         direction={{
           base: 'column',
           md: 'row'
-        }}
-        justifyContent="center">
+        }}>
         <PageTree
           px="2"
           borderRadius="md"

@@ -3,13 +3,11 @@ import {
   Button,
   ButtonGroup,
   Center,
-  Divider,
   Flex,
   FormControl,
   FormErrorMessage,
   FormHelperText,
   FormLabel,
-  Heading,
   HStack,
   Icon,
   Image,
@@ -32,6 +30,7 @@ import {ISite, SiteMetadata} from '../../../../../types.js'
 import {useStatistics} from '../../../../hooks/useStatistics.js'
 import {useStatus} from '../../../../hooks/useStatus.js'
 import {List, ListItem} from '../../../molecules/index.js'
+import {ViewLayout} from '../../../organisms/index.js'
 import {FieldGroup} from './FieldGroup.js'
 
 export interface FormDataType {
@@ -129,20 +128,14 @@ export const SettingsView: React.FC<SettingsViewProps> = ({data, onUpdate}) => {
   return (
     <>
       {finder.finderElement}
-      <Box py="8" maxWidth="4xl" mx="auto">
+      <ViewLayout heading="Settings">
         <form
           onSubmit={data => {
             void handleSubmit(onSubmit)(data)
           }}>
-          <Heading size="lg" as="h1" paddingBottom="4">
-            Settings
-          </Heading>
-          <Divider />
           <Stack
-            h="60vh"
             spacing="4"
             divider={<StackDivider />}
-            overflowY="scroll"
             px={{base: '4', md: '10'}}>
             <FieldGroup title="Site Info">
               <VStack width="full" spacing="6">
@@ -418,7 +411,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({data, onUpdate}) => {
             </HStack>
           </FieldGroup>
         </form>
-      </Box>
+      </ViewLayout>
     </>
   )
 }
