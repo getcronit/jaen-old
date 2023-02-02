@@ -4,7 +4,14 @@ export const useWidgetStaticQuery = () => {
   let staticData
 
   try {
-    staticData = useStaticQuery(graphql`
+    staticData = useStaticQuery<{
+      jaenInternal: {
+        widgets: Array<{
+          name: string
+          data: object
+        }>
+      }
+    }>(graphql`
       query WidgetStaticQuery {
         jaenInternal {
           widgets {

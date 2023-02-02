@@ -1,10 +1,43 @@
 import {graphql, useStaticQuery} from 'gatsby'
 
-export const useAdminStaticQuery = () => {
+export const useAdminStaticQuery = <JaenSiteMetadata, JaenPageNode>() => {
   let staticData
 
   try {
-    staticData = useStaticQuery(graphql`
+    staticData = useStaticQuery<{
+      jaenInternal: {
+        finderUrl: string | null
+        migrationHistory: Array<{
+          createdAt: string
+          fileUrl: string
+        }>
+        siteMetadata: Partial<JaenSiteMetadata>
+      }
+      allJaenPage: {
+        totalCount: number
+        nodes: JaenPageNode[]
+      }
+      allJaenPopup: {
+        totalCount: number
+        nodes: Array<{
+          id: string
+          active: boolean
+          jaenFields: object
+        }>
+      }
+      jaenTemplate: {
+        nodes: Array<{
+          name: string
+          relativePath: string
+        }>
+      }
+      jaenView: {
+        nodes: Array<{
+          name: string
+          relativePath: string
+        }>
+      }
+    }>(graphql`
       query AdminStaticQuery {
         jaenInternal {
           finderUrl
