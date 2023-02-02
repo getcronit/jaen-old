@@ -10,7 +10,8 @@ import {
   Image,
   Switch,
   Text,
-  Wrap
+  Wrap,
+  WrapItem
 } from '@chakra-ui/react'
 import {LoadedPopupComponent} from 'packages/jaen/src/internal/helper/popup/loadPopupComponents.js'
 import {useState} from 'react'
@@ -40,6 +41,8 @@ export const PopupCard: React.FC<PopupCardProps> = ({
   const iconColor = 'pink.500'
   return (
     <Flex
+      shadow="base"
+      rounded="lg"
       borderRadius="20px"
       bg={boxBg}
       p="20px"
@@ -133,21 +136,23 @@ export const PopupsView: React.FC<PopupsViewProps> = ({
       {isLoading ? (
         <Text>Loading...</Text>
       ) : (
-        <Wrap>
+        <Wrap spacing="8" overflow="visible">
           {popups.map(popup => (
-            <PopupCard
-              key={popup.id}
-              title={popup.Component.options.label}
-              description={popup.Component.options.description}
-              imageURL={popup.Component.options.imageURL}
-              onEdit={() => {
-                onPopupEdit(popup)
-              }}
-              onEnableToggle={() => {
-                onPopupEnableToggle(popup)
-              }}
-              isEnabled={popup.isActive}
-            />
+            <WrapItem key={popup.id}>
+              <PopupCard
+                key={popup.id}
+                title={popup.Component.options.label}
+                description={popup.Component.options.description}
+                imageURL={popup.Component.options.imageURL}
+                onEdit={() => {
+                  onPopupEdit(popup)
+                }}
+                onEnableToggle={() => {
+                  onPopupEnableToggle(popup)
+                }}
+                isEnabled={popup.isActive}
+              />
+            </WrapItem>
           ))}
         </Wrap>
       )}

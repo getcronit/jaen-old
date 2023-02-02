@@ -66,9 +66,16 @@ export function ContextMenu<T extends HTMLElement = HTMLElement>(
         targetRef.current?.contains(e.target as any) ||
         e.target === targetRef.current
       ) {
+        // const node = e.target as HTMLElement
+
+        const x = e.clientX
+        const y = e.clientY
+
+        console.log('handleEventOpen', e, x, y)
+
         e.preventDefault()
         setIsOpen(true)
-        setPosition([e.pageX, e.pageY])
+        setPosition([x, y])
       } else {
         setIsOpen(false)
       }

@@ -65,7 +65,7 @@ export const AdminShell: React.FC<AdminShellProps> = props => {
           {props.beforeAdminShell}
         </Box>
 
-        <Box mt={marginTop} pos="relative">
+        <Box pt={marginTop} pos="relative">
           <NewsSlide
             top="0"
             right="0"
