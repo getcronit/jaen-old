@@ -9,7 +9,8 @@
     "watch": "tsc -w"
   },
   "peerDependencies": {
-    "gatsby": "^5"
+    "gatsby": "^5",
+    "@snek-at/jaen": "*"
   },
   "dependencies": {
     "gatsby-plugin-compile-es6-packages": "^2.1.1",
