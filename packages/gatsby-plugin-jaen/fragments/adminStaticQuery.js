@@ -6,14 +6,14 @@ export const useAdminStaticQuery = () => {
   try {
     staticData = useStaticQuery(graphql`
       query AdminStaticQuery {
-        site {
-          siteMetadata
-        }
         jaenInternal {
           finderUrl
           migrationHistory {
             createdAt
             fileUrl
+          }
+          siteMetadata {
+            ...JaenSiteMetadataData
           }
         }
         allJaenPage {

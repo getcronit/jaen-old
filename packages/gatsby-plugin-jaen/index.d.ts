@@ -1,11 +1,14 @@
-export declare const useAdminStaticQuery: <JaenSite, JaenPageNode>() => {
-  site: JaenSite
+export declare const useAdminStaticQuery: <
+  JaenSiteMetadata,
+  JaenPageNode
+>() => {
   jaenInternal: {
     finderUrl: string | null
     migrationHistory: Array<{
       createdAt: string
       fileUrl: string
     }>
+    siteMetadata: Partial<JaenSiteMetadata>
   }
   allJaenPage: {
     totalCount: number
@@ -57,3 +60,5 @@ export declare const useWidgetStaticQuery: () => {
     }>
   }
 }
+
+export {Head} from './dist/Head'

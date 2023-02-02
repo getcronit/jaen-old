@@ -206,10 +206,6 @@ export const createSchemaCustomization: GatsbyNode['onCreateWebpackConfig'] = ({
   })
 
   actions.createTypes(`
-    type Site implements Node {
-      siteMetadata: JSON
-    }
-
     type JaenWidget {
       name: String!
       data: JSON
@@ -224,6 +220,7 @@ export const createSchemaCustomization: GatsbyNode['onCreateWebpackConfig'] = ({
       finderUrl: String
       widgets: [JaenWidget!]!
       migrationHistory: [RemoteFileMigration!]!
+      siteMetadata: JaenSiteMetadata
     }
 
     type JaenPopup implements Node {
@@ -280,6 +277,31 @@ export const createSchemaCustomization: GatsbyNode['onCreateWebpackConfig'] = ({
       canonical: String
       datePublished: String
       isBlogPost: Boolean
+    }
+
+    type JaenSiteMetadata {
+      siteUrl: String
+      title: String
+      description: String
+      image: String
+      author: JaenSiteMetadataAuthor
+      organization: JaenSiteMetadataOrganization
+      social: JaenSiteMetadataSocial
+    }
+    
+    type JaenSiteMetadataAuthor {
+      name: String
+    }
+
+    type JaenSiteMetadataOrganization {
+      name: String
+      url: String
+      logo: String
+    }
+
+    type JaenSiteMetadataSocial {
+      twitter: String
+      fbAppID: String
     }
   `)
 }

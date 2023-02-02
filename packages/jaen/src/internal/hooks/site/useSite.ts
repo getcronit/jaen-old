@@ -8,9 +8,13 @@ export const useSite = () => {
 
   const site = useAppSelector(state => state.site)
 
-  const mergedSite = deepmerge(staticData.site, site || {}, {
-    arrayMerge: deepmergeArrayIdMerge
-  })
+  const mergedSite = deepmerge(
+    {siteMetadata: staticData.jaenInternal.siteMetadata},
+    site || {},
+    {
+      arrayMerge: deepmergeArrayIdMerge
+    }
+  )
 
   return mergedSite
 }
