@@ -15,7 +15,8 @@ import {
   Tag,
   TagLabel,
   Text,
-  Textarea
+  Textarea,
+  theme
 } from '@chakra-ui/react'
 import {useSnekFinder} from '@jaenjs/snek-finder'
 import {HiCloudUpload} from '@react-icons/all-files/hi/HiCloudUpload'
@@ -116,7 +117,7 @@ export const PageContent = (props: PageContentProps) => {
 
   return (
     <>
-      <ThemeProvider>{finder.finderElement}</ThemeProvider>
+      <ThemeProvider theme={theme}>{finder.finderElement}</ThemeProvider>
 
       <form
         onSubmit={e => {
@@ -258,7 +259,7 @@ export const PageContent = (props: PageContentProps) => {
               </Checkbox>
             </FormControl>
           </Stack>
-          <ButtonGroup isDisabled={!isDirty} mt="8">
+          <ButtonGroup isDisabled={!isDirty} mt="8" size="lg">
             <Button isLoading={isSubmitting} type="submit">
               Save
             </Button>

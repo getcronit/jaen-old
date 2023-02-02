@@ -195,7 +195,6 @@ export const PagesView: React.FC<PagesViewProps> = () => {
   return (
     <ViewLayout heading="Pages">
       <Stack
-        shouldWrapChildren
         divider={<StackDivider />}
         spacing="4"
         px={{base: '4', md: '10'}}

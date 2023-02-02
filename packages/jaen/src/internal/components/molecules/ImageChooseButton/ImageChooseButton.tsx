@@ -1,7 +1,8 @@
-import {Button} from '@chakra-ui/react'
+import {Box, Button, theme} from '@chakra-ui/react'
 import {useSnekFinder} from '@jaenjs/snek-finder'
 import {BsCloudUpload} from 'react-icons/bs'
 import {withSnekFinder} from '../../../context/SnekFinder/withSnekFinder.js'
+import {ThemeProvider} from '../../../styles/ChakraThemeProvider.js'
 
 export interface ImageChooseButtonProps {
   onClick: (info: {src: string; alt?: string}) => void
@@ -21,7 +22,9 @@ export const ImageChooseButton: React.FC<ImageChooseButtonProps> =
 
     return (
       <>
-        {finder.finderElement}
+        <ThemeProvider theme={theme}>
+          <Box maxW="container.xl">{finder.finderElement}</Box>
+        </ThemeProvider>
         <Button
           leftIcon={<BsCloudUpload />}
           variant="jaenHighlightTooltip"

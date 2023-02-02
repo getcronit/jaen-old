@@ -72,13 +72,9 @@ export const AdminShell: React.FC<AdminShellProps> = props => {
             mt={marginTop}
             pos="fixed"
             zIndex={1}
-            h={
-              props.contentOffset
-                ? `calc(100vh - ${
-                    props.contentOffset || 'var(--chakra-sizes-14)'
-                  })`
-                : undefined
-            }
+            h={`calc(100vh - ${
+              props.contentOffset || 'var(--chakra-sizes-14)'
+            })`}
           />
           <Box zIndex={0} position="relative">
             {props.children}

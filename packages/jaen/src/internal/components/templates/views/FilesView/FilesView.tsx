@@ -1,4 +1,4 @@
-import {theme} from '@chakra-ui/react'
+import {Box, theme} from '@chakra-ui/react'
 import {useSnekFinder} from '@jaenjs/snek-finder'
 
 import {withSnekFinder} from '../../../../context/SnekFinder/withSnekFinder.js'
@@ -9,8 +9,10 @@ export const FilesView = withSnekFinder(() => {
   const finder = useSnekFinder({mode: 'browser'})
 
   return (
-    <ViewLayout heading="Files" h="80vh">
-      <ThemeProvider theme={theme}>{finder.finderElement}</ThemeProvider>
+    <ViewLayout heading="Files">
+      <ThemeProvider theme={theme}>
+        <Box h="60vh">{finder.finderElement}</Box>
+      </ThemeProvider>
     </ViewLayout>
   )
 })
