@@ -1,6 +1,6 @@
 import {GatsbyConfig as GatsbyConfigType} from 'gatsby'
 
-import {JaenSource} from '@snek-at/jaen/unstable-node'
+import {JaenSource} from 'jaen-utils'
 
 const GatsbyConfig: GatsbyConfigType = {
   jsxRuntime: 'automatic',

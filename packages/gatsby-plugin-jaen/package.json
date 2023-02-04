@@ -9,11 +9,11 @@
     "watch": "tsc -w"
   },
   "peerDependencies": {
-    "gatsby": "^5",
-    "@snek-at/jaen": "*"
+    "gatsby": "^5"
   },
   "dependencies": {
     "gatsby-plugin-compile-es6-packages": "^2.1.1",
-    "gatsby-plugin-nprogress": "^5.4.0"
+    "gatsby-plugin-nprogress": "^5.4.0",
+    "jaen-utils": "*"
   }
 }

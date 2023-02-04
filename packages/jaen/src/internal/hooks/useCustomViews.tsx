@@ -63,8 +63,6 @@ export const useCustomViews = () => {
     }
 
     void loadViews()
-
-    console.log('this loops')
   }, [staticData])
 
   return {

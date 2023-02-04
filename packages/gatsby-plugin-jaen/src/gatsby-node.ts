@@ -1,11 +1,6 @@
-import type {IJaenPage} from '@snek-at/jaen'
-import {
-  convertToSlug,
-  generatePageOriginPath,
-  JaenSource
-} from '@snek-at/jaen/unstable-node'
 import fs from 'fs'
 import {GatsbyNode, Node} from 'gatsby'
+import {convertToSlug, generatePageOriginPath, JaenSource} from 'jaen-utils'
 import path from 'path'
 
 export const onPreBootstrap: GatsbyNode['onPreBootstrap'] = async ({
@@ -93,7 +88,7 @@ export const createSchemaCustomization: GatsbyNode['onCreateWebpackConfig'] = ({
           source: {
             name: string
             jaenFiles: any[]
-            jaenFields: IJaenPage['jaenFields']
+            jaenFields: Record<string, any>
             headPtr: string
             tailPtr: string
           },
@@ -359,7 +354,7 @@ export const onCreatePage: GatsbyNode['onCreatePage'] = async ({
       const existingNode = getNode(jaenPageId)
 
       if (!existingNode) {
-        const jaenPage: IJaenPage = {
+        const jaenPage = {
           id: jaenPageId,
           slug: slugifiedPath,
           parent: null,

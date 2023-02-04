@@ -8,11 +8,13 @@
   "scripts": {
     "lint:fix": "yarn eslint packages/jaen/src/ --fix",
     "prettier:fix": "yarn prettier packages/jaen/src/ --write",
-    "format": "yarn prettier:fix && yarn lint:fix"
+    "format": "yarn prettier:fix && yarn lint:fix",
+    "build": "yarn workspace jaen-utils build && yarn workspace gatsby-plugin-jaen build && yarn workspace @snek-at/jaen build"
   },
   "workspaces": [
     "packages/jaen",
     "packages/gatsby-plugin-jaen",
+    "packages/jaen-utils",
     "example"
   ],
   "dependencies": {

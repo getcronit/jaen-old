@@ -1,4 +1,3 @@
-import {SiteMetadata} from '@snek-at/jaen'
 import {graphql, useStaticQuery} from 'gatsby'
 
 export const useSiteMetadata = () => {
@@ -7,7 +6,7 @@ export const useSiteMetadata = () => {
   try {
     staticData = useStaticQuery<{
       jaenInternal: {
-        siteMetadata?: SiteMetadata
+        siteMetadata?: Record<string, any>
       }
     }>(graphql`
       query {

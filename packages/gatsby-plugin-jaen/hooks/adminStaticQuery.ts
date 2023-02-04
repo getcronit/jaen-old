@@ -1,43 +1,43 @@
 import {graphql, useStaticQuery} from 'gatsby'
 
 export const useAdminStaticQuery = <JaenSiteMetadata, JaenPageNode>() => {
-  let staticData
+  let staticData: {
+    jaenInternal: {
+      finderUrl: string | null
+      migrationHistory: Array<{
+        createdAt: string
+        fileUrl: string
+      }>
+      siteMetadata: Partial<JaenSiteMetadata>
+    }
+    allJaenPage: {
+      totalCount: number
+      nodes: JaenPageNode[]
+    }
+    allJaenPopup: {
+      totalCount: number
+      nodes: Array<{
+        id: string
+        active: boolean
+        jaenFields: object
+      }>
+    }
+    jaenTemplate: {
+      nodes: Array<{
+        name: string
+        relativePath: string
+      }>
+    }
+    jaenView: {
+      nodes: Array<{
+        name: string
+        relativePath: string
+      }>
+    }
+  }
 
   try {
-    staticData = useStaticQuery<{
-      jaenInternal: {
-        finderUrl: string | null
-        migrationHistory: Array<{
-          createdAt: string
-          fileUrl: string
-        }>
-        siteMetadata: Partial<JaenSiteMetadata>
-      }
-      allJaenPage: {
-        totalCount: number
-        nodes: JaenPageNode[]
-      }
-      allJaenPopup: {
-        totalCount: number
-        nodes: Array<{
-          id: string
-          active: boolean
-          jaenFields: object
-        }>
-      }
-      jaenTemplate: {
-        nodes: Array<{
-          name: string
-          relativePath: string
-        }>
-      }
-      jaenView: {
-        nodes: Array<{
-          name: string
-          relativePath: string
-        }>
-      }
-    }>(graphql`
+    staticData = useStaticQuery<typeof staticData>(graphql`
       query AdminStaticQuery {
         jaenInternal {
           finderUrl
@@ -77,12 +77,6 @@ export const useAdminStaticQuery = <JaenSiteMetadata, JaenPageNode>() => {
             relativePath
           }
         }
-        jaenPopup: allFile(filter: {sourceInstanceName: {eq: "jaen-popups"}}) {
-          nodes {
-            name
-            relativePath
-          }
-        }
         allJaenPopup {
           totalCount
           nodes {
@@ -94,16 +88,15 @@ export const useAdminStaticQuery = <JaenSiteMetadata, JaenPageNode>() => {
       }
     `)
   } catch (e) {
+    console.log(e)
     staticData = {
-      site: {
-        siteMetadata: {}
-      },
       jaenInternal: {
         finderUrl: null,
         migrationHistory: [],
-        widgets: []
+        siteMetadata: {}
       },
       allJaenPage: {
+        totalCount: 0,
         nodes: []
       },
       jaenTemplate: {
@@ -112,10 +105,8 @@ export const useAdminStaticQuery = <JaenSiteMetadata, JaenPageNode>() => {
       jaenView: {
         nodes: []
       },
-      jaenNotification: {
-        nodes: []
-      },
-      allJaenNotification: {
+      allJaenPopup: {
+        totalCount: 0,
         nodes: []
       }
     }

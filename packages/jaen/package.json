@@ -91,6 +91,7 @@
     "gatsby-plugin-image": "^3.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "gatsby-plugin-jaen": "*"
+    "gatsby-plugin-jaen": "*",
+    "jaen-utils": "*"
   }
 }

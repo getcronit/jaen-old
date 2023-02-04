@@ -1,16 +1,15 @@
-import {IJaenPage} from '@snek-at/jaen'
 import {HeadProps} from 'gatsby'
+// import {useSiteMetadata} from 'gatsby-plugin-jaen/hooks/useSiteMetadata'
 import {getSchemaOrg} from './getSchemaOrg.js'
-import {useSiteMetadata} from './useSiteMetadata.js'
 
 // author, siteUrl, datePublished, defaultTitle, description, image, isBlogPost, organization, title, url
 
 export const Head: React.FC<
-  HeadProps<{page: IJaenPage | null}> & {
+  HeadProps<{page: Record<string, any> | null}> & {
     children?: React.ReactNode
   }
 > = props => {
-  const siteMetadata = useSiteMetadata()
+  const siteMetadata = {} as any // useSiteMetadata()
 
   const defaultTitle = props.location.pathname
 
