@@ -24,6 +24,7 @@ export const ActivationButton = (props: ActivationButtonProps) => {
   if (isClicked) {
     return (
       <HStack
+        zIndex={2147483647}
         mt={{
           md: 16,
           base: 24
@@ -93,7 +94,7 @@ export const ActivationButton = (props: ActivationButtonProps) => {
   return (
     <Tooltip hasArrow label="Manage site" placement="right">
       <JaenLogo
-        zIndex={9999}
+        zIndex={2147483647}
         cursor="pointer"
         boxSize="14"
         position="fixed"
