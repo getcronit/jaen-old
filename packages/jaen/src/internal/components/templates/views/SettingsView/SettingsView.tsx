@@ -60,7 +60,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({data, onUpdate}) => {
     handleSubmit,
     setValue,
     control,
-    formState: {errors, isSubmitting, isDirty, isValid}
+    formState: {errors, isSubmitting, isDirty}
   } = useForm<FormDataType>({
     defaultValues
   })
@@ -101,8 +101,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({data, onUpdate}) => {
       shouldDirty: true
     })
   }
-
-  const disabled = !isDirty || !isValid
 
   const onSubmit = (values: FormDataType) => {
     onUpdate(values)
@@ -252,7 +250,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({data, onUpdate}) => {
               </VStack>
             </FieldGroup>
 
-            <FieldGroup title="Migrations">
+            <FieldGroup title="Version history">
               <Flex direction="column" width="full">
                 <List
                   spacing="12"
@@ -400,7 +398,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({data, onUpdate}) => {
           </Stack>
           <FieldGroup mt="8">
             <HStack width="full">
-              <ButtonGroup isDisabled={disabled} size="lg">
+              <ButtonGroup isDisabled={!isDirty} size="lg">
                 <Button type="submit" mr="4" isLoading={isSubmitting}>
                   Save Changes
                 </Button>
