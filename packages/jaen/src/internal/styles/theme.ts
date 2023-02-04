@@ -11,7 +11,8 @@ const theme = extendTheme(
           // outlineOffset: '4px', // 'var(--chakra-space-1)',
           // 'outline-radius': '11px', // 'var(--chakra-radii-lg)',
           // zIndex: 'var(--chakra-zIndices-docked)'
-          position: 'relative'
+          position: 'relative',
+          zIndex: 'var(--chakra-zIndices-docked)'
         },
         [`.${CLASSNAMES.JAEN_HIGHLIGHT}:before`]: {
           content: '""',
@@ -21,10 +22,11 @@ const theme = extendTheme(
           right: 0,
           bottom: 0,
           zIndex: 'var(--chakra-zIndices-docked)',
-          outline: '2px solid var(--chakra-colors-pink-100)',
-          outlineOffset: '4px', // 'var(--chakra-space-1)',
-          borderRadius: '11px', // 'var(--chakra-radii-lg)'
+          border: '2px solid var(--chakra-colors-pink-100)',
+          // outlineOffset: '4px', // 'var(--chakra-space-1)',
+          // borderRadius: 'var(--chakra-radii-md)', //'11px', // 'var(--chakra-radii-lg)'
           pointerEvents: 'none'
+          // margin: '0.5em'
         },
         [`.${CLASSNAMES.JAEN_HIGHLIGHT_TOOLTIP}`]: {
           height: '100%',
