@@ -1,7 +1,7 @@
 import {
+  Badge,
   Button,
   ButtonProps,
-  Circle,
   Icon,
   IconButton,
   useBreakpointValue
@@ -68,7 +68,13 @@ export const SaveDraftActionButton: React.FC<SaveDraftActionButtonProps> =
       <Button
         borderRadius="full"
         leftIcon={<Icon as={BiSave} boxSize="5" />}
-        rightIcon={hasChanges ? <Circle size="4" bg="orange.200" /> : undefined}
+        rightIcon={
+          hasChanges ? (
+            <Badge size="4" bg="orange.200">
+              Changes
+            </Badge>
+          ) : undefined
+        }
         {...saveProps}>
         Save draft
       </Button>
