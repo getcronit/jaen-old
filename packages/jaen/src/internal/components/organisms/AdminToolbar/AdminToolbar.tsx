@@ -12,7 +12,8 @@ import {
   MenuItem,
   MenuList,
   StackProps,
-  Text
+  Text,
+  Tooltip
 } from '@chakra-ui/react'
 import {navigate} from 'gatsby'
 import {useEffect} from 'react'
@@ -117,13 +118,16 @@ export const AdminToolbar = ({
 
       <HStack>
         <Menu>
-          <MenuButton
-            as={IconButton}
-            aria-label="Help"
-            icon={<Icon as={IoHelpBuoySharp} boxSize="5" />}
-            variant="darkGhost"
-            fontSize="xl"
-          />
+          <Tooltip label="Need help?">
+            <MenuButton
+              as={IconButton}
+              aria-label="Help"
+              icon={<Icon as={IoHelpBuoySharp} boxSize="5" />}
+              variant="darkGhost"
+              fontSize="xl"
+              onClick={newsSlide.onClose}
+            />
+          </Tooltip>
 
           <MenuList color="black">
             <HStack p="2" justifyContent="space-between" fontWeight="bold">
@@ -153,24 +157,29 @@ export const AdminToolbar = ({
           </MenuList>
         </Menu>
 
-        <IconButton
-          aria-label="News"
-          icon={<Icon as={IoNewspaperSharp} boxSize="5" />}
-          variant="darkGhost"
-          fontSize="xl"
-          isActive={newsSlide.isOpen}
-          onClick={newsSlide.onToggle}
-        />
-
-        <Menu>
-          <MenuButton
-            as={IconButton}
-            aria-label="Account"
-            icon={<Avatar boxSize="6" size="sm" name="Nico Schett" />}
+        <Tooltip label="What's new at Jaen">
+          <IconButton
+            aria-label="News"
+            icon={<Icon as={IoNewspaperSharp} boxSize="5" />}
             variant="darkGhost"
             fontSize="xl"
-            isLoading={isLoading}
+            isActive={newsSlide.isOpen}
+            onClick={newsSlide.onToggle}
           />
+        </Tooltip>
+
+        <Menu>
+          <Tooltip label="Menu">
+            <MenuButton
+              as={IconButton}
+              aria-label="Account"
+              icon={<Avatar boxSize="6" size="sm" name="Nico Schett" />}
+              variant="darkGhost"
+              fontSize="xl"
+              isLoading={isLoading}
+              onClick={newsSlide.onClose}
+            />
+          </Tooltip>
 
           <MenuList color="black">
             <HStack p="2" justifyContent="space-between" fontWeight="bold">

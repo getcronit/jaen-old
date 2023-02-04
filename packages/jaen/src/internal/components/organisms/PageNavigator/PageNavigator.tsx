@@ -1,5 +1,12 @@
 import {ChevronDownIcon, ChevronUpIcon} from '@chakra-ui/icons'
-import {Button, Menu, MenuButton, MenuList, Text} from '@chakra-ui/react'
+import {
+  Button,
+  Menu,
+  MenuButton,
+  MenuList,
+  Text,
+  Tooltip
+} from '@chakra-ui/react'
 import {useEffect, useMemo, useState} from 'react'
 import {FaSitemap} from 'react-icons/fa'
 import {usePageManager} from '../../../context/AdminPageManager/AdminPageManager.js'
@@ -37,25 +44,27 @@ export const PageNavigator: React.FC<PageNavigatorProps> = () => {
     <Menu>
       {({isOpen}) => (
         <>
-          <MenuButton
-            as={Button}
-            leftIcon={<FaSitemap />}
-            rightIcon={isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-            fontWeight="normal"
-            size="sm"
-            w={{
-              base: '24',
-              md: '44'
-            }}
-            rounded="lg"
-            bg="gray.50"
-            color="gray.500"
-            _hover={{bg: 'pink.50'}}
-            py={{base: 1}}
-            px={{base: 2}}
-            _active={{bg: 'pink.100'}}>
-            <Text isTruncated>{title}</Text>
-          </MenuButton>
+          <Tooltip label="Navigation">
+            <MenuButton
+              as={Button}
+              leftIcon={<FaSitemap />}
+              rightIcon={isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+              fontWeight="normal"
+              size="sm"
+              w={{
+                base: '24',
+                md: '44'
+              }}
+              rounded="lg"
+              bg="gray.50"
+              color="gray.500"
+              _hover={{bg: 'pink.50'}}
+              py={{base: 1}}
+              px={{base: 2}}
+              _active={{bg: 'pink.100'}}>
+              <Text isTruncated>{title}</Text>
+            </MenuButton>
+          </Tooltip>
           <MenuList bg="white" color="black" h="xs" overflowY="auto">
             <PageTree
               nodes={manager.pagePaths}

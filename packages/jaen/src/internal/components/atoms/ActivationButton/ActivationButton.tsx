@@ -91,7 +91,7 @@ export const ActivationButton = (props: ActivationButtonProps) => {
   }
 
   return (
-    <Tooltip hasArrow label="Activate Jaen" bg="gray.300" color="black">
+    <Tooltip hasArrow label="Manage site" placement="right">
       <JaenLogo
         zIndex={9999}
         cursor="pointer"
