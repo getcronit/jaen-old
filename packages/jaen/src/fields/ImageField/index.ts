@@ -1,1 +1,1 @@
-export {ImageField, ImageFieldProps} from './ImageField.js'
+export {ImageField as default, ImageFieldProps} from './ImageField.js'

@@ -139,84 +139,86 @@ export const SectionField = withRedux(
 
     return (
       <HighlightTooltip isEditing={isEditing} actions={tooltipButtons}>
-        <Wrapper
-          {...rest.props}
-          className={rest.className}
-          style={rest.style}
-          minH="64"
-          w="full">
-          {section.items.map((item, index) => {
-            const s = sectionsDict[item.type]
+        <Box>
+          <Wrapper
+            {...rest.props}
+            className={rest.className}
+            style={rest.style}
+            minH="64"
+            w="full">
+            {section.items.map((item, index) => {
+              const s = sectionsDict[item.type]
 
-            if (s == null) {
-              console.error(
-                `Section type ${item.type} is not found in sections dictionary!`
+              if (s == null) {
+                console.error(
+                  `Section type ${item.type} is not found in sections dictionary!`
+                )
+                return null
+              }
+
+              const SectionWrapper = rest.sectionAs || Box
+
+              const sectionProps =
+                typeof rest.sectionProps === 'function'
+                  ? rest.sectionProps({
+                      count: index + 1,
+                      totalSections: section.items.length,
+                      section: item
+                    })
+                  : rest.sectionProps
+
+              return (
+                <HighlightTooltip
+                  key={item.id}
+                  isEditing={isEditing}
+                  actions={[
+                    <Button
+                      variant="jaenHighlightTooltipText"
+                      key={`section-field-tooltip-button-${item.id}`}>
+                      <Text as="span" noOfLines={1}>
+                        {s.Component.options.name}
+                      </Text>
+                    </Button>,
+                    <HStack
+                      spacing="0.5"
+                      key={`section-field-tooltip-buttons-${item.id}`}>
+                      <SectionBlockSelectorButton
+                        onBlockAdd={(block, type) => {
+                          handleSectionAdd(block, type, item)
+                        }}
+                        blocks={blocksForSelector}
+                        onlyAdd={false}
+                      />
+                      <IconButton
+                        variant="jaenHighlightTooltip"
+                        icon={<DeleteIcon />}
+                        aria-label="Delete"
+                        onClick={() => {
+                          void handleSectionDelete(
+                            item.id,
+                            item.ptrPrev,
+                            item.ptrNext
+                          )
+                        }}
+                      />
+                    </HStack>
+                  ]}>
+                  <SectionWrapper
+                    {...sectionProps}
+                    w="fit-content"
+                    h="fit-content">
+                    <JaenSectionBlockProvider
+                      path={sectionPath}
+                      id={item.id}
+                      position={index}
+                      Component={s.Component}
+                    />
+                  </SectionWrapper>
+                </HighlightTooltip>
               )
-              return null
-            }
-
-            const SectionWrapper = rest.sectionAs || Box
-
-            const sectionProps =
-              typeof rest.sectionProps === 'function'
-                ? rest.sectionProps({
-                    count: index + 1,
-                    totalSections: section.items.length,
-                    section: item
-                  })
-                : rest.sectionProps
-
-            return (
-              <HighlightTooltip
-                key={item.id}
-                isEditing={isEditing}
-                actions={[
-                  <Button
-                    variant="jaenHighlightTooltipText"
-                    key={`section-field-tooltip-button-${item.id}`}>
-                    <Text as="span" noOfLines={1}>
-                      {s.Component.options.name}
-                    </Text>
-                  </Button>,
-                  <HStack
-                    spacing="0.5"
-                    key={`section-field-tooltip-buttons-${item.id}`}>
-                    <SectionBlockSelectorButton
-                      onBlockAdd={(block, type) => {
-                        handleSectionAdd(block, type, item)
-                      }}
-                      blocks={blocksForSelector}
-                      onlyAdd={false}
-                    />
-                    <IconButton
-                      variant="jaenHighlightTooltip"
-                      icon={<DeleteIcon />}
-                      aria-label="Delete"
-                      onClick={() => {
-                        void handleSectionDelete(
-                          item.id,
-                          item.ptrPrev,
-                          item.ptrNext
-                        )
-                      }}
-                    />
-                  </HStack>
-                ]}>
-                <SectionWrapper
-                  {...sectionProps}
-                  w="fit-content"
-                  h="fit-content">
-                  <JaenSectionBlockProvider
-                    path={sectionPath}
-                    id={item.id}
-                    position={index}
-                    Component={s.Component}
-                  />
-                </SectionWrapper>
-              </HighlightTooltip>
-            )
-          })}
-        </Wrapper>
+            })}
+          </Wrapper>
+        </Box>
       </HighlightTooltip>
     )
   }
