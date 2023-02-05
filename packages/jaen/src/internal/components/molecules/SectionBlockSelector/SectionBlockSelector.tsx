@@ -33,7 +33,9 @@ export const SectionBlockSelector: React.FC<SectionBlockSelectorProps> = ({
   onBlockAdd,
   onlyAdd
 }) => {
-  const [selection, setSelection] = useState<SelectorBlockType | null>(null)
+  const [selection, setSelection] = useState<SelectorBlockType | null>(
+    blockTypes[0] || null
+  )
 
   return (
     <VStack
