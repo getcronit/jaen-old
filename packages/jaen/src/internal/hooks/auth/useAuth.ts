@@ -3,6 +3,7 @@ import {useCallback, useEffect, useState} from 'react'
 import {redirectAfterDelay} from '../../../utils/redirectAfterDelay.js'
 import {store, useAppDispatch, useAppSelector} from '../../redux/index.js'
 import * as authActions from '../../redux/slices/auth.js'
+import * as statusActions from '../../redux/slices/status.js'
 import {IAuthState} from '../../redux/types.js'
 
 export const useAuth = () => {
@@ -50,6 +51,8 @@ export const useAuth = () => {
   }, [])
 
   const logout = useCallback(async () => {
+    dispatch(statusActions.setIsEditing(false))
+
     await dispatch(authActions.logout())
 
     redirectAfterDelay('/admin/login?loggedOut=true')
