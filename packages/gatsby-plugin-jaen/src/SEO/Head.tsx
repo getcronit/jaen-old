@@ -5,7 +5,7 @@ import {getSchemaOrg} from './getSchemaOrg.js'
 // author, siteUrl, datePublished, defaultTitle, description, image, isBlogPost, organization, title, url
 
 export const Head: React.FC<
-  HeadProps<{page: Record<string, any> | null}> & {
+  HeadProps<{page?: Record<string, any>}> & {
     children?: React.ReactNode
   }
 > = props => {
@@ -46,27 +46,45 @@ export const Head: React.FC<
 
   return (
     <>
-      <title>{title}</title>
-      <meta name="description" content={description} />
-      <meta name="image" content={image} />
-      <link rel="canonical" href={url} />
+      <title id="title">{title}</title>
+      <meta id="meta-description" name="description" content={description} />
+      <meta id="meta-image" name="image" content={image} />
+      <link id="canonical-link" rel="canonical" href={url} />
+
       {/* OpenGraph tags */}
-      <meta property="og:url" content={url} />
-      {isBlogPost ? <meta property="og:type" content="article" /> : null}
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={image} />
-      <meta property="fb:app_id" content={fbAppID} />
+      <meta id="og-url" property="og:url" content={url} />
+      {isBlogPost ? (
+        <meta id="og-type" property="og:type" content="article" />
+      ) : null}
+      <meta id="og-title" property="og:title" content={title} />
+      <meta
+        id="og-description"
+        property="og:description"
+        content={description}
+      />
+      <meta id="og-image" property="og:image" content={image} />
+      <meta id="fb-app-id" property="fb:app_id" content={fbAppID} />
+
       {/* Twitter Card tags */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:creator" content={twitter} />
-      <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={image} />
+      <meta
+        id="twitter-card"
+        name="twitter:card"
+        content="summary_large_image"
+      />
+      <meta id="twitter-creator" name="twitter:creator" content={twitter} />
+      <meta id="twitter-title" name="twitter:title" content={title} />
+      <meta
+        id="twitter-description"
+        name="twitter:description"
+        content={description}
+      />
+      <meta id="twitter-image" name="twitter:image" content={image} />
+
       {/* Schema.org tags */}
-      <script type="application/ld+json">
+      <script id="schema-org" type="application/ld+json">
         {JSON.stringify(schemaOrgJSON)}
       </script>
+
       {props.children}
     </>
   )
