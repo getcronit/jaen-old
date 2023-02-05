@@ -7,29 +7,18 @@
   "exports": {
     ".": {
       "require": "./dist/index.js",
-      "types": "./dist/src/index.d.ts",
+      "types": "./dist/index.d.ts",
       "default": "./dist/index.module.js"
-    },
-    "./unstable-node": {
-      "require": "./dist/unstable-node.js",
-      "types": "./dist/unstable-node.d.ts",
-      "default": "./dist/unstable-node.module.js"
     },
     "./dist/index.css": "./dist/index.css",
     "./package.json": "./package.json"
   },
-  "typesVersions": {
-    "*": {
-      "unstable-node": [
-        "./dist/unstable-node.d.ts"
-      ]
-    }
-  },
   "bin": {
     "jaen": "./dist/index.cli.cjs"
   },
+  "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "microbundle src/index.ts src/unstable-node.ts --format cjs,esm",
+    "build": "microbundle src/index.ts --format cjs,esm",
     "dev": "yarn build --watch",
     "build:cli": "microbundle -i src/cli/index.ts -o dist/index.cli.mjs --no-pkg-main --target node --generateTypes false --format esm",
     "dev:cli": "yarn build:cli --watch",
