@@ -404,12 +404,16 @@ export const PageTree: React.FC<PageTreeProps> = ({
                 contextRefs.current[node.key] = ref
 
                 return (
-                  <HStack ref={ref}>
+                  <HStack ref={ref} w="full" h="full" py="4" px="2">
+                    <Icon as={HiDocument} backgroundColor="white" />
+
                     <Text
                       whiteSpace="break-spaces"
                       wordBreak="break-word"
                       noOfLines={1}
-                      as="span">
+                      as="span"
+                      w="full"
+                      h="full">
                       <>{node.title}</>
                     </Text>
 
@@ -442,6 +446,7 @@ export const PageTree: React.FC<PageTreeProps> = ({
           // if the click was on the context menu, don't select the node
           // @ts-expect-error
           if (!(ref?.current && ref?.current?.contains(nativeEvent.target))) {
+            alert('select')
             return
           }
 
@@ -480,8 +485,8 @@ export const PageTree: React.FC<PageTreeProps> = ({
           }
         }}
         onCheck={onCheck}
+        icon={<></>}
         treeData={treeData}
-        icon={<Icon as={HiDocument} backgroundColor="white" />}
         switcherIcon={nodeProps => {
           if (nodeProps.isLeaf) {
             return null

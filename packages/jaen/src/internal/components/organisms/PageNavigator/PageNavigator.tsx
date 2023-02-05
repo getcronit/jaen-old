@@ -65,7 +65,13 @@ export const PageNavigator: React.FC<PageNavigatorProps> = () => {
               <Text isTruncated>{title}</Text>
             </MenuButton>
           </Tooltip>
-          <MenuList bg="white" color="black" h="xs" overflowY="auto">
+          <MenuList
+            bg="white"
+            color="black"
+            h="xs"
+            overflowY="auto"
+            px="2"
+            py="1">
             <PageTree
               nodes={manager.pagePaths}
               isNavigatorMode
