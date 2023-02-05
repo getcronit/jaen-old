@@ -22,7 +22,7 @@ const Card = connectBlock(
       <Box w="sm" borderWidth="1px" borderRadius="lg">
         {/* <Image src={property.imageUrl} alt={property.imageAlt} /> */}
 
-        <Box h="md">
+        <Box h="md" m="4">
           <Field.Image
             name="image"
             label="Image"
