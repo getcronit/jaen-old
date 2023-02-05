@@ -404,7 +404,7 @@ export const PageTree: React.FC<PageTreeProps> = ({
                 contextRefs.current[node.key] = ref
 
                 return (
-                  <HStack ref={ref} w="full" h="full" py="4" px="2">
+                  <HStack ref={ref} w="full" h="full" py="2" px="2">
                     <Icon as={HiDocument} backgroundColor="white" />
 
                     <Text
