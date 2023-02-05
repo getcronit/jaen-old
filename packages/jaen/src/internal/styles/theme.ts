@@ -122,6 +122,15 @@ const theme = extendTheme(
       // 'focus-ring-color': 'rgba(255, 0, 125, 0.6)',
       // outline: '0 0 0 3px var(--chakra-ui-focus-ring-color)',
       outline: '0 0 0 3px var(--chakra-colors-pink-400)'
+    },
+    colors: {
+      // brand: {
+      //   500: '#0090D9',
+      //   600: '#EB2E88',
+      //   700: '#FF5D6A',
+      //   800: '#FF9353',
+      //   900: '#FFC751'
+      // }
     }
   },
   withDefaultColorScheme({colorScheme: 'pink'})

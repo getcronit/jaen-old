@@ -84,7 +84,6 @@ export const SectionBlockSelector: React.FC<SectionBlockSelectorProps> = ({
         {onlyAdd ? (
           <Button
             size="sm"
-            colorScheme="pink"
             flex="1"
             isDisabled={selection == null}
             onClick={() => {
@@ -97,7 +96,6 @@ export const SectionBlockSelector: React.FC<SectionBlockSelectorProps> = ({
         ) : (
           <ButtonGroup size="sm">
             <Button
-              colorScheme="pink"
               flex="1"
               isDisabled={selection == null}
               onClick={() => {
@@ -107,7 +105,6 @@ export const SectionBlockSelector: React.FC<SectionBlockSelectorProps> = ({
               Prepend
             </Button>
             <Button
-              colorScheme="pink"
               flex="1"
               isDisabled={selection == null}
               onClick={() => {
