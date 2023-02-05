@@ -1,4 +1,4 @@
-// export {Head} from 'gatsby-plugin-jaen'
+export {Head} from 'gatsby-plugin-jaen'
 export {
   connectBlock,
   connectField,
