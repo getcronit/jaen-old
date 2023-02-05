@@ -69,6 +69,18 @@ const theme = extendTheme(
           _active: {
             color: 'blue.700'
           }
+        },
+        variants: {
+          white: {
+            color: 'white',
+            _hover: {
+              color: 'gray.100',
+              textDecoration: 'underline'
+            },
+            _active: {
+              color: 'gray.200'
+            }
+          }
         }
       },
       Button: {

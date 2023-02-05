@@ -69,7 +69,10 @@ export const LoginPage: React.FC<LoginPageProps> = withRedux(() => {
             </Flex>
             <Flex align="center" alignItems="center" h="24">
               <Text fontWeight="medium" fontSize="sm">
-                Powered by Snek
+                Powered by{' '}
+                <Link variant="white" href="https://snek.at">
+                  Snek
+                </Link>
               </Text>
             </Flex>
           </Flex>
