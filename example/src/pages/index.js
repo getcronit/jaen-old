@@ -143,3 +143,4 @@ export const query = graphql`
   }
 `
 export default IndexPage
+export { Head } from "@snek-at/jaen"
