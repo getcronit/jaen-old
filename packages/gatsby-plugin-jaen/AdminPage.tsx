@@ -16,7 +16,7 @@ const AdminPageContainer = () => {
         //   Icon: BsHouse
         // },
         {
-          path: '/pages',
+          path: '/',
           Component: internal.views.PagesView,
           label: 'Pages',
           group: 'Your Site',

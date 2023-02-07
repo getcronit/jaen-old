@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react'
 import {navigate} from 'gatsby'
 import * as React from 'react'
-import {Navigate, Outlet, Route, Routes, useNavigate} from 'react-router-dom'
+import {Outlet, Route, Routes, useNavigate} from 'react-router-dom'
 
 import {isSSR} from '../../../../utils/isSSR.js'
 import {SnekFinder} from '../../../context/SnekFinder/SnekFinder.js'
@@ -190,11 +190,6 @@ export default withAdminPageWrapper(({routes, items}) => {
                 </AdminPage>
               )
             }>
-            <Route
-              path="/"
-              element={<Navigate to={Object.keys(routes)[0] || ''} />}
-            />
-
             {Object.entries(routes).map(([path, {Component, hasRoutes}]) => {
               if (hasRoutes) {
                 path = `${path}/*`
