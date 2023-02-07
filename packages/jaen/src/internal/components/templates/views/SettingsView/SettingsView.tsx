@@ -29,6 +29,8 @@ import {HiCloudUpload} from 'react-icons/hi'
 import {ISite, SiteMetadata} from '../../../../../types.js'
 import {useStatistics} from '../../../../hooks/useStatistics.js'
 import {useStatus} from '../../../../hooks/useStatus.js'
+import {ThemeProvider} from '../../../../styles/ChakraThemeProvider.js'
+import theme from '../../../../styles/theme.js'
 import {List, ListItem} from '../../../molecules/index.js'
 import {ViewLayout} from '../../../organisms/index.js'
 import {FieldGroup} from './FieldGroup.js'
@@ -125,7 +127,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({data, onUpdate}) => {
 
   return (
     <>
-      {finder.finderElement}
+      <ThemeProvider theme={theme}>{finder.finderElement}</ThemeProvider>
       <ViewLayout heading="Settings">
         <form
           onSubmit={data => {
