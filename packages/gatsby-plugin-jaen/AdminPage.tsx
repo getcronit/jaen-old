@@ -1,7 +1,10 @@
 import {internal} from '@snek-at/jaen'
+import {HeadProps} from 'gatsby'
 
 import {BiNotification} from 'react-icons/bi'
 import {BsFiles, BsGear, BsLayoutTextSidebar} from 'react-icons/bs'
+
+import {Head as JaenHead} from './dist/SEO/Head'
 
 const {AdminPage} = internal
 
@@ -49,3 +52,11 @@ const AdminPageContainer = () => {
 }
 
 export default AdminPageContainer
+
+export const Head = (props: HeadProps) => {
+  return (
+    <JaenHead {...props}>
+      <title id="title">Jaen Admin</title>
+    </JaenHead>
+  )
+}
