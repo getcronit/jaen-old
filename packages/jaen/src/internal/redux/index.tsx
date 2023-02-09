@@ -18,7 +18,6 @@ import {
 
 import PersistState from './persist-state.js'
 
-import auth, {authInitialState} from './slices/auth.js'
 import page, {pageInitialState} from './slices/page.js'
 import popup, {popupInitialState} from './slices/popup.js'
 import site, {siteInitialState} from './slices/site.js'
@@ -35,7 +34,6 @@ const {loadState, persistState, persistMiddleware} =
   PersistState<RootState>(persistKey)
 
 const combinedReducer = combineReducers({
-  auth,
   site,
   page,
   status,
@@ -50,7 +48,6 @@ const rootReducer = (state: any, action: any) => {
 
     const payload: {
       site?: typeof siteInitialState
-      auth?: typeof authInitialState
       page?: typeof pageInitialState
       popup?: typeof popupInitialState
       widget?: typeof widgetInitialState
@@ -59,7 +56,6 @@ const rootReducer = (state: any, action: any) => {
     console.log('payload', payload)
 
     return {
-      auth: deepmerge(authInitialState, payload.auth || {}),
       site: deepmerge(siteInitialState, payload.site || {}),
       page: deepmerge(pageInitialState, payload.page || {}),
       status: statusInitialState,

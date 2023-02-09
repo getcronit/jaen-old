@@ -7,7 +7,7 @@ import {HighlightProvider} from './context/HighlightContext.js'
 import {IncomingBuildCheckerProvider} from './context/IncomingBuildChecker/index.js'
 import {ModalProvider} from './context/Modals/ModalContext.js'
 import {SiteProvider} from './context/SiteContext.js'
-import {getAuth} from './hooks/auth/useAuth.js'
+import {useAuth} from './hooks/auth/useAuth.js'
 import {useInterceptGatsbyNavigate} from './hooks/useInterceptGatsbyNavigate'
 import {usePopupsInject} from './hooks/usePopupsInject.js'
 import {ThemeProvider} from './styles/ChakraThemeProvider.js'
@@ -54,7 +54,7 @@ export const GatsbyPageWrapper: React.FC<PageWrapperProps> = ({
     void navigate('/admin')
   }
 
-  const {isAuthenticated} = getAuth()
+  const {isAuthenticated} = useAuth()
 
   const InjectPopups: React.FC<{
     pageProps: PageProps

@@ -1,20 +1,9 @@
-import {SerializedError} from '@reduxjs/toolkit'
-
 import {IJaenPage, IJaenPopup, ISite, IWidget} from '../../types.js'
 
 export interface IError {
   code: string
   message: string
   details?: any
-}
-
-export interface IAuthState {
-  isLoading: boolean
-  error?: SerializedError
-  isAuthenticated: boolean
-  user: {
-    email: string
-  } | null
 }
 
 export interface IPageState {
@@ -54,7 +43,6 @@ export interface IJaenSiteState {
 }
 
 export interface IJaenState {
-  auth: IAuthState
   site: IJaenSiteState
   page: IPageState
   status: IStatusState

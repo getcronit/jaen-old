@@ -1,8 +1,10 @@
 import {
   Alert,
   AlertIcon,
+  Box,
   Button,
   Checkbox,
+  CloseButton,
   Divider,
   Flex,
   FormControl,
@@ -50,6 +52,10 @@ export const LoginForm: React.FC<LoginFormProps> = props => {
       message: string
     } | null>(null)
 
+  const resetAlert = () => {
+    setAlert(null)
+  }
+
   const onSubmit = async (values: LoginFormValues) => {
     const success = await props.onSubmit(values)
     if (success) {
@@ -66,8 +72,6 @@ export const LoginForm: React.FC<LoginFormProps> = props => {
         status: 'error',
         message: 'Invalid email or password'
       })
-
-      throw new Error('Invalid email or password')
     }
   }
 
@@ -107,7 +111,14 @@ export const LoginForm: React.FC<LoginFormProps> = props => {
           {alert && (
             <Alert status={alert.status}>
               <AlertIcon />
-              {alert.message}
+              <Box w="full">{alert.message}</Box>
+              <CloseButton
+                alignSelf="flex-start"
+                position="relative"
+                right={-1}
+                top={-1}
+                onClick={resetAlert}
+              />
             </Alert>
           )}
         </VStack>

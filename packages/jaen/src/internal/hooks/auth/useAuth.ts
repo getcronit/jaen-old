@@ -1,22 +1,46 @@
 import {useCallback, useEffect, useState} from 'react'
+import {storage} from 'snek-query'
 
+import {sq} from '../../../origin-api/index.js'
 import {redirectAfterDelay} from '../../../utils/redirectAfterDelay.js'
-import {store, useAppDispatch, useAppSelector} from '../../redux/index.js'
-import * as authActions from '../../redux/slices/auth.js'
-import * as statusActions from '../../redux/slices/status.js'
-import {IAuthState} from '../../redux/types.js'
 
 export const useAuth = () => {
-  const dispatch = useAppDispatch()
-  const auth = useAppSelector(state => state.auth)
+  const [user, setUser] =
+    useState<{
+      email: string
+    } | null>(null)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const [isReady, setIsReady] = useState(false)
 
   useEffect(() => {
+    const persist = async () => {
+      setIsLoading(true)
+      await storage.set('isAuthenticated', isAuthenticated.toString())
+      setIsLoading(false)
+    }
+
+    if (isReady) {
+      persist()
+    }
+  }, [isReady, isAuthenticated])
+
+  useEffect(() => {
+    const bootstrap = async () => {
+      setIsLoading(true)
+
+      const isAuthenticated = await storage.get('isAuthenticated')
+
+      setIsAuthenticated(isAuthenticated === 'true')
+
+      setIsLoading(false)
+    }
+
+    bootstrap()
+
     setIsReady(true)
   }, [])
-
-  console.log('auth', auth)
 
   const login = useCallback(
     async (
@@ -25,48 +49,51 @@ export const useAuth = () => {
         logMeOutAfterwards?: boolean
       }
     ) => {
-      try {
-        await dispatch(
-          authActions.login({
-            params,
-            details
-          })
-        )
-        redirectAfterDelay('/admin')
+      console.log(`Logging in with ${params.email}...`, params, details)
+      const [data, errors] = await sq.mutate(m =>
+        m.login({
+          fnArgs: {
+            username: params.email,
+            password: params.password,
+            resource: 'resource-uuid-1'
+          }
+        })
+      )
 
-        return true
-      } catch (error) {
-        console.error(error)
+      const isAuthenticated = !!data && !errors
 
-        return false
+      if (!isAuthenticated) {
+        throw new Error('Login failed')
       }
     },
     []
   )
 
   const demoLogin = useCallback(() => {
-    dispatch(authActions.demoLogin())
+    setIsAuthenticated(true)
+    setUser(null)
 
     redirectAfterDelay('/admin')
   }, [])
 
   const logout = useCallback(async () => {
-    dispatch(statusActions.setIsEditing(false))
+    setIsLoading(true)
 
-    await dispatch(authActions.logout())
+    await sq.mutate(m => m.logout({fnArgs: {}}))
+
+    setIsAuthenticated(false)
+
+    setUser(null)
 
     redirectAfterDelay('/admin/login?loggedOut=true')
   }, [])
 
   return {
-    ...auth,
-    isLoading: !isReady || auth.isLoading,
+    isAuthenticated,
+    user,
+    isLoading: !isReady || isLoading,
     login,
     demoLogin,
     logout
   }
-}
-
-export const getAuth = (): IAuthState => {
-  return store.getState().auth
 }

@@ -85,17 +85,21 @@ export const LoginPage: React.FC<LoginPageProps> = withRedux(() => {
           <Stack mx="4" maxW="md" w="full" spacing={8}>
             <LoginForm
               onSubmit={async data => {
-                const res = await login(
-                  {
-                    email: data.email,
-                    password: data.password
-                  },
-                  {
-                    logMeOutAfterwards: data.logMeOutAfterwards
-                  }
-                )
+                try {
+                  await login(
+                    {
+                      email: data.email,
+                      password: data.password
+                    },
+                    {
+                      logMeOutAfterwards: data.logMeOutAfterwards
+                    }
+                  )
 
-                return res
+                  return true
+                } catch (error) {
+                  return false
+                }
               }}
               onForgotPassword={() => {}}
               onSignUp={() => {}}
