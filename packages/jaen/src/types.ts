@@ -67,14 +67,14 @@ export interface IJaenPage {
   id: string
   slug: string
   buildPath?: string
-  jaenPageMetadata: {
+  jaenPageMetadata: Partial<{
     title: string
-    isBlogPost?: boolean
-    image?: string
-    description?: string
-    datePublished?: string
-    canonical?: string
-  }
+    isBlogPost: boolean
+    image: string
+    description: string
+    datePublished: string
+    canonical: string
+  }>
   jaenFields: IJaenFields
   jaenFiles: Array<{
     id: string

@@ -7,7 +7,7 @@ import {
   Text,
   Tooltip
 } from '@chakra-ui/react'
-import {useEffect, useMemo, useState} from 'react'
+import {useMemo} from 'react'
 import {FaSitemap} from 'react-icons/fa'
 import {usePageManager} from '../../../context/AdminPageManager/AdminPageManager.js'
 import {PageTree} from '../PageTree/PageTree.js'
@@ -15,13 +15,8 @@ import {PageTree} from '../PageTree/PageTree.js'
 export interface PageNavigatorProps {}
 
 export const PageNavigator: React.FC<PageNavigatorProps> = () => {
-  const [title, setTitle] = useState('No title')
-
-  useEffect(() => {
-    if (document.title) {
-      setTitle(document.title)
-    }
-  }, [])
+  const title =
+    typeof window !== 'undefined' ? window.document.title : 'No Title'
 
   const path = useMemo(() => {
     if (typeof window === 'undefined') return null

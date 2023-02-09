@@ -30,8 +30,8 @@ import {useModals} from '../../../context/Modals/ModalContext.js'
 import {ThemeProvider} from '../../../styles/ChakraThemeProvider.js'
 
 export interface ContentValues {
-  title: string
   slug: string
+  title?: string
   image?: string
   description?: string
   excludedFromIndex?: boolean
@@ -145,9 +145,7 @@ export const PageContent = (props: PageContentProps) => {
               <Input
                 // id="title"
                 placeholder="Title"
-                {...register('title', {
-                  required: 'This is required'
-                })}
+                {...register('title', {})}
               />
               <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
             </FormControl>

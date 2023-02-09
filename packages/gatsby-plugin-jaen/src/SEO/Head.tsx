@@ -1,33 +1,32 @@
 import {HeadProps} from 'gatsby'
-// import {useSiteMetadata} from 'gatsby-plugin-jaen/hooks/useSiteMetadata'
+import {useSiteMetadata} from 'gatsby-plugin-jaen/hooks/useSiteMetadata'
 import {getSchemaOrg} from './getSchemaOrg.js'
 
 // author, siteUrl, datePublished, defaultTitle, description, image, isBlogPost, organization, title, url
 
 export const Head: React.FC<
-  HeadProps<{page?: Record<string, any>}> & {
+  HeadProps<{jaenPage?: Record<string, any>}> & {
     children?: React.ReactNode
   }
 > = props => {
-  const siteMetadata = {} as any // useSiteMetadata()
+  const siteMetadata = useSiteMetadata()
 
   const defaultTitle = props.location.pathname
 
-  let title: string
-
-  if (props.location.pathname === '/') {
-    title = siteMetadata?.title || defaultTitle
-  } else {
-    title = props.data.page?.jaenPageMetadata?.title || defaultTitle
-  }
+  const title: string =
+    props.data.jaenPage?.jaenPageMetadata?.title ||
+    siteMetadata?.title ||
+    defaultTitle
 
   const description =
-    props.data.page?.jaenPageMetadata?.description || siteMetadata?.description
-  const image = props.data.page?.jaenPageMetadata?.image || siteMetadata?.image
+    props.data.jaenPage?.jaenPageMetadata?.description ||
+    siteMetadata?.description
+  const image =
+    props.data.jaenPage?.jaenPageMetadata?.image || siteMetadata?.image
   const url = `${siteMetadata?.siteUrl}${props.location.pathname}`
-  const isBlogPost = props.data.page?.jaenPageMetadata?.isBlogPost || false
+  const isBlogPost = props.data.jaenPage?.jaenPageMetadata?.isBlogPost || false
   const datePublished =
-    props.data.page?.jaenPageMetadata?.datePublished || false
+    props.data.jaenPage?.jaenPageMetadata?.datePublished || false
   const fbAppID = siteMetadata?.social?.fbAppID
   const twitter = siteMetadata?.social?.twitter
 

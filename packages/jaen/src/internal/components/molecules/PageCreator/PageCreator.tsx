@@ -77,7 +77,6 @@ const TemplateSelector = ({
 
 export interface CreateValues {
   slug: string
-  title: string
   template: Omit<IJaenTemplate, 'children'>
 }
 
@@ -127,7 +126,7 @@ export const PageCreator = ({
 
     toast({
       title: 'Page created',
-      description: `Page "${values.title}" created`,
+      description: `Page "${values.slug}" created`,
       status: 'success'
     })
   }
@@ -152,17 +151,6 @@ export const PageCreator = ({
           <ModalHeader>Create a page</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <FormControl isInvalid={!(errors.title == null)}>
-              <FormLabel>Title</FormLabel>
-              <Input
-                placeholder="Title"
-                {...register('title', {
-                  required: 'This is required'
-                })}
-              />
-              <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
-            </FormControl>
-
             <FormControl mt={4} isInvalid={!(errors.slug == null)}>
               <FormLabel>Slug</FormLabel>
               <Input

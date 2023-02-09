@@ -17,7 +17,6 @@ export const Basic: Story<ComponentProps> = Template.bind({})
 Basic.args = {
   values: {
     slug: '',
-    title: '',
     template: {name: '', label: ''}
   },
   templates: [

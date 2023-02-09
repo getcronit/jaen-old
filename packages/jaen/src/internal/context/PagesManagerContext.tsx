@@ -195,7 +195,7 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
 
         return {
           path,
-          title: page?.jaenPageMetadata?.title || pageId,
+          title: page.slug || 'root',
           isLocked: isRoot || !page.template
         }
       })
@@ -258,7 +258,6 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
         finalFocusRef={null as any}
         isTemplatesLoading={templates.isLoading}
         values={{
-          title: '',
           slug: '',
           template: {
             name: '',
