@@ -1,5 +1,3 @@
-import {ViewLayout} from '../../../organisms/index.js'
-
 // Chakra imports
 import {
   Button,
@@ -132,7 +130,7 @@ export const PopupsView: React.FC<PopupsViewProps> = ({
   }
 
   return (
-    <ViewLayout heading="Popups">
+    <>
       {isLoading ? (
         <Text>Loading...</Text>
       ) : (
@@ -168,6 +166,6 @@ export const PopupsView: React.FC<PopupsViewProps> = ({
           edtiable
         />
       )}
-    </ViewLayout>
+    </>
   )
 }

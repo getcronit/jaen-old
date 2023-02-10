@@ -21,11 +21,11 @@ export const ViewLayout: React.FC<ViewLayoutProps> = ({
     <Flex boxSize="full" {...boxProps}>
       <Box
         w="100%"
-        maxW="container.xl"
-        mx="auto"
-        mt="4"
-        rounded="lg"
-        shadow="lg"
+        // maxW="container.xl"
+        // mx="auto"
+        // mt="4"
+        // rounded="lg"
+        // shadow="md"
         px={{
           base: 2,
           md: 4

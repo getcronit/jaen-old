@@ -1,5 +1,1 @@
-export {FilesView} from './FilesView.js'
-export {HomeView} from './HomeView.js'
-export {PagesView} from './PagesView.js'
-export {PopupsView} from './PopupsView.js'
-export {SettingsView} from './SettingsView.js'
+export {CMS} from './CMS/index.js'

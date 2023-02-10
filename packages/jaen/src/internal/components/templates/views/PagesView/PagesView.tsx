@@ -14,8 +14,7 @@ import {pageUpdateValidation} from '../../../../helper/page/validators.js'
 import {
   PageContent,
   PageTree,
-  useToolbarActions,
-  ViewLayout
+  useToolbarActions
 } from '../../../organisms/index.js'
 
 export interface PagesViewProps {}
@@ -193,71 +192,68 @@ export const PagesView: React.FC<PagesViewProps> = () => {
   }, [selectedJaenPage?.path])
 
   return (
-    <ViewLayout heading="Pages">
-      <Stack
-        divider={<StackDivider />}
-        spacing="4"
-        px={{base: '4', md: '10'}}
-        h="full"
-        direction={{
-          base: 'column',
-          md: 'row'
-        }}>
-        <PageTree
-          px="2"
-          borderRadius="md"
-          minW={{
-            base: 'full',
-            md: 'xs'
-          }}
-          h={{
-            base: 48,
-            md: 'full'
-          }}
-          defaultSelectedPath="/"
-          selectedPath={selectedJaenPage?.path}
-          nodes={manager.pagePaths}
-          onSelectPage={onSelect}
-          onAddPage={handleItemAdd}
-          onDeletePage={path => {
-            void handleItemDelete(path)
-          }}
-          onMovePage={handlePageMove}
-          onViewPage={manager.onNavigate}
-        />
+    <Stack
+      divider={<StackDivider />}
+      spacing="4"
+      h="full"
+      direction={{
+        base: 'column',
+        md: 'row'
+      }}>
+      <PageTree
+        px="2"
+        borderRadius="md"
+        minW={{
+          base: 'full',
+          md: 'xs'
+        }}
+        h={{
+          base: 48,
+          md: 'full'
+        }}
+        defaultSelectedPath="/"
+        selectedPath={selectedJaenPage?.path}
+        nodes={manager.pagePaths}
+        onSelectPage={onSelect}
+        onAddPage={handleItemAdd}
+        onDeletePage={path => {
+          void handleItemDelete(path)
+        }}
+        onMovePage={handlePageMove}
+        onViewPage={manager.onNavigate}
+      />
 
-        {selectedJaenPage && (
-          <PageProvider
-            jaenPage={selectedJaenPage.jaenPage}
-            unregisterFields={false}>
-            <PageContent
-              key={selectedJaenPage.jaenPage.id}
-              template={selectedTemplate}
-              jaenPageId={selectedJaenPage.jaenPage.id}
-              publishedAt={
-                selectedJaenPage.jaenPage.jaenPageMetadata.datePublished
-              }
-              values={{
-                title: selectedJaenPage.jaenPage.jaenPageMetadata.title,
-                slug: selectedJaenPage.jaenPage.slug,
-                description:
-                  selectedJaenPage.jaenPage.jaenPageMetadata.description,
-                image: selectedJaenPage.jaenPage.jaenPageMetadata.image,
-                excludedFromIndex: selectedJaenPage.jaenPage.excludedFromIndex
-              }}
-              onSubmit={handleSelectedJaenPageUpdate}
-              externalValidation={(name, value) => {
-                return pageUpdateValidation({
-                  name,
-                  value,
-                  parentId: selectedJaenPage.jaenPage.parent?.id,
-                  pageTree: manager.pageTree
-                })
-              }}
-            />
-          </PageProvider>
-        )}
-      </Stack>
-    </ViewLayout>
+      {selectedJaenPage && (
+        <PageProvider
+          jaenPage={selectedJaenPage.jaenPage}
+          unregisterFields={false}>
+          <PageContent
+            key={selectedJaenPage.jaenPage.id}
+            template={selectedTemplate}
+            jaenPageId={selectedJaenPage.jaenPage.id}
+            publishedAt={
+              selectedJaenPage.jaenPage.jaenPageMetadata.datePublished
+            }
+            values={{
+              title: selectedJaenPage.jaenPage.jaenPageMetadata.title,
+              slug: selectedJaenPage.jaenPage.slug,
+              description:
+                selectedJaenPage.jaenPage.jaenPageMetadata.description,
+              image: selectedJaenPage.jaenPage.jaenPageMetadata.image,
+              excludedFromIndex: selectedJaenPage.jaenPage.excludedFromIndex
+            }}
+            onSubmit={handleSelectedJaenPageUpdate}
+            externalValidation={(name, value) => {
+              return pageUpdateValidation({
+                name,
+                value,
+                parentId: selectedJaenPage.jaenPage.parent?.id,
+                pageTree: manager.pageTree
+              })
+            }}
+          />
+        </PageProvider>
+      )}
+    </Stack>
   )
 }

@@ -80,6 +80,16 @@ const theme = extendTheme(
             _active: {
               color: 'gray.200'
             }
+          },
+          black: {
+            color: 'black',
+            _hover: {
+              color: 'gray.900',
+              textDecoration: 'underline'
+            },
+            _active: {
+              color: 'blue.700'
+            }
           }
         }
       },
