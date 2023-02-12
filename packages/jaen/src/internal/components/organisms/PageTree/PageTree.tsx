@@ -446,7 +446,6 @@ export const PageTree: React.FC<PageTreeProps> = ({
           // if the click was on the context menu, don't select the node
           // @ts-expect-error
           if (!(ref?.current && ref?.current?.contains(nativeEvent.target))) {
-            alert('select')
             return
           }
 

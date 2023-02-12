@@ -42,6 +42,7 @@ export const SectionBlockSelector: React.FC<SectionBlockSelectorProps> = ({
       p="3"
       rounded="xl"
       bg="white"
+      w="48"
       maxW="300px"
       shadow="lg"
       border="1px"

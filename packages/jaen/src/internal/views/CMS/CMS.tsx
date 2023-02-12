@@ -52,8 +52,8 @@ const CMSComponent: React.FC<CMSProps> = props => {
         left="0"
         bg="gray.50"
         pos="fixed"
-        h="calc(100vh - var(--chakra-sizes-14) * 2)"
-        mt="calc(var(--chakra-sizes-14) * 2)"
+        h="calc(100vh - 6.5rem)"
+        mt="6.5rem"
         p="4"
         boxShadow="inner">
         <Stack spacing="8">

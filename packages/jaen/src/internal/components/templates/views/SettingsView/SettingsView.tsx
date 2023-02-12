@@ -16,6 +16,7 @@ import {
   StackDivider,
   Text,
   Textarea,
+  theme,
   useColorModeValue,
   useToast,
   VStack
@@ -30,7 +31,6 @@ import {ISite, SiteMetadata} from '../../../../../types.js'
 import {useStatistics} from '../../../../hooks/useStatistics.js'
 import {useStatus} from '../../../../hooks/useStatus.js'
 import {ThemeProvider} from '../../../../styles/ChakraThemeProvider.js'
-import theme from '../../../../styles/theme.js'
 import {List, ListItem} from '../../../molecules/index.js'
 import {FieldGroup} from './FieldGroup.js'
 

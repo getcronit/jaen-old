@@ -14,7 +14,7 @@ export const AdminSecondaryToolbar: React.FC<AdminSecondaryToolbarProps> = ({
 }) => {
   return (
     <Flex
-      minH="14"
+      minH="12"
       w="full"
       align="center"
       px={{base: 4}}

@@ -34,7 +34,7 @@ export const ViewLayout: React.FC<ViewLayoutProps> = ({
           base: 4,
           md: 8
         }}>
-        <Stack divider={<StackDivider />} spacing="8">
+        <Stack divider={<StackDivider />} spacing="4">
           {heading && (
             <Heading size="xl" as="h1">
               {heading}
