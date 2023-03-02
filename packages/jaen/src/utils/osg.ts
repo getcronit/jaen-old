@@ -1,6 +1,9 @@
 const URL = 'https://osg.snek.at/storage'
 
-export const upload = async (payload: object | Blob | File) => {
+export const upload = async (
+  payload: object | Blob | File,
+  filename: string = 'jaen-index.json'
+) => {
   const formData = new FormData()
 
   // payload to blob
@@ -9,7 +12,7 @@ export const upload = async (payload: object | Blob | File) => {
   } else {
     formData.append(
       'file',
-      new File([JSON.stringify(payload)], 'jaen-index.json', {
+      new File([JSON.stringify(payload)], filename, {
         type: 'application/json'
       })
     )

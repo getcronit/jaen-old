@@ -1,9 +1,9 @@
 import React from 'react'
 import {IJaenPage} from '../../types.js'
-import {useAuth} from '../hooks/auth/useAuth.js'
 import {RootState, store, useAppDispatch, withRedux} from '../redux'
 import {actions} from '../redux/slices/page.js'
 import {IJaenState} from '../redux/types.js'
+import {useAuthentication} from './AuthenticationContext.js'
 
 export interface PageProviderProps {
   jaenPage: {
@@ -37,7 +37,7 @@ const UnregisterFieldsHelper = withRedux(() => {
 export const PageProvider: React.FC<
   React.PropsWithChildren<PageProviderProps>
 > = ({children, jaenPage, jaenPages, unregisterFields = true}) => {
-  const {isAuthenticated} = useAuth()
+  const {isAuthenticated} = useAuthentication()
 
   return (
     <PageContext.Provider

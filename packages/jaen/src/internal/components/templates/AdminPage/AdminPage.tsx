@@ -11,8 +11,8 @@ import * as React from 'react'
 import {Outlet, Route, Routes, useNavigate} from 'react-router-dom'
 
 import {isSSR} from '../../../../utils/isSSR.js'
+import {useAuthentication} from '../../../context/AuthenticationContext.js'
 import {SnekFinder} from '../../../context/SnekFinder/SnekFinder.js'
-import {useAuth} from '../../../hooks/auth/useAuth.js'
 import {withRedux} from '../../../redux/index.js'
 import {NavGroup, NavItem} from '../../molecules/index.js'
 import {
@@ -153,7 +153,7 @@ export default withAdminPageWrapper(({routes, items}) => {
     window.scrollTo(0, 0)
   }, [])
 
-  const {isLoading, isAuthenticated} = useAuth()
+  const {isLoading, isAuthenticated} = useAuthentication()
 
   const [isNavigating, setIsNavigating] = React.useState(false)
 

@@ -1,9 +1,9 @@
 import {useEffect} from 'react'
+import {useAuthentication} from '../internal/context/AuthenticationContext.js'
 import {
   BlockContext,
   useSectionBlockContext
 } from '../internal/context/SectionBlockContext.js'
-import {useAuth} from '../internal/hooks/auth/useAuth.js'
 import {IJaenConnection} from '../types.js'
 
 export interface IBlockOptions {
@@ -23,7 +23,7 @@ export const connectBlock = <P extends {}>(
   const MyComp: IJaenConnection<P, typeof options> = props => {
     const section = useSectionBlockContext()
 
-    const {isAuthenticated} = useAuth()
+    const {isAuthenticated} = useAuthentication()
 
     useEffect(() => {
       if (isAuthenticated && section) {

@@ -7,18 +7,13 @@ export const useSaveDraft = () => {
 
   const saveDraft = useCallback(async () => {
     setIsSaving(true)
-    const migrationData = await prepareMigration()
-
-    // migrationData to JSON file
-    const blob = new Blob([JSON.stringify(migrationData)], {
-      type: 'application/json'
-    })
+    const {blob, filename} = await prepareMigration()
 
     const url = URL.createObjectURL(blob)
 
     const a = document.createElement('a')
     a.href = url
-    a.download = `jaen-draft-${new Date().toISOString()}.jaen`
+    a.download = filename
     document.body.appendChild(a)
     a.click()
     a.remove()

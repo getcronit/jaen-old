@@ -6,7 +6,12 @@ module.exports = {
     siteUrl: `https://gatsbystarterdefaultsource.gatsbyjs.io/`,
   },
   plugins: [
-    "gatsby-plugin-jaen",
+    {
+      resolve: `gatsby-plugin-jaen`,
+      options: {
+        snekResourceId: `059c1cc6-447a-4043-b3e2-fcf15e25961b`,
+      },
+    },
     `gatsby-plugin-image`,
     {
       resolve: `gatsby-source-filesystem`,

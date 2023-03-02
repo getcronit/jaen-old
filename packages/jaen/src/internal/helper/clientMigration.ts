@@ -3,7 +3,7 @@ import {Backend} from '../context/SnekFinder/SnekFinder.js'
 import {resetState, store} from '../redux/index.js'
 import {IJaenState} from '../redux/types.js'
 
-export const prepareMigration = async () => {
+export const prepareMigration = async (filenameScope: string = 'draft') => {
   const state = store.getState() as IJaenState
 
   const migrationData: MigrationData = {}
@@ -25,7 +25,16 @@ export const prepareMigration = async () => {
     ...state.popup.nodes
   }
 
-  return migrationData
+  // migrationData to JSON file
+  const blob = new Blob([JSON.stringify(migrationData)], {
+    type: 'application/json'
+  })
+
+  return {
+    data: migrationData,
+    filename: `jaen-${filenameScope}-${new Date().toISOString()}.jaen`,
+    blob
+  }
 }
 
 export const insertMigration = async (migrationData: MigrationData) => {

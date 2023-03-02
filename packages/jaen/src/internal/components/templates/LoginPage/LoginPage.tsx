@@ -11,8 +11,8 @@ import {
   Text
 } from '@chakra-ui/react'
 import {navigate} from 'gatsby'
+import {useAuthentication} from '../../../context/AuthenticationContext.js'
 
-import {useAuth} from '../../../hooks/auth/useAuth.js'
 import {withRedux} from '../../../redux/index.js'
 import {JaenFullLogoWhite} from '../../atoms/icons/JaenLogo/JaenLogo.js'
 import {LoginForm} from '../../organisms/index.js'
@@ -20,7 +20,7 @@ import {LoginForm} from '../../organisms/index.js'
 export interface LoginPageProps {}
 
 export const LoginPage: React.FC<LoginPageProps> = withRedux(() => {
-  const {demoLogin, login} = useAuth()
+  const {demoLogin, login} = useAuthentication()
 
   return (
     <Flex
@@ -87,13 +87,9 @@ export const LoginPage: React.FC<LoginPageProps> = withRedux(() => {
               onSubmit={async data => {
                 try {
                   await login(
-                    {
-                      email: data.email,
-                      password: data.password
-                    },
-                    {
-                      logMeOutAfterwards: data.logMeOutAfterwards
-                    }
+                    data.email,
+                    data.password,
+                    data.logMeOutAfterwards
                   )
 
                   return true

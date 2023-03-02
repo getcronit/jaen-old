@@ -20,9 +20,9 @@ import {useEffect} from 'react'
 import {AiOutlineUser} from 'react-icons/ai'
 import {FaFileImport, FaGithub, FaSignOutAlt} from 'react-icons/fa'
 import {IoHelpBuoySharp, IoNewspaperSharp} from 'react-icons/io5'
+import {useAuthentication} from '../../../context/AuthenticationContext.js'
 import {useModals} from '../../../context/Modals/ModalContext.js'
 import {useNewsSlide} from '../../../context/NewsSlideContext.js'
-import {useAuth} from '../../../hooks/auth/useAuth.js'
 import {useImportDraft} from '../../../hooks/draft/useImportDraft.js'
 import {JaenLogo} from '../../atoms/index.js'
 import {ActionBar} from '../../molecules/ActionBar/index.js'
@@ -43,7 +43,7 @@ export const AdminToolbar = ({
 
   const {toast} = useModals()
 
-  const {logout, isLoading} = useAuth()
+  const {logout, isLoading, user} = useAuthentication()
 
   const {handleImportClick, isImported} = useImportDraft()
 
@@ -183,7 +183,8 @@ export const AdminToolbar = ({
 
           <MenuList color="black">
             <HStack p="2" justifyContent="space-between" fontWeight="bold">
-              <Text>Name</Text>
+              <Text>{user?.username}</Text>
+              <Text></Text>
             </HStack>
 
             <MenuDivider />

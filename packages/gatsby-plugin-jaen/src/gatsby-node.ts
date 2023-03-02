@@ -38,12 +38,18 @@ export const onPreBootstrap: GatsbyNode['onPreBootstrap'] = async ({
   }
 }
 
-export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = ({
-  actions,
-  loaders,
-  plugins,
-  stage
-}) => {
+export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = (
+  {actions, loaders, plugins, stage},
+  pluginOptions
+) => {
+  const snekResourceId = pluginOptions.snekResourceId
+
+  if (!snekResourceId) {
+    throw new Error(
+      `The plugin option 'snekResourceId' is required. Please add the option to your gatsby-config.js file.`
+    )
+  }
+
   actions.setWebpackConfig({
     plugins: [
       plugins.define({
@@ -52,7 +58,8 @@ export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = ({
         ),
         ___JAEN_SOURCE_PAGES___: JSON.stringify(JaenSource.sourcePagesPath),
         ___JAEN_SOURCE_VIEWS___: JSON.stringify(JaenSource.sourceViewsPath),
-        ___JAEN_SOURCE_POPUPS___: JSON.stringify(JaenSource.sourcePopupsPath)
+        ___JAEN_SOURCE_POPUPS___: JSON.stringify(JaenSource.sourcePopupsPath),
+        ___SNEK_RESOURCE_ID___: JSON.stringify(snekResourceId)
       })
     ]
   })

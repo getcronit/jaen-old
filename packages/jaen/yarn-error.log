@@ -1,8 +1,8 @@
 Arguments: 
-  /usr/local/share/nvm/versions/node/v16.19.0/bin/node /usr/share/yarn/bin/yarn.js add snek-query-0.0.45.tgz
+  /usr/local/share/nvm/versions/node/v16.19.0/bin/node /usr/share/yarn/bin/yarn.js add snek-functions-origin-0.7.0.tgz
 
 PATH: 
-  /usr/local/rvm/gems/ruby-3.1.3/bin:/usr/local/rvm/gems/ruby-3.1.3@global/bin:/usr/local/rvm/rubies/ruby-3.1.3/bin:/vscode/bin/linux-x64/e2816fe719a4026ffa1ee0189dc89bdfdbafb164/bin/remote-cli:/home/codespace/.local/bin:/home/codespace/.dotnet:/home/codespace/nvm/current/bin:/home/codespace/.php/current/bin:/home/codespace/.python/current/bin:/home/codespace/java/current/bin:/home/codespace/.ruby/current/bin:/home/codespace/.local/bin:/usr/local/oryx:/usr/local/go/bin:/go/bin:/usr/local/sdkman/bin:/usr/local/sdkman/candidates/java/current/bin:/usr/local/sdkman/candidates/gradle/current/bin:/usr/local/sdkman/candidates/maven/current/bin:/usr/local/rvm/gems/default/bin:/usr/local/rvm/gems/default@global/bin:/usr/local/rvm/rubies/default/bin:/usr/local/share/rbenv/bin:/opt/conda/bin:/usr/local/php/current/bin:/usr/local/python/current/bin:/usr/local/py-utils/bin:/usr/local/nvs:/usr/local/share/nvm/versions/node/v16.19.0/bin:/usr/local/hugo/bin:/usr/local/dotnet/current:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/codespace/.dotnet/tools:/usr/local/rvm/bin
+  /usr/local/rvm/gems/ruby-3.1.3/bin:/usr/local/rvm/gems/ruby-3.1.3@global/bin:/usr/local/rvm/rubies/ruby-3.1.3/bin:/vscode/bin/linux-x64/92da9481c0904c6adfe372c12da3b7748d74bdcb/bin/remote-cli:/home/codespace/.local/bin:/home/codespace/.dotnet:/home/codespace/nvm/current/bin:/home/codespace/.php/current/bin:/home/codespace/.python/current/bin:/home/codespace/java/current/bin:/home/codespace/.ruby/current/bin:/home/codespace/.local/bin:/usr/local/oryx:/usr/local/go/bin:/go/bin:/usr/local/sdkman/bin:/usr/local/sdkman/candidates/java/current/bin:/usr/local/sdkman/candidates/gradle/current/bin:/usr/local/sdkman/candidates/maven/current/bin:/usr/local/rvm/gems/default/bin:/usr/local/rvm/gems/default@global/bin:/usr/local/rvm/rubies/default/bin:/usr/local/share/rbenv/bin:/opt/conda/bin:/usr/local/php/current/bin:/usr/local/python/current/bin:/usr/local/py-utils/bin:/usr/local/nvs:/usr/local/share/nvm/versions/node/v16.19.0/bin:/usr/local/hugo/bin:/usr/local/dotnet/current:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/codespace/.dotnet/tools:/usr/local/rvm/bin
 
 Yarn version: 
   1.22.19
@@ -14,7 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/snek-query-0.0.45.tgz: Request failed "404 Not Found"
+  Error: https://registry.yarnpkg.com/snek-functions-origin-0.7.0.tgz: Request failed "404 Not Found"
       at ResponseError.ExtendableBuiltin (/usr/share/yarn/lib/cli.js:696:66)
       at new ResponseError (/usr/share/yarn/lib/cli.js:802:124)
       at Request.<anonymous> (/usr/share/yarn/lib/cli.js:66215:16)
@@ -54,7 +54,7 @@ npm manifest:
       "cli": "node ./dist/index.cli.mjs",
       "storybook": "start-storybook -p 6006",
       "build-storybook": "build-storybook",
-      "sq-gen": "snek-query generate https://bf0xierewj.execute-api.eu-central-1.amazonaws.com/graphql -o ./src/origin-api"
+      "sq-gen": "snek-query generate https://services.snek.at/origin/graphql -o ./src/origin-api"
     },
     "repository": "https://github.com/snek-at/jaen",
     "author": "Nico Schett <schett@snek.at>",
@@ -62,6 +62,7 @@ npm manifest:
     "dependencies": {
       "@chakra-ui/gatsby-plugin": "^3.0.6",
       "@chakra-ui/icons": "^2.0.12",
+      "@chakra-ui/pro-theme": "^0.0.64",
       "@chakra-ui/react": "^2.3.6",
       "@ckeditor/ckeditor5-build-balloon": "^35.3.2",
       "@ckeditor/ckeditor5-react": "^5.0.3",
@@ -85,7 +86,7 @@ npm manifest:
       "react-redux": "^8.0.4",
       "react-router-dom": "^6.4.2",
       "redux": "^4.2.0",
-      "snek-query": "./snek-query-0.0.40.tgz",
+      "snek-query": "./snek-query-0.0.46.tgz",
       "uuid": "^9.0.0"
     },
     "devDependencies": {
@@ -1346,6 +1347,11 @@ Lockfile:
       "@chakra-ui/shared-utils" "2.0.5"
       "@chakra-ui/spinner" "2.0.13"
   
+  "@chakra-ui/anatomy@2.1.1":
+    version "2.1.1"
+    resolved "https://registry.yarnpkg.com/@chakra-ui/anatomy/-/anatomy-2.1.1.tgz#819a1458ff727157e5500a69fc26bfea6e944495"
+    integrity sha512-LUHAoqJAgxAqmyckG5bUpBrfEo1FleEyY+1A8hkWciy58gZ+h3GoY9oBpHcdo7XdHPpy3G+3hieK/7i9NLwxAw==
+  
   "@chakra-ui/anatomy@2.1.2":
     version "2.1.2"
     resolved "https://registry.yarnpkg.com/@chakra-ui/anatomy/-/anatomy-2.1.2.tgz#ea66b1841e7195da08ddc862daaa3f3e56e565f5"
@@ -1694,6 +1700,14 @@ Lockfile:
       "@chakra-ui/react-context" "2.0.7"
       "@chakra-ui/react-use-safe-layout-effect" "2.0.5"
   
+  "@chakra-ui/pro-theme@^0.0.64":
+    version "0.0.64"
+    resolved "https://registry.yarnpkg.com/@chakra-ui/pro-theme/-/pro-theme-0.0.64.tgz#54522acd7358a1c01403964330b4c0b624cc23b1"
+    integrity sha512-q+guqcLQpT+/GcSV+HDepKlPbS8pkBhc9xGZgaw+ngV694dOrykDabJKO4mEQaMUnPPWenfm7SsF21V1fKhPHg==
+    dependencies:
+      "@chakra-ui/styled-system" "2.5.1"
+      "@chakra-ui/theme-tools" "2.0.16"
+  
   "@chakra-ui/progress@2.1.5":
     version "2.1.5"
     resolved "https://registry.yarnpkg.com/@chakra-ui/progress/-/progress-2.1.5.tgz#eb6a47adf2bff93971262d163461d390782a04ff"
@@ -1930,6 +1944,11 @@ Lockfile:
       "@chakra-ui/form-control" "2.0.17"
       "@chakra-ui/shared-utils" "2.0.5"
   
+  "@chakra-ui/shared-utils@2.0.4":
+    version "2.0.4"
+    resolved "https://registry.yarnpkg.com/@chakra-ui/shared-utils/-/shared-utils-2.0.4.tgz#8661f2b48dd93d04151b10a894a4290c9d9a080c"
+    integrity sha512-JGWr+BBj3PXGZQ2gxbKSD1wYjESbYsZjkCeE2nevyVk4rN3amV1wQzCnBAhsuJktMaZD6KC/lteo9ou9QUDzpA==
+  
   "@chakra-ui/shared-utils@2.0.5":
     version "2.0.5"
     resolved "https://registry.yarnpkg.com/@chakra-ui/shared-utils/-/shared-utils-2.0.5.tgz#cb2b49705e113853647f1822142619570feba081"
@@ -1980,6 +1999,15 @@ Lockfile:
     version "4.0.16"
     resolved "https://registry.yarnpkg.com/@chakra-ui/storybook-addon/-/storybook-addon-4.0.16.tgz#6e2c1c6c92aa50eda6db412fd53cce5088e3e514"
     integrity sha512-4+Mm9WHl+2lZ6BFTRV9xE+vT6Gxh0cvtScOw7idvhPru1vzTiJVsSpHoWANzQAs08DAzwulexjLghCMGnLKKhw==
+  
+  "@chakra-ui/styled-system@2.5.1":
+    version "2.5.1"
+    resolved "https://registry.yarnpkg.com/@chakra-ui/styled-system/-/styled-system-2.5.1.tgz#d76f0898d5036353947bc83afb2e1c3cad3d374a"
+    integrity sha512-HhaXR/r5eGlC7vkoOWQ31yZEj+Aq+kFee7ZZb0fBRGKQichn06S9Ugr8CsFyzb+jNexHdtBlIcTBm0ufJ8HsFA==
+    dependencies:
+      "@chakra-ui/shared-utils" "2.0.4"
+      csstype "^3.0.11"
+      lodash.mergewith "4.6.2"
   
   "@chakra-ui/styled-system@2.5.2":
     version "2.5.2"
@@ -2049,6 +2077,15 @@ Lockfile:
     dependencies:
       "@chakra-ui/form-control" "2.0.17"
       "@chakra-ui/shared-utils" "2.0.5"
+  
+  "@chakra-ui/theme-tools@2.0.16":
+    version "2.0.16"
+    resolved "https://registry.yarnpkg.com/@chakra-ui/theme-tools/-/theme-tools-2.0.16.tgz#17caae14a61f93759f072b16c7346489eb8be643"
+    integrity sha512-B/LD+2LNDeHYd/LVCHIJqckVZfhrycTUpNbhRVAiDRaS0AAcsPxKas7liTFkkMkM076YjiHlcla3KpVX+E9tzg==
+    dependencies:
+      "@chakra-ui/anatomy" "2.1.1"
+      "@chakra-ui/shared-utils" "2.0.4"
+      color2k "^2.0.0"
   
   "@chakra-ui/theme-tools@2.0.17":
     version "2.0.17"
@@ -16478,9 +16515,9 @@ Lockfile:
       source-map-resolve "^0.5.0"
       use "^3.1.0"
   
-  snek-query@./snek-query-0.0.40.tgz:
-    version "0.0.40"
-    resolved "./snek-query-0.0.40.tgz#c22f989da5c3b494debb152b225c219317268986"
+  snek-query@./snek-query-0.0.46.tgz:
+    version "0.0.46"
+    resolved "./snek-query-0.0.46.tgz#672a8148c8a6343fce106ed5ddc5f6c334dd71e0"
     dependencies:
       commander "^9.4.1"
       graphql "^16.6.0"

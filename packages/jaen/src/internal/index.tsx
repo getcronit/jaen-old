@@ -3,11 +3,14 @@ import {navigate} from 'gatsby'
 import {PageProps} from '../types.js'
 
 import {ActivationButton, AdminShell} from './components/index.js'
+import {
+  AuthenticationProvider,
+  useAuthentication
+} from './context/AuthenticationContext.js'
 import {HighlightProvider} from './context/HighlightContext.js'
 import {IncomingBuildCheckerProvider} from './context/IncomingBuildChecker/index.js'
 import {ModalProvider} from './context/Modals/ModalContext.js'
 import {SiteProvider} from './context/SiteContext.js'
-import {useAuth} from './hooks/auth/useAuth.js'
 import {useInterceptGatsbyNavigate} from './hooks/useInterceptGatsbyNavigate'
 import {usePopupsInject} from './hooks/usePopupsInject.js'
 import {ThemeProvider} from './styles/ChakraThemeProvider.js'
@@ -30,11 +33,13 @@ export const GatsbyRootWrapper: React.FC<WrapperProps> = ({children}) => {
   return (
     <ChakraProvider resetCSS={true} theme={theme}>
       <ModalProvider>
-        <SiteProvider>
-          <IncomingBuildCheckerProvider>
-            <HighlightProvider>{children}</HighlightProvider>
-          </IncomingBuildCheckerProvider>
-        </SiteProvider>
+        <AuthenticationProvider>
+          <SiteProvider>
+            <IncomingBuildCheckerProvider>
+              <HighlightProvider>{children}</HighlightProvider>
+            </IncomingBuildCheckerProvider>
+          </SiteProvider>
+        </AuthenticationProvider>
       </ModalProvider>
     </ChakraProvider>
   )
@@ -54,7 +59,7 @@ export const GatsbyPageWrapper: React.FC<PageWrapperProps> = ({
     void navigate('/admin')
   }
 
-  const {isAuthenticated} = useAuth()
+  const {isAuthenticated} = useAuthentication()
 
   const InjectPopups: React.FC<{
     pageProps: PageProps
