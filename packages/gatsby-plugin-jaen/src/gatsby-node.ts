@@ -50,6 +50,8 @@ export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = (
     )
   }
 
+  console.log('snekResourceId', snekResourceId)
+
   actions.setWebpackConfig({
     plugins: [
       plugins.define({

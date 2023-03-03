@@ -32,14 +32,23 @@ export const PublishActionButton: React.FC<PublishActionButtonProps> = () => {
       return
     }
 
-    toast({
-      title: `Publishing...`,
-      description: `Your page is being published. This may take a few minutes.`,
-      status: 'success',
-      isClosable: true
-    })
+    try {
+      await publish()
 
-    await publish()
+      toast({
+        title: `Publishing...`,
+        description: `Your page is being published. This may take a few minutes.`,
+        status: 'success',
+        isClosable: true
+      })
+    } catch (err) {
+      toast({
+        title: `Publishing failed`,
+        description: `Your page could not be published. Please try again later.`,
+        status: 'error',
+        isClosable: true
+      })
+    }
   }
 
   const commonProps: ButtonProps = {

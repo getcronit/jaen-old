@@ -9,7 +9,7 @@ module.exports = {
     {
       resolve: `gatsby-plugin-jaen`,
       options: {
-        snekResourceId: `059c1cc6-447a-4043-b3e2-fcf15e25961b`,
+        snekResourceId: `236d377c-cd47-497a-a74c-9101f6fced60`,
       },
     },
     `gatsby-plugin-image`,

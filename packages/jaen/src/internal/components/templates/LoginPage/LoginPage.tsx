@@ -11,6 +11,7 @@ import {
   Text
 } from '@chakra-ui/react'
 import {navigate} from 'gatsby'
+
 import {useAuthentication} from '../../../context/AuthenticationContext.js'
 
 import {withRedux} from '../../../redux/index.js'
@@ -20,7 +21,26 @@ import {LoginForm} from '../../organisms/index.js'
 export interface LoginPageProps {}
 
 export const LoginPage: React.FC<LoginPageProps> = withRedux(() => {
-  const {demoLogin, login} = useAuthentication()
+  const {
+    isAuthenticated,
+    isDemo,
+    isLoading,
+    user,
+    login,
+    logout,
+    demoLogin,
+    redirectToSSO
+  } = useAuthentication()
+
+  console.log(
+    isAuthenticated,
+    isDemo,
+    isLoading,
+    user,
+    login,
+    logout,
+    demoLogin
+  )
 
   return (
     <Flex
@@ -94,14 +114,15 @@ export const LoginPage: React.FC<LoginPageProps> = withRedux(() => {
 
                   return true
                 } catch (error) {
+                  console.log(error)
                   return false
                 }
               }}
               onForgotPassword={() => {}}
               onSignUp={() => {}}
-              onSSO={() => {}}
+              onSSO={redirectToSSO}
               onTryDemo={() => {
-                demoLogin()
+                void demoLogin()
               }}
             />
             <Link

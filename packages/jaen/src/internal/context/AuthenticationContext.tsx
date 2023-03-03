@@ -14,12 +14,12 @@ import {useStatus} from '../hooks/useStatus.js'
 export interface AutenticationContext {
   isAuthenticated: boolean
   isDemo: boolean
+  isLoading: boolean
   user: {
     id: string
     primaryEmail: string
     username: string
   } | null
-  isLoading: boolean
   login: (
     login: string,
     password: string,
@@ -27,16 +27,18 @@ export interface AutenticationContext {
   ) => Promise<void>
   logout: () => Promise<void>
   demoLogin: () => Promise<void>
+  redirectToSSO: () => Promise<void>
 }
 
 export const AuthenticationContext = createContext<AutenticationContext>({
   isAuthenticated: false,
   isDemo: false,
-  user: null,
   isLoading: true,
+  user: null,
   login: async () => {},
   logout: async () => {},
-  demoLogin: async () => {}
+  demoLogin: async () => {},
+  redirectToSSO: async () => {}
 })
 
 const useDemoLogin = (): [
@@ -71,7 +73,6 @@ export const AuthenticationProvider: React.FC<{
 
   const login = useCallback(
     async (login: string, password: string, logMeOutAfterwards?: boolean) => {
-      setIsLoading(true)
       console.log(`Logging in with ${login}...`, logMeOutAfterwards)
       const [data, errors] = await sq.mutate(m => {
         const signIn = m.signIn({
@@ -93,8 +94,6 @@ export const AuthenticationProvider: React.FC<{
 
       const isSuccess = !!data && !errors
 
-      setIsLoading(false)
-
       if (!isSuccess) {
         throw new Error('Login failed')
       }
@@ -109,36 +108,34 @@ export const AuthenticationProvider: React.FC<{
   )
 
   const logout = useCallback(async () => {
-    setIsLoading(true)
-    console.log('Logging out...')
-    const [data, errors] = await sq.mutate(m =>
-      m.signOut({
-        resourceId: snekResourceId
-      })
-    )
+    if (isDemo) {
+      setIsDemo(false)
+    } else {
+      console.log('Logging out...')
+      const [data, errors] = await sq.mutate(m =>
+        m.signOut({
+          resourceId: snekResourceId
+        })
+      )
 
-    const isSuccess = !!data && !errors
+      const isSuccess = !!data && !errors
 
-    setIsLoading(false)
+      if (!isSuccess) {
+        throw new Error('Logout failed')
+      }
 
-    if (!isSuccess) {
-      throw new Error('Logout failed')
+      setTokenPair(null)
     }
 
-    setTokenPair(null)
-
     setIsAuthenticated(false)
-
     isEditing.setEditing(false)
 
     redirectAfterDelay('/admin/login?loggedOut=true')
   }, [])
 
   const demoLogin = useCallback(async () => {
-    setIsLoading(true)
     setIsDemo(true)
     setIsAuthenticated(true)
-    setIsLoading(false)
 
     console.log(
       'Demo login is enabled. You can use the following credentials to login:'
@@ -148,7 +145,6 @@ export const AuthenticationProvider: React.FC<{
   }, [])
 
   const bootstrap = useCallback(async () => {
-    setIsLoading(true)
     const [users, errors] = await sq.query(q => {
       return q.me({resourceId: snekResourceId}).map(({user}) => ({
         id: user.id,
@@ -171,7 +167,7 @@ export const AuthenticationProvider: React.FC<{
     if (isDemo) {
       setUser({
         id: 'demo',
-        primaryEmail: 'snekman@snek/.at',
+        primaryEmail: 'snekman@snek.at',
         username: 'snekman'
       })
     } else {
@@ -179,16 +175,52 @@ export const AuthenticationProvider: React.FC<{
     }
   }, [isDemo])
 
+  const redirectToSSO = useCallback(async () => {
+    window.location.href = `https://access.snek.at?resourceId=${snekResourceId}`
+  }, [])
+
+  useEffect(() => {
+    const accessFromLocation = new URLSearchParams(window.location.search).get(
+      'access'
+    )
+
+    if (accessFromLocation) {
+      // try to json parse the access object and get accessToken and refreshToken
+
+      try {
+        const access = JSON.parse(accessFromLocation)
+
+        if (access.accessToken && access.refreshToken) {
+          const tokenPair = {
+            accessToken: access.accessToken,
+            refreshToken: access.refreshToken
+          }
+
+          const isSession = access.isSession
+
+          setTokenPair(tokenPair, isSession)
+
+          bootstrap().then(() => {
+            redirectAfterDelay('/admin')
+          })
+        }
+      } catch (e) {
+        console.error(e)
+      }
+    }
+  }, [])
+
   return (
     <AuthenticationContext.Provider
       value={{
         isAuthenticated,
         isDemo,
-        user,
         isLoading,
+        user,
         login,
         logout,
-        demoLogin
+        demoLogin,
+        redirectToSSO
       }}>
       {props.children}
     </AuthenticationContext.Provider>
