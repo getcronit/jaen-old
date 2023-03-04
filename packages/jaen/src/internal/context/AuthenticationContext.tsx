@@ -201,7 +201,7 @@ export const AuthenticationProvider: React.FC<{
           setTokenPair(tokenPair, isSession)
 
           bootstrap().then(() => {
-            redirectAfterDelay('/admin')
+            redirectAfterDelay('/admin', 0)
           })
         }
       } catch (e) {
