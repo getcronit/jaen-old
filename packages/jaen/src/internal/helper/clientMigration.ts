@@ -3,7 +3,10 @@ import {Backend} from '../context/SnekFinder/SnekFinder.js'
 import {resetState, store} from '../redux/index.js'
 import {IJaenState} from '../redux/types.js'
 
-export const prepareMigration = async (filenameScope: string = 'draft') => {
+export const prepareMigration = async (
+  filenameScope: string = 'draft',
+  withRouting = false
+) => {
   const state = store.getState() as IJaenState
 
   const migrationData: MigrationData = {}
@@ -18,6 +21,13 @@ export const prepareMigration = async (filenameScope: string = 'draft') => {
   // pages
   migrationData.pages = {
     ...state.page.pages.nodes
+  }
+
+  // pageRouting
+  if (withRouting) {
+    migrationData.pageRouting = {
+      ...state.page.routing
+    }
   }
 
   // popups
@@ -41,6 +51,7 @@ export const insertMigration = async (migrationData: MigrationData) => {
   resetState({
     site: migrationData.jaen.site,
     page: {
+      routing: migrationData.pageRouting,
       pages: {
         nodes: migrationData.pages
       }

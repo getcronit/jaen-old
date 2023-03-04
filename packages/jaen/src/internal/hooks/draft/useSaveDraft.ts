@@ -7,7 +7,7 @@ export const useSaveDraft = () => {
 
   const saveDraft = useCallback(async () => {
     setIsSaving(true)
-    const {blob, filename} = await prepareMigration()
+    const {blob, filename} = await prepareMigration('draft', true)
 
     const url = URL.createObjectURL(blob)
 
