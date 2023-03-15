@@ -1,5 +1,4 @@
 import {HashRouter} from 'react-router-dom'
-import {useAdminStaticQuery} from '../../../hooks/useAdminStaticQuery.js'
 import {useCustomViews} from '../../../hooks/useCustomViews.js'
 import {
   buildFromViews,
@@ -24,10 +23,6 @@ export function withAdminPageWrapper<P>(
   }: P & {
     views: View[]
   }) => {
-    const data = useAdminStaticQuery()
-
-    console.log(data)
-
     if (typeof window === 'undefined') {
       return null
     }
@@ -37,9 +32,9 @@ export function withAdminPageWrapper<P>(
     const {isLoading, customViews} = useCustomViews()
 
     if (isLoading) {
-      console.log(`Loading custom views...`)
+      console.info(`Loading custom views...`)
     } else {
-      console.log(`Custom views loaded.`)
+      console.info(`Custom views loaded.`)
     }
 
     views = views.concat(customViews)

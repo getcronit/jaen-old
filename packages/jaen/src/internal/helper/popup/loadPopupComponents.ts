@@ -19,8 +19,6 @@ export const loadPopupComponents = async (
   for (const {relativePath} of jaenPopup.nodes) {
     const Popup = await popupLoader(relativePath)
     if (Popup) {
-      console.log(`Popup`, allJaenPopup, relativePath)
-
       const popup = allJaenPopup.nodes.find(
         node => node.id === relativePath
       ) as IJaenPopup

@@ -33,8 +33,6 @@ export function usePopupField<IValue>(name: string, type: string) {
 
     const p = state.popup.nodes[id]
 
-    console.log('got value', p, 'for', id, 'with name', name, 'and type', type)
-
     if (p) {
       return getPopupField(p)
     }

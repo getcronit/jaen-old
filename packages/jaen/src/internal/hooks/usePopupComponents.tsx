@@ -14,8 +14,6 @@ export const usePopupComponents = () => {
 
   const dynamicPopupNodes = useAppSelector(state => state.popup.nodes)
 
-  console.log('usePopupStaticQuery', jaenPopup, allJaenPopup)
-
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [popups, setPopups] = useState<LoadedPopupComponent[]>([])
 
@@ -30,15 +28,6 @@ export const usePopupComponents = () => {
   useEffect(() => {
     const loadPopups = async () => {
       setIsLoading(true)
-
-      // const mergedNodes = deepmerge(
-      //   allJaenPopup.nodes ?? {},
-      //   dynamicPopupNodes ?? {}
-      // )
-
-      // allJaenPopup.nodes = mergedNodes
-
-      console.log(`allJaenPopup before`, allJaenPopup, dynamicPopupNodes)
 
       Object.entries(dynamicPopupNodes).forEach(([id, node]) => {
         const index = allJaenPopup.nodes.findIndex(n => n.id === id)
@@ -58,11 +47,7 @@ export const usePopupComponents = () => {
         }
       })
 
-      console.log(`allJaenPopup`, allJaenPopup)
-
       const elements = await loadPopupComponents(jaenPopup, allJaenPopup)
-
-      console.log(`elements`, elements)
 
       setPopups(elements)
 

@@ -24,8 +24,6 @@ export const ImageField = connectField<
   ImageFieldProps
 >(
   ({jaenField, ...props}) => {
-    console.log(jaenField)
-
     if (jaenField.defaultValue) {
       console.error(
         `ImageField: using defaultValue is not recommended. If you choose to use it, please be aware that Gatsby will not be able to process the image.`
@@ -35,8 +33,6 @@ export const ImageField = connectField<
     const {toast, confirm} = useModals()
 
     const handleImageChooseClick = (info: {src: string; alt?: string}) => {
-      console.log('handleImageChooseClick')
-
       jaenField.onUpdateValue({
         ...jaenField.value,
         internalImageUrl: info.src,
@@ -51,8 +47,6 @@ export const ImageField = connectField<
     }
 
     const handleImageClearClick = () => {
-      console.log('handleImageClearClick')
-
       const updateWhenConfirmed = async () => {
         const confirmed = await confirm(
           'Are you sure you want to clear the image?'
@@ -75,7 +69,6 @@ export const ImageField = connectField<
     }
 
     const handleImageAltSaveClick = (value: string) => {
-      console.log('handleImageAltSaveClick')
       toast({
         title: 'Image description saved',
         description: 'The image description has been saved',
@@ -98,8 +91,6 @@ export const ImageField = connectField<
       id: jaenField?.staticValue?.imageId as string,
       byFieldName: jaenField.name
     })
-
-    console.log(value, gatsbyImage)
 
     const imageFieldProps = {
       alt: value.alt || 'Image',

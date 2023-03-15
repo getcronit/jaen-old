@@ -86,13 +86,7 @@ const useTreeState = (
     isNavigatorMode
   } = opt || {}
 
-  const onExpand = (expandedKeys: string[]) => {
-    console.log('onExpand', expandedKeys)
-  }
-
   const onSelect: TreeProps['onSelect'] = (selectedKeys, info) => {
-    console.log('onSelect', selectedKeys, info)
-
     const path = selectedKeys[0]?.toString() || '/'
 
     if (isNavigatorMode) {
@@ -107,10 +101,6 @@ const useTreeState = (
         onSelectPage?.(path)
       }
     }
-  }
-
-  const onCheck = (checkedKeys: string[], info: any) => {
-    console.log('onCheck', checkedKeys, info)
   }
 
   const onDrop: TreeProps['onDrop'] = info => {
@@ -214,9 +204,7 @@ const useTreeState = (
   }
 
   return {
-    onExpand,
     onSelect,
-    onCheck,
     defaultCheckedKeys,
     defaultSelectedKeys,
     selectedKeys,
@@ -323,9 +311,7 @@ export const PageTree: React.FC<PageTreeProps> = ({
   )
 
   const {
-    onExpand,
     onSelect,
-    onCheck,
     onDrop,
     defaultCheckedKeys,
     defaultSelectedKeys,
@@ -371,8 +357,6 @@ export const PageTree: React.FC<PageTreeProps> = ({
                       <MenuItem
                         icon={<AddIcon />}
                         onClick={() => {
-                          console.log('add')
-
                           onAddPage?.(node.key.toString())
                         }}>
                         Add
@@ -380,8 +364,6 @@ export const PageTree: React.FC<PageTreeProps> = ({
                       <MenuItem
                         icon={<FaEye />}
                         onClick={() => {
-                          console.log('view')
-
                           onViewPage?.(node.key.toString())
                         }}>
                         View
@@ -429,7 +411,6 @@ export const PageTree: React.FC<PageTreeProps> = ({
         showLine
         checkStrictly={true}
         defaultExpandAll
-        onExpand={onExpand}
         draggable
         onDragStart={_event => {}}
         onDragEnter={_event => {}}
@@ -483,7 +464,6 @@ export const PageTree: React.FC<PageTreeProps> = ({
             }
           }
         }}
-        onCheck={onCheck}
         icon={<></>}
         treeData={treeData}
         switcherIcon={nodeProps => {

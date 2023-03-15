@@ -33,8 +33,6 @@ export interface AdminPageProps {
 }
 const AdminPage: React.FC<AdminPageProps> = withRedux(
   ({items, activePath, children, onNavigate}) => {
-    console.log('AdminPage', {items, activePath, children, onNavigate})
-
     const leftRef = React.useRef<HTMLDivElement>(null)
 
     const navSliderDisclosure = useDisclosure()
@@ -145,7 +143,6 @@ const AdminPage: React.FC<AdminPageProps> = withRedux(
 )
 
 export default withAdminPageWrapper(({routes, items}) => {
-  console.log(`withAdminPageWrapper`, items, routes)
   const activePath = !isSSR() ? window.location.hash.replace('#', '') : null
 
   const routerNavigate = useNavigate()

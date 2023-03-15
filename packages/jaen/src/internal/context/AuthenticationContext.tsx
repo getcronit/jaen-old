@@ -73,11 +73,10 @@ export const AuthenticationProvider: React.FC<{
 
   const login = useCallback(
     async (login: string, password: string, logMeOutAfterwards?: boolean) => {
-      console.log(`Logging in with ${login}...`, logMeOutAfterwards)
       const [data, errors] = await sq.mutate(m => {
         const signIn = m.signIn({
-          login: login,
-          password: password,
+          login,
+          password,
           resourceId: snekResourceId
         })
 
@@ -111,7 +110,6 @@ export const AuthenticationProvider: React.FC<{
     if (isDemo) {
       setIsDemo(false)
     } else {
-      console.log('Logging out...')
       const [data, errors] = await sq.mutate(m =>
         m.signOut({
           resourceId: snekResourceId
@@ -136,10 +134,6 @@ export const AuthenticationProvider: React.FC<{
   const demoLogin = useCallback(async () => {
     setIsDemo(true)
     setIsAuthenticated(true)
-
-    console.log(
-      'Demo login is enabled. You can use the following credentials to login:'
-    )
 
     redirectAfterDelay('/admin')
   }, [])
@@ -171,7 +165,7 @@ export const AuthenticationProvider: React.FC<{
         username: 'snekman'
       })
     } else {
-      bootstrap()
+      void bootstrap()
     }
   }, [isDemo])
 
@@ -200,7 +194,7 @@ export const AuthenticationProvider: React.FC<{
 
           setTokenPair(tokenPair, isSession)
 
-          bootstrap().then(() => {
+          void bootstrap().then(() => {
             redirectAfterDelay('/admin', 0)
           })
         }

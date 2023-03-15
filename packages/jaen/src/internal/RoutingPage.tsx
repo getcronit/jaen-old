@@ -55,14 +55,6 @@ const Dynamic = (props: RouteComponentProps & Partial<PageProps>) => {
       : null
 
     const {value: Component} = usePromiseEffect(async () => {
-      console.log(`Dynamic `, {
-        path,
-        dynamicPaths,
-        dynamicPath,
-        pageId,
-        templateName,
-        template
-      })
       if (template) {
         // TODO: Remove this hack to ignore incorrect template names
         return await templateLoader(templateName)
@@ -83,8 +75,6 @@ const Dynamic = (props: RouteComponentProps & Partial<PageProps>) => {
       />
     )
   }
-
-  console.log(`Dynamic `, {path, dynamicPaths})
 
   if (!path || dynamicPaths[path] == null) {
     return loadingComponent

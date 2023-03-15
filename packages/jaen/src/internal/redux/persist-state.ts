@@ -36,22 +36,18 @@ export default <RootState extends {}>(persistKey: string) => {
 
       const cleanState = JSON.parse(JSON.stringify(state))
 
-      console.log('state', state)
-      console.log('cleanState', cleanState)
-
       removeLoadingAndError(cleanState)
 
       const serialState = JSON.stringify(cleanState)
 
       localStorage.setItem(persistKey, serialState)
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
   }
 
   const persistState = (store: Store) => {
     store.subscribe(() => {
-      console.log('persisting state')
       saveState(store.getState() as RootState)
     })
 

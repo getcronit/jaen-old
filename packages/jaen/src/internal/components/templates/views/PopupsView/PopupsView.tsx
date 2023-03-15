@@ -121,8 +121,6 @@ export const PopupsView: React.FC<PopupsViewProps> = ({
 
   onPopupEnableToggle
 }) => {
-  console.log(popups)
-
   const [popup, setPopup] = useState<LoadedPopupComponent | null>(null)
 
   const onPopupEdit = (popup: LoadedPopupComponent) => {

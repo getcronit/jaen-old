@@ -44,16 +44,12 @@ const combinedReducer = combineReducers({
 // Reset state if action called
 const rootReducer = (state: any, action: any) => {
   if (action.type === 'RESET_STATE') {
-    console.log('RESET_STATE', action)
-
     const payload: {
       site?: typeof siteInitialState
       page?: typeof pageInitialState
       popup?: typeof popupInitialState
       widget?: typeof widgetInitialState
     } = action.payload || {}
-
-    console.log('payload', payload)
 
     return {
       site: deepmerge(siteInitialState, payload.site || {}),

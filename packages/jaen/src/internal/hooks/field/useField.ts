@@ -43,8 +43,6 @@ export function useField<IValue>(name: string, type: string) {
   const getValue = () => {
     const state = store.getState() as RootState
 
-    console.log('state', state)
-
     const page = state.page.pages.nodes[jaenPage.id]
 
     if (page) {

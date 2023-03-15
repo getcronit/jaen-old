@@ -44,7 +44,6 @@ const closestSibling = (
 
 interface TooltipProps {
   actions: React.ReactNode[]
-  ref: HTMLDivElement
 }
 
 const Tooltip: React.FC<TooltipProps> = props => {
@@ -109,7 +108,7 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = ({
 
     highlighterRoot.style.left = `${element.offsetLeft}px`
 
-    //> Tooltip
+    // > Tooltip
 
     // set width of tooltip to width of element
     tooltipRoot.style.width = `${element.offsetWidth}px`
@@ -126,8 +125,7 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = ({
 
       const root = createRoot(tooltipRoot)
 
-      // @ts-ignore
-      root.render(<Tooltip actions={tooltipButtons} ref={element} />)
+      root.render(<Tooltip actions={tooltipButtons} />)
     }
   }
 
@@ -162,15 +160,11 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = ({
     const currentTarget = event.currentTarget as HTMLDivElement
     const relatedTarget = event.relatedTarget as HTMLDivElement
 
-    console.log('relatedTarget', relatedTarget)
-
     const isHighlightTooltip = relatedTarget?.classList.contains(
       CLASSNAMES.JAEN_HIGHLIGHT_TOOLTIP
     )
 
     const target = currentTarget.parentElement
-
-    console.log('mouseleave event', event)
 
     if (!target) return
 
@@ -233,8 +227,6 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = ({
 
     highlights.forEach(highlight => {
       // remove highlight from element
-
-      console.log('highlight', highlight)
 
       element.removeChild(highlight)
     })

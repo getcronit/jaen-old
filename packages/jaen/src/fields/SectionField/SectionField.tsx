@@ -77,8 +77,6 @@ export const SectionField = withRedux(
       type: SelectorBlockAddType,
       item?: IJaenBlock
     ) => {
-      console.log('handleSectionAdd', block, type, item)
-
       if (item) {
         if (type === 'prepend') {
           onSectionPrepend(block.slug, item.id, item.ptrPrev)

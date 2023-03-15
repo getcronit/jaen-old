@@ -1,7 +1,6 @@
 import {createMigration, CreateMigrationOptions} from '../createMigration.js'
 
 export default async (options: CreateMigrationOptions) => {
-  console.log(options)
   const JAEN_MIGRATION_URL = options.migrationUrl
 
   if (!JAEN_MIGRATION_URL) {

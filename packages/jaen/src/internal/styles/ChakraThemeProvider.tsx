@@ -30,7 +30,6 @@ export function ThemeProvider({
 
       {React.Children.map(props.children, (child: React.ReactElement) => {
         if (!React.isValidElement(child)) {
-          console.log('Invalid child', child)
           return child
         }
 

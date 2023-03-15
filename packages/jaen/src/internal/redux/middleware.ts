@@ -5,7 +5,7 @@ export const onErrorResetAndRery = <State>(persistKey: string) => {
     try {
       return next(action)
     } catch (e) {
-      console.log('Error during action dispatching. Call Fn then retry', e)
+      console.error('Error during action dispatching. Call Fn then retry', e)
 
       localStorage.removeItem(persistKey)
 

@@ -59,15 +59,11 @@ export const LoginForm: React.FC<LoginFormProps> = props => {
   const onSubmit = async (values: LoginFormValues) => {
     const success = await props.onSubmit(values)
     if (success) {
-      console.log('success')
-
       setAlert({
         status: 'success',
         message: 'Login successful. Redirecting...'
       })
     } else {
-      console.log('failed')
-
       setAlert({
         status: 'error',
         message: 'Invalid email or password'

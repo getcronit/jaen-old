@@ -37,8 +37,6 @@ export interface CMSProps {
 const CMSComponent: React.FC<CMSProps> = props => {
   const location = useLocation()
 
-  console.log('location', location)
-
   const isActive = (path: string) => {
     return location.pathname.endsWith(path)
   }
@@ -126,8 +124,6 @@ export const CMS = () => {
           element={routes[0]?.path && <Navigate to={routes[0].path} replace />}
         />
         {routes.map(route => {
-          console.log('route', route)
-
           return (
             <Route
               key={route.path}

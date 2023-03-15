@@ -22,26 +22,7 @@ import {LoginForm} from '../../organisms/index.js'
 export interface LoginPageProps {}
 
 export const LoginPage: React.FC<LoginPageProps> = withRedux(() => {
-  const {
-    isAuthenticated,
-    isDemo,
-    isLoading,
-    user,
-    login,
-    logout,
-    demoLogin,
-    redirectToSSO
-  } = useAuthentication()
-
-  console.log(
-    isAuthenticated,
-    isDemo,
-    isLoading,
-    user,
-    login,
-    logout,
-    demoLogin
-  )
+  const {login, demoLogin, redirectToSSO} = useAuthentication()
 
   return (
     <ThemeProvider>
@@ -117,13 +98,15 @@ export const LoginPage: React.FC<LoginPageProps> = withRedux(() => {
 
                     return true
                   } catch (error) {
-                    console.log(error)
+                    console.error(error)
                     return false
                   }
                 }}
                 onForgotPassword={() => {}}
                 onSignUp={() => {}}
-                onSSO={redirectToSSO}
+                onSSO={() => {
+                  void redirectToSSO()
+                }}
                 onTryDemo={() => {
                   void demoLogin()
                 }}

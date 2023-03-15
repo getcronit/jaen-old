@@ -68,8 +68,6 @@ export const useJaenPageTree = (): IJaenPage[] => {
     getStatePages(state)
   ) as IJaenPage[]
 
-  console.log('useJaenPageTree', staticPages, pages)
-
   const mergeData = useMemo(
     () => mergeStaticWithStatePages(staticPages, pages as any),
     [staticPages, pages]
@@ -83,8 +81,6 @@ export const useJaenPageTree = (): IJaenPage[] => {
       ),
     [mergeData]
   )
-
-  console.log('useJaenPageTree', filteredData)
 
   return filteredData
 }

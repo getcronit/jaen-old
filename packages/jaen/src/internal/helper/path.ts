@@ -36,11 +36,7 @@ export const generatePagePaths = (allNodes: IJaenPage[], pageId: string) => {
   if (originNode) {
     const paths: Record<string, string> = {}
 
-    console.log(`originNode`, originNode)
-
     const originPath = generatePageOriginPath(allNodes, originNode)
-
-    console.log('originPath', originPath)
 
     const lookupPath = (node: IJaenPage, pathPrefix = '/') => {
       paths[pathPrefix] = node.id
