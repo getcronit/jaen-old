@@ -24,7 +24,7 @@ const theme = extendTheme(
 
     styles: {
       global: {
-        ['div:has(div):has(.jaen-image-wrapper)']: {
+        'div:has(div):has(.jaen-image-wrapper)': {
           isolation: 'isolate'
         },
         [`.${CLASSNAMES.JAEN_HIGHLIGHT}`]: {
@@ -64,8 +64,8 @@ const theme = extendTheme(
           position: 'absolute',
           pointerEvents: 'all',
           // height: '',
-          pt: '5px',
-          pb: '35px',
+          py: '10px',
+          mb: '25px',
           // negative top value to position tooltip above highlight
           top: '-40px'
         },

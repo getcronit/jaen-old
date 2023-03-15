@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {IJaenPage} from '../../types.js'
 import {RootState, store, useAppDispatch, withRedux} from '../redux'
 import {actions} from '../redux/slices/page.js'
@@ -162,18 +162,20 @@ export const useJaenPageIndex = (
     }
   }, [id])
 
-  const dynamicChildren = React.useMemo(() => {
+  const [dynamicChildren, setDynamicChildren] = React.useState<IJaenPage[]>([])
+
+  useEffect(() => {
     if (dynamicChildrenIds) {
       const state = store.getState() as IJaenState
 
       const dynamicJaenPages = state.page.pages.nodes
-      return dynamicChildrenIds.map(({id}) => ({
+      const ds = dynamicChildrenIds.map(({id}) => ({
         id,
         ...dynamicJaenPages[id]
       })) as IJaenPage[]
-    }
 
-    return []
+      setDynamicChildren(ds)
+    }
   }, [dynamicChildrenIds])
 
   staticChildren = staticChildren || []
