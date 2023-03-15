@@ -170,6 +170,7 @@ export const SectionField = withRedux(
               return (
                 <HighlightTooltip
                   key={item.id}
+                  as={SectionWrapper}
                   isEditing={isEditing}
                   actions={[
                     <Button
@@ -202,18 +203,18 @@ export const SectionField = withRedux(
                         }}
                       />
                     </HStack>
-                  ]}>
-                  <SectionWrapper
-                    {...sectionProps}
-                    w="fit-content"
-                    h="fit-content">
+                  ]}
+                  asProps={{
+                    ...sectionProps
+                  }}>
+                  <Box>
                     <JaenSectionBlockProvider
                       path={sectionPath}
                       id={item.id}
                       position={index}
                       Component={s.Component}
                     />
-                  </SectionWrapper>
+                  </Box>
                 </HighlightTooltip>
               )
             })}

@@ -55,10 +55,7 @@ export const DataImage: React.FC<DataImageProps> = ({
       )
     } else {
       imageElement = (
-        <Center
-          style={imageFieldProps.style}
-          backgroundImage="linear-gradient(to left, #c8d9ff 50%, transparent 50%)"
-          backgroundSize="4px 100%">
+        <Center style={imageFieldProps.style}>
           <Text color="gray.600" fontSize="sm">
             No image
           </Text>

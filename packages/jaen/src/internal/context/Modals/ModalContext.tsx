@@ -7,6 +7,7 @@
  */
 
 import {
+  Box,
   Button,
   CreateToastFnReturn,
   Input,
@@ -27,6 +28,7 @@ import {
   useRef,
   useState
 } from 'react'
+import {ThemeProvider} from '../../styles/ChakraThemeProvider.js'
 
 // TODO: Select field contents when a prompt() loads
 // TODO: Fix Promise<> return types instead of using any
@@ -105,26 +107,30 @@ export const ModalProvider = ({children}: {children: ReactNode}) => {
               onClose={handleClose}
               initialFocusRef={type === ModalType.Prompt ? input : ok}>
               <ModalOverlay />
-              <ModalContent>
-                <ModalBody mt={5}>
-                  <Stack spacing={5}>
-                    <Text> {message}</Text>
-                    {type === ModalType.Prompt && (
-                      <Input ref={input} defaultValue={defaultValue} />
-                    )}
-                  </Stack>
-                </ModalBody>
-                <ModalFooter>
-                  {type !== ModalType.Alert && (
-                    <Button mr={3} variant="ghost" onClick={handleCancel}>
-                      Cancel
-                    </Button>
-                  )}
-                  <Button onClick={handleOK} ref={ok}>
-                    OK
-                  </Button>
-                </ModalFooter>
-              </ModalContent>
+              <ThemeProvider>
+                <Box>
+                  <ModalContent>
+                    <ModalBody mt={5}>
+                      <Stack spacing={5}>
+                        <Text> {message}</Text>
+                        {type === ModalType.Prompt && (
+                          <Input ref={input} defaultValue={defaultValue} />
+                        )}
+                      </Stack>
+                    </ModalBody>
+                    <ModalFooter>
+                      {type !== ModalType.Alert && (
+                        <Button mr={3} variant="ghost" onClick={handleCancel}>
+                          Cancel
+                        </Button>
+                      )}
+                      <Button onClick={handleOK} ref={ok}>
+                        OK
+                      </Button>
+                    </ModalFooter>
+                  </ModalContent>
+                </Box>
+              </ThemeProvider>
             </Modal>
           )
         }),

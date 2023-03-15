@@ -194,14 +194,9 @@ export const createSchemaCustomization: GatsbyNode['onCreateWebpackConfig'] = ({
 
           const sourcePages = JaenSource.sourcePagesPath
 
-          console.log(`sourcePages`, sourcePages)
-          console.log(page.component)
-
           const componentName = page?.component?.includes(sourcePages)
             ? page.component.replace(`${sourcePages}/`, '')
             : undefined
-
-          console.log(`componentName`, componentName)
 
           return componentName
         }

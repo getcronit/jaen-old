@@ -5,10 +5,12 @@
   "version": "0.1.0",
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
+    "@chakra-ui/gatsby-plugin": "^3.1.1",
+    "@chakra-ui/react": "^2.5.1",
     "@snek-at/jaen": "*",
-    "gatsby-plugin-jaen": "*",
     "gatsby": "^5",
     "gatsby-plugin-image": "^3",
+    "gatsby-plugin-jaen": "*",
     "gatsby-plugin-manifest": "^5",
     "gatsby-plugin-sharp": "^5",
     "gatsby-source-filesystem": "^5",

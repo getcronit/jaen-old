@@ -1,7 +1,7 @@
 import {Box} from '@chakra-ui/react'
 import {ComponentMeta, Story} from '@storybook/react'
 import React from 'react'
-import {withJaenMock} from '../../withJaenMock.js'
+import {withJaenMock} from '../../internal/testing/withJaenMock.js'
 import {ImageField} from './ImageField.js'
 export default {
   title: 'fields/ImageField',

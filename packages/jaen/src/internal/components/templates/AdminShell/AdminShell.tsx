@@ -1,5 +1,6 @@
 import {Box} from '@chakra-ui/react'
 import {NewsSlideProvider} from '../../../context/NewsSlideContext.js'
+import {ThemeProvider} from '../../../styles/ChakraThemeProvider.js'
 import {NewsSlide} from '../../molecules/index.js'
 import {AdminToolbar} from '../../organisms/index.js'
 
@@ -61,21 +62,26 @@ export const AdminShell: React.FC<AdminShellProps> = props => {
     <>
       <NewsSlideProvider>
         <Box pos="fixed" top="0" w="full" zIndex={2}>
-          <AdminToolbar withoutShadow={props.withoutAdminToolbarShadow} />
-          {props.beforeAdminShell}
+          <ThemeProvider>
+            <AdminToolbar withoutShadow={props.withoutAdminToolbarShadow} />
+            {props.beforeAdminShell}
+          </ThemeProvider>
         </Box>
 
         <Box pt={marginTop} pos="relative">
-          <NewsSlide
-            top="0"
-            right="0"
-            mt={marginTop}
-            pos="fixed"
-            zIndex={1}
-            h={`calc(100vh - ${
-              props.contentOffset || 'var(--chakra-sizes-14)'
-            })`}
-          />
+          <ThemeProvider>
+            <NewsSlide
+              top="0"
+              right="0"
+              mt={marginTop}
+              pos="fixed"
+              zIndex={1}
+              h={`calc(100vh - ${
+                props.contentOffset || 'var(--chakra-sizes-14)'
+              })`}
+            />
+          </ThemeProvider>
+
           <Box zIndex={0} position="relative">
             {props.children}
           </Box>

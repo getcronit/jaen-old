@@ -46,7 +46,7 @@ export function useWidget<T extends object>(widgetName: string) {
     }
 
     return staticData
-  }, [dynamicData, staticData])
+  }, [dynamicData, staticData]) as T
 
   const writeData = (data: T) =>
     store.dispatch(

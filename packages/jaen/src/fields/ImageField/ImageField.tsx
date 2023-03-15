@@ -145,7 +145,7 @@ export const ImageField = connectField<
         {
           // The box is needed because the highlight tooltip will not work if the image is the only child
         }
-        <Box boxSize="full">
+        <Box boxSize="full" className="jaen-image-wrapper">
           <DataImage
             imageFieldProps={imageFieldProps}
             internalImageUrl={value.internalImageUrl}

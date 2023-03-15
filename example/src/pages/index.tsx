@@ -1,9 +1,76 @@
-import * as React from "react"
-import { Button, Box, Image, Badge, Wrap, WrapItem } from "@chakra-ui/react"
 import { StarIcon } from "@chakra-ui/icons"
-import { connectPage, Field, useWidget, connectBlock } from "@snek-at/jaen"
+import { Box, Badge, Wrap, WrapItem, Button, Text } from "@chakra-ui/react"
+
+import { connectBlock, connectPage, Field, useWidget } from "@snek-at/jaen"
+import * as React from "react"
 
 import { graphql } from "gatsby"
+
+const FullImageCard = connectBlock(
+  () => {
+    return (
+      <Box
+        boxSize="sm"
+        borderWidth="1px"
+        borderRadius="lg"
+        overflow={"hidden"}
+        borderColor="green"
+      >
+        <Field.Image name="image" label="Image" />
+      </Box>
+    )
+  },
+  {
+    name: "fullImageCard",
+    label: "Full Image Card",
+  }
+)
+
+const GrowOnHover = connectBlock(
+  () => {
+    return (
+      <Box
+        boxSize="sm"
+        borderWidth="1px"
+        borderRadius="lg"
+        overflow={"hidden"}
+        borderColor="green"
+        _hover={{
+          transform: "scale(1.5)",
+          // transition: "all 0.2s ease-in-out",
+        }}
+      >
+        <Field.Image name="image" label="Image" />
+      </Box>
+    )
+  },
+  {
+    name: "growOnHover",
+    label: "Grow On Hover",
+  }
+)
+
+const RotatedBox = connectBlock(
+  () => {
+    return (
+      <Box
+        boxSize="sm"
+        borderWidth="1px"
+        borderRadius="lg"
+        overflow={"hidden"}
+        borderColor="green"
+        transform="rotate(45deg)"
+        p="4"
+      >
+        <Field.Image name="image" label="Image" />
+      </Box>
+    )
+  },
+  {
+    name: "rotatedBox",
+    label: "Rotated Box",
+  }
+)
 
 const Card = connectBlock(
   () => {
@@ -19,7 +86,13 @@ const Card = connectBlock(
     }
 
     return (
-      <Box w="sm" borderWidth="1px" borderRadius="lg">
+      <Box
+        w="sm"
+        borderWidth="1px"
+        borderRadius="lg"
+        overflow={"hidden"}
+        borderColor="green"
+      >
         {/* <Image src={property.imageUrl} alt={property.imageAlt} /> */}
 
         <Box h="md" m="4">
@@ -107,18 +180,36 @@ const IndexPage = connectPage(
 
     return (
       <>
+        <Button>Button 1</Button>
+
+        <Button>Button 2</Button>
         <Field.Section
           name="section"
           label="Section"
-          blocks={[Card]}
+          blocks={[Card, FullImageCard, RotatedBox, GrowOnHover]}
           as={Wrap}
           sectionAs={WrapItem}
+          sectionProps={{
+            ref: (el: any) => console.log("ELEMENT", el),
+            color: "red",
+          }}
         />
-        <div style={{ color: `purple`, fontSize: `72px`, height: "5000px" }}>
+        <div
+          style={{ color: `purple`, fontSize: `72px`, height: "5000px" }}
+          id="app"
+        >
           <h1>Hello Gatsby!</h1>
           <p>Now go build something great.</p>
-          <Button colorScheme="teal">Button</Button>
-          <Field.Text name="test" defaultValue={"teest"} label="Test" />
+          <Button>Button 3</Button>
+          <Field.Text name="test" defaultValue="teest" label="Test" />
+
+          <Text fontFamily={"fantasy"}>
+            <Field.Text
+              name="custom-font"
+              defaultValue="Fantasyyyy"
+              label="Custom Font"
+            />
+          </Text>
         </div>
       </>
     )

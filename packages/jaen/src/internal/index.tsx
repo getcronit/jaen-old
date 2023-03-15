@@ -31,7 +31,7 @@ export const GatsbyRootWrapper: React.FC<WrapperProps> = ({children}) => {
   useInterceptGatsbyNavigate()
 
   return (
-    <ChakraProvider resetCSS={true} theme={theme}>
+    <ChakraProvider cssVarsRoot="#coco" resetCSS theme={theme}>
       <ModalProvider>
         <AuthenticationProvider>
           <SiteProvider>
@@ -75,9 +75,11 @@ export const GatsbyPageWrapper: React.FC<PageWrapperProps> = ({
     if (!isAuthenticated && !isAdminOrLogin) {
       return (
         <>
-          <ActivationButton onClick={handleActivationButtonClick} />
+          <ThemeProvider>
+            <ActivationButton onClick={handleActivationButtonClick} />
+          </ThemeProvider>
 
-          <ThemeProvider>{children}</ThemeProvider>
+          {children}
         </>
       )
     }

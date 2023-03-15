@@ -9,12 +9,8 @@ const GatsbyConfig: GatsbyConfigType = {
 }
 
 GatsbyConfig.plugins = [
-  {
-    resolve: `gatsby-plugin-compile-es6-packages`,
-    options: {
-      modules: [`@chakra-ui/gatsby-plugin`]
-    }
-  },
+  `@chakra-ui/gatsby-plugin`,
+
   {
     resolve: `gatsby-plugin-sharp`,
     options: {

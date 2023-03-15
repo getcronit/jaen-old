@@ -5,11 +5,7 @@ import {
   theme as baseTheme,
   withDefaultColorScheme
 } from '@chakra-ui/react'
-
-import {CLASSNAMES} from './constants.js'
-
-const fontFamily =
-  '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; '
+import {CLASSNAMES, FONT_FAMILY} from './constants.js'
 
 const theme = extendTheme(
   {
@@ -18,42 +14,60 @@ const theme = extendTheme(
       brand: baseTheme.colors.blue
     },
     fonts: {
-      body: fontFamily,
-      heading: fontFamily,
-      mono: fontFamily
+      body: FONT_FAMILY,
+      heading: FONT_FAMILY,
+      mono: FONT_FAMILY
+    },
+    fontSizes: {
+      ...baseTheme.fontSizes
     },
 
     styles: {
       global: {
+        ['div:has(div):has(.jaen-image-wrapper)']: {
+          isolation: 'isolate'
+        },
         [`.${CLASSNAMES.JAEN_HIGHLIGHT}`]: {
-          // // boxShadow: 'inset 5px 5px 10px #555;',
-          // outline: '2px solid var(--chakra-colors-pink-100)',
-          // outlineOffset: '4px', // 'var(--chakra-space-1)',
-          // 'outline-radius': '11px', // 'var(--chakra-radii-lg)',
-          // zIndex: 'var(--chakra-zIndices-docked)'
-          position: 'relative',
-          zIndex: 'var(--chakra-zIndices-docked)'
+          position: 'absolute',
+          borderRadius: '11px',
+          pointerEvents: 'none'
         },
         [`.${CLASSNAMES.JAEN_HIGHLIGHT}:before`]: {
           content: '""',
           position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          zIndex: 'var(--chakra-zIndices-docked)',
-          border: '2px solid var(--chakra-colors-pink-100)',
-          // outlineOffset: '4px', // 'var(--chakra-space-1)',
-          // borderRadius: 'var(--chakra-radii-md)', //'11px', // 'var(--chakra-radii-lg)'
+          top: '-6px', // border: 2px + offset: 4px
+          right: ' -6px', // border: 2px + offset: 4px
+          bottom: '-6px', // border: 2px + offset: 4px
+          left: '-6px', // border: 2px + offset: 4px
+          border: ' 2px solid var(--chakra-colors-pink-100)',
+          borderRadius: '15px', // border—radius: 11px + offset: 4px
           pointerEvents: 'none'
-          // margin: '0.5em'
         },
+        // [`.${CLASSNAMES.JAEN_HIGHLIGHT_FRAME}`]: {
+        //   position: 'absolute',
+        //   borderRadius: '11px',
+        //   pointerEvents: 'none'
+        // },
+        // [`.${CLASSNAMES.JAEN_HIGHLIGHT_FRAME}:before`]: {
+        //   content: '""',
+        //   position: 'absolute',
+        //   top: '-6px', // border: 2px + offset: 4px
+        //   right: ' -6px', // border: 2px + offset: 4px
+        //   bottom: '-6px', // border: 2px + offset: 4px
+        //   left: '-6px', // border: 2px + offset: 4px
+        //   border: ' 2px solid var(--chakra-colors-pink-100)',
+        //   borderRadius: '15px', // border—radius: 11px + offset: 4px
+        //   pointerEvents: 'none'
+        // },
+
         [`.${CLASSNAMES.JAEN_HIGHLIGHT_TOOLTIP}`]: {
-          height: '100%',
-          width: '100%',
-          pointerEvents: 'none',
           position: 'absolute',
-          top: 0
+          pointerEvents: 'all',
+          // height: '',
+          pt: '5px',
+          pb: '35px',
+          // negative top value to position tooltip above highlight
+          top: '-40px'
         },
         'html, body, #root, #___gatsby': {
           // height: '100%',
@@ -126,7 +140,7 @@ const theme = extendTheme(
             }
           },
           jaenHighlightTooltip: {
-            bg: 'pink.100',
+            bg: 'rgba(254, 215, 226, 0.8)',
             color: 'pink.900',
             _hover: {
               bg: 'pink.200'
@@ -139,12 +153,12 @@ const theme = extendTheme(
             px: '2'
           },
           jaenHighlightTooltipText: {
-            bg: 'pink.100',
+            bg: 'rgba(254, 215, 226, 0.8)',
             color: 'pink.900',
-            _hover: {
-              bg: 'pink.100',
-              color: 'pink.900'
-            },
+            // _hover: {
+            //   bg: 'pink.100',
+            //   color: 'pink.900'
+            // },
             borderRadius: 'full',
             fontWeight: 'normal',
             cursor: 'default',

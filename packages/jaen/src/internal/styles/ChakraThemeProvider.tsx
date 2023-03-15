@@ -1,14 +1,23 @@
 import {toCSSVar} from '@chakra-ui/react'
 import {ThemeProvider as EmotionThemeProvider} from '@emotion/react'
-import {useMemo} from 'react'
+import React, {useMemo} from 'react'
+
 import theme from './theme.js'
 
 export interface ThemeProviderProps {
   children: React.ReactNode
   theme?: Record<string, any>
+  cssVarsRoot?: string
 }
 
-export function ThemeProvider(props: ThemeProviderProps): JSX.Element {
+// let registeredCssVars: {
+//   [key: string]: boolean
+// } = {}
+
+export function ThemeProvider({
+  cssVarsRoot = 'coco',
+  ...props
+}: ThemeProviderProps): JSX.Element {
   const {theme: themeOverride} = props
 
   const t = themeOverride || theme
@@ -17,7 +26,18 @@ export function ThemeProvider(props: ThemeProviderProps): JSX.Element {
 
   return (
     <EmotionThemeProvider theme={computedTheme}>
-      {props.children}
+      {/* {<CSSVars root={`#${cssVarsRoot}` || ':host, :root'} />} */}
+
+      {React.Children.map(props.children, (child: React.ReactElement) => {
+        if (!React.isValidElement(child)) {
+          console.log('Invalid child', child)
+          return child
+        }
+
+        return React.cloneElement(child as React.ReactElement, {
+          id: cssVarsRoot
+        })
+      })}
     </EmotionThemeProvider>
   )
 }

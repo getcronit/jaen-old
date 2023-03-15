@@ -1,7 +1,7 @@
-import {AdminToolbar} from './internal/components/index.js'
-import {PageContextType, PageProvider} from './internal/context/PageProvider.js'
-import {withSnekFinder} from './internal/context/SnekFinder/withSnekFinder.js'
-import {GatsbyRootWrapper} from './internal/index.js'
+import {AdminToolbar} from '../components/index.js'
+import {PageContextType, PageProvider} from '../context/PageProvider.js'
+import {withSnekFinder} from '../context/SnekFinder/withSnekFinder.js'
+import {GatsbyRootWrapper} from '../index.js'
 
 export type JaenMockProps = PageContextType
 
