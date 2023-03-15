@@ -59,14 +59,32 @@ const useDemoLogin = (): [
   return [isDemo, setIsDemo]
 }
 
+const useAuthenticated = (): [
+  isAuthenticated: boolean,
+  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
+] => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+
+  useEffect(() => {
+    const storedIsAuthenticated = localStorage.getItem('isAuthenticated')
+    setIsAuthenticated(storedIsAuthenticated === 'true')
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem('isAuthenticated', isAuthenticated ? 'true' : 'false')
+  }, [isAuthenticated])
+
+  return [isAuthenticated, setIsAuthenticated]
+}
+
 export const AuthenticationProvider: React.FC<{
   children: React.ReactNode
 }> = props => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useAuthenticated()
 
   const [user, setUser] = useState<AutenticationContext['user']>(null)
 
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(isAuthenticated)
 
   const [isDemo, setIsDemo] = useDemoLogin()
   const isEditing = useStatus()
@@ -129,7 +147,7 @@ export const AuthenticationProvider: React.FC<{
     isEditing.setEditing(false)
 
     redirectAfterDelay('/admin/login?loggedOut=true')
-  }, [])
+  }, [isDemo])
 
   const demoLogin = useCallback(async () => {
     setIsDemo(true)
@@ -165,9 +183,11 @@ export const AuthenticationProvider: React.FC<{
         username: 'snekman'
       })
     } else {
-      void bootstrap()
+      if (isAuthenticated) {
+        void bootstrap()
+      }
     }
-  }, [isDemo])
+  }, [isDemo, isAuthenticated])
 
   const redirectToSSO = useCallback(async () => {
     window.location.href = `https://access.snek.at?resourceId=${snekResourceId}`
