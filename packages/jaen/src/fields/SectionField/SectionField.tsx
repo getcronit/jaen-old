@@ -139,11 +139,11 @@ export const SectionField = withRedux(
       <HighlightTooltip isEditing={isEditing} actions={tooltipButtons}>
         <Box boxSize="full">
           <Wrapper
+            minH="64"
+            w="full"
             {...rest.props}
             className={rest.className}
-            style={rest.style}
-            minH="64"
-            w="full">
+            style={rest.style}>
             {section.items.map((item, index) => {
               const s = sectionsDict[item.type]
 
