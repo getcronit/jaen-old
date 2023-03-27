@@ -64,11 +64,20 @@ const useAuthenticated = (): [
   isAuthenticated: boolean,
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
 ] => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const getIsAuthenticated = useCallback(() => {
+    return localStorage.getItem('isAuthenticated') === 'true'
+  }, [])
+
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    if (typeof window === 'undefined') {
+      return false
+    }
+
+    return getIsAuthenticated()
+  })
 
   useEffect(() => {
-    const storedIsAuthenticated = localStorage.getItem('isAuthenticated')
-    setIsAuthenticated(storedIsAuthenticated === 'true')
+    setIsAuthenticated(getIsAuthenticated())
   }, [])
 
   useEffect(() => {
