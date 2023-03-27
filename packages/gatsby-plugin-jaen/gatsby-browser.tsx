@@ -3,15 +3,21 @@ import {GatsbyBrowser} from 'gatsby'
 import {internal} from '@snek-at/jaen'
 
 import '@snek-at/jaen/dist/index.css'
+import 'vanilla-cookieconsent/dist/cookieconsent.css'
 
-const {GatsbyRootWrapper, GatsbyPageWrapper} = internal
+const {GatsbyRootWrapper, GatsbyPageWrapper, CookieConsent} = internal
 
 export const wrapRootElement: GatsbyBrowser['wrapRootElement'] = ({
   element,
   pathname
 }) => {
   // @ts-expect-error
-  return <GatsbyRootWrapper>{element}</GatsbyRootWrapper>
+  return (
+    <GatsbyRootWrapper>
+      <CookieConsent />
+      {element}
+    </GatsbyRootWrapper>
+  )
 }
 
 export const wrapPageElement: GatsbyBrowser['wrapPageElement'] = ({

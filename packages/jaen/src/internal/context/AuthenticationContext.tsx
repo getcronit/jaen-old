@@ -3,6 +3,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState
 } from 'react'
 
@@ -87,7 +88,9 @@ export const AuthenticationProvider: React.FC<{
   const [isLoading, setIsLoading] = useState(isAuthenticated)
 
   const [isDemo, setIsDemo] = useDemoLogin()
-  const isEditing = useStatus()
+  const status = useStatus()
+
+  // Test which status attributes are causing the re-render
 
   const login = useCallback(
     async (login: string, password: string, logMeOutAfterwards?: boolean) => {
@@ -144,7 +147,7 @@ export const AuthenticationProvider: React.FC<{
     }
 
     setIsAuthenticated(false)
-    isEditing.setEditing(false)
+    status.setEditing(false)
 
     redirectAfterDelay('/admin/login?loggedOut=true')
   }, [isDemo])
@@ -224,19 +227,35 @@ export const AuthenticationProvider: React.FC<{
     }
   }, [])
 
+  const children = useMemo(() => {
+    return props.children
+  }, [])
+
+  const value = useMemo(() => {
+    return {
+      isAuthenticated,
+      isDemo,
+      isLoading,
+      user,
+      login,
+      logout,
+      demoLogin,
+      redirectToSSO
+    }
+  }, [
+    isAuthenticated,
+    isDemo,
+    isLoading,
+    user,
+    login,
+    logout,
+    demoLogin,
+    redirectToSSO
+  ])
+
   return (
-    <AuthenticationContext.Provider
-      value={{
-        isAuthenticated,
-        isDemo,
-        isLoading,
-        user,
-        login,
-        logout,
-        demoLogin,
-        redirectToSSO
-      }}>
-      {props.children}
+    <AuthenticationContext.Provider value={value}>
+      {children}
     </AuthenticationContext.Provider>
   )
 }

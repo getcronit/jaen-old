@@ -8,7 +8,8 @@ import {
   MenuItem,
   MenuList,
   Tag,
-  Text
+  Text,
+  Tooltip
 } from '@chakra-ui/react'
 import Tree, {TreeProps} from 'rc-tree'
 
@@ -16,7 +17,7 @@ import 'rc-tree/assets/index.css'
 import {DataNode} from 'rc-tree/lib/interface.js'
 import React, {useEffect, useMemo} from 'react'
 import {FaEye} from 'react-icons/fa'
-import {HiDocument, HiMinus, HiPlus} from 'react-icons/hi'
+import {HiDocument, HiLockClosed, HiMinus, HiPlus} from 'react-icons/hi'
 
 import {matchPath} from '../../../helper/path.js'
 import {ContextMenuEvent} from '../../molecules/ContextMenu/ContextMenu.js'
@@ -348,6 +349,8 @@ export const PageTree: React.FC<PageTreeProps> = ({
         titleRender={node => {
           const childrenLength = node.children?.length || 0
 
+          const data = getNodeFromDataNode(node)
+
           return (
             <ContextMenu<HTMLDivElement>
               renderMenu={() => (
@@ -371,10 +374,10 @@ export const PageTree: React.FC<PageTreeProps> = ({
 
                       <MenuDivider />
                       <MenuItem
-                        isDisabled={getNodeFromDataNode(node).isLocked}
+                        isDisabled={data.isLocked}
                         icon={<DeleteIcon color="red" />}
                         onClick={() => {
-                          onViewPage?.(node.key.toString())
+                          onDeletePage?.(node.key.toString())
                         }}>
                         Delete
                       </MenuItem>
@@ -400,8 +403,14 @@ export const PageTree: React.FC<PageTreeProps> = ({
                     </Text>
 
                     {childrenLength > 0 && (
-                      <Tag size="sm">{childrenLength}</Tag>
+                      <Tooltip label={`${childrenLength} total child pages`}>
+                        <Tag size="sm" colorScheme="gray">
+                          {childrenLength}
+                        </Tag>
+                      </Tooltip>
                     )}
+
+                    {data.isLocked && <Icon as={HiLockClosed} />}
                   </HStack>
                 )
               }}

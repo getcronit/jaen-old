@@ -16,7 +16,7 @@ import {usePopupsInject} from './hooks/usePopupsInject.js'
 import {ThemeProvider} from './styles/ChakraThemeProvider.js'
 import theme from './styles/theme.js'
 
-export {AdminPage, LoginPage} from './components/index.js'
+export {AdminPage, CookieConsent, LoginPage} from './components/index.js'
 export {useIncomingBuildChecker} from './context/IncomingBuildChecker/index.js'
 export {useStatus} from './hooks/useStatus.js'
 export {RoutingPage} from './RoutingPage.js'
@@ -59,7 +59,7 @@ export const GatsbyPageWrapper: React.FC<PageWrapperProps> = ({
     void navigate('/admin')
   }
 
-  const {isAuthenticated} = useAuthentication()
+  const auth = useAuthentication()
 
   const InjectPopups: React.FC<{
     pageProps: PageProps
@@ -72,7 +72,7 @@ export const GatsbyPageWrapper: React.FC<PageWrapperProps> = ({
   }
 
   const Wrapper = () => {
-    if (!isAuthenticated && !isAdminOrLogin) {
+    if (!auth.isAuthenticated && !isAdminOrLogin) {
       return (
         <>
           <ThemeProvider>
@@ -84,7 +84,7 @@ export const GatsbyPageWrapper: React.FC<PageWrapperProps> = ({
       )
     }
 
-    if (isAuthenticated && !isAdminOrLogin) {
+    if (auth.isAuthenticated && !isAdminOrLogin) {
       return <AdminShell>{children}</AdminShell>
     }
 

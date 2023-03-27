@@ -137,7 +137,7 @@ export const SectionField = withRedux(
 
     return (
       <HighlightTooltip isEditing={isEditing} actions={tooltipButtons}>
-        <Box>
+        <Box boxSize="full">
           <Wrapper
             {...rest.props}
             className={rest.className}
@@ -175,7 +175,7 @@ export const SectionField = withRedux(
                       variant="jaenHighlightTooltipText"
                       key={`section-field-tooltip-button-${item.id}`}>
                       <Text as="span" noOfLines={1}>
-                        {s.Component.options.name}
+                        {s.Component.options.label}
                       </Text>
                     </Button>,
                     <HStack

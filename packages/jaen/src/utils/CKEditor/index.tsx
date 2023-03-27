@@ -151,7 +151,7 @@ const Editor: React.FC<EditorProps> = props => {
     }, 100)
   }
 
-  const handleMouseLeave = () => {
+  const handleMouseOut = () => {
     if (!props.editing) {
       return
     }
@@ -207,9 +207,7 @@ const Editor: React.FC<EditorProps> = props => {
     </React.Suspense>
   )
   return (
-    <EditorWrapper
-      onMouseOver={handleMouseOver}
-      onMouseLeave={handleMouseLeave}>
+    <EditorWrapper onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
       {editorElement}
     </EditorWrapper>
   )

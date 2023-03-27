@@ -1,11 +1,4 @@
-import {
-  Box,
-  BoxProps,
-  Flex,
-  Heading,
-  Stack,
-  StackDivider
-} from '@chakra-ui/react'
+import {Box, BoxProps, Heading, Stack, StackDivider} from '@chakra-ui/react'
 
 export interface ViewLayoutProps extends BoxProps {
   heading?: string
@@ -18,14 +11,28 @@ export const ViewLayout: React.FC<ViewLayoutProps> = ({
   ...boxProps
 }) => {
   return (
-    <Flex boxSize="full" {...boxProps}>
+    <Stack
+      boxSize="full"
+      px={{
+        base: 2,
+        md: 4,
+        lg: 8,
+        xl: 12
+      }}
+      pt="4"
+      spacing="4"
+      {...boxProps}>
+      {heading && (
+        <Heading size="lg" as="h1">
+          {heading}
+        </Heading>
+      )}
       <Box
         w="100%"
-        // maxW="container.xl"
-        // mx="auto"
-        // mt="4"
-        // rounded="lg"
-        // shadow="md"
+        bg="white"
+        mx="auto"
+        rounded="lg"
+        shadow="md"
         px={{
           base: 2,
           md: 4
@@ -35,15 +42,9 @@ export const ViewLayout: React.FC<ViewLayoutProps> = ({
           md: 8
         }}>
         <Stack divider={<StackDivider />} spacing="4">
-          {heading && (
-            <Heading size="xl" as="h1">
-              {heading}
-            </Heading>
-          )}
-
           {children}
         </Stack>
       </Box>
-    </Flex>
+    </Stack>
   )
 }

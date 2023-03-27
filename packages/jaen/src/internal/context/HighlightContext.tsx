@@ -1,8 +1,15 @@
 import {HStack} from '@chakra-ui/react'
-import React, {createContext, useContext, useEffect, useRef} from 'react'
+import React, {
+  createContext,
+  forwardRef,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef
+} from 'react'
 import {createRoot} from 'react-dom/client'
-
 import {useStatus} from '../hooks/useStatus.js'
+
 import {ThemeProvider} from '../styles/ChakraThemeProvider.js'
 import {CLASSNAMES, FONT_FAMILY} from '../styles/constants.js'
 
@@ -19,37 +26,15 @@ export interface HighlightProviderProps {
   children: React.ReactNode
 }
 
-const closestSibling = (
-  element: Element,
-  selector: string
-): HTMLElement | null => {
-  // Finds the closest sibling of any ancestor of the element
-
-  // Test all siblings on the current level
-
-  const siblings = Array.from(element.parentElement?.children || [])
-
-  for (const sibling of siblings) {
-    if (sibling.matches(selector)) return sibling as HTMLElement
-  }
-
-  // If no siblings found, go up one level and try again
-
-  if (element.parentElement) {
-    return closestSibling(element.parentElement, selector)
-  }
-
-  return null
-}
-
 interface TooltipProps {
   actions: React.ReactNode[]
 }
 
-const Tooltip: React.FC<TooltipProps> = props => {
+const Tooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
   return (
     <ThemeProvider>
       <HStack
+        ref={ref}
         id="coco"
         fontFamily={FONT_FAMILY}
         w="fit-content"
@@ -66,11 +51,9 @@ const Tooltip: React.FC<TooltipProps> = props => {
       </HStack>
     </ThemeProvider>
   )
-}
+})
 
-export const HighlightProvider: React.FC<HighlightProviderProps> = ({
-  children
-}) => {
+export const HighlightProvider: React.FC<HighlightProviderProps> = props => {
   const itemsRef = useRef<
     Array<{
       ref: HTMLDivElement | null
@@ -78,107 +61,150 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = ({
     }>
   >([])
 
-  const setHighlight = (element: HTMLElement) => {
-    const highlighterRoot = element.parentNode?.insertBefore(
-      document.createElement('div'),
-      element
-    ) as HTMLElement
+  const tooltipHightRef = useRef<HTMLDivElement | null>(null)
 
-    const tooltipRoot = highlighterRoot.appendChild(
-      document.createElement('div')
+  const setHighlight = (element: HTMLElement) => {
+    const appRoot = document.getElementById('___gatsby')
+
+    if (!appRoot) {
+      alert('appRoot root not found, please contact support')
+      return
+    }
+
+    // let highlighterRoot: HTMLDivElement | null = appRoot.querySelector(
+    //   `.${CLASSNAMES.JAEN_HIGHLIGHT}`
+    // )
+
+    let frameRoot: HTMLDivElement | null = appRoot.querySelector(
+      `.${CLASSNAMES.JAEN_HIGHLIGHT_FRAME}`
     )
+
+    if (frameRoot) {
+      frameRoot.remove()
+    }
+
+    frameRoot = appRoot.appendChild(document.createElement('div'))
+    frameRoot.classList.add(CLASSNAMES.JAEN_HIGHLIGHT_FRAME)
+
+    // include scroll
+    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+
+    frameRoot.style.position = 'absolute'
+
+    const tooltipRoot = frameRoot.appendChild(document.createElement('div'))
 
     tooltipRoot.classList.add(CLASSNAMES.JAEN_HIGHLIGHT_TOOLTIP)
 
-    highlighterRoot.classList.add(CLASSNAMES.JAEN_HIGHLIGHT)
+    tooltipRoot.style.position = 'absolute'
 
-    // set width of highlighter to width of element
+    // Positions
+    // add a observer to the frameRoot to re-position it when the element moves or resizes
+    const observer = new ResizeObserver(entries => {
+      const entry = entries[0]
 
-    highlighterRoot.style.width = `${element.offsetWidth}px`
+      if (!entry) return
 
-    // set height of highlighter to height of element
+      const elementRect = entry.target.getBoundingClientRect()
 
-    highlighterRoot.style.height = `${element.offsetHeight}px`
+      if (!frameRoot)
+        throw new Error('elementRect is null. This should not happen.')
 
-    // set top of highlighter to top of element
+      // frameRoot exists because we just created it
+      frameRoot.style.top = `${elementRect.top + scrollTop}px`
+      frameRoot.style.left = `${elementRect.left + scrollLeft}px`
+      frameRoot.style.width = `${elementRect.width}px`
+      frameRoot.style.height = `${elementRect.height}px`
 
-    highlighterRoot.style.top = `${element.offsetTop}px`
+      tooltipRoot.style.width = `${elementRect.width}px`
+    })
 
-    // set left of highlighter to left of element
-
-    highlighterRoot.style.left = `${element.offsetLeft}px`
-
-    // > Tooltip
-
-    // set width of tooltip to width of element
-    tooltipRoot.style.width = `${element.offsetWidth}px`
-
-    // padding tooltip to improve accessibility (hovering over the tooltip)
-    // tooltipRoot.style.padding = '5px'
-
-    if (getHighlights(element).length > 0) return
+    observer.observe(element)
 
     const item = itemsRef.current.find(item => item.ref === element)
 
     if (item?.ref) {
       const tooltipButtons = item?.tooltipButtons || []
-
       const root = createRoot(tooltipRoot)
-
-      root.render(<Tooltip actions={tooltipButtons} />)
+      root.render(<Tooltip actions={tooltipButtons} ref={tooltipHightRef} />)
     }
+
+    frameRoot.addEventListener('mouseleave', handleMouseLeave)
+
+    // move tooltip above element
+    tooltipRoot.style.top = `-${20 + 22}px`
+    // Padding to improve accessibility (hovering over the tooltip)
+    tooltipRoot.style.padding = '9px'
+
+    tooltipRoot.style.pointerEvents = 'all'
   }
 
-  const handleMouseOver = (event: MouseEvent) => {
+  let removeHighlightTimeout: NodeJS.Timeout | null = null
+
+  const handleMouseEnter = (event: MouseEvent) => {
     const target = event.currentTarget as HTMLDivElement
 
     if (!target) return
 
-    // skip if element is the tooltip
-    if (target.classList.contains(CLASSNAMES.JAEN_HIGHLIGHT_TOOLTIP)) return
+    setHighlight(target)
 
-    // find child element with classname JAEN_HIGHLIGHT
-    const childElement = target.parentElement?.querySelector(
-      `.${CLASSNAMES.JAEN_HIGHLIGHT}`
-    )
-
-    if (!childElement) {
-      setHighlight(target)
-
-      const closestParentHighlight = closestSibling(
-        target.parentElement as Element,
-        `.${CLASSNAMES.JAEN_HIGHLIGHT}`
-      )
-
-      if (closestParentHighlight?.parentElement) {
-        findAndRemoveHighlight(closestParentHighlight.parentElement)
-      }
+    // If there is a scheduled removal, clear it
+    if (removeHighlightTimeout) {
+      clearTimeout(removeHighlightTimeout)
+      removeHighlightTimeout = null
     }
+
+    // if (!skipPropagation) {
+    //   event.stopPropagation()
+    // }
+  }
+
+  const findClosestParentMatching = (
+    element: HTMLElement,
+    find: (element: HTMLElement) => boolean
+  ) => {
+    let currentElement: HTMLElement | null = element
+
+    while (currentElement) {
+      if (find(currentElement)) {
+        return currentElement
+      }
+
+      currentElement = currentElement.parentElement
+    }
+
+    return null
   }
 
   const handleMouseLeave = (event: MouseEvent) => {
-    const currentTarget = event.currentTarget as HTMLDivElement
-    const relatedTarget = event.relatedTarget as HTMLDivElement
-
-    const isHighlightTooltip = relatedTarget?.classList.contains(
-      CLASSNAMES.JAEN_HIGHLIGHT_TOOLTIP
+    const highlightRoot = document.querySelector(
+      `.${CLASSNAMES.JAEN_HIGHLIGHT_FRAME}`
     )
 
-    const target = currentTarget.parentElement
+    if (!highlightRoot) return
 
-    if (!target) return
+    // do not remove highlighter if mouse is over tooltip
 
-    // if tooltip is hovered, do not remove highlight, instead add
-    // a event listener to remove highlight when mouse leaves tooltip
-    if (isHighlightTooltip) {
-      relatedTarget.addEventListener('mouseleave', () => {
-        findAndRemoveHighlight(target)
-      })
+    const relatedTarget = event.relatedTarget as HTMLElement
 
+    if (relatedTarget?.classList.contains(CLASSNAMES.JAEN_HIGHLIGHT_TOOLTIP)) {
       return
     }
 
-    findAndRemoveHighlight(target)
+    // find closest parent that matches one of the items
+    const closestParent = findClosestParentMatching(relatedTarget, element => {
+      return itemsRef.current.some(item => item.ref === element)
+    })
+
+    if (closestParent) {
+      setHighlight(closestParent)
+      return
+    }
+
+    // Schedule the removal of the highlighter
+    removeHighlightTimeout = setTimeout(() => {
+      highlightRoot.remove()
+    }, 200)
   }
 
   const {isEditing} = useStatus()
@@ -193,16 +219,21 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = ({
     ref: HTMLDivElement | null,
     tooltipButtons: React.ReactNode[]
   ) => {
-    const index = itemsRef.current.findIndex(item => item.ref === ref)
+    const index = itemsRef.current.findIndex(item => {
+      return item.ref === ref
+    })
 
     if (ref) {
       // handle event listeners
 
+      // ref.addEventListener('mouseover', handleMouseEnter)
+      // ref.addEventListener('mouseleave', handleMouseLeave)
+
       if (isEditing) {
-        ref.addEventListener('mouseover', handleMouseOver)
+        ref.addEventListener('mouseenter', handleMouseEnter)
         ref.addEventListener('mouseleave', handleMouseLeave)
       } else {
-        ref.removeEventListener('mouseover', handleMouseOver)
+        ref.removeEventListener('mouseenter', handleMouseEnter)
         ref.removeEventListener('mouseleave', handleMouseLeave)
       }
 
@@ -214,23 +245,9 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = ({
     }
   }
 
-  const getHighlights = (parentElement: HTMLElement) => {
-    return parentElement.querySelectorAll(
-      `:scope > .${CLASSNAMES.JAEN_HIGHLIGHT}`
-    )
-  }
-
-  const findAndRemoveHighlight = (element: HTMLElement) => {
-    // check if element is a tooltip, if so skip
-
-    const highlights = getHighlights(element)
-
-    highlights.forEach(highlight => {
-      // remove highlight from element
-
-      element.removeChild(highlight)
-    })
-  }
+  const children = useMemo(() => {
+    return props.children
+  }, [props.children])
 
   return (
     <HighlightProviderContext.Provider value={{ref}}>

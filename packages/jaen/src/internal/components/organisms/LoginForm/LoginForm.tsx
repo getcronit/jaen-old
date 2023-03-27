@@ -48,8 +48,8 @@ export const LoginForm: React.FC<LoginFormProps> = props => {
 
   const [alert, setAlert] =
     React.useState<{
-      status: 'error' | 'success'
-      message: string
+      status: 'error' | 'success' | 'info'
+      message: string | JSX.Element
     } | null>(null)
 
   const resetAlert = () => {
@@ -69,6 +69,34 @@ export const LoginForm: React.FC<LoginFormProps> = props => {
         message: 'Invalid email or password'
       })
     }
+  }
+
+  const onForgotPassword = () => {
+    props.onForgotPassword()
+
+    setAlert({
+      status: 'info',
+      message: (
+        <>
+          Please <Link href="mailto:contact@snek.at"> contact us </Link>
+          to reset your password
+        </>
+      )
+    })
+  }
+
+  const onSignUp = () => {
+    props.onSignUp()
+
+    setAlert({
+      status: 'info',
+      message: (
+        <>
+          Please <Link href="mailto:contact@snek.at"> contact us </Link>
+          to create an account for you
+        </>
+      )
+    })
   }
 
   useEffect(() => {
@@ -101,7 +129,7 @@ export const LoginForm: React.FC<LoginFormProps> = props => {
           </Heading>
           <HStack>
             <Text>Don&apos;t have an account?</Text>
-            <Link onClick={props.onSignUp}>Sign up</Link>
+            <Link onClick={onSignUp}>Sign up</Link>
           </HStack>
 
           {alert && (
@@ -164,7 +192,7 @@ export const LoginForm: React.FC<LoginFormProps> = props => {
               </Checkbox>
             )}
           />
-          <Link onClick={props.onForgotPassword}>Forgot password?</Link>
+          <Link onClick={onForgotPassword}>Forgot password?</Link>
         </HStack>
 
         <VStack spacing="4">

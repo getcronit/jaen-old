@@ -51,6 +51,8 @@ const AdminPage: React.FC<AdminPageProps> = withRedux(
           <Flex
             flex="1"
             position="relative"
+            minH="calc(100vh - 6.5rem)"
+            bg="gray.50"
             onClick={e => {
               // check if the click was inside the leftRef or rightRef
               // if it was, don't close the slider
@@ -132,7 +134,7 @@ const AdminPage: React.FC<AdminPageProps> = withRedux(
               </Box>
             </SlideFade>
 
-            <Box boxSize="full" zIndex="1" bg="white">
+            <Box boxSize="full" zIndex="1">
               {children}
             </Box>
           </Flex>

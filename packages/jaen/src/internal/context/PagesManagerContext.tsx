@@ -90,10 +90,13 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
       const page = pageTree.find(p => {
         const pagePath = generatePageOriginPath(pageTree, p)
 
-        return pagePath && matchPath(path, pagePath)
+        return pagePath && matchPath(path, pagePath) && !p.deleted
       })
 
-      return page?.id || null
+      // check if page has id and is not deleted
+      if (!page?.id) return null
+
+      return page.id
     },
     [pageTree]
   )

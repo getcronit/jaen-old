@@ -1,4 +1,5 @@
 export {ActivationButton} from './ActivationButton/index.js'
+export * from './CookieConsent/index.js'
 export * from './DiscardActionButton/index.js'
 export * from './DividerWithText/index.js'
 export * from './EditActionButton/index.js'

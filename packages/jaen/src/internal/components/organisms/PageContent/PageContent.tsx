@@ -123,7 +123,7 @@ export const PageContent = (props: PageContentProps) => {
           <Stack flexGrow="1" overflowY="auto" spacing="6">
             <HStack>
               {props.template && (
-                <Tag my={4} size="lg" variant="outline" colorScheme="teal">
+                <Tag my={4} size="lg" variant="outline">
                   <Box ml={-1} mr={2}>
                     <HiTemplate />
                   </Box>

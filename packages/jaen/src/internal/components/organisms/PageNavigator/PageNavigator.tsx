@@ -15,9 +15,6 @@ import {PageTree} from '../PageTree/PageTree.js'
 export interface PageNavigatorProps {}
 
 export const PageNavigator: React.FC<PageNavigatorProps> = () => {
-  const title =
-    typeof window !== 'undefined' ? window.document.title : 'No Title'
-
   const path = useMemo(() => {
     if (typeof window === 'undefined') return null
 
@@ -32,6 +29,11 @@ export const PageNavigator: React.FC<PageNavigatorProps> = () => {
 
     return pathname
   }, [])
+
+  const title =
+    (typeof window !== 'undefined' && window.document.title) ||
+    path ||
+    'No Title'
 
   const manager = usePageManager()
 

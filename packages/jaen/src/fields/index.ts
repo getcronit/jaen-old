@@ -14,4 +14,7 @@ export const Field = {
 
 export {useJaenPageIndex as useIndexField} from '../internal/context/PageProvider.js'
 export {useField} from '../internal/hooks/field/useField.js'
-export {useSectionField} from '../internal/hooks/field/useSectionField.js'
+export {
+  useSectionField,
+  UseSectionField
+} from '../internal/hooks/field/useSectionField.js'

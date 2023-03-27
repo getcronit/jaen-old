@@ -26,7 +26,7 @@ export const PagesView: React.FC<PagesViewProps> = () => {
 
   // const relativeRootPageId = selection.id === rootPageId ? null : selection.id
 
-  // const isSelectionLandingPage = selection?.id === rootPageId
+  // const isSelectionLandingPage = n?.id === rootPageId
 
   const rootElement = React.useMemo(() => {
     const rootPageId = manager.getPageIdFromPath('/')
@@ -50,8 +50,10 @@ export const PagesView: React.FC<PagesViewProps> = () => {
     } | null>(rootElement)
 
   React.useEffect(() => {
-    if (manager.latestAddedPageId) {
-      onSelect(manager.latestAddedPageId, 'pageId')
+    return () => {
+      if (manager.latestAddedPageId) {
+        onSelect(manager.latestAddedPageId, 'pageId')
+      }
     }
   }, [manager.latestAddedPageId])
 
@@ -104,10 +106,27 @@ export const PagesView: React.FC<PagesViewProps> = () => {
     )
 
     if (shouldDelete) {
+      const pageId = manager.getPageIdFromPath(path)
+
+      if (!pageId) {
+        return
+      }
+
       toast({
         title: 'Page deleted',
         status: 'success'
       })
+
+      // get Id of parent page
+      const page = manager.onGet(pageId)
+
+      manager.onDelete(pageId)
+
+      if (!page?.parent?.id) {
+        return
+      }
+
+      onSelect(page.parent.id, 'pageId')
     }
   }, [])
 

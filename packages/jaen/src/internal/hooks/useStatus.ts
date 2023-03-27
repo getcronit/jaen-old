@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import {useCallback, useEffect, useState} from 'react'
 import {RootState, store} from '../redux/index.js'
 import * as actions from '../redux/slices/status.js'
 
@@ -13,6 +13,10 @@ export const useStatus = (): IStatus => {
   const [isEditing, setIsEditing] = useState(false)
 
   useEffect(() => {
+    const state = store.getState() as RootState
+
+    setIsEditing(state.status.isEditing)
+
     const unsubscribe = store.subscribe(() => {
       const state = store.getState() as RootState
 
@@ -24,10 +28,18 @@ export const useStatus = (): IStatus => {
     }
   }, [])
 
-  const toggleIsEditing = () => setEditing(!isEditing)
+  const toggleIsEditing = useCallback(() => {
+    // get the current state
+    const state = store.getState() as RootState
+    const isCurrentlyEditing = state.status.isEditing
 
-  const setEditing = (isEditing: boolean) =>
+    // toggle the state
+    setIsEditing(!isCurrentlyEditing)
+  }, [])
+
+  const setEditing = useCallback((isEditing: boolean) => {
     store.dispatch(actions.setIsEditing(isEditing))
+  }, [])
 
   return {
     isPublishing: true,

@@ -2,13 +2,23 @@ import React from 'react'
 
 import {IJaenPage} from '../../../types'
 import {usePageContext} from '../../context/PageProvider.js'
-import {useSectionBlockContext} from '../../context/SectionBlockContext.js'
+import {
+  SectionBlockContextType,
+  useSectionBlockContext
+} from '../../context/SectionBlockContext.js'
 import {findSection} from '../../helper/page/section.js'
 import {RootState, store} from '../../redux/index.js'
 import {actions} from '../../redux/slices/page.js'
 import {useStatus} from '../useStatus.js'
 
-export function useField<IValue>(name: string, type: string) {
+export function useField<IValue>(
+  name: string,
+  type: string,
+  block?: {
+    path: SectionBlockContextType['path']
+    id: SectionBlockContextType['id']
+  }
+) {
   const {jaenPage} = usePageContext()
 
   if (!jaenPage.id) {
@@ -25,13 +35,15 @@ export function useField<IValue>(name: string, type: string) {
     if (page) {
       let fields
 
-      if (SectionBlockContext == null) {
-        fields = page.jaenFields
+      const path = block?.path || SectionBlockContext?.path
+      const blockId = block?.id || SectionBlockContext?.id
+
+      if (path) {
+        fields = findSection(page.sections || [], path)?.items.find(
+          ({id}) => id === blockId
+        )?.jaenFields
       } else {
-        fields = findSection(
-          page.sections || [],
-          SectionBlockContext.path
-        )?.items.find(({id}) => id === SectionBlockContext.id)?.jaenFields
+        fields = page.jaenFields
       }
 
       return fields?.[type]?.[name]?.value

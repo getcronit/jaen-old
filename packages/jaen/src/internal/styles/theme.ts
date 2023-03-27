@@ -25,14 +25,14 @@ const theme = extendTheme(
     styles: {
       global: {
         'div:has(div):has(.jaen-image-wrapper)': {
+          // maybe no longer needed
           isolation: 'isolate'
         },
-        [`.${CLASSNAMES.JAEN_HIGHLIGHT}`]: {
-          position: 'absolute',
+        [`.${CLASSNAMES.JAEN_HIGHLIGHT_FRAME}`]: {
           borderRadius: '11px',
           pointerEvents: 'none'
         },
-        [`.${CLASSNAMES.JAEN_HIGHLIGHT}:before`]: {
+        [`.${CLASSNAMES.JAEN_HIGHLIGHT_FRAME}:before`]: {
           content: '""',
           position: 'absolute',
           top: '-6px', // border: 2px + offset: 4px
@@ -43,12 +43,15 @@ const theme = extendTheme(
           borderRadius: '15px', // border—radius: 11px + offset: 4px
           pointerEvents: 'none'
         },
-        // [`.${CLASSNAMES.JAEN_HIGHLIGHT_FRAME}`]: {
+        [`.${CLASSNAMES.JAEN_HIGHLIGHT_TOOLTIP}`]: {
+          // backgroundColor: 'rgba(254, 215, 226, 0.4)'
+        },
+        // [`.${CLASSNAMES.JAEN_HIGHLIGHT}`]: {
         //   position: 'absolute',
         //   borderRadius: '11px',
         //   pointerEvents: 'none'
         // },
-        // [`.${CLASSNAMES.JAEN_HIGHLIGHT_FRAME}:before`]: {
+        // [`.${CLASSNAMES.JAEN_HIGHLIGHT}:before`]: {
         //   content: '""',
         //   position: 'absolute',
         //   top: '-6px', // border: 2px + offset: 4px
@@ -59,16 +62,21 @@ const theme = extendTheme(
         //   borderRadius: '15px', // border—radius: 11px + offset: 4px
         //   pointerEvents: 'none'
         // },
+        // [`.${CLASSNAMES.JAEN_HIGHLIGHT_FRAME}`]: {
+        //   position: 'absolute',
+        //   borderRadius: '11px',
+        //   pointerEvents: 'none'
+        // },
 
-        [`.${CLASSNAMES.JAEN_HIGHLIGHT_TOOLTIP}`]: {
-          position: 'absolute',
-          pointerEvents: 'all',
-          // height: '',
-          py: '10px',
-          mb: '25px',
-          // negative top value to position tooltip above highlight
-          top: '-40px'
-        },
+        // [`.${CLASSNAMES.JAEN_HIGHLIGHT_TOOLTIP}`]: {
+        //   position: 'absolute',
+        //   pointerEvents: 'all',
+        //   // height: '',
+        //   py: '10px',
+        //   mb: '25px',
+        //   // // negative top value to position tooltip above highlight
+        //   top: '-40px'
+        // },
         'html, body, #root, #___gatsby': {
           // height: '100%',
           // width: '100%',
