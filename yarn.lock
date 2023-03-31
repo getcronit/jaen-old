@@ -4386,17 +4386,30 @@
   resolved "https://registry.yarnpkg.com/@snek-at/function/-/function-0.0.10.tgz#f5da22bd97e1fba704b07cc0f3d708bac9c62b4a"
   integrity sha512-e9RbM+lenDM220JtUwukzoGpYLUkmP/tidLWahs2fRDEzPzRzzI/9EYLNP69qK5cWo3bSovP5X+g8srNBCukqg==
 
-"@snek-functions/origin@*":
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/@snek-functions/origin/-/origin-0.1.4.tgz#962f6de53a86c3a45e80261f3070c57086760975"
-  integrity sha512-Yoqu5Ss042tGb9EoevoWi4OfgLiYztXfNA2+TGyVK2M1a0v5/twFdQUWCPnvhZPS2uNWDAvpLkEIy4OQsaO5zQ==
+"@snek-functions/jwt@^0.0.15":
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/@snek-functions/jwt/-/jwt-0.0.15.tgz#22e27089a4e894adbfb066a8549ad00d802f1bba"
+  integrity sha512-wOxRRRTtD/PcLdPYgs3M5YIjavxxkCp8ZrWNDkRnE+Ve0QobFbZ3raNRFTi03ULqCp3nE0r3rYM0o412bbRdUA==
   dependencies:
     "@snek-at/function" "*"
     "@snek-at/function-cli" "*"
     "@snek-at/function-server" "*"
     cors "^2.8.5"
     jsonwebtoken "^9.0.0"
-    snek-query "^0.0.55"
+    snek-query "^0.0.61"
+
+"@snek-functions/origin@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@snek-functions/origin/-/origin-0.2.2.tgz#998666cedc256f8d36be60547673c0080fa7aca6"
+  integrity sha512-4m5NiFDgj7kRAVZbSjN0ND/RAbI6i7gngXGKtLqRfSfBZCvIHytEnby1UHgZiCZZQCqQTkePeSN0+of5UX6yRg==
+  dependencies:
+    "@snek-at/function" "*"
+    "@snek-at/function-cli" "*"
+    "@snek-at/function-server" "*"
+    "@snek-functions/jwt" "^0.0.15"
+    cors "^2.8.5"
+    jsonwebtoken "^9.0.0"
+    snek-query "^0.0.64"
 
 "@socket.io/component-emitter@~3.1.0":
   version "3.1.0"
@@ -17399,10 +17412,23 @@ snek-query@*:
     rxjs "^7.8.0"
     typescript "^4.9.4"
 
-snek-query@^0.0.55:
-  version "0.0.55"
-  resolved "https://registry.yarnpkg.com/snek-query/-/snek-query-0.0.55.tgz#8e1856b41d373da97a858423a2b68f683902ae7a"
-  integrity sha512-Ti7tRHPMy34rlxjRD1Zp3hHoo7dMXV3avmUbRz5DGFhbodgJ0Izy8KrjgHPZYbaQhomvad6smZsk4YZdujzM9w==
+snek-query@^0.0.61:
+  version "0.0.61"
+  resolved "https://registry.yarnpkg.com/snek-query/-/snek-query-0.0.61.tgz#e7b03e11fefe261075082ef3da50f0ac6c2258b3"
+  integrity sha512-rQ9g8f1ZZhMy0IPVoKf0zj3Q6RreiEFx8QjaxTfNmLM/dPFA+SshAJyvbPfISIS7A6gParHu3paualFyBTArDg==
+  dependencies:
+    commander "^9.4.1"
+    graphql "^16.6.0"
+    lodash.clonedeep "^4.5.0"
+    pino "^8.8.0"
+    pino-pretty "^9.1.1"
+    rxjs "^7.8.0"
+    typescript "^4.9.4"
+
+snek-query@^0.0.64:
+  version "0.0.64"
+  resolved "https://registry.yarnpkg.com/snek-query/-/snek-query-0.0.64.tgz#b4b2554d5e7ee12057d9b7d56c5244a9a483ace1"
+  integrity sha512-1wsBbbdlVfg7JQpiG7XaTfOYCv4DOIdmnCFO13ltH9NWfHLCi6AC8P/vFo0DS4Jo79Fd5qCUfaZeYHAj7Dh6Ig==
   dependencies:
     commander "^9.4.1"
     graphql "^16.6.0"
@@ -18846,6 +18872,11 @@ value-or-promise@1.0.12:
   version "1.0.12"
   resolved "https://registry.yarnpkg.com/value-or-promise/-/value-or-promise-1.0.12.tgz#0e5abfeec70148c78460a849f6b003ea7986f15c"
   integrity sha512-Z6Uz+TYwEqE7ZN50gwn+1LCVo9ZVrpxRPOhOLnncYkY1ZzOYtrX8Fwf/rFktZ8R5mJms6EZf5TqNOMeZmnPq9Q==
+
+vanilla-cookieconsent@^2.8.9:
+  version "2.8.9"
+  resolved "https://registry.yarnpkg.com/vanilla-cookieconsent/-/vanilla-cookieconsent-2.8.9.tgz#2c143dc3a9561ff1cdf28b4d94de6a5f3f4ea8e2"
+  integrity sha512-4seMLm+oOLYT4HTrjai9ceIRmRP00apkoEg/fV3P9GtN0QPPGuPQfe2UwXPuZZfR5E0t9EVvVFITIOwPtxOGkQ==
 
 vary@^1, vary@~1.1.2:
   version "1.1.2"

@@ -15,7 +15,7 @@ export const usePublish = () => {
     const migrationURL = await upload(blob, filename)
 
     const [_, errors] = await sq.mutate(Mutation =>
-      Mutation.jaenPublish({
+      Mutation.resourceJaenPublish({
         resourceId: snekResourceId,
         migrationURL
       })

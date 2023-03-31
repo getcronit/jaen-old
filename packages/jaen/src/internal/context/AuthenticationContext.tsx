@@ -104,7 +104,7 @@ export const AuthenticationProvider: React.FC<{
   const login = useCallback(
     async (login: string, password: string, logMeOutAfterwards?: boolean) => {
       const [data, errors] = await sq.mutate(m => {
-        const signIn = m.signIn({
+        const signIn = m.userSignIn({
           login,
           password,
           resourceId: snekResourceId
@@ -113,7 +113,11 @@ export const AuthenticationProvider: React.FC<{
         const u = signIn.user
 
         return {
-          user: {username: u.username, primaryEmail: u.primaryEmail, id: u.id},
+          user: {
+            username: u.username,
+            primaryEmail: u.primaryEmailAddress,
+            id: u.id
+          },
           tokenPair: {
             accessToken: signIn.tokenPair.accessToken,
             refreshToken: signIn.tokenPair.refreshToken
@@ -140,17 +144,17 @@ export const AuthenticationProvider: React.FC<{
     if (isDemo) {
       setIsDemo(false)
     } else {
-      const [data, errors] = await sq.mutate(m =>
-        m.signOut({
-          resourceId: snekResourceId
-        })
-      )
+      // const [data, errors] = await sq.mutate(m =>
+      //   m.userSignOut({
+      //     resourceId: snekResourceId
+      //   })
+      // )
 
-      const isSuccess = !!data && !errors
+      // const isSuccess = !!data && !errors
 
-      if (!isSuccess) {
-        throw new Error('Logout failed')
-      }
+      // if (!isSuccess) {
+      //   throw new Error('Logout failed')
+      // }
 
       setTokenPair(null)
     }
@@ -170,9 +174,9 @@ export const AuthenticationProvider: React.FC<{
 
   const bootstrap = useCallback(async () => {
     const [users, errors] = await sq.query(q => {
-      return q.me({resourceId: snekResourceId}).map(({user}) => ({
+      return q.userMe({resourceId: snekResourceId}).map(user => ({
         id: user.id,
-        primaryEmail: user.primaryEmail,
+        primaryEmail: user.primaryEmailAddress,
         username: user.username
       }))
     })
