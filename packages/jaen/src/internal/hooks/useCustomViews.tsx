@@ -8,7 +8,10 @@ import {useAdminStaticQuery} from './useAdminStaticQuery.js'
 const withCustomViewLayout = (Component: IViewConnection) => {
   return (props: any) => {
     return (
-      <ViewLayout>
+      <ViewLayout
+        heading={Component.options.heading}
+        fullscreen={Component.options.fullscreen}
+        controls={Component.options.controls}>
         <Component {...props} />
       </ViewLayout>
     )

@@ -1,6 +1,6 @@
 {
   "name": "@snek-at/jaen",
-  "version": "0.0.26",
+  "version": "0.0.34",
   "source": "src/index.ts",
   "main": "./dist/index.js",
   "module": "./dist/index.module.js",
@@ -14,7 +14,7 @@
     "./package.json": "./package.json"
   },
   "bin": {
-    "jaen": "./dist/index.cli.cjs"
+    "jaen": "./dist/index.cli.mjs"
   },
   "types": "./dist/index.d.ts",
   "files": [
@@ -34,17 +34,17 @@
   "author": "Nico Schett <schett@snek.at>",
   "license": "MIT",
   "dependencies": {
-    "@chakra-ui/icons": "^2.0.12",
+    "@chakra-ui/icons": "^2.0.18",
     "@chakra-ui/pro-theme": "^0.0.64",
-    "@chakra-ui/react": "^2.3.6",
+    "@chakra-ui/react": "^2.5.5",
     "@ckeditor/ckeditor5-build-balloon": "^35.3.2",
     "@ckeditor/ckeditor5-react": "^5.0.3",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
-    "@jaenjs/snek-finder": "^1.0.0-beta.13",
+    "@snek-at/snek-finder": "^1.0.0-beta.23",
     "@reach/router": "^1.3.4",
     "@reduxjs/toolkit": "^1.8.6",
-    "@snek-functions/origin": "^0.2.2",
+    "@snek-functions/origin": "^0.2.3",
     "commander": "^9.4.1",
     "deepmerge": "^4.2.2",
     "form-data": "^4.0.0",

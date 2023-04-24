@@ -1,4 +1,4 @@
-import {sq} from '@snek-functions/origin/client'
+import {sq} from '@snek-functions/origin'
 import {useCallback, useState} from 'react'
 
 import {snekResourceId} from '../../snekResourceId.js'
@@ -15,7 +15,7 @@ export const usePublish = () => {
     const migrationURL = await upload(blob, filename)
 
     const [_, errors] = await sq.mutate(Mutation =>
-      Mutation.resourceJaenPublish({
+      Mutation.jaenPublish({
         resourceId: snekResourceId,
         migrationURL
       })

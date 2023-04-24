@@ -1,5 +1,5 @@
 import {Box, theme} from '@chakra-ui/react'
-import {useSnekFinder} from '@jaenjs/snek-finder'
+import {useSnekFinder} from '@snek-at/snek-finder'
 
 import {withSnekFinder} from '../../../../context/SnekFinder/withSnekFinder.js'
 import {ThemeProvider} from '../../../../styles/ChakraThemeProvider.js'

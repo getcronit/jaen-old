@@ -102,19 +102,16 @@ const processMigration = async ({
         break
       case 'pages':
       case 'JaenPages@0.0.1':
-        for (const id of Object.keys(value.pages)) {
-          jaenData.pages[id] = await updateEntity(
-            jaenData.pages[id],
-            value.pages[id]
-          )
+        for (const id of Object.keys(value)) {
+          jaenData.pages[id] = await updateEntity(jaenData.pages[id], value[id])
         }
 
         break
       case 'popups':
-        for (const id of Object.keys(value.popups)) {
+        for (const id of Object.keys(value)) {
           jaenData.popups[id] = await updateEntity(
             jaenData.popups[id],
-            value.popups[id]
+            value[id]
           )
         }
         break

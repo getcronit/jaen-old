@@ -4,9 +4,10 @@ import {IJaenConnection} from '../types.js'
 export interface ViewOptions {
   path: string
   label: string
-  description: string
+  heading?: string
   Icon: React.ComponentType<{}>
   controls?: React.ReactNode[]
+  fullscreen?: boolean
 }
 
 export const ViewContext = React.createContext<{} | undefined>(undefined)

@@ -21,7 +21,7 @@ import {
   useToast,
   VStack
 } from '@chakra-ui/react'
-import {useSnekFinder} from '@jaenjs/snek-finder'
+import {useSnekFinder} from '@snek-at/snek-finder'
 import React from 'react'
 import {Controller, useForm} from 'react-hook-form'
 import {FaRocket} from 'react-icons/fa'

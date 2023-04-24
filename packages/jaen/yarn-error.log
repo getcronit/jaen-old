@@ -68,7 +68,7 @@ npm manifest:
       "@ckeditor/ckeditor5-react": "^5.0.3",
       "@emotion/react": "^11.10.4",
       "@emotion/styled": "^11.10.4",
-      "@jaenjs/snek-finder": "^1.0.0-beta.13",
+      "@snek-at/snek-finder": "^1.0.0-beta.13",
       "@reach/router": "^1.3.4",
       "@reduxjs/toolkit": "^1.8.6",
       "@snek-at/snek-api-client": "^0.0.7",
@@ -2932,9 +2932,9 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/@istanbuljs/schema/-/schema-0.1.3.tgz#e45e384e4b8ec16bce2fd903af78450f6bf7ec98"
     integrity sha512-ZXRY4jNvVgSVQ8DL3LTcakaAtXwTVUxE81hslsyD2AtoXW/wVob10HkOJ1X/pAlcI7D+2YoZKg5do8G/w6RYgA==
   
-  "@jaenjs/snek-finder@^1.0.0-beta.13":
+  "@snek-at/snek-finder@^1.0.0-beta.13":
     version "1.0.0-beta.13"
-    resolved "https://registry.yarnpkg.com/@jaenjs/snek-finder/-/snek-finder-1.0.0-beta.13.tgz#45d497825684c93c87626c359ea16bcf00fa5b00"
+    resolved "https://registry.yarnpkg.com/@snek-at/snek-finder/-/snek-finder-1.0.0-beta.13.tgz#45d497825684c93c87626c359ea16bcf00fa5b00"
     integrity sha512-J1AgrQdPO8Ti/BpEYrXJWzimjVqAMcaqoi7v++LTROMgP3mTGRkyl2ZAZjaI4a724gYb4Y4Bn4KMFncMO3EKdA==
     dependencies:
       "@chakra-ui/icons" "^2.0.8"

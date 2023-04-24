@@ -1,4 +1,4 @@
-import {OSGBackend, SnekFinderProvider} from '@jaenjs/snek-finder'
+import {OSGBackend, SnekFinderProvider} from '@snek-at/snek-finder'
 import {ComponentMeta, Story} from '@storybook/react'
 import React from 'react'
 import {AdminPageManagerProvider} from '../../../../context/AdminPageManager/AdminPageManagerProvider.js'

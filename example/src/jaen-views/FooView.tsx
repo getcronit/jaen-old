@@ -372,6 +372,8 @@ const FooView = connectView(Multistep, {
   label: "Foo",
   description: "This view demonstrates how to create a custom view.",
   Icon: AddIcon,
+  fullscreen: false,
+  controls: [<Button>Add</Button>, <Button>Delete</Button>],
 })
 
 export default FooView

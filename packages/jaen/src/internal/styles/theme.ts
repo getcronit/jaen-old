@@ -24,6 +24,9 @@ const theme = extendTheme(
 
     styles: {
       global: {
+        [`.${CLASSNAMES.JAEN_ADMIN_BODY}`]: {
+          minH: 'calc(100vh - 7rem)'
+        },
         'div:has(div):has(.jaen-image-wrapper)': {
           // maybe no longer needed
           isolation: 'isolate'

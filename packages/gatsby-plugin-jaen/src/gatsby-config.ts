@@ -10,7 +10,7 @@ const GatsbyConfig: GatsbyConfigType = {
 
 GatsbyConfig.plugins = [
   `@chakra-ui/gatsby-plugin`,
-
+  `gatsby-plugin-emotion`,
   {
     resolve: `gatsby-plugin-sharp`,
     options: {

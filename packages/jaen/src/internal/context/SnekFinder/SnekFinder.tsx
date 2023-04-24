@@ -1,10 +1,10 @@
-import {OSGBackend} from '@jaenjs/snek-finder/dist/backends/OSGBackend'
+import {OSGBackend} from '@snek-at/snek-finder/dist/backends/OSGBackend'
 import React from 'react'
 import {useAdminStaticQuery} from '../../hooks/useAdminStaticQuery.js'
 
 const SnekFinderProvider = React.lazy(
   async () =>
-    await import('@jaenjs/snek-finder').then(module => ({
+    await import('@snek-at/snek-finder').then(module => ({
       default: module.SnekFinderProvider
     }))
 )

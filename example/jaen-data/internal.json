@@ -1,9 +1,23 @@
 {
-  "site": {},
+  "site": {
+    "siteMetadata": {}
+  },
   "migrationHistory": [
     {
       "createdAt": "2019-03-27T15:00:00.000Z",
       "fileUrl": "https://s3.amazonaws.com/.../2019-03-27T15:00:00.000Z.json"
+    },
+    {
+      "createdAt": "2023-04-12T12:34:54.164Z",
+      "fileUrl": "https://osg.snek.at/storage/BQACAgQAAxkDAAIVemQ2olbdLlWOHDG9_lwl7P30TVlNAAK_EAAC3nqxUb9sHitja1x-LwQ"
+    },
+    {
+      "createdAt": "2023-04-12T12:35:11.982Z",
+      "fileUrl": "https://osg.snek.at/storage/BQACAgQAAxkDAAIVemQ2olbdLlWOHDG9_lwl7P30TVlNAAK_EAAC3nqxUb9sHitja1x-LwQ"
+    },
+    {
+      "createdAt": "2023-04-12T12:35:18.197Z",
+      "fileUrl": "https://osg.snek.at/storage/BQACAgQAAxkDAAIVemQ2olbdLlWOHDG9_lwl7P30TVlNAAK_EAAC3nqxUb9sHitja1x-LwQ"
     }
   ],
   "widgets": []

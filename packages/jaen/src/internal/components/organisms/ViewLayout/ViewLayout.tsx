@@ -1,15 +1,33 @@
-import {Box, BoxProps, Heading, Stack, StackDivider} from '@chakra-ui/react'
+import {
+  Box,
+  BoxProps,
+  Flex,
+  Heading,
+  HStack,
+  Spacer,
+  Stack,
+  StackDivider
+} from '@chakra-ui/react'
+import {CLASSNAMES} from '../../../styles/constants'
 
 export interface ViewLayoutProps extends BoxProps {
   heading?: string
+  controls?: React.ReactNode[]
+  fullscreen?: boolean
   children: React.ReactNode
 }
 
 export const ViewLayout: React.FC<ViewLayoutProps> = ({
   heading,
   children,
+  fullscreen,
+  controls,
   ...boxProps
 }) => {
+  if (fullscreen) {
+    return <Box className={CLASSNAMES.JAEN_ADMIN_BODY}>{children}</Box>
+  }
+
   return (
     <Stack
       boxSize="full"
@@ -22,11 +40,16 @@ export const ViewLayout: React.FC<ViewLayoutProps> = ({
       pt="4"
       spacing="4"
       {...boxProps}>
-      {heading && (
-        <Heading size="lg" as="h1">
-          {heading}
-        </Heading>
-      )}
+      <Flex>
+        {heading && (
+          <Heading size="lg" as="h1">
+            {heading}
+          </Heading>
+        )}
+        <Spacer />
+        <HStack>{controls}</HStack>
+      </Flex>
+
       <Box
         w="100%"
         bg="white"

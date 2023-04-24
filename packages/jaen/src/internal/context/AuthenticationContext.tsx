@@ -7,7 +7,7 @@ import {
   useState
 } from 'react'
 
-import {setTokenPair, sq} from '@snek-functions/origin/client'
+import {setTokenPair, sq} from '@snek-functions/origin'
 import {snekResourceId} from '../../snekResourceId.js'
 import {redirectAfterDelay} from '../../utils/redirectAfterDelay.js'
 import {useStatus} from '../hooks/useStatus.js'
@@ -173,21 +173,23 @@ export const AuthenticationProvider: React.FC<{
   }, [])
 
   const bootstrap = useCallback(async () => {
-    const [users, errors] = await sq.query(q => {
-      return q.userMe({resourceId: snekResourceId}).map(user => ({
+    const [me, errors] = await sq.query(q => {
+      const user = q.userMe
+
+      return {
         id: user.id,
         primaryEmail: user.primaryEmailAddress,
         username: user.username
-      }))
+      }
     })
 
-    const isSuccess = !!users && !errors
+    const isSuccess = !!me && !errors
 
     setIsLoading(false)
 
-    if (isSuccess && users[0]) {
+    if (isSuccess) {
       setIsAuthenticated(true)
-      setUser(users[0])
+      setUser(me)
     }
   }, [])
 

@@ -18,9 +18,9 @@ import {
   Textarea,
   theme
 } from '@chakra-ui/react'
-import {useSnekFinder} from '@jaenjs/snek-finder'
 import {HiCloudUpload} from '@react-icons/all-files/hi/HiCloudUpload'
 import {HiTemplate} from '@react-icons/all-files/hi/HiTemplate'
+import {useSnekFinder} from '@snek-at/snek-finder'
 import * as React from 'react'
 import {Controller, useForm} from 'react-hook-form'
 

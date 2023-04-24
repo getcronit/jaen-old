@@ -1,6 +1,6 @@
 {
   "name": "gatsby-plugin-jaen",
-  "version": "0.0.8",
+  "version": "0.0.10",
   "main": "index.js",
   "types": "dist/index.d.ts",
   "license": "MIT",
@@ -27,6 +27,7 @@
   "dependencies": {
     "@chakra-ui/gatsby-plugin": "^3.1.1",
     "gatsby-plugin-compile-es6-packages": "^2.1.1",
+    "gatsby-plugin-emotion": "^8.9",
     "gatsby-plugin-nprogress": "^5.4.0",
     "gatsby-source-filesystem": "^5.4.0",
     "jaen-utils": "*"
