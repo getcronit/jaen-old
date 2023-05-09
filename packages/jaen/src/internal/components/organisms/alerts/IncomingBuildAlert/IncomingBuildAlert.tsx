@@ -29,8 +29,7 @@ export interface IncomingBuildAlertProps {
 export const IncomingBuildAlert = ({
   onConfirm,
   isOpen,
-  onClose,
-  totalChanges
+  onClose
 }: IncomingBuildAlertProps) => {
   const cancelRef = React.useRef<any>()
 
@@ -94,10 +93,10 @@ export const IncomingBuildAlert = ({
               continue working on your changes.
             </Text>
             <Divider />
-            <Text fontSize="sm">
+            {/* <Text fontSize="sm">
               <strong>Note:</strong> {totalChanges} changes have been made since
               the last published version.
-            </Text>
+            </Text> */}
             <Text fontSize="sm">
               <strong>Warning:</strong> When not updating, publishing your
               changes might result in overwriting data of the latest version.
@@ -107,7 +106,6 @@ export const IncomingBuildAlert = ({
         <AlertDialogFooter>
           <HStack spacing={6}>
             <Button
-              colorScheme="teal"
               isLoading={isLoading}
               onClick={handleConfirm}
               size="lg"

@@ -1,7 +1,10 @@
+import type {IJaenPage} from '@snek-at/jaen/dist/types.js'
 import fs from 'fs'
 import {GatsbyNode, Node} from 'gatsby'
 import {convertToSlug, generatePageOriginPath, JaenSource} from 'jaen-utils'
 import path from 'path'
+
+import {processPage} from './iam-process.js'
 
 export const onPreBootstrap: GatsbyNode['onPreBootstrap'] = async ({
   reporter
@@ -49,8 +52,6 @@ export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = (
       `The plugin option 'snekResourceId' is required. Please add the option to your gatsby-config.js file.`
     )
   }
-
-  console.log('snekResourceId', snekResourceId)
 
   actions.setWebpackConfig({
     plugins: [
@@ -305,8 +306,13 @@ export const createSchemaCustomization: GatsbyNode['onCreateWebpackConfig'] = ({
   `)
 }
 
-export const createPages: GatsbyNode['createPages'] = async ({actions}) => {
-  const {createPage} = actions
+export const createPages: GatsbyNode['createPages'] = async ({
+  actions,
+  graphql,
+  reporter,
+  getNode
+}) => {
+  const {createPage, createNodeField} = actions
 
   createPage({
     path: '/admin',
@@ -328,6 +334,99 @@ export const createPages: GatsbyNode['createPages'] = async ({actions}) => {
     component: require.resolve('../RoutingPage.tsx'),
     context: {}
   })
+
+  const createJaenPages = async () => {
+    interface QueryData {
+      allTemplate: {
+        nodes: Array<{
+          name: string
+          absolutePath: string
+        }>
+      }
+      allJaenPage: {
+        nodes: Array<
+          IJaenPage & {
+            template: string
+          }
+        >
+      }
+    }
+
+    const result = await graphql<QueryData>(`
+      query {
+        allTemplate: allFile(
+          filter: {sourceInstanceName: {eq: "jaen-templates"}}
+        ) {
+          nodes {
+            name
+            absolutePath
+          }
+        }
+        allJaenPage {
+          nodes {
+            id
+            slug
+            parent {
+              id
+            }
+            template
+          }
+        }
+      }
+    `)
+
+    if (result.errors || !result.data) {
+      reporter.panicOnBuild(
+        `Error while running GraphQL query. ${result.errors}`
+      )
+
+      return
+    }
+
+    const {allTemplate, allJaenPage} = result.data
+
+    for (const node of allJaenPage.nodes) {
+      const pagePath = generatePageOriginPath(allJaenPage.nodes, node)
+
+      const pureNode = getNode(node.id)
+
+      if (pureNode) {
+        createNodeField({
+          node: pureNode,
+          name: 'path',
+          value: pagePath
+        })
+      }
+
+      if (node.template) {
+        if (!pagePath) {
+          reporter.panicOnBuild(
+            `Error while generating path for page ${node.id}`
+          )
+          return
+        }
+
+        const template = allTemplate.nodes.find(
+          template => template.name === node.template
+        )
+
+        if (!template) {
+          reporter.panicOnBuild(`Template ${node.template} not found`)
+          return
+        }
+
+        createPage({
+          path: pagePath,
+          component: template.absolutePath,
+          context: {
+            jaenPageId: node.id
+          }
+        })
+      }
+    }
+  }
+
+  await createJaenPages()
 }
 
 export const onCreatePage: GatsbyNode['onCreatePage'] = async ({
@@ -396,15 +495,18 @@ export const onCreatePage: GatsbyNode['onCreatePage'] = async ({
 export const sourceNodes: GatsbyNode['onCreateWebpackConfig'] = async ({
   actions,
   createNodeId,
-  createContentDigest
+  createContentDigest,
+  cache,
+  store,
+  reporter
 }) => {
   const {createNode} = actions
 
   JaenSource.jaenData.read()
 
-  const internalData = JaenSource.jaenData.internal || {}
+  console.log(JaenSource.jaenData)
 
-  console.log(`internalData`, internalData)
+  const internalData = JaenSource.jaenData.internal || {}
 
   const internalNode = {
     ...internalData,
@@ -419,4 +521,41 @@ export const sourceNodes: GatsbyNode['onCreateWebpackConfig'] = async ({
   }
 
   await createNode(internalNode)
+
+  for (const [id, jaenPage] of Object.entries(JaenSource.jaenData.pages)) {
+    const page = await jaenPage.context.fetchRemoteFile<IJaenPage>()
+
+    await processPage({
+      page,
+      createNodeId,
+      createNode,
+      cache,
+      store,
+      reporter
+    })
+
+    const path = id.split('JaenPage ')[1]
+
+    const node = {
+      ...page,
+      jaenPageMetadata: {
+        ...page.jaenPageMetadata,
+        title: page.jaenPageMetadata?.title || path
+      },
+      slug: page.slug || (path ? convertToSlug(path) : ''),
+      id,
+      template: page.template || null,
+      componentName: page.componentName || null,
+      sections: page.sections || [],
+      parent: page.parent ? page.parent.id : null,
+      children: page.children?.map(child => child.id) || [],
+      internal: {
+        type: 'JaenPage',
+        content: JSON.stringify(page),
+        contentDigest: createContentDigest(page)
+      }
+    }
+
+    createNode(node)
+  }
 }

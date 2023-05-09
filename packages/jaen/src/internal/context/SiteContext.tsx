@@ -45,3 +45,5 @@ export const useSiteContext = () => {
 
   return context
 }
+
+export default SiteProvider

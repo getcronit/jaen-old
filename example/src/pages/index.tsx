@@ -182,6 +182,10 @@ const IndexPage = connectPage(
       <>
         <Button>Button 1</Button>
 
+        <Box minW="sm" minH="sm">
+          <Field.Image name="image" label="Image" defaultValue={undefined} />
+        </Box>
+
         <Button>Button 2</Button>
         <Field.Section
           name="section"

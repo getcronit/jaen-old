@@ -1,6 +1,6 @@
 {
   "name": "@snek-at/jaen",
-  "version": "0.0.34",
+  "version": "0.0.44",
   "source": "src/index.ts",
   "main": "./dist/index.js",
   "module": "./dist/index.module.js",
@@ -11,6 +11,7 @@
       "default": "./dist/index.module.js"
     },
     "./dist/index.css": "./dist/index.css",
+    "./dist/gatsby-wrapper.js": "./dist/gatsby-wrapper.js",
     "./package.json": "./package.json"
   },
   "bin": {

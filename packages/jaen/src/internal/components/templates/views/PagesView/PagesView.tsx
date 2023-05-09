@@ -100,35 +100,38 @@ export const PagesView: React.FC<PagesViewProps> = () => {
     [manager]
   )
 
-  const handleItemDelete = React.useCallback(async (path: string) => {
-    const shouldDelete = await confirm(
-      `Are you sure you want to delete the page "${path}"?`
-    )
+  const handleItemDelete = React.useCallback(
+    async (path: string) => {
+      const shouldDelete = await confirm(
+        `Are you sure you want to delete the page "${path}"?`
+      )
 
-    if (shouldDelete) {
-      const pageId = manager.getPageIdFromPath(path)
+      if (shouldDelete) {
+        const pageId = manager.getPageIdFromPath(path)
 
-      if (!pageId) {
-        return
+        if (!pageId) {
+          return
+        }
+
+        toast({
+          title: 'Page deleted',
+          status: 'success'
+        })
+
+        // get Id of parent page
+        const page = manager.onGet(pageId)
+
+        manager.onDelete(pageId)
+
+        if (!page?.parent?.id) {
+          return
+        }
+
+        onSelect(page.parent.id, 'pageId')
       }
-
-      toast({
-        title: 'Page deleted',
-        status: 'success'
-      })
-
-      // get Id of parent page
-      const page = manager.onGet(pageId)
-
-      manager.onDelete(pageId)
-
-      if (!page?.parent?.id) {
-        return
-      }
-
-      onSelect(page.parent.id, 'pageId')
-    }
-  }, [])
+    },
+    [manager.pageTree]
+  )
 
   const handlePageMove = React.useCallback(
     (info: {dragParentPath: string; dragPath: string; dropPath: string}) => {

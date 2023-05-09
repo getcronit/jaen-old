@@ -271,3 +271,5 @@ export const useHighlight = ({tooltipButtons}: UseHighlightProps) => {
     ref: refOnly
   }
 }
+
+export default HighlightProvider

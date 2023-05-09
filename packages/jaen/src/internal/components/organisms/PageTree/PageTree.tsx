@@ -290,7 +290,11 @@ export const PageTree: React.FC<PageTreeProps> = ({
       matchPath(node.path, dataNode.key.toString())
     )
     if (node == null) {
-      throw new Error('Node not found')
+      return {
+        title: 'Loading...',
+        path: '/',
+        isLocked: true
+      }
     }
     return node
   }

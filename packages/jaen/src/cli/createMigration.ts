@@ -142,10 +142,14 @@ const updateEntity = async (
       arrayMerge: deepmergeArrayIdMerge
     }) // {...baseData, ...migrationData}
 
+    console.log('baseData', JSON.stringify(baseData, null, 2))
+    console.log('migrationData', JSON.stringify(migrationData, null, 2))
+    console.log('mergedData', JSON.stringify(mergedData, null, 2))
+
     const newMigration = await uploadMigration(mergedData)
 
     return {
-      context: baseEntity.context,
+      context: newMigration,
       migrations: [...baseEntity.migrations, newMigration]
     }
   }

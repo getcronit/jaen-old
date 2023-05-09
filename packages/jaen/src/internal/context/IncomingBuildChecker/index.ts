@@ -1,2 +1,5 @@
-export {IncomingBuildCheckerProvider} from './IncomingBuildCheckerProvider.js'
+export {
+  IncomingBuildChecker as default,
+  IncomingBuildChecker
+} from './IncomingBuildChecker.js'
 export {useIncomingBuildChecker} from './useIncomingBuildChecker.js'

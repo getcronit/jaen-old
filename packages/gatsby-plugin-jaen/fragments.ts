@@ -41,7 +41,11 @@ export const fragments = graphql`
     jaenFiles {
       id
       childImageSharp {
-        gatsbyImageData(placeholder: BLURRED, formats: [AUTO, WEBP, AVIF])
+        gatsbyImageData(
+          placeholder: BLURRED
+          formats: [AUTO, WEBP, AVIF]
+          layout: FULL_WIDTH
+        )
       }
     }
     sections {
@@ -104,7 +108,11 @@ export const fragments = graphql`
     jaenFiles {
       id
       childImageSharp {
-        gatsbyImageData(placeholder: BLURRED, formats: [AUTO, WEBP, AVIF])
+        gatsbyImageData(
+          placeholder: BLURRED
+          formats: [AUTO, WEBP, AVIF]
+          layout: FULL_WIDTH
+        )
       }
     }
   }

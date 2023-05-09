@@ -1,7 +1,7 @@
 import {AdminToolbar} from '../components/index.js'
 import {PageContextType, PageProvider} from '../context/PageProvider.js'
 import {withSnekFinder} from '../context/SnekFinder/withSnekFinder.js'
-import {GatsbyRootWrapper} from '../index.js'
+import {GatsbyRootWrapper} from '../gatsby-wrapper'
 
 export type JaenMockProps = PageContextType
 

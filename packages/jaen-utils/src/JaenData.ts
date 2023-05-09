@@ -1,9 +1,19 @@
 import {existsSync, readFileSync, writeFileSync} from 'fs'
 import {resolve} from 'path'
 
-export interface RemoteFileMigration {
+export class RemoteFileMigration {
   createdAt: string
   fileUrl: string
+
+  constructor(createdAt: string, fileUrl: string) {
+    this.createdAt = createdAt
+    this.fileUrl = fileUrl
+  }
+
+  async fetchRemoteFile<T>(): Promise<T> {
+    const response = await fetch(this.fileUrl)
+    return await response.json()
+  }
 }
 
 export interface BaseEntity extends MigrationEntity {
@@ -49,22 +59,69 @@ export class JaenData {
     this.#jaenDataDir = absoluteJaenDataDir
   }
 
-  private readJSONFile(fileName: string, defaultData = {}) {
-    return getJSONFile(`${this.#jaenDataDir}/${fileName}.json`, defaultData)
+  private readJSONFile<T = any>(fileName: string, defaultData = {}) {
+    return getJSONFile(
+      `${this.#jaenDataDir}/${fileName}.json`,
+      defaultData
+    ) as T
   }
 
   private writeJSONFile(fileName: string, data: any) {
     writeJSONFile(`${this.#jaenDataDir}/${fileName}.json`, data)
   }
 
-  read() {
-    this.pages = this.readJSONFile('pages')
-    this.popups = this.readJSONFile('popups')
-    this.internal = this.readJSONFile('internal', {
+  readPages() {
+    const pages = this.readJSONFile<typeof this.pages>('pages', {})
+
+    for (const [pageName, page] of Object.entries(pages)) {
+      pages[pageName] = {
+        context: new RemoteFileMigration(
+          page.context.createdAt,
+          page.context.fileUrl
+        ),
+        migrations: page.migrations.map(
+          (m: any) => new RemoteFileMigration(m.createdAt, m.fileUrl)
+        )
+      }
+    }
+
+    this.pages = pages
+  }
+
+  readPopups() {
+    const popups = this.readJSONFile<typeof this.popups>('popups', {})
+
+    for (const [popupName, popup] of Object.entries(popups)) {
+      popups[popupName] = {
+        context: new RemoteFileMigration(
+          popup.context.createdAt,
+          popup.context.fileUrl
+        ),
+        migrations: popup.migrations.map(
+          (m: any) => new RemoteFileMigration(m.createdAt, m.fileUrl)
+        )
+      }
+    }
+
+    this.popups = popups
+  }
+
+  readInternal() {
+    this.internal = this.readJSONFile<typeof this.internal>('internal', {
       site: {},
-      migrationHistory: [],
-      widgets: []
+      widgets: [],
+      migrationHistory: []
     })
+
+    this.internal.migrationHistory = this.internal.migrationHistory.map(
+      (m: any) => new RemoteFileMigration(m.createdAt, m.fileUrl)
+    )
+  }
+
+  read() {
+    this.readPages()
+    this.readPopups()
+    this.readInternal()
   }
 
   write() {

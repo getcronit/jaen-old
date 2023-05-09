@@ -20,18 +20,25 @@ export const DataImage: React.FC<DataImageProps> = ({
 }) => {
   let imageElement
 
+  const gatsbyImageDynamic = {
+    placeholder: undefined,
+    layout: 'constained',
+    images: {
+      fallback: {
+        src: internalImageUrl
+      }
+    }
+  }
+
   if (internalImageUrl) {
     imageElement = (
       <GatsbyImage
         {...imageFieldProps}
         // @ts-expect-error
-        image={{
-          images: {
-            sources: [],
-            fallback: {
-              src: internalImageUrl
-            }
-          }
+        image={gatsbyImageDynamic}
+        imgStyle={{
+          ...imageFieldProps.imgStyle,
+          position: 'static'
         }}
       />
     )
@@ -43,13 +50,10 @@ export const DataImage: React.FC<DataImageProps> = ({
         <GatsbyImage
           {...imageFieldProps}
           // @ts-expect-error
-          image={{
-            images: {
-              sources: [],
-              fallback: {
-                src: defaultImageUrl
-              }
-            }
+          image={gatsbyImageDynamic}
+          imgStyle={{
+            ...imageFieldProps.imgStyle,
+            position: 'static'
           }}
         />
       )

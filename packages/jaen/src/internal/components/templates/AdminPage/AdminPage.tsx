@@ -39,7 +39,7 @@ const AdminPage: React.FC<AdminPageProps> = withRedux(
 
     return (
       <AdminShell
-        contentOffset="6.5rem"
+        contentOffset="3rem"
         withoutAdminToolbarShadow
         beforeAdminShell={
           <AdminSecondaryToolbar

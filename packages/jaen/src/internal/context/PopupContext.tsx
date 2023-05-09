@@ -38,7 +38,7 @@ export interface IPopupOptions {
     showAfterXPageViews: number
     showUntilXPageViews: number
   }>
-  logo?: As<any>
+  logo?: As
   customCondition?: (props: PageProps) => boolean
   customTrigger?: () => Promise<boolean>
 }

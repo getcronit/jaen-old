@@ -87,11 +87,17 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
 
   const getPageIdFromPath = React.useCallback(
     (path: string) => {
+      console.log('getPageIdFromPath', path, pageTree)
+
       const page = pageTree.find(p => {
         const pagePath = generatePageOriginPath(pageTree, p)
 
+        console.log('pagePath', pagePath, matchPath(path, pagePath!))
+
         return pagePath && matchPath(path, pagePath) && !p.deleted
       })
+
+      console.log('page', page)
 
       // check if page has id and is not deleted
       if (!page?.id) return null
@@ -131,11 +137,14 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
     []
   )
 
-  const handlePageDelete = React.useCallback((id: string) => {
-    setShouldUpdateDpathsFor({pageId: id, create: false})
+  const handlePageDelete = React.useCallback(
+    (id: string) => {
+      setShouldUpdateDpathsFor({pageId: id, create: false})
 
-    dispatch(actions.page_markForDeletion(id))
-  }, [])
+      dispatch(actions.page_markForDeletion(id))
+    },
+    [pageTree]
+  )
 
   const handlePageMove = React.useCallback(
     (id: string, oldParentId: string | null, newParentId: string | null) => {
@@ -185,6 +194,8 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
   const pagePaths = React.useMemo(() => {
     const paths = generateAllPaths(pageTree)
 
+    console.log('PATHS: ', paths)
+
     return Object.keys(paths)
       .map(path => {
         const pageId = paths[path]
@@ -204,6 +215,8 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
       })
       .filter(Boolean) as PageTreeItems
   }, [pageTree])
+
+  console.log('pagePaths', pagePaths)
 
   const [creatorState, setCreatorState] =
     React.useState<{

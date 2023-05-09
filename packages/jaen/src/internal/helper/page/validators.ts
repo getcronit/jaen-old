@@ -34,10 +34,10 @@ export function pageUpdateValidation({
       const sibling = pageTree.find(p => p.id === siblingId)
 
       if (sibling) {
-        // // check if sibling is deleted
-        // if (sibling.deleted) {
-        //   return false
-        // }
+        // check if sibling is deleted
+        if (sibling.deleted) {
+          return false
+        }
 
         return sibling.slug === value
       }

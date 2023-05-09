@@ -90,3 +90,5 @@ export const AdminShell: React.FC<AdminShellProps> = props => {
     </>
   )
 }
+
+export default AdminShell
