@@ -108,7 +108,7 @@ export class JaenData {
 
   readInternal() {
     this.internal = this.readJSONFile<typeof this.internal>('internal', {
-      site: {},
+      siteMetadata: {},
       widgets: [],
       migrationHistory: []
     })

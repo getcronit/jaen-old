@@ -1,6 +1,16 @@
 {
-  "site": {
-    "siteMetadata": {}
+  "siteMetadata": {
+    "title": "AGT Gun Trade KG - Hochwertige Jagd- und Sportwaffen online kaufen",
+    "siteUrl": "https://agt.snek.at",
+    "organization": {
+      "name": "",
+      "url": ""
+    },
+    "description": "Entdecken Sie bei AGT Gun Trade KG eine breite Auswahl an hochwertigen Jagd- und Sportwaffen sowie Zubehör. Unser erfahrener Büchsenmacher-Service bietet Reparaturen, Montagen, Brünierungen und Tuning an. Kaufen Sie bequem online ein und genießen Sie erstklassigen Service und Fachberatung. Erfüllen Sie Ihre Leidenschaft für Jagd und Sport mit AGT Gun Trade KG.",
+    "author": {
+      "name": ""
+    },
+    "image": "https://osg.snek.at/storage/BQACAgQAAxkDAAIV42RanwdakCHf9sbT9CZh5XnWuhEbAAJwDQACj-7YUokOcz2Fyo6sLwQ"
   },
   "migrationHistory": [
     {
