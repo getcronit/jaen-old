@@ -22,7 +22,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "microbundle src/index.ts --format cjs,esm",
+    "build": "microbundle src/index.ts --format cjs,esm --no-compress",
     "dev": "yarn build --watch",
     "build:cli": "microbundle -i src/cli/index.ts -o dist/index.cli.mjs --no-pkg-main --target node --generateTypes false --format esm",
     "dev:cli": "yarn build:cli --watch",
