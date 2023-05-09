@@ -10993,7 +10993,7 @@ gatsby-plugin-compile-es6-packages@^2.1.1:
     "@babel/runtime" "^7.0.0"
     regex-escape "^3.4.8"
 
-gatsby-plugin-emotion@^8.9.0:
+gatsby-plugin-emotion@^8.9:
   version "8.9.0"
   resolved "https://registry.yarnpkg.com/gatsby-plugin-emotion/-/gatsby-plugin-emotion-8.9.0.tgz#71009ec92b1cc26f070ca4e401b947b25e92c515"
   integrity sha512-cYDxkgDRE/vdXmX6W7z1HgJb5+LSaekNUFFrqigA/Hias/fooJUf0qCP8bPyLtdlGnp1+sCGxUXj5egxzS2iSA==
