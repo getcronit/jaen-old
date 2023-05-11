@@ -5,7 +5,7 @@ import {JaenSource} from 'jaen-utils'
 const GatsbyConfig: GatsbyConfigType = {
   jsxRuntime: 'automatic',
   jsxImportSource: '@emotion/react',
-  siteMetadata: JaenSource.jaenData.internal?.site.siteMetadata
+  siteMetadata: JaenSource.jaenData.internal?.siteMetadata
 }
 
 GatsbyConfig.plugins = [
