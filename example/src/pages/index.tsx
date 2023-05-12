@@ -162,7 +162,7 @@ const Card = connectBlock(
 )
 
 const IndexPage = connectPage(
-  () => {
+  function () {
     const menuWidget = useWidget("menu")
 
     React.useEffect(() => {
@@ -180,12 +180,15 @@ const IndexPage = connectPage(
 
     return (
       <>
-        <Button>Button 1</Button>
+        <Button>Button 1234</Button>
+        <Button>Button 1234</Button>
+        <Button>Button 12342232323231</Button>
+        <Button>Button 111323</Button>
+        <Button>Button 111323</Button>
 
         <Box minW="sm" minH="sm">
           <Field.Image name="image" label="Image" defaultValue={undefined} />
         </Box>
-
         <Button>Button 2</Button>
         <Field.Section
           name="section"

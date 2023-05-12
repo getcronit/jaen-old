@@ -49,5 +49,7 @@ Basic.args = {
     if (valueName === 'slug' && siblingsSlugs.includes(value)) {
       return 'This slug is already in use.'
     }
+
+    return undefined
   }
 }

@@ -87,7 +87,7 @@ const CMSComponent: React.FC<CMSProps> = props => {
   )
 }
 
-export const CMS = () => {
+export const CMS: React.FC = () => {
   const routes = [
     {
       name: 'Pages',
