@@ -1,7 +1,6 @@
 import {ChakraProvider} from '@chakra-ui/react'
 import {navigate} from 'gatsby'
 import React from 'react'
-import {PageProps} from '../types.js'
 import {InjectPopups} from './components/atoms/InjectPopups.js'
 import {LoadingPage} from './components/templates/LoadingPage/LoadingPage.js'
 import {
@@ -11,7 +10,7 @@ import {
 import {IncomingBuildChecker} from './context/IncomingBuildChecker/index.js'
 import {ModalProvider} from './context/Modals/ModalContext.js'
 import SiteProvider from './context/SiteContext.js'
-import {useInterceptGatsbyNavigate} from './hooks/useInterceptGatsbyNavigate'
+import {DynamicPageProps, useDynamicRoute} from './DynamicRoute.js'
 import {ThemeProvider} from './styles/ChakraThemeProvider.js'
 import theme from './styles/theme.js'
 
@@ -21,8 +20,6 @@ export interface WrapperProps {
 }
 
 export const GatsbyRootWrapper: React.FC<WrapperProps> = ({children}) => {
-  useInterceptGatsbyNavigate()
-
   const MayeLazy: React.FC<{
     children: React.ReactNode
   }> = ({children}) => {
@@ -59,13 +56,14 @@ export const GatsbyRootWrapper: React.FC<WrapperProps> = ({children}) => {
 }
 
 export interface PageWrapperProps extends WrapperProps {
-  pageProps: PageProps
+  pageProps: DynamicPageProps
 }
 
-export const GatsbyPageWrapper: React.FC<PageWrapperProps> = ({
-  children,
-  pageProps
-}) => {
+export const GatsbyPageWrapper: React.FC<PageWrapperProps> = props => {
+  const {node: dynamicPage, isLoading} = useDynamicRoute({
+    pageProps: props.pageProps
+  })
+
   const handleActivationButtonClick = () => {
     void navigate('/admin')
   }
@@ -73,6 +71,8 @@ export const GatsbyPageWrapper: React.FC<PageWrapperProps> = ({
   const auth = useAuthentication()
 
   const Wrapper = () => {
+    const children = dynamicPage || props.children
+
     if (auth.isAuthenticated) {
       const AdminShell = React.lazy(
         () => import('./components/templates/AdminShell/AdminShell.js')
@@ -84,7 +84,7 @@ export const GatsbyPageWrapper: React.FC<PageWrapperProps> = ({
         </React.Suspense>
       )
     } else {
-      if (pageProps.path.includes('/admin')) {
+      if (props.pageProps.path.includes('/admin')) {
         // For example if the user accesses /admin/login, the ActivationButton should not be rendered
         return <>{children}</>
       }
@@ -107,9 +107,13 @@ export const GatsbyPageWrapper: React.FC<PageWrapperProps> = ({
     }
   }
 
+  if (isLoading) {
+    return <LoadingPage />
+  }
+
   return (
     <>
-      <InjectPopups pageProps={pageProps} />
+      <InjectPopups pageProps={props.pageProps} />
       <Wrapper />
     </>
   )

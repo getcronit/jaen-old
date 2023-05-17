@@ -1,23 +1,25 @@
 import {Center, CircularProgress} from '@chakra-ui/react'
-import {RouteComponentProps, Router} from '@reach/router'
 import {navigate} from 'gatsby'
-import {useEffect} from 'react'
+import {useEffect, useState} from 'react'
 import {PageProps} from '../types.js'
 import {usePromiseEffect} from '../utils/hooks/usePromiseEffect.js'
 import {useSiteContext} from './context/SiteContext.js'
 import {useDynamicPaths} from './hooks/routing/useDynamicPaths.js'
 import {useJaenTemplates} from './hooks/site/useJaenTemplates.js'
 
-const Dynamic = (props: RouteComponentProps & Partial<PageProps>) => {
+export const DynamicRoute = (props: PageProps) => {
   const dynamicPaths = useDynamicPaths()
 
-  const path = props.location?.hash?.substring(1)
+  // add trailing slash if not present
+  const path = props.path.endsWith('/') ? props.path : `${props.path}/`
 
   const loadingComponent = (
     <Center my="24">
       <CircularProgress isIndeterminate />
     </Center>
   )
+
+  console.log('Dynamic', dynamicPaths, path)
 
   const TemplateLoader = ({path}: {path: string}) => {
     const dynamicPath = dynamicPaths[path]
@@ -69,9 +71,9 @@ const Dynamic = (props: RouteComponentProps & Partial<PageProps>) => {
 
     return (
       <Component
-        {...(props as any)}
-        pageContext={{...props.pageContext, jaenPageId: pageId}}
-        data={{...props.data, jaenPage: null}}
+        {...({} as any)}
+        pageContext={{jaenPageId: pageId}}
+        data={{jaenPage: null}}
       />
     )
   }
@@ -82,16 +84,25 @@ const Dynamic = (props: RouteComponentProps & Partial<PageProps>) => {
 
   return <TemplateLoader path={path} />
 }
-export const RoutingPage = () => {
-  if (typeof window !== 'undefined') {
-    return (
-      <Router primary={false}>
-        <Dynamic path="/r" />
-      </Router>
-    )
-  }
 
-  return null
+export type DynamicPageProps = PageProps & {
+  custom404?: object
 }
 
-export default RoutingPage
+export const useDynamicRoute = ({pageProps}: {pageProps: DynamicPageProps}) => {
+  const [node, setNode] = useState<React.ReactNode>()
+  const [isLoading, setIsLoading] = useState(!!pageProps.custom404)
+
+  useEffect(() => {
+    // check if 404
+    console.log('Page not found', window.location.pathname, pageProps)
+
+    if (pageProps.custom404) {
+      console.log(`Setting dynamic route for ${window.location.pathname}`)
+      setNode(<DynamicRoute {...pageProps} />)
+      setIsLoading(false)
+    }
+  }, [pageProps.path])
+
+  return {node, isLoading}
+}

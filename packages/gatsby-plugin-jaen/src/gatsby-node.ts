@@ -328,13 +328,6 @@ export const createPages: GatsbyNode['createPages'] = async ({
     context: {}
   })
 
-  createPage({
-    path: '/r',
-    matchPath: '/r/*',
-    component: require.resolve('../RoutingPage.tsx'),
-    context: {}
-  })
-
   const createJaenPages = async () => {
     interface QueryData {
       allTemplate: {
