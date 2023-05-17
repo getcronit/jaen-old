@@ -3,6 +3,7 @@ import React, {forwardRef, useCallback} from 'react'
 import {useHighlight} from '../../../context/HighlightContext.js'
 
 export interface HighlightTooltipProps {
+  id: string
   children: React.ReactNode
   as?: React.ComponentType<React.HTMLAttributes<HTMLElement>>
   asProps?: Record<string, any>
@@ -39,7 +40,7 @@ export const HighlightTooltip = forwardRef<
     const childrenWithRef = React.Children.map(
       children,
       (child: React.ReactElement<any>) => {
-        return React.cloneElement(child, {ref: setRefs})
+        return React.cloneElement(child, {ref: setRefs, id: props.id})
       }
     )
 

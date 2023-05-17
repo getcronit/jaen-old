@@ -73,6 +73,8 @@ export const GatsbyPageWrapper: React.FC<PageWrapperProps> = props => {
   const Wrapper = () => {
     const children = dynamicPage || props.children
 
+    const isOnAdmin = props.pageProps.path.includes('/admin')
+
     if (auth.isAuthenticated) {
       const AdminShell = React.lazy(
         () => import('./components/templates/AdminShell/AdminShell.js')
@@ -84,7 +86,7 @@ export const GatsbyPageWrapper: React.FC<PageWrapperProps> = props => {
         </React.Suspense>
       )
     } else {
-      if (props.pageProps.path.includes('/admin')) {
+      if (isOnAdmin) {
         // For example if the user accesses /admin/login, the ActivationButton should not be rendered
         return <>{children}</>
       }

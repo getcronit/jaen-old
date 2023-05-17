@@ -73,7 +73,7 @@ export const ChoiceField = connectField<
     }
 
     return (
-      <HighlightTooltip actions={actions}>
+      <HighlightTooltip id={jaenField.name} actions={actions}>
         {render(
           selection,
           options,

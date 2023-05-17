@@ -3,6 +3,7 @@ import {NewsSlideProvider} from '../../../context/NewsSlideContext.js'
 import {ThemeProvider} from '../../../styles/ChakraThemeProvider.js'
 import {NewsSlide} from '../../molecules/index.js'
 import {AdminToolbar} from '../../organisms/index.js'
+import {useScrollToElement} from './useScrollToElement.js'
 
 export interface AdminShellProps {
   beforeAdminShell?: React.ReactNode
@@ -13,6 +14,8 @@ export interface AdminShellProps {
 }
 
 export const AdminShell: React.FC<AdminShellProps> = props => {
+  useScrollToElement()
+
   // disable SSR for this component
   // const isSSR = typeof window === 'undefined'
 

@@ -136,7 +136,10 @@ export const SectionField = withRedux(
     }
 
     return (
-      <HighlightTooltip isEditing={isEditing} actions={tooltipButtons}>
+      <HighlightTooltip
+        id={name}
+        isEditing={isEditing}
+        actions={tooltipButtons}>
         <Box boxSize="full">
           <Wrapper
             minH="64"
@@ -168,6 +171,7 @@ export const SectionField = withRedux(
               return (
                 <HighlightTooltip
                   key={item.id}
+                  id={`${name}-${index}`}
                   as={SectionWrapper}
                   isEditing={isEditing}
                   actions={[

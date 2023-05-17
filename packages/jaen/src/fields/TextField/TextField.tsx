@@ -25,6 +25,7 @@ export const TextField = connectField<string, string, TextFieldProps>(
 
     return (
       <HighlightTooltip
+        id={jaenField.name}
         actions={[
           <Button
             variant="jaenHighlightTooltipText"

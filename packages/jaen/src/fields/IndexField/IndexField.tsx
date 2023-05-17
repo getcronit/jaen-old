@@ -5,6 +5,7 @@ import {withRedux} from '../../internal/redux/index.js'
 import {IJaenPage} from '../../types.js'
 
 export interface IndexFieldProps {
+  name: string
   /**
    * Opts out the field from the page content on which it is applied.
    * Instead the page context of the provided jaenPageId will be used.
@@ -33,10 +34,11 @@ export interface IndexFieldProps {
 }
 
 export const IndexField: React.FC<IndexFieldProps> = withRedux(
-  ({renderPage, ...rest}: IndexFieldProps) => {
+  ({name, renderPage, ...rest}: IndexFieldProps) => {
     const {children, withJaenPage} = useJaenPageIndex(rest)
     return (
       <HighlightTooltip
+        id={name}
         actions={[
           <Button
             variant="jaenHighlightTooltipText"
