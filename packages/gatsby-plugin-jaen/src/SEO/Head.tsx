@@ -4,29 +4,59 @@ import {getSchemaOrg} from './getSchemaOrg.js'
 
 // author, siteUrl, datePublished, defaultTitle, description, image, isBlogPost, organization, title, url
 
+import React from 'react'
+
 export const Head: React.FC<
-  HeadProps<{jaenPage?: Record<string, any>}> & {
-    children?: React.ReactNode
+  HeadProps<{
+    jaenPage?: {
+      jaenPageMetadata?: {
+        title?: string
+        description?: string
+        image?: string
+        isBlogPost?: boolean
+        datePublished?: string
+      }
+    }
+  }> & {
+    jaenPageMetadata?: {
+      title?: string
+      description?: string
+      image?: string
+      isBlogPost?: boolean
+      datePublished?: string
+    }
+    children: React.ReactNode
   }
 > = props => {
   const siteMetadata = useSiteMetadata()
 
   const defaultTitle = props.location.pathname
 
-  const title: string =
+  const jaenPageMetadata = props.jaenPageMetadata || {}
+
+  const title =
+    jaenPageMetadata.title ||
     props.data.jaenPage?.jaenPageMetadata?.title ||
     siteMetadata?.title ||
     defaultTitle
 
   const description =
+    jaenPageMetadata.description ||
     props.data.jaenPage?.jaenPageMetadata?.description ||
     siteMetadata?.description
   const image =
-    props.data.jaenPage?.jaenPageMetadata?.image || siteMetadata?.image
+    jaenPageMetadata.image ||
+    props.data.jaenPage?.jaenPageMetadata?.image ||
+    siteMetadata?.image
   const url = `${siteMetadata?.siteUrl}${props.location.pathname}`
-  const isBlogPost = props.data.jaenPage?.jaenPageMetadata?.isBlogPost || false
+  const isBlogPost =
+    jaenPageMetadata.isBlogPost ||
+    props.data.jaenPage?.jaenPageMetadata?.isBlogPost ||
+    false
   const datePublished =
-    props.data.jaenPage?.jaenPageMetadata?.datePublished || false
+    jaenPageMetadata.datePublished ||
+    props.data.jaenPage?.jaenPageMetadata?.datePublished ||
+    false
   const fbAppID = siteMetadata?.social?.fbAppID
   const twitter = siteMetadata?.social?.twitter
 

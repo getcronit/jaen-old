@@ -156,13 +156,14 @@ export interface IJaenConnection<ReactProps, Options>
   options: Options
 }
 
-export type PageProps = GatsbyPageProps<
-  {
-    jaenPage: IJaenPage | null
-    allJaenPage?: {nodes: Array<Partial<IJaenPage>>}
-  },
-  {jaenPageId: string}
->
+export type PageProps<DataType = object, PageContextType = object> =
+  GatsbyPageProps<
+    DataType & {
+      jaenPage: IJaenPage | null
+      allJaenPage?: {nodes: Array<Partial<IJaenPage>>}
+    },
+    PageContextType & {jaenPageId: string}
+  >
 
 export interface IFormProps<Values> {
   values: Values

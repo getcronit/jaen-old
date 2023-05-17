@@ -2,8 +2,8 @@ import React from 'react'
 import {ErrorBoundary} from 'react-error-boundary'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import {VFileMessage} from 'vfile-message'
-import reporter from 'vfile-reporter'
 import {Statistics} from 'vfile-statistics'
+
 import {ErrorFallback} from './ErrorFallback.js'
 import {BaseEditorProps} from './types.js'
 
@@ -50,19 +50,19 @@ export const PreviewComponent: React.FC<PreviewComponentProps> = ({
     }
   }
 
+  const StatsReporterError = React.lazy(() => import('./StatsReporterError.js'))
+
+  console.log('PreviewComponent', state, stats)
+
   return (
-    <>
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
       <noscript>Enable JavaScript for the rendered result.</noscript>
-      <div>
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          {state.file?.result ? <Content /> : null}
-          {stats.fatal || stats.warn ? (
-            <pre>
-              <code>{reporter(state.file)}</code>
-            </pre>
-          ) : null}
-        </ErrorBoundary>
-      </div>
-    </>
+
+      {state.file?.result ? <Content /> : null}
+
+      <React.Suspense fallback={null}>
+        <StatsReporterError state={state} stats={stats} />
+      </React.Suspense>
+    </ErrorBoundary>
   )
 }

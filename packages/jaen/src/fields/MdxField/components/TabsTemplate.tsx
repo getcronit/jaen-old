@@ -76,7 +76,7 @@ const TabsTemplate: React.FC<TabsProps> = props => {
           </TabList>
         </ThemeProvider>
 
-        <ThemeProvider theme={currentTheme} cssVarsRoot={':root'}>
+        <ThemeProvider theme={currentTheme} cssVarsRoot=":root">
           <TabPanels>
             {props.tabs.map((tab, i) => (
               <TabPanel key={i} p="0">

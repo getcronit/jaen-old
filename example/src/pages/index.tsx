@@ -123,7 +123,6 @@ const Card = connectBlock(
           <Box
             mt="1"
             fontWeight="semibold"
-            as="h4"
             // lineHeight="tight"
             noOfLines={1}
           >
@@ -210,7 +209,7 @@ const IndexPage = connectPage(
           <Button>Button 3</Button>
           <Field.Text name="test" defaultValue="teest" label="Test" />
 
-          <Text fontFamily={"fantasy"}>
+          <Text fontFamily={"fantasy"} as="span">
             <Field.Text
               name="custom-font"
               defaultValue="Fantasyyyy"

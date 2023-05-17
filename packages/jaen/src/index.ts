@@ -15,7 +15,7 @@ export {useWidget} from './internal/hooks/useWidget.js'
 export * as internal from './internal/index.js'
 export {withJaenMock} from './internal/testing/withJaenMock.js'
 export {snekResourceId} from './snekResourceId.js'
-export type {IJaenPage, SiteMetadata} from './types.js'
+export type {IJaenPage, PageProps, SiteMetadata} from './types.js'
 
 export const getCookieConsentApi = () => {
   return window.CookieConsentApi
