@@ -105,7 +105,7 @@ export const ImageField = connectField<
 
     return (
       <HighlightTooltip
-        id={jaenField.name}
+        id={jaenField.id}
         actions={[
           <Button
             variant="jaenHighlightTooltipText"

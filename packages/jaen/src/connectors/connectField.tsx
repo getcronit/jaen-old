@@ -6,11 +6,14 @@ import {ThemeProvider} from '../internal/styles/ChakraThemeProvider.js'
 import {IJaenConnection} from '../types.js'
 
 export interface JaenFieldProps<IDefaultValue> {
+  id?: string
   name: string
   label: string
   defaultValue: IDefaultValue
   style?: React.CSSProperties
   className?: string
+  relatedAnchor?: string
+  idStrategy?: 'auto' | 'value'
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -49,7 +52,16 @@ export const connectField = <IValue, IDefaultValue = IValue, P = {}>(
   const MyComp: IJaenConnection<
     P & JaenFieldProps<IDefaultValue>,
     typeof options
-  > = ({name, label, defaultValue, style, className, ...rest}) => {
+  > = ({
+    id,
+    name,
+    label,
+    defaultValue,
+    style,
+    className,
+    idStrategy = 'auto',
+    ...rest
+  }) => {
     let field: {
       register: any
       staticValue: any
@@ -67,10 +79,43 @@ export const connectField = <IValue, IDefaultValue = IValue, P = {}>(
       field = useField<IValue>(name, options.fieldType)
     }
 
+    if (!id) {
+      if (idStrategy === 'auto') {
+        id = name
+
+        if (field.SectionBlockContext) {
+          const {path, position} = field.SectionBlockContext
+
+          // Generate a fully qualified name (fqn) by mapping the path array and joining field names with section IDs (if present) using hyphens
+          const fqn = path
+            .map(p =>
+              p.sectionId ? `${p.fieldName}-${p.sectionId}` : p.fieldName
+            )
+            .join('-')
+
+          // Construct the final id by combining fqn, name, and position using hyphens
+          id = `${fqn}-${position}-${name}`
+        }
+      } else if (idStrategy === 'value') {
+        // Strip all HTML and all non-alphanumeric characters from the value and use it as the id
+        // Also make sure that spaces are replaced with hyphens
+
+        const value = field.value || field.staticValue || defaultValue
+
+        id = `${value
+          .replace(/(<([^>]+)>)/gi, '')
+          .replace(/[^a-zA-Z0-9 ]/g, '')
+          .replace(/\s+/g, '-')
+          .toLowerCase()}`
+      }
+    }
+
     return (
       <ThemeProvider>
         <Component
           jaenField={{
+            id,
+            idStrategy,
             name,
             label,
             defaultValue,

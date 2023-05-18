@@ -7,6 +7,8 @@ export const useScrollToElement = () => {
     const url = new URL(window.location.href)
     const id = url.hash.slice(1) // Remove the '#' symbol from the ID
 
+    console.log('Scrolling to element', id)
+
     if (id) {
       const targetElement = document.getElementById(id)
       if (targetElement) {

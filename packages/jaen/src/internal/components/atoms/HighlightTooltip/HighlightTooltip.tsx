@@ -3,7 +3,7 @@ import React, {forwardRef, useCallback} from 'react'
 import {useHighlight} from '../../../context/HighlightContext.js'
 
 export interface HighlightTooltipProps {
-  id: string
+  id?: string
   children: React.ReactNode
   as?: React.ComponentType<React.HTMLAttributes<HTMLElement>>
   asProps?: Record<string, any>
