@@ -316,9 +316,11 @@ const pagesSlice = createSlice({
         fieldType: string
         fieldName: string
         value: any
+        props?: object
       }>
     ) {
-      const {pageId, section, fieldType, fieldName, value} = action.payload
+      const {pageId, section, fieldType, fieldName, value, props} =
+        action.payload
 
       // find the page
       // Create the page if not found
@@ -340,7 +342,8 @@ const pagesSlice = createSlice({
             jaenFields: {
               [fieldType]: {
                 [fieldName]: {
-                  value
+                  value,
+                  props
                 }
               }
             }

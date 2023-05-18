@@ -26,5 +26,29 @@
         "fileUrl": "https://osg.snek.at/storage/BQACAgQAAxkDAAIVzmRHzWD4IDOWOVCvkNLf27rfPednAAKLDgACC29BUsvbvma-0v1WLwQ"
       }
     ]
+  },
+  "JaenPage /test/": {
+    "context": {
+      "createdAt": "2023-05-18T13:03:45.662Z",
+      "fileUrl": "https://osg.snek.at/storage/BQACAgQAAxkDAAIV9GRmIjHnqSzKMC7qX72-PE202TBCAAImDgACeeM5U19regn31cNZLwQ"
+    },
+    "migrations": [
+      {
+        "createdAt": "2023-05-18T13:03:45.662Z",
+        "fileUrl": "https://osg.snek.at/storage/BQACAgQAAxkDAAIV9GRmIjHnqSzKMC7qX72-PE202TBCAAImDgACeeM5U19regn31cNZLwQ"
+      }
+    ]
+  },
+  "JaenPage /article/": {
+    "context": {
+      "createdAt": "2023-05-18T13:03:45.892Z",
+      "fileUrl": "https://osg.snek.at/storage/BQACAgQAAxkDAAIV9WRmIjFRmc-QGYX7x5voyRd6n3V7AAInDgACeeM5U3X_ViXFpiBYLwQ"
+    },
+    "migrations": [
+      {
+        "createdAt": "2023-05-18T13:03:45.892Z",
+        "fileUrl": "https://osg.snek.at/storage/BQACAgQAAxkDAAIV9WRmIjFRmc-QGYX7x5voyRd6n3V7AAInDgACeeM5U3X_ViXFpiBYLwQ"
+      }
+    ]
   }
 }

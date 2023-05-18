@@ -1,10 +1,10 @@
 import {ComponentMeta, Story} from '@storybook/react'
 import React from 'react'
 import {withJaenMock} from '../../internal/testing/withJaenMock.js'
-import {TextField} from './TextField.js'
+import {RichTextField} from './RichTextField.js'
 export default {
-  title: 'fields/TextField',
-  component: TextField,
+  title: 'fields/RichTextField',
+  component: RichTextField,
   parameters: {
     layout: 'fullscreen'
   },
@@ -26,7 +26,7 @@ export default {
           },
           jaenFields: {
             'IMA:TextField': {
-              'text-field-1': {
+              'rich-text-field-1': {
                 value: 'This is a text field'
               }
             }
@@ -40,16 +40,16 @@ export default {
       return <Mocked />
     }
   ]
-} as ComponentMeta<typeof TextField>
+} as ComponentMeta<typeof RichTextField>
 
-type ComponentProps = React.ComponentProps<typeof TextField>
+type ComponentProps = React.ComponentProps<typeof RichTextField>
 
 // Create a template for the component
-const Template: Story<ComponentProps> = args => <TextField {...args} />
+const Template: Story<ComponentProps> = args => <RichTextField {...args} />
 
 export const Basic: Story<ComponentProps> = Template.bind({})
 
 Basic.args = {
-  name: 'text-field-1',
+  name: 'rich-text-field-1',
   defaultValue: 'This is a text field'
 }

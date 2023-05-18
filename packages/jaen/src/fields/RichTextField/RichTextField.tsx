@@ -3,13 +3,14 @@ import {As, Button, Text, TextProps, Tooltip} from '@chakra-ui/react'
 import {connectField} from '../../connectors/index.js'
 import {HighlightTooltip} from '../../internal/components/index.js'
 import {useModals} from '../../internal/context/Modals/ModalContext.js'
+import Editor from '../../utils/CKEditor/index.js'
 
-export interface TextFieldProps extends TextProps {
+export interface RichTextFieldProps extends TextProps {
   as?: As
   asAs?: As
 }
 
-export const TextField = connectField<string, string, TextFieldProps>(
+export const RichTextField = connectField<string, string, RichTextFieldProps>(
   ({jaenField, as: Wrapper = Text, asAs, ...rest}) => {
     const {toast} = useModals()
 
@@ -29,9 +30,9 @@ export const TextField = connectField<string, string, TextFieldProps>(
         actions={[
           <Button
             variant="jaenHighlightTooltipText"
-            key={`jaen-highlight-tooltip-text-${jaenField.name}`}>
+            key={`jaen-highlight-tooltip-rich-text-${jaenField.name}`}>
             <Tooltip label={`ID: ${jaenField.id}`} placement="top-start">
-              <Text>Text</Text>
+              <Text>RichText</Text>
             </Tooltip>
           </Button>
         ]}
@@ -43,40 +44,19 @@ export const TextField = connectField<string, string, TextFieldProps>(
             outline: '0px solid transparent'
           }}
           className={jaenField.className}
-          as={asAs}
-          contentEditable={jaenField.isEditing}
-          suppressContentEditableWarning
-          onBlur={(e: any) => {
-            console.log('e.target.value', e.target.innerHTML)
-
-            handleTextSave(e.target.innerHTML)
-          }}
-          dangerouslySetInnerHTML={{
-            __html:
-              jaenField.value || jaenField.staticValue || jaenField.defaultValue
-          }}
-        />
+          as={asAs}>
+          <Editor
+            defaultValue={jaenField.staticValue || jaenField.defaultValue}
+            value={jaenField.value}
+            onBlurValue={handleTextSave}
+            editing={jaenField.isEditing}
+            disableToolbar={false}
+          />
+        </Wrapper>
       </HighlightTooltip>
     )
   },
   {
-    fieldType: 'IMA:TextField'
+    fieldType: 'IMA:RichTextField'
   }
 )
-
-// const CustomInput: React.FC<InputProps> = props => {
-//   const [value, setValue] = useState(props.value)
-
-//   return (
-//     <Text
-//       {...props}
-//       onChange={(e: any) => {
-//         setValue(e.target.value)
-//       }}
-//       onBlur={props.onBlur}
-//       contentEditable={!props.isDisabled}
-//       outline="0px solid transparent">
-//       {value || props.defaultValue}
-//     </Text>
-//   )
-// }

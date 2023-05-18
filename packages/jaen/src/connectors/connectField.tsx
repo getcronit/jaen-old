@@ -1,4 +1,4 @@
-import {memo} from 'react'
+import {memo, useEffect} from 'react'
 import {SectionBlockContextType} from '../internal/context/SectionBlockContext.js'
 import {useField} from '../internal/hooks/field/useField.js'
 import {usePopupField} from '../internal/hooks/field/usePopupField.js'
@@ -11,7 +11,7 @@ export interface JaenFieldProps<IDefaultValue> {
   defaultValue: IDefaultValue
   style?: React.CSSProperties
   className?: string
-  relatedAnchor?: string
+  relatedName?: string
   idStrategy?: 'auto' | 'value'
 }
 
@@ -58,6 +58,7 @@ export const connectField = <IValue, IDefaultValue = IValue, P = {}>(
     style,
     className,
     idStrategy = 'auto',
+    relatedName,
     ...rest
   }) => {
     let field: {
@@ -108,6 +109,14 @@ export const connectField = <IValue, IDefaultValue = IValue, P = {}>(
       }
     }
 
+    useEffect(() => {
+      // skip initial render
+
+      if (!field.isEditing) return
+
+      field.register({id, relatedName})
+    }, [id, relatedName, field.isEditing])
+
     return (
       <ThemeProvider>
         <Component
@@ -121,7 +130,8 @@ export const connectField = <IValue, IDefaultValue = IValue, P = {}>(
             isEditing: field.isEditing,
             onUpdateValue: field.write,
             style,
-            className
+            className,
+            relatedName
           }}
           {...(rest as P)}
         />
