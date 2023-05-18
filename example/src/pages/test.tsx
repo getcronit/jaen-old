@@ -66,7 +66,6 @@ export default connectPage(
       <Box mx="96">
         <Field.Mdx
           name="test"
-          label="Test"
           defaultValue={null}
           components={{
             p: props => <chakra.p fontSize="sm" color="red" {...props} />,

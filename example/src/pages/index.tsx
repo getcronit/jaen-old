@@ -4,7 +4,7 @@ import { Box, Badge, Wrap, WrapItem, Button, Text } from "@chakra-ui/react"
 import { connectBlock, connectPage, Field, useWidget } from "@snek-at/jaen"
 import * as React from "react"
 
-import { graphql } from "gatsby"
+import { graphql, Link } from "gatsby"
 
 const FullImageCard = connectBlock(
   () => {
@@ -16,7 +16,7 @@ const FullImageCard = connectBlock(
         overflow={"hidden"}
         borderColor="green"
       >
-        <Field.Image name="image" label="Image" />
+        <Field.Image name="image" />
       </Box>
     )
   },
@@ -40,7 +40,7 @@ const GrowOnHover = connectBlock(
           // transition: "all 0.2s ease-in-out",
         }}
       >
-        <Field.Image name="image" label="Image" />
+        <Field.Image name="image" />
       </Box>
     )
   },
@@ -62,7 +62,7 @@ const RotatedBox = connectBlock(
         transform="rotate(45deg)"
         p="4"
       >
-        <Field.Image name="image" label="Image" />
+        <Field.Image name="image" />
       </Box>
     )
   },
@@ -98,7 +98,6 @@ const Card = connectBlock(
         <Box h="md" m="4">
           <Field.Image
             name="image"
-            label="Image"
             // defaultValue={property.imageUrl}
           />
         </Box>
@@ -126,11 +125,7 @@ const Card = connectBlock(
             // lineHeight="tight"
             noOfLines={1}
           >
-            <Field.Text
-              name="title"
-              label="Title"
-              defaultValue={property.title}
-            />
+            <Field.Text name="title" defaultValue={property.title} />
           </Box>
 
           <Box>
@@ -179,14 +174,16 @@ const IndexPage = connectPage(
 
     return (
       <>
-        <Button>Button 1234</Button>
+        <Button as={Link} to="/xxxx">
+          Button 1234 /xxxx
+        </Button>
         <Button>Button 1234</Button>
         <Button>Button 12342232323231</Button>
         <Button>Button 111323</Button>
         <Button>Button 111323</Button>
 
         <Box minW="sm" minH="sm">
-          <Field.Image name="image" label="Image" defaultValue={undefined} />
+          <Field.Image name="image" defaultValue={undefined} />
         </Box>
         <Button>Button 2</Button>
         <Field.Section
@@ -207,14 +204,10 @@ const IndexPage = connectPage(
           <h1>Hello Gatsby!</h1>
           <p>Now go build something great.</p>
           <Button>Button 3</Button>
-          <Field.Text name="test" defaultValue="teest" label="Test" />
+          <Field.Text name="test" defaultValue="teest" />
 
           <Text fontFamily={"fantasy"} as="span">
-            <Field.Text
-              name="custom-font"
-              defaultValue="Fantasyyyy"
-              label="Custom Font"
-            />
+            <Field.Text name="custom-font" defaultValue="Fantasyyyy" />
           </Text>
         </div>
       </>

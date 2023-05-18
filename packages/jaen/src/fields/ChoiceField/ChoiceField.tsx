@@ -1,4 +1,4 @@
-import {Button, Icon, Text} from '@chakra-ui/react'
+import {Button, Icon, Text, Tooltip} from '@chakra-ui/react'
 import {IoOptions} from 'react-icons/io5'
 
 import {connectField} from '../../connectors/index.js'
@@ -36,9 +36,9 @@ export const ChoiceField = connectField<
       <Button
         variant="jaenHighlightTooltipText"
         key={`jaen-highlight-tooltip-text-${jaenField.name}`}>
-        <Text as="span" noOfLines={1}>
-          Choice {jaenField.label}
-        </Text>
+        <Tooltip label={`ID: ${jaenField.id}`} placement="top-start">
+          <Text>Choice</Text>
+        </Tooltip>
       </Button>
     ]
 

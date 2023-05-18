@@ -8,7 +8,6 @@ import {IJaenConnection} from '../types.js'
 export interface JaenFieldProps<IDefaultValue> {
   id?: string
   name: string
-  label: string
   defaultValue: IDefaultValue
   style?: React.CSSProperties
   className?: string
@@ -55,7 +54,6 @@ export const connectField = <IValue, IDefaultValue = IValue, P = {}>(
   > = ({
     id,
     name,
-    label,
     defaultValue,
     style,
     className,
@@ -117,7 +115,6 @@ export const connectField = <IValue, IDefaultValue = IValue, P = {}>(
             id,
             idStrategy,
             name,
-            label,
             defaultValue,
             staticValue: field.staticValue,
             value: field.value,

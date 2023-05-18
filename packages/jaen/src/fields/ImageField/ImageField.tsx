@@ -1,4 +1,11 @@
-import {Box, Button, ButtonGroup, IconButton, Text} from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  IconButton,
+  Text,
+  Tooltip
+} from '@chakra-ui/react'
 import {BsEraser} from 'react-icons/bs'
 
 import {connectField} from '../../connectors/index.js'
@@ -110,9 +117,9 @@ export const ImageField = connectField<
           <Button
             variant="jaenHighlightTooltipText"
             key={`jaen-highlight-tooltip-text-${jaenField.name}`}>
-            <Text as="span" noOfLines={1}>
-              Image {jaenField.name}
-            </Text>
+            <Tooltip label={`ID: ${jaenField.id}`} placement="top-start">
+              <Text>Image</Text>
+            </Tooltip>
           </Button>,
           <ButtonGroup
             key={`jaen-highlight-tooltip-buttons-${jaenField.name}`}

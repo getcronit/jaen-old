@@ -1,4 +1,4 @@
-import {Box, Button, Text} from '@chakra-ui/react'
+import {Box, Button, Text, Tooltip} from '@chakra-ui/react'
 
 import {connectField} from '../../connectors/index.js'
 import {HighlightTooltip} from '../../internal/components/index.js'
@@ -30,9 +30,9 @@ export const TextField = connectField<string, string, TextFieldProps>(
           <Button
             variant="jaenHighlightTooltipText"
             key={`jaen-highlight-tooltip-text-${jaenField.name}`}>
-            <Text as="span" noOfLines={1}>
-              {jaenField.label}
-            </Text>
+            <Tooltip label={`ID: ${jaenField.id}`} placement="top-start">
+              <Text>Text</Text>
+            </Tooltip>
           </Button>
         ]}
         isEditing={jaenField.isEditing}>
