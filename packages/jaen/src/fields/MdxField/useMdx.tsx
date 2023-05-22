@@ -1,7 +1,10 @@
 import {evaluateSync} from '@mdx-js/mdx'
 import {useDebounceFn} from 'ahooks'
+import {mdxToMarkdown} from 'mdast-util-mdx'
 import {useState} from 'react'
 import * as runtime from 'react/jsx-runtime'
+import rehypeSlug from 'rehype-slug-custom-id'
+
 import remarkDirective from 'remark-directive'
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkGfm from 'remark-gfm'
@@ -9,23 +12,36 @@ import remarkMath from 'remark-math'
 import {VFile} from 'vfile'
 import {VFileMessage} from 'vfile-message'
 
+import {toMarkdown} from 'mdast-util-to-markdown'
+import {MdastRoot} from './components/types.js'
+
+const parseMdast = (tree: MdastRoot) => {
+  const out = toMarkdown(tree, {extensions: [mdxToMarkdown()]})
+
+  return out
+}
+
 function createFile(value: string) {
   return new VFile({basename: 'example.mdx', value})
 }
 
-function captureData(name: string, file: VFile) {
-  return (tree: any) => {
+function evaluateFile(file: VFile) {
+  const capture = (name: string) => () => (tree: any) => {
     file.data[name] = tree
   }
-}
 
-function evaluateFile(file: VFile, remarkPlugins: any[]) {
   try {
     file.result = evaluateSync(file, {
       ...(runtime as any),
       useDynamicImport: true,
-      remarkPlugins,
-      rehypePlugins: [],
+      remarkPlugins: [
+        remarkGfm,
+        remarkFrontmatter,
+        remarkMath,
+        remarkDirective,
+        capture('mdast')
+      ],
+      rehypePlugins: [rehypeSlug],
       recmaPlugins: []
     }).default
   } catch (error) {
@@ -45,22 +61,23 @@ export function useMdx(defaults: {
   frontmatter: boolean
   math: boolean
   directive: boolean
-  value: any
+  mdast?: MdastRoot
 }) {
   const [state, setState] = useState(() => {
-    const file = createFile(defaults.value)
-    const remarkPlugins = []
+    console.log('defaults', defaults)
 
-    if (defaults.gfm) remarkPlugins.push(remarkGfm)
-    if (defaults.frontmatter) remarkPlugins.push(remarkFrontmatter)
-    if (defaults.math) remarkPlugins.push(remarkMath)
-    if (defaults.directive) remarkPlugins.push(remarkDirective)
+    // Stringify mdast back into markdown
+    const markdown = defaults.mdast ? parseMdast(defaults.mdast) : ''
 
-    remarkPlugins.push(captureData('mdast', file))
-    evaluateFile(file, remarkPlugins)
+    console.log(`Markdown`, markdown)
+
+    const file = createFile(markdown)
+
+    evaluateFile(file)
 
     return {
       ...defaults,
+      value: markdown,
       file
     }
   })
@@ -68,15 +85,8 @@ export function useMdx(defaults: {
   const {run: setConfig} = useDebounceFn(
     async config => {
       const file = createFile(config.value)
-      const remarkPlugins = []
 
-      if (config.gfm) remarkPlugins.push(remarkGfm)
-      if (config.frontmatter) remarkPlugins.push(remarkFrontmatter)
-      if (config.math) remarkPlugins.push(remarkMath)
-      if (config.directive) remarkPlugins.push(remarkDirective)
-
-      remarkPlugins.push(captureData('mdast', file))
-      evaluateFile(file, remarkPlugins)
+      evaluateFile(file)
 
       setState({...config, file})
     },

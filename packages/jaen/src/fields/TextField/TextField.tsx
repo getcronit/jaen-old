@@ -1,4 +1,5 @@
 import {As, Button, Text, TextProps, Tooltip} from '@chakra-ui/react'
+import {useEffect} from 'react'
 
 import {connectField} from '../../connectors/index.js'
 import {HighlightTooltip} from '../../internal/components/index.js'
@@ -22,6 +23,23 @@ export const TextField = connectField<string, string, TextFieldProps>(
         status: 'info'
       })
     }
+
+    useEffect(() => {
+      if (jaenField.isEditing) {
+        const as =
+          typeof Wrapper === 'string'
+            ? Wrapper
+            : typeof asAs === 'string'
+            ? asAs
+            : undefined
+
+        console.log('as', Wrapper, asAs, as)
+
+        jaenField.register({
+          as
+        })
+      }
+    }, [jaenField.isEditing])
 
     return (
       <HighlightTooltip
@@ -47,15 +65,12 @@ export const TextField = connectField<string, string, TextFieldProps>(
           contentEditable={jaenField.isEditing}
           suppressContentEditableWarning
           onBlur={(e: any) => {
-            console.log('e.target.value', e.target.innerHTML)
+            console.log('e.target.value', e.target.textContent)
 
-            handleTextSave(e.target.innerHTML)
-          }}
-          dangerouslySetInnerHTML={{
-            __html:
-              jaenField.value || jaenField.staticValue || jaenField.defaultValue
-          }}
-        />
+            handleTextSave(e.target.textContent)
+          }}>
+          {jaenField.value || jaenField.staticValue || jaenField.defaultValue}
+        </Wrapper>
       </HighlightTooltip>
     )
   },

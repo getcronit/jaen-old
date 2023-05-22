@@ -3,6 +3,7 @@ import fs from 'fs'
 import {GatsbyNode, Node} from 'gatsby'
 import {convertToSlug, generatePageOriginPath, JaenSource} from 'jaen-utils'
 import path from 'path'
+import {buildSearchIndex} from './build-search-index.js'
 
 import {processPage} from './iam-process.js'
 
@@ -363,6 +364,10 @@ export const createPages: GatsbyNode['createPages'] = async ({
               id
             }
             template
+            jaenPageMetadata {
+              title
+            }
+            jaenFields
           }
         }
       }
@@ -417,9 +422,27 @@ export const createPages: GatsbyNode['createPages'] = async ({
         })
       }
     }
+
+    const searchIndex = await buildSearchIndex(allJaenPage.nodes)
+
+    console.log(`searchIndex`, searchIndex)
+
+    await fs.promises.writeFile(
+      path.join('public', 'search-index-alpha.json'),
+      JSON.stringify(searchIndex)
+    )
   }
 
   await createJaenPages()
+}
+
+export interface SearchIndex {
+  [path: string]: {
+    title: string
+    data: {
+      [type: string]: string
+    }
+  }
 }
 
 export const onCreatePage: GatsbyNode['onCreatePage'] = async ({
@@ -496,8 +519,6 @@ export const sourceNodes: GatsbyNode['onCreateWebpackConfig'] = async ({
   const {createNode} = actions
 
   JaenSource.jaenData.read()
-
-  console.log(JaenSource.jaenData)
 
   const internalData = JaenSource.jaenData.internal || {}
 

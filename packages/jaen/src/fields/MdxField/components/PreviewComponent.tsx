@@ -30,6 +30,8 @@ export const PreviewComponent: React.FC<PreviewComponentProps> = ({
   stats,
   components
 }) => {
+  console.log('toooo PreviewComponent', state)
+
   const Content: React.FC = () => {
     try {
       return state.file.result({

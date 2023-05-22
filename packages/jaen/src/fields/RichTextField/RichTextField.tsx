@@ -11,7 +11,7 @@ export interface RichTextFieldProps extends TextProps {
 }
 
 export const RichTextField = connectField<string, string, RichTextFieldProps>(
-  ({jaenField, as: Wrapper = Text, asAs, ...rest}) => {
+  ({jaenField, as: Wrapper = Text, asAs = 'span', ...rest}) => {
     const {toast} = useModals()
 
     const handleTextSave = (data: string) => {

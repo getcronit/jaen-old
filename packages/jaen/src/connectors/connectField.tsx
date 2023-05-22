@@ -1,4 +1,4 @@
-import {memo, useEffect} from 'react'
+import {memo, useCallback} from 'react'
 import {SectionBlockContextType} from '../internal/context/SectionBlockContext.js'
 import {useField} from '../internal/hooks/field/useField.js'
 import {usePopupField} from '../internal/hooks/field/usePopupField.js'
@@ -42,6 +42,7 @@ export const connectField = <IValue, IDefaultValue = IValue, P = {}>(
           value?: IValue
           isEditing: boolean
           onUpdateValue: (value: IValue) => void
+          register: (props: Record<string, any>) => void
         }
       }
     >
@@ -109,13 +110,24 @@ export const connectField = <IValue, IDefaultValue = IValue, P = {}>(
       }
     }
 
-    useEffect(() => {
-      // skip initial render
+    // useEffect(() => {
+    //   // skip initial render
 
-      if (!field.isEditing) return
+    //   if (!field.isEditing) return
 
-      field.register({id, relatedName})
-    }, [id, relatedName, field.isEditing])
+    //   field.register({id, relatedName})
+    // }, [id, relatedName, field.isEditing])
+
+    const register = useCallback(
+      (props: Record<string, any>) => {
+        field.register({
+          id,
+          relatedName,
+          ...props
+        })
+      },
+      [id, relatedName]
+    )
 
     return (
       <ThemeProvider>
@@ -129,6 +141,7 @@ export const connectField = <IValue, IDefaultValue = IValue, P = {}>(
             value: field.value,
             isEditing: field.isEditing,
             onUpdateValue: field.write,
+            register,
             style,
             className,
             relatedName

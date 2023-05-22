@@ -1,6 +1,10 @@
+import {Root as MdastRoot} from 'mdast'
+
 export interface BaseEditorProps {
-  children: string
+  mdast?: MdastRoot
   components?: Record<string, React.ComponentType>
-  onUpdateValue?: (value: string) => void
+  onUpdateValue?: (value: MdastRoot) => void
   mode?: 'preview' | 'build' | 'editAndPreview' | 'editAndBuild'
 }
+
+export {MdastRoot}

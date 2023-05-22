@@ -35,7 +35,7 @@ const MemoizedCodeMirror = React.memo<CodeMirrorProps>(props => {
 export interface EditorProps extends BaseEditorProps {}
 
 export const Editor: React.FC<EditorProps> = props => {
-  const [defaultValue, _] = useState(props.children)
+  const [defaultValue, _] = useState(props.mdast)
 
   useEffect(() => {
     console.log('Editorr', defaultValue)
@@ -46,8 +46,10 @@ export const Editor: React.FC<EditorProps> = props => {
     frontmatter: true,
     math: true,
     directive: true,
-    value: defaultValue
+    mdast: defaultValue
   }) as any
+
+  console.log(`state`, state)
 
   const extensions = useMemo(() => [basicSetup, langMarkdown()], [])
 
@@ -69,11 +71,14 @@ export const Editor: React.FC<EditorProps> = props => {
         const value = String(v.state.doc)
 
         setConfig({...state, value})
-        props.onUpdateValue && props.onUpdateValue(value)
       }
     },
     [setConfig]
   )
+
+  useEffect(() => {
+    props.onUpdateValue && props.onUpdateValue(state.file.data.mdast)
+  }, [state])
 
   const insertSnippet = (snippet: string) => {
     if (!view) return
@@ -163,7 +168,7 @@ export const Editor: React.FC<EditorProps> = props => {
               <noscript>Enable JavaScript for the rendered result.</noscript>
 
               <MemoizedCodeMirror
-                value={defaultValue}
+                value={state.value}
                 extensions={extensions}
                 onUpdate={onUpdate}
                 onEditorViewChange={setView}

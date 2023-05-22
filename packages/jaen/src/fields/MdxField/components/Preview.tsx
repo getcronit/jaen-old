@@ -1,6 +1,6 @@
-import {BaseEditorProps} from './types.js'
+import {BaseEditorProps, MdastRoot} from './types.js'
 // @ts-nocheck
-import React, {useEffect} from 'react'
+import React from 'react'
 import {Statistics, statistics} from 'vfile-statistics'
 
 import {useMdx} from '../useMdx.js'
@@ -9,30 +9,26 @@ import {PreviewComponent} from './PreviewComponent'
 export interface BuildEditorProps {
   components: BaseEditorProps['components']
 
-  children: string
+  mdast: MdastRoot
 }
 
-export const Preview = React.memo<BuildEditorProps>(
-  ({components, children}) => {
-    const defaultValue = children
+export const Preview = React.memo<BuildEditorProps>(({components, mdast}) => {
+  const [state, _] = useMdx({
+    gfm: true,
+    frontmatter: true,
+    math: true,
+    directive: true,
+    mdast
+  }) as any
 
-    const [state, setConfig] = useMdx({
-      gfm: true,
-      frontmatter: true,
-      math: true,
-      directive: true,
-      value: defaultValue
-    }) as any
+  const stats = state.file ? statistics(state.file) : ({} as Statistics)
 
-    const stats = state.file ? statistics(state.file) : ({} as Statistics)
+  // useEffect(() => {
+  //   console.log('useEffect', defaultValue)
+  //   setConfig({value: defaultValue})
+  // }, [defaultValue, setConfig])
 
-    useEffect(() => {
-      console.log('useEffect', defaultValue)
-      setConfig({value: defaultValue})
-    }, [defaultValue, setConfig])
-
-    return (
-      <PreviewComponent state={state} stats={stats} components={components} />
-    )
-  }
-)
+  return (
+    <PreviewComponent state={state} stats={stats} components={components} />
+  )
+})

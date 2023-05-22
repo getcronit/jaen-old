@@ -57,7 +57,7 @@ export type IJaenFields = Record<
     string,
     {
       position?: number
-      props?: object
+      props?: Record<string, any>
       value: any
     }
   >
