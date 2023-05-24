@@ -6,7 +6,9 @@ import {
   Text,
   Tooltip
 } from '@chakra-ui/react'
+import {useMemo} from 'react'
 import {BsEraser} from 'react-icons/bs'
+import {PhotoProvider, PhotoView} from 'react-photo-view'
 
 import {connectField} from '../../connectors/index.js'
 import {
@@ -20,9 +22,23 @@ import {ImageFieldValue, ImageProps} from './types.js'
 import {usePageImage} from './usePageImage.js'
 
 export interface ImageFieldProps extends ImageProps {
-  // onLoad?: (props: {wasCached: boolean}) => void
-  // onError?: ReactEventHandler<HTMLImageElement>
-  // onStartLoad?: (props: {wasCached: boolean}) => void
+  lightbox?: boolean
+  /**
+   * When true, the image will be displayed in a lightbox along with other images in the same group.
+   * Thus it is required to wrap the image in a `PhotoProvider` component.
+   *
+   * @example
+   * ```tsx
+   *
+   * import {Field, PhotoProvider} from '@snek-at/jaen'
+   *
+   * <PhotoProvider maskOpacity={0.8}>
+   *  <Field.Image ... lightboxGroup />
+   *  <Field.Image ... lightboxGroup />
+   * </PhotoProvider>
+   * ```
+   */
+  lightboxGroup?: boolean
 }
 
 export const ImageField = connectField<
@@ -30,7 +46,7 @@ export const ImageField = connectField<
   string | undefined,
   ImageFieldProps
 >(
-  ({jaenField, ...props}) => {
+  ({jaenField, lightbox, lightboxGroup, ...props}) => {
     if (jaenField.defaultValue) {
       console.error(
         `ImageField: using defaultValue is not recommended. If you choose to use it, please be aware that Gatsby will not be able to process the image.`
@@ -110,6 +126,54 @@ export const ImageField = connectField<
       ...props
     }
 
+    const imageElement = useMemo(() => {
+      const isLightbox = lightbox && !jaenField.isEditing
+
+      const dataImage = (
+        <Box
+          boxSize="full"
+          className="jaen-image-wrapper"
+          cursor={isLightbox ? 'zoom-in' : 'default'}>
+          <DataImage
+            imageFieldProps={imageFieldProps}
+            internalImageUrl={value.internalImageUrl}
+            defaultImageUrl={jaenField.defaultValue}
+            imageData={gatsbyImage}
+            alt={value.alt}
+          />
+        </Box>
+      )
+
+      if (isLightbox) {
+        const photo = (
+          <PhotoView
+            src={
+              jaenField.value?.internalImageUrl ||
+              jaenField.staticValue?.internalImageUrl ||
+              undefined
+            }>
+            {dataImage}
+          </PhotoView>
+        )
+
+        if (lightboxGroup) {
+          return photo
+        }
+
+        return <PhotoProvider maskOpacity={0.8}>{photo}</PhotoProvider>
+      }
+
+      return dataImage
+    }, [
+      jaenField,
+      lightbox,
+      lightboxGroup,
+      imageFieldProps,
+      value,
+      jaenField.defaultValue,
+      gatsbyImage
+    ])
+
     return (
       <HighlightTooltip
         id={jaenField.id}
@@ -144,15 +208,8 @@ export const ImageField = connectField<
         {
           // The box is needed because the highlight tooltip will not work if the image is the only child
         }
-        <Box boxSize="full" className="jaen-image-wrapper">
-          <DataImage
-            imageFieldProps={imageFieldProps}
-            internalImageUrl={value.internalImageUrl}
-            defaultImageUrl={jaenField.defaultValue}
-            imageData={gatsbyImage}
-            alt={value.alt}
-          />
-        </Box>
+
+        {imageElement}
       </HighlightTooltip>
     )
   },

@@ -7,6 +7,8 @@ import {
 } from '@chakra-ui/react'
 import {CLASSNAMES, FONT_FAMILY} from './constants.js'
 
+import 'react-photo-view/dist/react-photo-view.css'
+
 const theme = extendTheme(
   {
     colors: {

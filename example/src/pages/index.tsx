@@ -16,7 +16,7 @@ const FullImageCard = connectBlock(
         overflow={"hidden"}
         borderColor="green"
       >
-        <Field.Image name="image" />
+        <Field.Image name="image" lightbox />
       </Box>
     )
   },
@@ -181,6 +181,17 @@ const IndexPage = connectPage(
         <Button>Button 12342232323231</Button>
         <Button>Button 111323</Button>
         <Button>Button 111323</Button>
+
+        <Field.Text
+          as={Button}
+          name="textButton"
+          defaultValue="textButton"
+          pos="relative"
+        >
+          <Box bg="orange" pos={"absolute"} top="0" right="0">
+            test
+          </Box>
+        </Field.Text>
 
         <Box minW="sm" minH="sm">
           <Field.Image name="image" defaultValue={undefined} />

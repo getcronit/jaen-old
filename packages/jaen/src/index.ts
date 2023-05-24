@@ -1,4 +1,5 @@
 export {Head} from 'gatsby-plugin-jaen'
+export {PhotoProvider} from 'react-photo-view'
 export {
   connectBlock,
   connectField,
