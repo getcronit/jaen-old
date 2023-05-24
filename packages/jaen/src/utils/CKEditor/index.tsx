@@ -56,7 +56,7 @@ const LoadableCKEditor = React.lazy(
 )
 
 interface EditorProps {
-  defaultValue: string
+  defaultValue?: string
   value?: string
   editing: boolean
   disableToolbar: boolean
@@ -72,7 +72,7 @@ interface EditorProps {
 
 let BalloonEditor: any
 
-const cleanValue = (defaultValue: string, value?: string) => {
+const cleanValue = (defaultValue?: string, value?: string) => {
   const v = value || defaultValue || ''
 
   // Check if the default value does not contain any HTML tags

@@ -78,9 +78,9 @@ const FieldsBlock = connectBlock(
   () => (
     <Box w="sm" borderWidth="1px" borderRadius="lg" overflow="hidden" p="4">
       <Box h="sm">
-        <ImageField name="image" label="Image" defaultValue={undefined} />
+        <ImageField name="image" />
       </Box>
-      <TextField name="tf" defaultValue="sample value" label="Important Text" />
+      <TextField name="tf" defaultValue="sample value" />
     </Box>
   ),
   {name: 'FieldsBlock', label: 'Block /w fields'}

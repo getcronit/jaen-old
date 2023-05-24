@@ -12,7 +12,7 @@ export interface MdxFieldProps {
 
 let Editor: React.FC<BaseEditorProps> | null = null
 
-export const MdxField = connectField<MdxFieldValue, any, MdxFieldProps>(
+export const MdxField = connectField<MdxFieldValue, MdxFieldProps>(
   ({jaenField, components}) => {
     console.log(jaenField.staticValue)
 

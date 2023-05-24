@@ -194,7 +194,7 @@ const IndexPage = connectPage(
         </Field.Text>
 
         <Box minW="sm" minH="sm">
-          <Field.Image name="image" defaultValue={undefined} />
+          <Field.Image name="image" />
         </Box>
         <Button>Button 2</Button>
         <Field.Section

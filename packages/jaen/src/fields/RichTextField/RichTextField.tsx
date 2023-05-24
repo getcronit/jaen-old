@@ -8,10 +8,11 @@ import Editor from '../../utils/CKEditor/index.js'
 export interface RichTextFieldProps extends TextProps {
   as?: As
   asAs?: As
+  defaultValue?: string
 }
 
-export const RichTextField = connectField<string, string, RichTextFieldProps>(
-  ({jaenField, as: Wrapper = Text, asAs = 'span', ...rest}) => {
+export const RichTextField = connectField<string, RichTextFieldProps>(
+  ({jaenField, defaultValue, as: Wrapper = Text, asAs = 'span', ...rest}) => {
     const {toast} = useModals()
 
     const handleTextSave = (data: string) => {
@@ -46,7 +47,7 @@ export const RichTextField = connectField<string, string, RichTextFieldProps>(
           className={jaenField.className}
           as={asAs}>
           <Editor
-            defaultValue={jaenField.staticValue || jaenField.defaultValue}
+            defaultValue={jaenField.staticValue || defaultValue}
             value={jaenField.value}
             onBlurValue={handleTextSave}
             editing={jaenField.isEditing}
