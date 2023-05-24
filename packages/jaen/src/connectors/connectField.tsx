@@ -2,7 +2,6 @@ import {memo, useCallback} from 'react'
 import {SectionBlockContextType} from '../internal/context/SectionBlockContext.js'
 import {useField} from '../internal/hooks/field/useField.js'
 import {usePopupField} from '../internal/hooks/field/usePopupField.js'
-import {ThemeProvider} from '../internal/styles/ChakraThemeProvider.js'
 import {IJaenConnection} from '../types.js'
 
 export interface JaenFieldProps<IDefaultValue> {
@@ -130,25 +129,23 @@ export const connectField = <IValue, IDefaultValue = IValue, P = {}>(
     )
 
     return (
-      <ThemeProvider>
-        <Component
-          jaenField={{
-            id,
-            idStrategy,
-            name,
-            defaultValue,
-            staticValue: field.staticValue,
-            value: field.value,
-            isEditing: field.isEditing,
-            onUpdateValue: field.write,
-            register,
-            style,
-            className,
-            relatedName
-          }}
-          {...(rest as P)}
-        />
-      </ThemeProvider>
+      <Component
+        jaenField={{
+          id,
+          idStrategy,
+          name,
+          defaultValue,
+          staticValue: field.staticValue,
+          value: field.value,
+          isEditing: field.isEditing,
+          onUpdateValue: field.write,
+          register,
+          style,
+          className,
+          relatedName
+        }}
+        {...(rest as P)}
+      />
     )
   }
 
