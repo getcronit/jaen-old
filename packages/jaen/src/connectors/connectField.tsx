@@ -4,10 +4,9 @@ import {useField} from '../internal/hooks/field/useField.js'
 import {usePopupField} from '../internal/hooks/field/usePopupField.js'
 import {IJaenConnection} from '../types.js'
 
-export interface JaenFieldProps<IDefaultValue> {
+export interface JaenFieldProps {
   id?: string
   name: string
-  defaultValue: IDefaultValue
   style?: React.CSSProperties
   className?: string
   relatedName?: string
@@ -15,7 +14,7 @@ export interface JaenFieldProps<IDefaultValue> {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export interface FieldOptions<_IValue, _IDefaultValue, _IProps = {}> {
+export interface FieldOptions<_IValue, _IProps = {}> {
   fieldType: string
 }
 /**
@@ -26,17 +25,17 @@ export interface FieldOptions<_IValue, _IDefaultValue, _IProps = {}> {
  * @example
  * ```
  * const T = connectField<string>(props => {
- *   const {name, defaultValue, style, className} = props.jaenField
+ *   const {name, style, className} = props.jaenField
  *   return null
  * })
  * ```
  */
 
-export const connectField = <IValue, IDefaultValue = IValue, P = {}>(
+export const connectField = <IValue, P = {}>(
   Component: React.ComponentType<
     React.PropsWithChildren<
       P & {
-        jaenField: JaenFieldProps<IDefaultValue> & {
+        jaenField: JaenFieldProps & {
           staticValue?: IValue
           value?: IValue
           isEditing: boolean
@@ -46,15 +45,11 @@ export const connectField = <IValue, IDefaultValue = IValue, P = {}>(
       }
     >
   >,
-  options: FieldOptions<IValue, IDefaultValue, P>
+  options: FieldOptions<IValue, P>
 ) => {
-  const MyComp: IJaenConnection<
-    P & JaenFieldProps<IDefaultValue>,
-    typeof options
-  > = ({
+  const MyComp: IJaenConnection<P & JaenFieldProps, typeof options> = ({
     id,
     name,
-    defaultValue,
     style,
     className,
     idStrategy = 'auto',
@@ -99,7 +94,7 @@ export const connectField = <IValue, IDefaultValue = IValue, P = {}>(
         // Strip all HTML and all non-alphanumeric characters from the value and use it as the id
         // Also make sure that spaces are replaced with hyphens
 
-        const value = field.value || field.staticValue || defaultValue
+        const value = field.value || field.staticValue
 
         id = `${value
           .replace(/(<([^>]+)>)/gi, '')
@@ -134,7 +129,6 @@ export const connectField = <IValue, IDefaultValue = IValue, P = {}>(
           id,
           idStrategy,
           name,
-          defaultValue,
           staticValue: field.staticValue,
           value: field.value,
           isEditing: field.isEditing,

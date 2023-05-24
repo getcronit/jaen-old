@@ -8,10 +8,11 @@ import {useModals} from '../../internal/context/Modals/ModalContext.js'
 export interface TextFieldProps extends TextProps {
   as?: As
   asAs?: As
+  defaultValue?: string
 }
 
-export const TextField = connectField<string, string, TextFieldProps>(
-  ({jaenField, as: Wrapper = Text, asAs, ...rest}) => {
+export const TextField = connectField<string, TextFieldProps>(
+  ({jaenField, defaultValue, as: Wrapper = Text, asAs, ...rest}) => {
     const {toast} = useModals()
 
     const handleTextSave = (data: string) => {
@@ -69,7 +70,7 @@ export const TextField = connectField<string, string, TextFieldProps>(
 
             handleTextSave(e.target.textContent)
           }}>
-          {jaenField.value || jaenField.staticValue || jaenField.defaultValue}
+          {jaenField.value || jaenField.staticValue || defaultValue}
         </Wrapper>
       </HighlightTooltip>
     )

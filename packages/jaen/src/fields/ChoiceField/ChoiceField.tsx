@@ -20,17 +20,16 @@ type ChoiceRenderFn = (
 
 export const ChoiceField = connectField<
   Option,
-  Option,
   {
+    defaultValue: Option
     label?: React.ReactNode
     options: Options
     render: ChoiceRenderFn
     renderPopover: ChoiceRenderFn | null
   }
 >(
-  ({jaenField, options, render, renderPopover}) => {
-    const selection =
-      jaenField.value || jaenField.staticValue || jaenField.defaultValue
+  ({jaenField, defaultValue, options, render, renderPopover}) => {
+    const selection = jaenField.value || jaenField.staticValue || defaultValue
 
     const actions = [
       <Button

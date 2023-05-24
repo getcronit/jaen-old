@@ -9,14 +9,12 @@ export interface DataImageProps {
   imageData: IGatsbyImageData | undefined
   alt: string | undefined
   internalImageUrl: string | null | undefined
-  defaultImageUrl: string | undefined
 }
 
 export const DataImage: React.FC<DataImageProps> = ({
   imageFieldProps,
   imageData,
-  internalImageUrl,
-  defaultImageUrl
+  internalImageUrl
 }) => {
   let imageElement
 
@@ -45,27 +43,13 @@ export const DataImage: React.FC<DataImageProps> = ({
   } else if (imageData) {
     imageElement = <GatsbyImage {...imageFieldProps} image={imageData} />
   } else {
-    if (defaultImageUrl) {
-      imageElement = (
-        <GatsbyImage
-          {...imageFieldProps}
-          // @ts-expect-error
-          image={gatsbyImageDynamic}
-          imgStyle={{
-            ...imageFieldProps.imgStyle,
-            position: 'static'
-          }}
-        />
-      )
-    } else {
-      imageElement = (
-        <Center style={imageFieldProps.style}>
-          <Text color="gray.600" fontSize="sm">
-            No image
-          </Text>
-        </Center>
-      )
-    }
+    imageElement = (
+      <Center style={imageFieldProps.style}>
+        <Text color="gray.600" fontSize="sm">
+          No image
+        </Text>
+      </Center>
+    )
   }
 
   return imageElement

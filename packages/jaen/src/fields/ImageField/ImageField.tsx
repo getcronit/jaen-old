@@ -41,18 +41,8 @@ export interface ImageFieldProps extends ImageProps {
   lightboxGroup?: boolean
 }
 
-export const ImageField = connectField<
-  ImageFieldValue,
-  string | undefined,
-  ImageFieldProps
->(
+export const ImageField = connectField<ImageFieldValue, ImageFieldProps>(
   ({jaenField, lightbox, lightboxGroup, ...props}) => {
-    if (jaenField.defaultValue) {
-      console.error(
-        `ImageField: using defaultValue is not recommended. If you choose to use it, please be aware that Gatsby will not be able to process the image.`
-      )
-    }
-
     const {toast, confirm} = useModals()
 
     const handleImageChooseClick = (info: {src: string; alt?: string}) => {
@@ -137,7 +127,6 @@ export const ImageField = connectField<
           <DataImage
             imageFieldProps={imageFieldProps}
             internalImageUrl={value.internalImageUrl}
-            defaultImageUrl={jaenField.defaultValue}
             imageData={gatsbyImage}
             alt={value.alt}
           />
@@ -170,7 +159,6 @@ export const ImageField = connectField<
       lightboxGroup,
       imageFieldProps,
       value,
-      jaenField.defaultValue,
       gatsbyImage
     ])
 

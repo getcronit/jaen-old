@@ -42,12 +42,7 @@ type ComponentProps = React.ComponentProps<typeof ImageField>
 export const Basic: Story<ComponentProps> = () => {
   return (
     <Box bg="red" height={64}>
-      <ImageField
-        name="image"
-        label="Image"
-        defaultValue={undefined}
-        objectFit="contain"
-      />
+      <ImageField name="image" objectFit="contain" />
     </Box>
   )
 }
