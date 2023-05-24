@@ -184,65 +184,6 @@ export const defaultData = {
           offset: 120
         }
       }
-    },
-    {
-      type: 'mdxJsxFlowElement',
-      name: 'Wrap',
-      attributes: [],
-      children: [
-        {
-          type: 'mdxJsxFlowElement',
-          name: 'TestCard',
-          attributes: [
-            {
-              type: 'mdxJsxAttribute',
-              name: 'heading',
-              value: 'Couch'
-            },
-            {
-              type: 'mdxJsxAttribute',
-              name: 'text',
-              value: 'A green couch with wooden legs'
-            },
-            {
-              type: 'mdxJsxAttribute',
-              name: 'price',
-              value: '$299'
-            }
-          ],
-          children: [],
-          position: {
-            start: {
-              line: 13,
-              column: 1,
-              offset: 131
-            },
-            end: {
-              line: 13,
-              column: 89,
-              offset: 219
-            }
-          },
-          data: {
-            _mdxExplicitJsx: true
-          }
-        }
-      ],
-      position: {
-        start: {
-          line: 11,
-          column: 1,
-          offset: 123
-        },
-        end: {
-          line: 15,
-          column: 8,
-          offset: 228
-        }
-      },
-      data: {
-        _mdxExplicitJsx: true
-      }
     }
   ],
   position: {
