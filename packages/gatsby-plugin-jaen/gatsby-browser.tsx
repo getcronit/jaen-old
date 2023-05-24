@@ -8,13 +8,15 @@ import 'vanilla-cookieconsent/dist/cookieconsent.css'
 const {GatsbyRootWrapper, GatsbyPageWrapper, CookieConsent} = internal
 
 const scrollTo = (id: any) => () => {
-  const el = document.querySelector(id)
-  if (el) return window.scrollTo(0, el.offsetTop - 20)
-  return false
+  try {
+    const el = document.querySelector(id)
+    if (el) {
+      window.scrollTo(0, el.offsetTop - 20)
+    }
+  } catch (e) {}
 }
 
 export const onRouteUpdate = ({location: {hash}}) => {
-  console.log(location)
   if (hash) {
     window.setTimeout(scrollTo(hash), 10)
   }
