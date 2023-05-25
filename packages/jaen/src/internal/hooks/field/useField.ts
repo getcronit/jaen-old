@@ -80,6 +80,8 @@ export function useField<IValue>(
     const unsubscribe = store.subscribe(() => {
       const newValue = getValue()
 
+      console.log('new value', newValue, value, store.getState())
+
       if (newValue !== value) {
         setValue(newValue)
       }
@@ -88,7 +90,7 @@ export function useField<IValue>(
     return () => {
       unsubscribe()
     }
-  }, [value])
+  }, [value, store])
 
   const staticValue = getStaticValue()
 
@@ -110,8 +112,10 @@ export function useField<IValue>(
           value: newValue
         })
       )
+
+      setValue(newValue || undefined)
     },
-    [jaenPage.id, SectionBlockContext, type, name, value]
+    [jaenPage.id, SectionBlockContext, type, name, value, store]
   )
 
   const register = React.useCallback(
