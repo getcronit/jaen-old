@@ -92,8 +92,6 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
       const page = pageTree.find(p => {
         const pagePath = generatePageOriginPath(pageTree, p)
 
-        console.log('pagePath', pagePath, matchPath(path, pagePath!))
-
         return pagePath && matchPath(path, pagePath) && !p.deleted
       })
 

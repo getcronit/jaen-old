@@ -8,7 +8,11 @@ export const useDynamicPaths = () => {
 
   useEffect(() => {
     const unsubscribe = store.subscribe(() => {
-      setDynamicPaths(getDynamicPaths())
+      const newDynamicPaths = getDynamicPaths()
+
+      if (JSON.stringify(newDynamicPaths) !== JSON.stringify(dynamicPaths)) {
+        setDynamicPaths(newDynamicPaths)
+      }
     })
 
     return unsubscribe
@@ -16,7 +20,7 @@ export const useDynamicPaths = () => {
 
   return dynamicPaths
 }
-function getDynamicPaths() {
+export function getDynamicPaths() {
   const state = store.getState() as RootState
   const dynamicPaths = state.page.routing.dynamicPaths
   return dynamicPaths

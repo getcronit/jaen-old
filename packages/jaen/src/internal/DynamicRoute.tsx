@@ -1,6 +1,6 @@
 import {Center, CircularProgress} from '@chakra-ui/react'
 import {navigate} from 'gatsby'
-import {useEffect, useState} from 'react'
+import {useEffect, useMemo, useState} from 'react'
 import {PageProps} from '../types.js'
 import {usePromiseEffect} from '../utils/hooks/usePromiseEffect.js'
 import {useSiteContext} from './context/SiteContext.js'
@@ -91,18 +91,40 @@ export type DynamicPageProps = PageProps & {
 
 export const useDynamicRoute = ({pageProps}: {pageProps: DynamicPageProps}) => {
   const [node, setNode] = useState<React.ReactNode>()
-  const [isLoading, setIsLoading] = useState(!!pageProps.custom404)
+
+  const [isLoading, setIsLoading] = useState(false)
+
+  const dynamicRoutes = useDynamicPaths()
 
   useEffect(() => {
     // check if 404
-    console.log('Page not found', window.location.pathname, pageProps)
+    console.log(
+      'Page not found',
+      window.location.pathname,
+      pageProps,
+      dynamicRoutes
+    )
 
-    if (pageProps.custom404) {
+    const path = pageProps.path.endsWith('/')
+      ? pageProps.path
+      : `${pageProps.path}/`
+
+    const isDynamic = Object.keys(dynamicRoutes).includes(path)
+
+    if (isDynamic) {
+      setIsLoading(true)
+
       console.log(`Setting dynamic route for ${window.location.pathname}`)
       setNode(<DynamicRoute {...pageProps} />)
-      setIsLoading(false)
-    }
-  }, [pageProps.path])
 
-  return {node, isLoading}
+      setIsLoading(false)
+    } else {
+      // Set undefined so that the page is not rendered
+      setNode(undefined)
+    }
+  }, [pageProps.path, dynamicRoutes])
+
+  const value = useMemo(() => ({node, isLoading}), [node, isLoading])
+
+  return value
 }

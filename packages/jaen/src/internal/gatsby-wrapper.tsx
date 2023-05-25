@@ -1,6 +1,6 @@
 import {ChakraProvider} from '@chakra-ui/react'
 import {navigate} from 'gatsby'
-import React from 'react'
+import React, {useCallback, useMemo} from 'react'
 import {InjectPopups} from './components/atoms/InjectPopups.js'
 import {LoadingPage} from './components/templates/LoadingPage/LoadingPage.js'
 import {
@@ -30,7 +30,7 @@ export const GatsbyRootWrapper: React.FC<WrapperProps> = ({children}) => {
     }
 
     const LazyHighlightProvider = React.lazy(
-      () => import('./context/HighlightContext.js')
+      async () => await import('./context/HighlightContext.js')
     )
 
     return (
@@ -60,63 +60,90 @@ export interface PageWrapperProps extends WrapperProps {
 }
 
 export const GatsbyPageWrapper: React.FC<PageWrapperProps> = props => {
-  const {node: dynamicPage, isLoading} = useDynamicRoute({
+  const dynamicRoute = useDynamicRoute({
     pageProps: props.pageProps
   })
 
-  const handleActivationButtonClick = () => {
+  const handleActivationButtonClick = useCallback(() => {
     void navigate('/admin')
-  }
+  }, [])
 
   const auth = useAuthentication()
 
-  const Wrapper = () => {
-    const children = dynamicPage || props.children
-
-    const isOnAdmin = props.pageProps.path.includes('/admin')
-
-    if (auth.isAuthenticated) {
-      const AdminShell = React.lazy(
-        () => import('./components/templates/AdminShell/AdminShell.js')
-      )
-
-      return (
-        <React.Suspense fallback={<LoadingPage />}>
-          <AdminShell>{children}</AdminShell>
-        </React.Suspense>
-      )
-    } else {
-      if (isOnAdmin) {
-        // For example if the user accesses /admin/login, the ActivationButton should not be rendered
-        return <>{children}</>
-      }
-
-      const ActivationButton = React.lazy(
-        () => import('./components/atoms/ActivationButton/ActivationButton.js')
-      )
-
-      return (
-        <>
-          <React.Suspense fallback={<></>}>
-            <ThemeProvider>
-              <ActivationButton onClick={handleActivationButtonClick} />
-            </ThemeProvider>
-          </React.Suspense>
-
-          {children}
-        </>
-      )
-    }
-  }
-
-  if (isLoading) {
+  if (dynamicRoute.isLoading) {
     return <LoadingPage />
   }
 
   return (
     <>
       <InjectPopups pageProps={props.pageProps} />
-      <Wrapper />
+      <WrapperPage
+        dynamicRoute={dynamicRoute}
+        path={props.pageProps.path}
+        isAuthenticated={auth.isAuthenticated}
+        handleActivationButtonClick={handleActivationButtonClick}>
+        {props.children}
+      </WrapperPage>
     </>
   )
+}
+
+const DynamicAdminShell: React.FC<{
+  children: React.ReactNode
+}> = ({children}) => {
+  const AdminShell = React.lazy(
+    async () => await import('./components/templates/AdminShell/AdminShell.js')
+  )
+
+  const MemoedAdminShell = useMemo(() => AdminShell, [])
+
+  return (
+    <React.Suspense fallback={<LoadingPage />}>
+      <MemoedAdminShell>{children}</MemoedAdminShell>
+    </React.Suspense>
+  )
+}
+
+const WrapperPage: React.FC<{
+  dynamicRoute: ReturnType<typeof useDynamicRoute>
+  children: React.ReactNode
+  path: string
+  isAuthenticated: boolean
+  handleActivationButtonClick: () => void
+}> = ({
+  dynamicRoute,
+  children: propsChildren,
+  path,
+  isAuthenticated,
+  handleActivationButtonClick
+}) => {
+  const children = dynamicRoute.node || propsChildren
+
+  const isOnAdmin = path.includes('/admin')
+
+  if (isAuthenticated) {
+    return <DynamicAdminShell>{children}</DynamicAdminShell>
+  } else {
+    if (isOnAdmin) {
+      // For example if the user accesses /admin/login, the ActivationButton should not be rendered
+      return <>{children}</>
+    }
+
+    const ActivationButton = React.lazy(
+      async () =>
+        await import('./components/atoms/ActivationButton/ActivationButton.js')
+    )
+
+    return (
+      <>
+        <React.Suspense fallback={<></>}>
+          <ThemeProvider>
+            <ActivationButton onClick={handleActivationButtonClick} />
+          </ThemeProvider>
+        </React.Suspense>
+
+        {children}
+      </>
+    )
+  }
 }
