@@ -185,20 +185,29 @@ export const Editor: React.FC<EditorProps> = props => {
           const props = Object.entries(
             component.defaultProps || {}
           ).reduce<any>((acc, [name, value]) => {
-            if (typeof value === 'string') {
-              acc[name] = `"${value}"`
-            } else if (typeof value === 'number') {
-              acc[name] = value
-            } else if (typeof value === 'boolean') {
-              acc[name] = value
-            } else if (typeof value === 'object') {
-              acc[name] = JSON.stringify(value)
+            if (typeof value === 'function') {
+              const result = value()
+              acc[name] = processValue(result)
             } else {
-              acc[name] = value
+              acc[name] = processValue(value)
             }
 
             return acc
           }, {})
+
+          function processValue(value: any) {
+            if (typeof value === 'string') {
+              return `"${value}"`
+            } else if (typeof value === 'number') {
+              return value
+            } else if (typeof value === 'boolean') {
+              return value
+            } else if (typeof value === 'object') {
+              return `{${JSON.stringify(value)}}`
+            } else {
+              return value
+            }
+          }
 
           // Generate a usage snippet with filled-in placeholder props.
           const propsChain = Object.entries(props)

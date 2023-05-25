@@ -1,7 +1,10 @@
 import React, {useEffect} from 'react'
+
 import {connectField} from '../../connectors/connectField.js'
 import {Preview} from './components/Preview.js'
 import {BaseEditorProps, MdastRoot} from './components/types.js'
+
+import {Image, Link} from './default-components.js'
 import {defaultData} from './default-data.js'
 
 type MdxFieldValue = MdastRoot
@@ -21,6 +24,12 @@ export const MdxField = connectField<MdxFieldValue, MdxFieldProps>(
     )
 
     console.log('rawValue', rawValue)
+
+    components = {
+      ...components,
+      Image,
+      Link
+    }
 
     useEffect(() => {
       if (!jaenField.value) return
