@@ -194,8 +194,19 @@ const IndexPage = connectPage(
         </Field.Text>
 
         <Box minW="sm" minH="sm">
-          <Field.Image name="image" />
+          <Field.Image
+            name="image"
+            defaultValue={"https://i.giphy.com/media/duzpaTbCUy9Vu/giphy.webp"}
+          />
         </Box>
+
+        <Box minW="sm" minH="sm" maxW="500px" bg="green">
+          <Field.Image
+            name="image2"
+            defaultValue="https://via.placeholder.com/300x200"
+          />
+        </Box>
+
         <Button>Button 2</Button>
         <Field.Section
           name="section"
