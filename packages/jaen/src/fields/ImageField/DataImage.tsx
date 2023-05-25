@@ -9,12 +9,14 @@ export interface DataImageProps {
   imageData: IGatsbyImageData | undefined
   alt: string | undefined
   internalImageUrl: string | null | undefined
+  renderAsDynamic?: boolean
 }
 
 export const DataImage: React.FC<DataImageProps> = ({
   imageFieldProps,
   imageData,
-  internalImageUrl
+  internalImageUrl,
+  renderAsDynamic = false
 }) => {
   let imageElement
 
@@ -28,7 +30,7 @@ export const DataImage: React.FC<DataImageProps> = ({
     }
   }
 
-  if (internalImageUrl) {
+  if (internalImageUrl && renderAsDynamic) {
     imageElement = (
       <GatsbyImage
         {...imageFieldProps}

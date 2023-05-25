@@ -6,7 +6,7 @@ import {
   Text,
   Tooltip
 } from '@chakra-ui/react'
-import {useMemo} from 'react'
+import {useEffect, useMemo} from 'react'
 import {BsEraser} from 'react-icons/bs'
 import {PhotoProvider, PhotoView} from 'react-photo-view'
 
@@ -39,10 +39,11 @@ export interface ImageFieldProps extends ImageProps {
    * ```
    */
   lightboxGroup?: boolean
+  defaultValue?: string
 }
 
 export const ImageField = connectField<ImageFieldValue, ImageFieldProps>(
-  ({jaenField, lightbox, lightboxGroup, ...props}) => {
+  ({jaenField, defaultValue, lightbox, lightboxGroup, ...props}) => {
     const {toast, confirm} = useModals()
 
     const handleImageChooseClick = (info: {src: string; alt?: string}) => {
@@ -96,9 +97,27 @@ export const ImageField = connectField<ImageFieldValue, ImageFieldProps>(
 
     const value: ImageFieldValue = {
       ...jaenField.staticValue,
-      ...jaenField.value,
-      internalImageUrl: jaenField.value?.internalImageUrl
+      ...jaenField.value
     }
+
+    useEffect(() => {
+      console.log(
+        'value',
+        jaenField.name,
+        value.internalImageUrl,
+        defaultValue,
+        !value.internalImageUrl && defaultValue
+      )
+
+      if (!value.internalImageUrl && defaultValue) {
+        console.log('update', defaultValue)
+        console.log('current', jaenField.value?.internalImageUrl)
+        jaenField.onUpdateValue({
+          ...jaenField.value,
+          internalImageUrl: defaultValue
+        })
+      }
+    }, [value])
 
     const gatsbyImage = usePageImage({
       id: jaenField?.staticValue?.imageId as string,
@@ -129,6 +148,7 @@ export const ImageField = connectField<ImageFieldValue, ImageFieldProps>(
             internalImageUrl={value.internalImageUrl}
             imageData={gatsbyImage}
             alt={value.alt}
+            renderAsDynamic={jaenField.value?.internalImageUrl !== undefined}
           />
         </Box>
       )
@@ -161,6 +181,8 @@ export const ImageField = connectField<ImageFieldValue, ImageFieldProps>(
       value,
       gatsbyImage
     ])
+
+    console.log('value 2', jaenField.name, value.internalImageUrl)
 
     return (
       <HighlightTooltip
