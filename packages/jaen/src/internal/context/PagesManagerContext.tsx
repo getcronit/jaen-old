@@ -95,8 +95,6 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
         return pagePath && matchPath(path, pagePath) && !p.deleted
       })
 
-      console.log('page', page)
-
       // check if page has id and is not deleted
       if (!page?.id) return null
 
