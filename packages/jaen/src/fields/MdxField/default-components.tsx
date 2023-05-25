@@ -1,11 +1,11 @@
-import {Box} from '@chakra-ui/react'
-import {GatsbyLinkProps, Link as GatsbyLink} from 'gatsby'
+import {Box, Link as ChakraLink} from '@chakra-ui/react'
+import {Link as GatsbyLink} from 'gatsby'
 import {Field} from '../index.js'
 
-export const Image = ({name, defaultValue, ...rest}: any) => {
+export const Image = ({name, defaultValue, alt, ...rest}: any) => {
   return (
     <Box {...rest}>
-      <Field.Image name={name} defaultValue={defaultValue} />
+      <Field.Image name={name} defaultValue={defaultValue} alt={alt} />
     </Box>
   )
 }
@@ -15,8 +15,25 @@ Image.defaultProps = {
   defaultValue: 'https://via.placeholder.com/150'
 }
 
-export const Link: React.FC<GatsbyLinkProps<any>> = ({children, ...rest}) => {
-  return <GatsbyLink {...(rest as any)}>{children}</GatsbyLink>
+export const Link: React.FC<{
+  to: string
+  children: React.ReactNode
+}> = ({to, children}) => {
+  // Check if link is internal or external
+  if (to.startsWith('/')) {
+    return (
+      <ChakraLink as={GatsbyLink} to={to}>
+        {children}
+      </ChakraLink>
+    )
+  }
+
+  // External link
+  return (
+    <ChakraLink href={to} isExternal>
+      {children}
+    </ChakraLink>
+  )
 }
 
 Link.defaultProps = {

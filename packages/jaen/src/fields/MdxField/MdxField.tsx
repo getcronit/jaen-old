@@ -27,7 +27,21 @@ export const MdxField = connectField<MdxFieldValue, MdxFieldProps>(
 
     components = {
       ...components,
+      img: (props: any) => {
+        console.log('props', props)
+
+        const src = props.src
+        const alt = props.alt
+
+        const name = `${src}-${alt}`
+
+        return <Image name={name} bg="orange" defaultValue={src} alt={alt} />
+      },
+
       Image,
+      a: (props: any) => {
+        return <Link to={props.href}>{props.children}</Link>
+      },
       Link
     }
 
