@@ -96,6 +96,25 @@ export const processIMAtoNodes = async ({
   field,
   ...rest
 }: IProcessIMAtoNodes): Promise<void> => {
+  const createJaenFile = async (url: string) => {
+    const fileNode = await createRemoteFileNode({
+      url,
+      parentNodeId: node.id,
+      ...rest
+    })
+
+    const fileNodeId = fileNode.id
+
+    if (!node.jaenFiles) {
+      node.jaenFiles = []
+    }
+
+    // @ts-expect-error
+    node.jaenFiles.push(fileNodeId)
+
+    return fileNodeId
+  }
+
   switch (type) {
     case 'IMA:ImageField':
       for (const [name, v] of Object.entries(field)) {
@@ -103,29 +122,58 @@ export const processIMAtoNodes = async ({
           if (v.value) {
             const {internalImageUrl} = v.value as {internalImageUrl: string}
 
-            if (internalImageUrl) {
-              let fileNode = await createRemoteFileNode({
-                url: internalImageUrl,
-                parentNodeId: node.id,
-                ...rest
-              })
+            console.log('iamProcess', name, type, internalImageUrl)
 
-              const fileNodeId = fileNode.id
+            if (internalImageUrl) {
+              const fileNodeId = await createJaenFile(internalImageUrl)
 
               v.value.imageId = fileNodeId
-
-              if (!node.jaenFiles) {
-                node.jaenFiles = []
-              }
-
-              // @ts-ignore
-              node.jaenFiles.push(fileNodeId)
             }
           }
         } catch (error) {
           console.error(`${name} is not a valid IMA field`, error)
         }
       }
+      break
+    // case 'IMA:MdxField':
+    //   for (const [name, v] of Object.entries(field)) {
+    //     try {
+    //       const value = v.value as {
+    //         children: Array<{
+    //           type: string
+    //           name: string
+    //           attributes: Array<{
+    //             name: string
+    //             type: string
+    //             value: string
+    //           }>
+    //         }>
+    //       }
+
+    //       // get all image nodes (type: mdxJsxFlowElement, name: Image)
+    //       const imageNodes = value.children.filter(
+    //         node => node.type === 'mdxJsxFlowElement' && node.name === 'Image'
+    //       )
+
+    //       for (const imageNode of imageNodes) {
+    //         const srcAttri = imageNode.attributes.find(
+    //           attri => attri.name === 'src' && attri.type === 'mdxJsxAttribute'
+    //         )
+
+    //         if (srcAttri) {
+    //           const src = srcAttri.value
+
+    //           if (src) {
+    //             await createJaenFile(src)
+    //           }
+    //         }
+    //       }
+    //     } catch (error) {
+    //       console.error(`${name} is not a valid IMA field`, error)
+    //     }
+    //   }
+
+    //   break
 
     default:
       break
