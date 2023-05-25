@@ -185,6 +185,9 @@ export const Editor: React.FC<EditorProps> = props => {
           const props = Object.entries(
             component.defaultProps || {}
           ).reduce<any>((acc, [name, value]) => {
+            // skip if children
+            if (name === 'children') return acc
+
             if (typeof value === 'function') {
               const result = value()
               acc[name] = processValue(result)
@@ -214,7 +217,10 @@ export const Editor: React.FC<EditorProps> = props => {
             .map(([name, value]) => `${name}=${value}`)
             .join(' ')
 
-          const snippet = `<${name}${propsChain && ' ' + propsChain}></${name}>`
+          const snippet = `<${name}${propsChain && ' ' + propsChain}>${
+            // @ts-expect-error
+            component.defaultProps?.children || ''
+          }</${name}>`
 
           // Insert the snippet into the editor at the current cursor position.
           insertSnippet(snippet)
