@@ -195,8 +195,9 @@ const IndexPage = connectPage(
 
         <Box minW="sm" minH="sm">
           <Field.Image
-            name="image"
+            name="image0"
             defaultValue={"https://i.giphy.com/media/duzpaTbCUy9Vu/giphy.webp"}
+            raw
           />
         </Box>
 

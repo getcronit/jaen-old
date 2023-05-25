@@ -40,10 +40,23 @@ export interface ImageFieldProps extends ImageProps {
    */
   lightboxGroup?: boolean
   defaultValue?: string
+  /**
+   * When true, the image will not be optimized by gatsby-image.
+   *
+   * This is useful when you want to display a GIF image.
+   *
+   * @example
+   * ```tsx
+   * import {Field} from '@snek-at/jaen'
+   *
+   * <Field.Image ... raw />
+   * ```
+   */
+  raw?: boolean
 }
 
 export const ImageField = connectField<ImageFieldValue, ImageFieldProps>(
-  ({jaenField, defaultValue, lightbox, lightboxGroup, ...props}) => {
+  ({jaenField, defaultValue, lightbox, lightboxGroup, raw, ...props}) => {
     const {toast, confirm} = useModals()
 
     const handleImageChooseClick = (info: {src: string; alt?: string}) => {
@@ -138,6 +151,9 @@ export const ImageField = connectField<ImageFieldValue, ImageFieldProps>(
     const imageElement = useMemo(() => {
       const isLightbox = lightbox && !jaenField.isEditing
 
+      const renderAsDynamic =
+        raw || jaenField.value?.internalImageUrl !== undefined
+
       const dataImage = (
         <Box
           boxSize="full"
@@ -148,7 +164,7 @@ export const ImageField = connectField<ImageFieldValue, ImageFieldProps>(
             internalImageUrl={value.internalImageUrl}
             imageData={gatsbyImage}
             alt={value.alt}
-            renderAsDynamic={jaenField.value?.internalImageUrl !== undefined}
+            renderAsDynamic={renderAsDynamic}
           />
         </Box>
       )
@@ -177,6 +193,7 @@ export const ImageField = connectField<ImageFieldValue, ImageFieldProps>(
       jaenField,
       lightbox,
       lightboxGroup,
+      raw,
       imageFieldProps,
       value,
       gatsbyImage
