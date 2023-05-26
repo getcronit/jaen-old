@@ -7,7 +7,11 @@ export function redirectAfterDelay(
   if (redirectTo) {
     // navigate after a timeout to allow the UI to update
     setTimeout(() => {
-      void navigate(redirectTo)
+      void navigate(redirectTo, {
+        state: {
+          from: typeof window !== 'undefined' ? window.location.pathname : '/'
+        }
+      })
     }, delay)
   }
 }

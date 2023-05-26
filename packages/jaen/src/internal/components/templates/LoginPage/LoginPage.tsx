@@ -10,7 +10,7 @@ import {
   Stack,
   Text
 } from '@chakra-ui/react'
-import {navigate} from 'gatsby'
+import {navigate, PageProps} from 'gatsby'
 
 import {useAuthentication} from '../../../context/AuthenticationContext.js'
 
@@ -19,9 +19,9 @@ import {ThemeProvider} from '../../../styles/ChakraThemeProvider.js'
 import {JaenFullLogoWhite} from '../../atoms/icons/JaenLogo/JaenLogo.js'
 import {LoginForm} from '../../organisms/index.js'
 
-export interface LoginPageProps {}
+export interface LoginPageProps extends PageProps {}
 
-export const LoginPage: React.FC<LoginPageProps> = withRedux(() => {
+export const LoginPage: React.FC<LoginPageProps> = withRedux(props => {
   const {login, demoLogin, redirectToSSO} = useAuthentication()
 
   return (
@@ -115,7 +115,14 @@ export const LoginPage: React.FC<LoginPageProps> = withRedux(() => {
                 display="flex"
                 alignItems="center"
                 onClick={() => {
-                  void navigate('/')
+                  // Get history to go back to previous page
+                  const from = (props.location.state as any).from
+
+                  // If from is starts with /admin, go back to site
+
+                  const to = from?.startsWith('/admin') ? '/' : from
+
+                  navigate(to)
                 }}>
                 <ChevronLeftIcon />{' '}
                 <Text as="span" fontWeight="medium">
