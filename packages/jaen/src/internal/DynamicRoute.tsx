@@ -19,8 +19,6 @@ export const DynamicRoute = (props: PageProps) => {
     </Center>
   )
 
-  console.log('Dynamic', dynamicPaths, path)
-
   const TemplateLoader = ({path}: {path: string}) => {
     const dynamicPath = dynamicPaths[path]
 
@@ -96,25 +94,26 @@ export const useDynamicRoute = ({pageProps}: {pageProps: DynamicPageProps}) => {
 
   const dynamicRoutes = useDynamicPaths()
 
-  useEffect(() => {
-    // check if 404
-    console.log(
-      'Page not found',
-      window.location.pathname,
-      pageProps,
-      dynamicRoutes
-    )
-
+  const isDynamic = useMemo(() => {
     const path = pageProps.path.endsWith('/')
       ? pageProps.path
       : `${pageProps.path}/`
 
     const isDynamic = Object.keys(dynamicRoutes).includes(path)
 
+    return isDynamic
+  }, [pageProps.path, dynamicRoutes])
+
+  useEffect(() => {
+    // check if 404
+
     if (isDynamic) {
       setIsLoading(true)
 
-      console.log(`Setting dynamic route for ${window.location.pathname}`)
+      console.log(
+        `Setting dynamic route for ${window.location.pathname}`,
+        pageProps
+      )
       setNode(<DynamicRoute {...pageProps} />)
 
       setIsLoading(false)
@@ -122,7 +121,7 @@ export const useDynamicRoute = ({pageProps}: {pageProps: DynamicPageProps}) => {
       // Set undefined so that the page is not rendered
       setNode(undefined)
     }
-  }, [pageProps.path, dynamicRoutes])
+  }, [pageProps.path, dynamicRoutes, isDynamic])
 
   const value = useMemo(() => ({node, isLoading}), [node, isLoading])
 

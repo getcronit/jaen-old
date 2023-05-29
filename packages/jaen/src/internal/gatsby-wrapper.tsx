@@ -14,6 +14,11 @@ import {DynamicPageProps, useDynamicRoute} from './DynamicRoute.js'
 import {ThemeProvider} from './styles/ChakraThemeProvider.js'
 import theme from './styles/theme.js'
 
+const ActivationButton = React.lazy(
+  async () =>
+    await import('./components/atoms/ActivationButton/ActivationButton.js')
+)
+
 export interface WrapperProps {
   children: React.ReactNode
   ssr?: boolean
@@ -33,9 +38,11 @@ export const GatsbyRootWrapper: React.FC<WrapperProps> = ({children}) => {
       async () => await import('./context/HighlightContext.js')
     )
 
+    const MemoedHighlightProvider = useMemo(() => LazyHighlightProvider, [])
+
     return (
       <React.Suspense fallback={<LoadingPage />}>
-        <LazyHighlightProvider>{children}</LazyHighlightProvider>
+        <MemoedHighlightProvider>{children}</MemoedHighlightProvider>
       </React.Suspense>
     )
   }
@@ -128,11 +135,6 @@ const WrapperPage: React.FC<{
       // For example if the user accesses /admin/login, the ActivationButton should not be rendered
       return <>{children}</>
     }
-
-    const ActivationButton = React.lazy(
-      async () =>
-        await import('./components/atoms/ActivationButton/ActivationButton.js')
-    )
 
     return (
       <>
