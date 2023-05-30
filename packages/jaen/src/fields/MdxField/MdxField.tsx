@@ -37,7 +37,7 @@ export const MdxField = connectField<MdxFieldValue, MdxFieldProps>(
 
         const name = `${src}-${alt}`
 
-        return <Image name={name} bg="orange" defaultValue={src} alt={alt} />
+        return <Image name={name} defaultValue={src} alt={alt} />
       },
 
       Image,
