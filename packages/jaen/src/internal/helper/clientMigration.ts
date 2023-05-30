@@ -49,6 +49,7 @@ export const prepareMigration = async (
 
 export const insertMigration = async (migrationData: MigrationData) => {
   resetState({
+    finderUrl: migrationData.jaen.finderUrl,
     site: migrationData.jaen.site,
     page: {
       routing: migrationData.pageRouting,
@@ -65,4 +66,6 @@ export const insertMigration = async (migrationData: MigrationData) => {
   })
 
   Backend.indexKey = migrationData.jaen.finderUrl
+
+  await Backend.readIndex()
 }

@@ -48,11 +48,11 @@ export function useSectionData(
         return false
       }
 
-      if (l == null && r == null) {
+      if (l === null && r === null) {
         return true
       }
 
-      if (l == null || r == null) {
+      if (l === null || r === null) {
         return false
       }
 
@@ -68,7 +68,8 @@ export function useSectionData(
         const lItem = l.items[i]
         const rItem = r.items[i]
 
-        if (lItem?.deleted || rItem?.deleted) {
+        // check if deleted is not equal
+        if (lItem?.deleted !== rItem?.deleted) {
           return false
         }
       }

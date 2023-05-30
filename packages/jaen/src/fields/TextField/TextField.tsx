@@ -15,6 +15,13 @@ export const TextField = connectField<string, TextFieldProps>(
   ({jaenField, defaultValue, as: Wrapper = Text, asAs, ...rest}) => {
     const {toast} = useModals()
 
+    // @ts-expect-error
+    const isWrapperHeading = Wrapper.displayName === 'Heading'
+
+    if (isWrapperHeading && !asAs) {
+      asAs = 'h2'
+    }
+
     const handleTextSave = (data: string) => {
       jaenField.onUpdateValue(data)
 
@@ -33,8 +40,6 @@ export const TextField = connectField<string, TextFieldProps>(
             : typeof asAs === 'string'
             ? asAs
             : undefined
-
-        console.log('as', Wrapper, asAs, as)
 
         jaenField.register({
           as

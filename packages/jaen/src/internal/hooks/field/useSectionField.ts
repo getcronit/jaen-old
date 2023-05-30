@@ -1,4 +1,4 @@
-import {useMemo} from 'react'
+import {useCallback, useMemo} from 'react'
 
 import {
   IBlockConnection,
@@ -52,10 +52,10 @@ export interface UseSectionFieldOptions {
   blocks: IBlockConnection[]
 }
 
-export const useSectionField = ({
-  sectionName,
-  blocks
-}: UseSectionFieldOptions): UseSectionField => {
+export const useSectionField = (
+  sectionName: string,
+  blocks: IBlockConnection[]
+): UseSectionField => {
   const {jaenPage} = usePageContext()
 
   const {data: section, sectionPath} = useSectionData(sectionName)
@@ -95,50 +95,47 @@ export const useSectionField = ({
     return t
   }, [blocks])
 
-  const onSectionAdd = (
-    sectionItemType: string,
-    between: [string | null, string | null]
-  ) => {
-    store.dispatch(
-      actions.section_add({
-        pageId: jaenPage.id,
-        sectionItemType,
-        path: sectionPath,
-        between
-      })
-    )
-  }
+  const onSectionAdd = useCallback(
+    (sectionItemType: string, between: [string | null, string | null]) => {
+      store.dispatch(
+        actions.section_add({
+          pageId: jaenPage.id,
+          sectionItemType,
+          path: sectionPath,
+          between
+        })
+      )
+    },
+    []
+  )
 
-  const onSectionDelete = (
-    id: string,
-    ptrPrev: string | null,
-    ptrNext: string | null
-  ) => {
-    store.dispatch(
-      actions.section_remove({
-        pageId: jaenPage.id,
-        sectionId: id,
-        path: sectionPath,
-        between: [ptrPrev, ptrNext]
-      })
-    )
-  }
+  const onSectionDelete = useCallback(
+    (id: string, ptrPrev: string | null, ptrNext: string | null) => {
+      store.dispatch(
+        actions.section_remove({
+          pageId: jaenPage.id,
+          sectionId: id,
+          path: sectionPath,
+          between: [ptrPrev, ptrNext]
+        })
+      )
+    },
+    []
+  )
 
-  const onSectionAppend = (
-    sectionName: string,
-    id: string,
-    ptrNext: string | null
-  ) => {
-    onSectionAdd(sectionName, [id, ptrNext || null])
-  }
+  const onSectionAppend = useCallback(
+    (sectionName: string, id: string, ptrNext: string | null) => {
+      onSectionAdd(sectionName, [id, ptrNext || null])
+    },
+    []
+  )
 
-  const onSectionPrepend = (
-    sectionName: string,
-    id: string,
-    ptrPrev: string | null
-  ) => {
-    onSectionAdd(sectionName, [ptrPrev || null, id])
-  }
+  const onSectionPrepend = useCallback(
+    (sectionName: string, id: string, ptrPrev: string | null) => {
+      onSectionAdd(sectionName, [ptrPrev || null, id])
+    },
+    []
+  )
 
   return {
     onSectionAdd,

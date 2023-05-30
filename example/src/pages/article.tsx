@@ -25,6 +25,12 @@ const IndexPage = connectPage(
           defaultValue="Heading1"
         />
 
+        <Field.Text
+          as={Heading}
+          name="heading-without-asAs"
+          defaultValue="Heading2"
+        />
+
         <Button as={Link} to="#heading2">
           Button 1234 #heading2
         </Button>

@@ -174,6 +174,14 @@ const IndexPage = connectPage(
 
     return (
       <>
+        <Button as={Link} to="/">
+          Home
+        </Button>
+
+        <Button as={Link} to="/article">
+          Article
+        </Button>
+
         <Button as={Link} to="/xxxx">
           Button 1234 /xxxx
         </Button>

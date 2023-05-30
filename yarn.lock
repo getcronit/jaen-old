@@ -5339,10 +5339,10 @@
     escape-string-regexp "^2.0.0"
     lodash.deburr "^4.1.0"
 
-"@snek-at/snek-finder@^1.0.0-beta.23":
-  version "1.0.0-beta.23"
-  resolved "https://registry.yarnpkg.com/@snek-at/snek-finder/-/snek-finder-1.0.0-beta.23.tgz#95264e14094c18139b805b9cf5fb4807bcb13205"
-  integrity sha512-nbDdDOc0WJUyCGVzZTwNuudWsofFNs3pdz/EvyJytw4HBXcHNp1abUbz3yPtZ+rXWS4px4kevf/0M+pABXaziw==
+"@snek-at/snek-finder@^1.0.0-beta.25":
+  version "1.0.0-beta.25"
+  resolved "https://registry.yarnpkg.com/@snek-at/snek-finder/-/snek-finder-1.0.0-beta.25.tgz#edd0082f7026297ac8f4b56e4252617968ebc389"
+  integrity sha512-xSOAB+z5AHOzdNc+LElxMUH7kw9eSJ3v+EYuUoVXlIpDwdXIYq0jDg26KAfWie1UFRLfa2l+nZYl7qCLil3jwg==
   dependencies:
     "@chakra-ui/icons" "^2"
     "@chakra-ui/react" "^2.5.5"

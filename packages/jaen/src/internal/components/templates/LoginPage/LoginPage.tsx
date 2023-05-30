@@ -116,11 +116,15 @@ export const LoginPage: React.FC<LoginPageProps> = withRedux(props => {
                 alignItems="center"
                 onClick={() => {
                   // Get history to go back to previous page
-                  const from = (props.location.state as any).from
 
-                  // If from is starts with /admin, go back to site
+                  const location = props.location as any
+                  const from = location?.state?.from as string | undefined
 
-                  const to = from?.startsWith('/admin') ? '/' : from
+                  // If from is starts with /admin, go back to root
+                  // Else go back to previous page (from)
+                  // If from is undefined, go to root
+
+                  const to = from?.startsWith('/admin') ? '/' : from || '/'
 
                   navigate(to)
                 }}>

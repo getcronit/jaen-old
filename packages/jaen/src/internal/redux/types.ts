@@ -42,10 +42,13 @@ export interface IJaenSiteState {
   siteMetadata: ISite['siteMetadata']
 }
 
+export type IJaenFinderUrl = string | undefined
+
 export interface IJaenState {
   site: IJaenSiteState
   page: IPageState
   status: IStatusState
   popup: IPopupState
   widget: IWidget
+  finderUrl: IJaenFinderUrl
 }

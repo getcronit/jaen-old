@@ -1,6 +1,7 @@
 import {OSGBackend} from '@snek-at/snek-finder/dist/backends/OSGBackend'
 import React from 'react'
 import {useAdminStaticQuery} from '../../hooks/useAdminStaticQuery.js'
+import {useAppSelector, withRedux} from '../../redux/index.js'
 
 const SnekFinderProvider = React.lazy(
   async () =>
@@ -11,22 +12,26 @@ const SnekFinderProvider = React.lazy(
 
 export const Backend = new OSGBackend('snek-finder-osg-backend-root')
 
-export const SnekFinder: React.FC<React.PropsWithChildren> = ({children}) => {
-  const isSSR = typeof window === 'undefined'
+export const SnekFinder: React.FC<React.PropsWithChildren> = withRedux(
+  ({children}) => {
+    const isSSR = typeof window === 'undefined'
 
-  const {
-    jaenInternal: {finderUrl}
-  } = useAdminStaticQuery()
+    const {jaenInternal} = useAdminStaticQuery()
 
-  return (
-    <React.Suspense fallback={null}>
-      {!isSSR && (
-        <SnekFinderProvider
-          backend={Backend}
-          initDataLink={finderUrl || undefined}>
-          {children}
-        </SnekFinderProvider>
-      )}
-    </React.Suspense>
-  )
-}
+    const dynamicFinderUrl = useAppSelector(state => state.finderUrl)
+
+    const finderUrl = dynamicFinderUrl || jaenInternal.finderUrl
+
+    return (
+      <React.Suspense fallback={null}>
+        {!isSSR && (
+          <SnekFinderProvider
+            backend={Backend}
+            initDataLink={finderUrl || undefined}>
+            {children}
+          </SnekFinderProvider>
+        )}
+      </React.Suspense>
+    )
+  }
+)

@@ -49,7 +49,7 @@ export const SectionField = withRedux(
       section,
       sectionsDict,
       sectionPath
-    } = useSectionField({sectionName: name, blocks})
+    } = useSectionField(name, blocks)
 
     const {isEditing} = useStatus()
 
