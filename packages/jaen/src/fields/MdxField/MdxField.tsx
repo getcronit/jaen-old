@@ -19,11 +19,13 @@ export const MdxField = connectField<MdxFieldValue, MdxFieldProps>(
   ({jaenField, components}) => {
     console.log(jaenField.staticValue)
 
-    const [rawValue, setRawValue] = React.useState(
+    const [rawValue, setRawValue] = React.useState<MdastRoot | undefined>(
       jaenField.value || jaenField.staticValue || defaultData
     )
 
-    console.log('rawValue', rawValue)
+    useEffect(() => {
+      setRawValue(jaenField.value || jaenField.staticValue || defaultData)
+    }, [jaenField.value])
 
     components = {
       ...components,
@@ -44,12 +46,6 @@ export const MdxField = connectField<MdxFieldValue, MdxFieldProps>(
       },
       Link
     }
-
-    useEffect(() => {
-      if (!jaenField.value) return
-
-      setRawValue(jaenField.value)
-    }, [jaenField.value])
 
     if (jaenField.isEditing) {
       // Render editor in edit mode

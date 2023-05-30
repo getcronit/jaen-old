@@ -9,17 +9,20 @@ import {PreviewComponent} from './PreviewComponent'
 export interface BuildEditorProps {
   components: BaseEditorProps['components']
 
-  mdast: MdastRoot
+  mdast?: MdastRoot
 }
 
 export const Preview = React.memo<BuildEditorProps>(({components, mdast}) => {
-  const [state, _] = useMdx({
-    gfm: true,
-    frontmatter: true,
-    math: true,
-    directive: true,
-    mdast
-  }) as any
+  const [state, _] = useMdx(
+    {
+      gfm: true,
+      frontmatter: true,
+      math: true,
+      directive: true,
+      mdast
+    },
+    true
+  ) as any
 
   const stats = state.file ? statistics(state.file) : ({} as Statistics)
 

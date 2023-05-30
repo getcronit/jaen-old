@@ -1,7 +1,7 @@
 import {evaluateSync} from '@mdx-js/mdx'
 import {useDebounceFn} from 'ahooks'
 import {mdxToMarkdown} from 'mdast-util-mdx'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import * as runtime from 'react/jsx-runtime'
 import rehypeSlug from 'rehype-slug-custom-id'
 
@@ -55,32 +55,35 @@ function evaluateFile(file: VFile) {
     message.fatal = true
   }
 }
-
-export function useMdx(defaults: {
+interface Defaults {
   gfm: boolean
   frontmatter: boolean
   math: boolean
   directive: boolean
   mdast?: MdastRoot
-}) {
-  const [state, setState] = useState(() => {
-    console.log('defaults', defaults)
+}
+const initializeState = (defaults: Defaults) => {
+  const markdown = defaults.mdast ? parseMdast(defaults.mdast) : ''
 
-    // Stringify mdast back into markdown
-    const markdown = defaults.mdast ? parseMdast(defaults.mdast) : ''
+  const file = createFile(markdown)
 
-    console.log(`Markdown`, markdown)
+  evaluateFile(file)
 
-    const file = createFile(markdown)
+  return {
+    ...defaults,
+    value: markdown,
+    file
+  }
+}
 
-    evaluateFile(file)
+export function useMdx(defaults: Defaults, live: boolean = false) {
+  const [state, setState] = useState(() => initializeState(defaults))
 
-    return {
-      ...defaults,
-      value: markdown,
-      file
+  useEffect(() => {
+    if (live) {
+      setState(initializeState(defaults))
     }
-  })
+  }, [defaults, live])
 
   const {run: setConfig} = useDebounceFn(
     async config => {
