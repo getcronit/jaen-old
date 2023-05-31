@@ -1,6 +1,6 @@
 import {BaseEditorProps, MdastRoot} from './types.js'
 // @ts-nocheck
-import React from 'react'
+import React, {useMemo} from 'react'
 import {Statistics, statistics} from 'vfile-statistics'
 
 import {useMdx} from '../useMdx.js'
@@ -13,16 +13,18 @@ export interface BuildEditorProps {
 }
 
 export const Preview = React.memo<BuildEditorProps>(({components, mdast}) => {
-  const [state, _] = useMdx(
-    {
+  const defaults = useMemo(
+    () => ({
       gfm: true,
       frontmatter: true,
       math: true,
       directive: true,
       mdast
-    },
-    true
-  ) as any
+    }),
+    [mdast]
+  )
+
+  const [state, _] = useMdx(defaults, true) as any
 
   const stats = state.file ? statistics(state.file) : ({} as Statistics)
 
