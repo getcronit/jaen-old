@@ -1,7 +1,21 @@
 import { StarIcon } from "@chakra-ui/icons"
-import { Box, Badge, Wrap, WrapItem, Button, Text } from "@chakra-ui/react"
+import {
+  Box,
+  Badge,
+  Wrap,
+  WrapItem,
+  Button,
+  Text,
+  ButtonGroup,
+} from "@chakra-ui/react"
 
-import { connectBlock, connectPage, Field, useWidget } from "@snek-at/jaen"
+import {
+  connectBlock,
+  connectPage,
+  Field,
+  useAuthentication,
+  useWidget,
+} from "@snek-at/jaen"
 import * as React from "react"
 
 import { graphql, Link } from "gatsby"
@@ -172,8 +186,50 @@ const IndexPage = connectPage(
       })
     }, [])
 
+    const auth = useAuthentication()
+
     return (
       <>
+        {auth.isAuthenticated ? (
+          <Button onClick={() => auth.logout()}>Logout</Button>
+        ) : (
+          <form
+            onSubmit={e => {
+              e.preventDefault()
+
+              // @ts-expect-error
+              const username = e.target.username.value
+              // @ts-expect-error
+              const password = e.target.password.value
+
+              auth.login(username, password)
+            }}
+          >
+            <input type="text" name="username" />
+            <input type="password" name="password" />
+            <ButtonGroup>
+              <Button type="submit" variant="link">
+                Login
+              </Button>
+
+              <Button
+                onClick={() => {
+                  auth.demoLogin()
+                }}
+                variant="link"
+              >
+                Demo
+              </Button>
+            </ButtonGroup>
+          </form>
+        )}
+
+        {auth.isAuthenticated ? (
+          <Button onClick={() => auth.logout()}>Logout</Button>
+        ) : (
+          "You are not signed in"
+        )}
+
         <Button as={Link} to="/">
           Home
         </Button>

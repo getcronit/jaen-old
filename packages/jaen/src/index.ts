@@ -10,6 +10,7 @@ export {
 } from './connectors/index.js'
 export * from './fields/index.js'
 export {usePageManager} from './internal/context/AdminPageManager/AdminPageManager.js'
+export {useAuthentication} from './internal/context/AuthenticationContext.js'
 export {usePageContext} from './internal/context/PageProvider.js'
 export {PageManagerProvider} from './internal/context/PagesManagerContext.js'
 export {useSectionBlockContext} from './internal/context/SectionBlockContext.js'
