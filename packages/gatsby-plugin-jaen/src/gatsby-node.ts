@@ -539,6 +539,11 @@ export const sourceNodes: GatsbyNode['onCreateWebpackConfig'] = async ({
   for (const [id, jaenPage] of Object.entries(JaenSource.jaenData.pages)) {
     const page = await jaenPage.context.fetchRemoteFile<IJaenPage>()
 
+    //!! Skip deleted pages. In the future is should be impossible that deleted pages are in the source.
+    if (page.deleted) {
+      continue
+    }
+
     await processPage({
       page,
       createNodeId,
