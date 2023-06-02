@@ -27,7 +27,7 @@ export const PageManagerProvider: React.FC<React.PropsWithChildren<{}>> = ({
 
   const dispatch = useAppDispatch()
 
-  const pageTree = useJaenPageTree()
+  const pageTree = useJaenPageTree({includeDeleted: true})
 
   const latestAddedPageId = useAppSelector(
     state => state.page.pages.lastAddedNodeId

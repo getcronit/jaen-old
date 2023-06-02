@@ -60,7 +60,9 @@ const mergeStaticWithStatePages = (
 /**
  * Access the PageTree of the JaenContext and Static.
  */
-export const useJaenPageTree = (): IJaenPage[] => {
+export const useJaenPageTree = (options?: {
+  includeDeleted?: boolean
+}): IJaenPage[] => {
   const {
     allJaenPage: {nodes: staticPages}
   } = useAdminStaticQuery()
@@ -82,5 +84,32 @@ export const useJaenPageTree = (): IJaenPage[] => {
     [mergeData]
   )
 
-  return filteredData
+  // delete all deleted pages and children
+  const cleanPages = useMemo(() => {
+    if (options?.includeDeleted) return filteredData
+
+    const pages: IJaenPage[] = []
+
+    for (const page of filteredData) {
+      if (page.deleted) {
+        continue
+      }
+
+      const newIndex = pages.push(page) - 1
+
+      if (page.children.length > 0) {
+        for (const [childIndex, child] of page.children.entries()) {
+          if (child.deleted) {
+            continue
+          }
+
+          pages[newIndex]!.children[childIndex] = child
+        }
+      }
+    }
+
+    return pages
+  }, [filteredData, options?.includeDeleted])
+
+  return cleanPages
 }

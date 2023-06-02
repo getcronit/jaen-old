@@ -14,6 +14,7 @@ import {
   connectPage,
   Field,
   useAuthentication,
+  useJaenPageTree,
   useWidget,
 } from "@snek-at/jaen"
 import * as React from "react"
@@ -187,6 +188,10 @@ const IndexPage = connectPage(
     }, [])
 
     const auth = useAuthentication()
+
+    const aaaa = useJaenPageTree()
+
+    console.log(`aaaa`, aaaa)
 
     return (
       <>
