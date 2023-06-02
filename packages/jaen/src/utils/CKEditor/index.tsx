@@ -49,7 +49,6 @@ const EditorWrapper = styled(Box)`
 
 const LoadableCKEditor = React.lazy(
   async () =>
-    // @ts-expect-error
     await import('@ckeditor/ckeditor5-react').then(module => ({
       default: module.CKEditor
     }))
@@ -125,7 +124,6 @@ const Editor: React.FC<EditorProps> = props => {
   React.useEffect(() => {
     async function load() {
       if (!BalloonEditor && !editor && props.editing) {
-        // @ts-expect-error
         BalloonEditor = await import('@ckeditor/ckeditor5-build-balloon')
 
         setEditor(BalloonEditor)
@@ -182,23 +180,21 @@ const Editor: React.FC<EditorProps> = props => {
       {props.editing && isFocused && editor ? (
         <>
           <LoadableCKEditor
-            fallback={fallbackElement}
             editor={editor?.default}
             config={editorConfig}
             data={value}
-            // @ts-expect-error
             onBlur={(_, editor) => {
-              const data = editor.getData()
+              const data = editor.data.get()
 
               if (data !== value) {
-                setValue(data || props.defaultValue)
+                setValue(data || props.defaultValue || '')
 
                 props.onBlurValue(data)
               }
             }}
-            onLoad={(editor: any) => {
-              editor.writer.addClass('revert-css')
-            }}
+            // onReady={editor => {
+            //   editor.writer.addClass('revert-css')
+            // }}
           />
         </>
       ) : (
