@@ -1,4 +1,5 @@
 import slugify from '@sindresorhus/slugify'
+import {MdastRoot} from '@snek-at/jaen/dist/fields/MdxField/components/types.js'
 import {IJaenPage} from '@snek-at/jaen/dist/types.js'
 import {generatePageOriginPath} from 'jaen-utils'
 import {SearchIndex} from './gatsby-node'
@@ -40,29 +41,37 @@ export const buildSearchIndex = async (nodes: IJaenPage[]) => {
 
           return `${slug}#${value}`
         }
+
         for (const [_, value] of Object.entries(mdxField)) {
-          const mdast = value.value
+          const mdast = value.value as MdastRoot
 
           // const headings: string[] = []
           for (const node of mdast.children) {
             if (node.type === 'heading') {
               // Set current heading key e.g. (some-anchor#Some Anchor)
-              // @ts-ignore
-              const value = node.children[0]?.value as string
 
-              currentHeading = buildHeading(value)
+              const element = node.children[0]
 
-              data[currentHeading] = ''
+              if (element) {
+                if (element.type === 'text') {
+                  currentHeading = buildHeading(element.value)
+
+                  data[currentHeading] = ''
+                }
+              }
             } else if (node.type === 'paragraph') {
               // Add paragraph to current heading
-              // @ts-ignore
-              const value = node.children[0]?.value as string
+              const element = node.children[0]
 
-              if (currentHeading) {
-                data[currentHeading] += `${value}\n`
-              } else {
-                // Append to path: ""
-                data[''] += `${value}\n`
+              if (element) {
+                if (element.type === 'text') {
+                  if (currentHeading) {
+                    data[currentHeading] += `${element.value}\n`
+                  } else {
+                    // Append to path: ""
+                    data[''] += `${element.value}\n`
+                  }
+                }
               }
             }
           }
