@@ -59,10 +59,10 @@ export const buildSearchIndex = async (nodes: IJaenPage[]) => {
               const value = node.children[0]?.value as string
 
               if (currentHeading) {
-                data[currentHeading] += value
+                data[currentHeading] += `${value}\n`
               } else {
                 // Append to path: ""
-                data[''] += value
+                data[''] += `${value}\n`
               }
             }
           }
@@ -87,13 +87,11 @@ export const buildSearchIndex = async (nodes: IJaenPage[]) => {
             const realtedField = textField[relatedName]
 
             if (realtedField) {
-              console.log(`realtedField`, realtedField)
-
               const relatedId = realtedField.props?.id
               const relatedValue = realtedField.value
 
               if (relatedId) {
-                data[`${relatedId}#${relatedValue}`] += value.value
+                data[`${relatedId}#${relatedValue}`] += `${value.value}\n`
               }
             }
           }
