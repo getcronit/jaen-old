@@ -64,7 +64,7 @@ export const AdminShell: React.FC<AdminShellProps> = props => {
   return (
     <>
       <NewsSlideProvider>
-        <Box pos="fixed" top="0" w="full" zIndex={2}>
+        <Box pos="fixed" top="0" left="0" w="full" zIndex={2}>
           <ThemeProvider>
             <AdminToolbar withoutShadow={props.withoutAdminToolbarShadow} />
             {props.beforeAdminShell}

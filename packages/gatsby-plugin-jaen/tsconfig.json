@@ -40,6 +40,8 @@
     "typeRoots": ["node_modules/@types", "src/@types"], // Specify multiple folders that act like `./node_modules/@types`
   },
   "include": [
-    "src"
+    "src",
+    "gatsby-*.ts",
+    "gatsby-*.tsx"
   ],
 }

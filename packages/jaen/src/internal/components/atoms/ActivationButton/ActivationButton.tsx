@@ -39,6 +39,7 @@ export const ActivationButton = (props: ActivationButtonProps) => {
         py={2}
         position="fixed"
         bottom={0}
+        left={0}
         boxShadow="dark-lg"
         bg="white"
         color="black"
