@@ -1,4 +1,4 @@
-import {Box} from '@chakra-ui/react'
+import {As, Box} from '@chakra-ui/react'
 import React, {forwardRef, useCallback} from 'react'
 
 import {useHighlight} from '../../../context/HighlightContext.js'
@@ -6,7 +6,7 @@ import {useHighlight} from '../../../context/HighlightContext.js'
 export interface HighlightTooltipProps {
   id?: string
   children: React.ReactNode
-  as?: React.ComponentType<React.HTMLAttributes<HTMLElement>>
+  as?: As
   asProps?: Record<string, any>
   actions: React.ReactNode[]
   isEditing?: boolean
