@@ -1,3 +1,4 @@
+import {Box} from '@chakra-ui/react'
 import React, {forwardRef, useCallback} from 'react'
 
 import {useHighlight} from '../../../context/HighlightContext.js'
@@ -34,20 +35,20 @@ export const HighlightTooltip = forwardRef<
     [ref, highlightRef]
   )
 
-  const Child: React.FC<{
-    children: React.ReactNode
-  }> = ({children}) => {
-    const childrenWithRef = React.Children.map(
-      children,
-      (child: React.ReactElement<any>) => {
-        return React.cloneElement(child, {ref: setRefs, id: props.id})
-      }
-    )
+  const Wrapper = props.as || Box
 
-    const Wrapper = props.as || React.Fragment
-
-    return <Wrapper {...props.asProps}>{childrenWithRef}</Wrapper>
-  }
-
-  return <Child>{children}</Child>
+  return (
+    <Wrapper
+      h="fit-content"
+      w="fit-content"
+      {...props.asProps}
+      id={props.id}
+      ref={setRefs}
+      tabIndex={props.isEditing ? 1 : undefined}
+      _focus={{
+        outline: 'none'
+      }}>
+      {children}
+    </Wrapper>
+  )
 })

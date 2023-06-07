@@ -48,9 +48,7 @@ const theme = extendTheme(
           borderRadius: '15px', // border—radius: 11px + offset: 4px
           pointerEvents: 'none'
         },
-        [`.${CLASSNAMES.JAEN_HIGHLIGHT_TOOLTIP}`]: {
-          // backgroundColor: 'rgba(254, 215, 226, 0.4)'
-        },
+        [`.${CLASSNAMES.JAEN_HIGHLIGHT_TOOLTIP}`]: {},
         // [`.${CLASSNAMES.JAEN_HIGHLIGHT}`]: {
         //   position: 'absolute',
         //   borderRadius: '11px',
@@ -153,7 +151,8 @@ const theme = extendTheme(
             }
           },
           jaenHighlightTooltip: {
-            bg: 'rgba(254, 215, 226, 0.8)',
+            bg: 'rgba(254, 215, 226, 0.9)',
+            backdropBlur: 8,
             color: 'pink.900',
             _hover: {
               bg: 'pink.200'
@@ -166,7 +165,8 @@ const theme = extendTheme(
             px: '2'
           },
           jaenHighlightTooltipText: {
-            bg: 'rgba(254, 215, 226, 0.8)',
+            bg: 'rgba(254, 215, 226, 0.9)',
+            backdropBlur: 8,
             color: 'pink.900',
             // _hover: {
             //   bg: 'pink.100',

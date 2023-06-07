@@ -2,10 +2,12 @@ import {HStack} from '@chakra-ui/react'
 import React, {
   createContext,
   forwardRef,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
-  useRef
+  useRef,
+  useState
 } from 'react'
 import {createRoot} from 'react-dom/client'
 import {useStatus} from '../hooks/useStatus.js'
@@ -38,6 +40,8 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
         id="coco"
         fontFamily={FONT_FAMILY}
         w="fit-content"
+        mt="-6"
+        p="1"
         mx="auto"
         justifyContent="center"
         spacing="1"
@@ -54,7 +58,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
 })
 
 export const HighlightProvider: React.FC<HighlightProviderProps> = props => {
-  const itemsRef = useRef<
+  const [items, setItems] = useState<
     Array<{
       ref: HTMLDivElement | null
       tooltipButtons: React.ReactNode[]
@@ -96,7 +100,12 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = props => {
 
     tooltipRoot.classList.add(CLASSNAMES.JAEN_HIGHLIGHT_TOOLTIP)
 
-    tooltipRoot.style.position = 'absolute'
+    tooltipRoot.style.position = 'sticky'
+
+    // move tooltip above element
+    tooltipRoot.style.top = `3.5rem`
+
+    tooltipRoot.style.pointerEvents = 'none'
 
     // Positions
     // add a observer to the frameRoot to re-position it when the element moves or resizes
@@ -116,47 +125,18 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = props => {
       frameRoot.style.width = `${elementRect.width}px`
       frameRoot.style.height = `${elementRect.height}px`
 
-      tooltipRoot.style.width = `${elementRect.width}px`
+      tooltipRoot.style.width = '100%'
     })
 
     observer.observe(element)
 
-    const item = itemsRef.current.find(item => item.ref === element)
+    const item = items.find(item => item.ref === element)
 
     if (item?.ref) {
       const tooltipButtons = item?.tooltipButtons || []
       const root = createRoot(tooltipRoot)
       root.render(<Tooltip actions={tooltipButtons} ref={tooltipHightRef} />)
     }
-
-    frameRoot.addEventListener('mouseleave', handleMouseLeave)
-
-    // move tooltip above element
-    tooltipRoot.style.top = `-${20 + 22}px`
-    // Padding to improve accessibility (hovering over the tooltip)
-    tooltipRoot.style.padding = '9px'
-
-    tooltipRoot.style.pointerEvents = 'all'
-  }
-
-  let removeHighlightTimeout: NodeJS.Timeout | null = null
-
-  const handleMouseEnter = (event: MouseEvent) => {
-    const target = event.currentTarget as HTMLDivElement
-
-    if (!target) return
-
-    setHighlight(target)
-
-    // If there is a scheduled removal, clear it
-    if (removeHighlightTimeout) {
-      clearTimeout(removeHighlightTimeout)
-      removeHighlightTimeout = null
-    }
-
-    // if (!skipPropagation) {
-    //   event.stopPropagation()
-    // }
   }
 
   const findClosestParentMatching = (
@@ -176,74 +156,196 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = props => {
     return null
   }
 
-  const handleMouseLeave = (event: MouseEvent) => {
-    const highlightRoot = document.querySelector(
-      `.${CLASSNAMES.JAEN_HIGHLIGHT_FRAME}`
-    )
-
-    if (!highlightRoot) return
-
-    // do not remove highlighter if mouse is over tooltip
-
-    const relatedTarget = event.relatedTarget as HTMLElement
-
-    if (relatedTarget?.classList.contains(CLASSNAMES.JAEN_HIGHLIGHT_TOOLTIP)) {
-      return
-    }
-
-    // find closest parent that matches one of the items
-    const closestParent = findClosestParentMatching(relatedTarget, element => {
-      return itemsRef.current.some(item => item.ref === element)
-    })
-
-    if (closestParent) {
-      setHighlight(closestParent)
-      return
-    }
-
-    // Schedule the removal of the highlighter
-    removeHighlightTimeout = setTimeout(() => {
-      highlightRoot.remove()
-    }, 200)
-  }
-
   const {isEditing} = useStatus()
 
+  const ref = useCallback(
+    (ref: HTMLDivElement | null, tooltipButtons: React.ReactNode[]) => {
+      if (ref) {
+        const index = items.findIndex(item => {
+          return item.ref === ref
+        })
+
+        if (index === -1) {
+          setItems([...items, {ref, tooltipButtons}])
+        }
+      }
+
+      console.log('ref', ref)
+    },
+    [items]
+  )
+
   useEffect(() => {
-    if (!isEditing) {
-      itemsRef.current = []
+    // ref.addEventListener('mouseenter', () => {
+    //   ref.focus({
+    //     preventScroll: true
+    //   })
+    // })
+
+    // ref.addEventListener('mouseleave', e => {
+    //   const relatedTarget = e.relatedTarget as HTMLElement
+
+    //   // check if relatedTarget is a itemsRef
+
+    //   if (relatedTarget) {
+    //     const index = items.findIndex(item => {
+    //       return item.ref === relatedTarget
+    //     })
+
+    //     if (index !== -1) {
+    //       return
+    //     }
+
+    //     const closestParent = findClosestParentMatching(
+    //       relatedTarget,
+    //       element => {
+    //         return items.some(item => item.ref === element)
+    //       }
+    //     )
+
+    //     // Get ref of relatedTarget
+    //     const relatedRef = items.find(
+    //       item => item.ref === closestParent
+    //     )
+
+    //     if (relatedRef?.ref) {
+    //       relatedRef.ref.focus({
+    //         preventScroll: true
+    //       })
+    //     }
+    //   }
+    // })
+
+    // ref.addEventListener('focus', () => {
+    //   if (!isEditing) return
+
+    //   alert('focus ' + isEditing)
+
+    //   setHighlight(ref)
+    // })
+
+    // ref.addEventListener('blur', e => {
+    //   if (!isEditing) return
+
+    //   const highlightRoot = document.querySelector(
+    //     `.${CLASSNAMES.JAEN_HIGHLIGHT_FRAME}`
+    //   )
+
+    //   if (!highlightRoot) return
+
+    //   // Check if the blur event is caused by a click on the tooltip
+    //   // check if tooltip ref contains relatedTarget
+    //   if (tooltipHightRef.current?.contains(e.relatedTarget as Node)) {
+    //     return
+    //   }
+
+    //   // Do not remove the highlight if the new focus is on a child of the original element
+    //   if (ref.contains(e.relatedTarget as Node)) {
+    //     return
+    //   }
+
+    //   highlightRoot.remove()
+    // })
+
+    const mouseEnterHandler = (e: MouseEvent) => {
+      if (!isEditing) return
+
+      const element = e.target as HTMLElement
+
+      element.focus({
+        preventScroll: true
+      })
     }
-  }, [isEditing])
 
-  const ref = (
-    ref: HTMLDivElement | null,
-    tooltipButtons: React.ReactNode[]
-  ) => {
-    const index = itemsRef.current.findIndex(item => {
-      return item.ref === ref
-    })
+    const mouseLeaveHandler = (e: MouseEvent) => {
+      if (!isEditing) return
 
-    if (ref) {
-      // handle event listeners
+      const relatedTarget = e.relatedTarget as HTMLElement
 
-      // ref.addEventListener('mouseover', handleMouseEnter)
-      // ref.addEventListener('mouseleave', handleMouseLeave)
+      // check if relatedTarget is a itemsRef
 
-      if (isEditing) {
-        ref.addEventListener('mouseenter', handleMouseEnter)
-        ref.addEventListener('mouseleave', handleMouseLeave)
-      } else {
-        ref.removeEventListener('mouseenter', handleMouseEnter)
-        ref.removeEventListener('mouseleave', handleMouseLeave)
+      if (relatedTarget) {
+        const index = items.findIndex(item => {
+          return item.ref === relatedTarget
+        })
+
+        if (index !== -1) {
+          return
+        }
+
+        const closestParent = findClosestParentMatching(
+          relatedTarget,
+          element => {
+            return items.some(item => item.ref === element)
+          }
+        )
+
+        // Get ref of relatedTarget
+        const relatedRef = items.find(item => item.ref === closestParent)
+
+        if (relatedRef?.ref) {
+          relatedRef.ref.focus({
+            preventScroll: true
+          })
+        }
+      }
+    }
+
+    const focusHandler = (e: FocusEvent) => {
+      if (!isEditing) return
+
+      const element = e.target as HTMLElement
+
+      setHighlight(element)
+    }
+
+    const blurHandler = (e: FocusEvent) => {
+      if (!isEditing) return
+
+      const highlightRoot = document.querySelector(
+        `.${CLASSNAMES.JAEN_HIGHLIGHT_FRAME}`
+      )
+
+      if (!highlightRoot) return
+
+      // Check if the blur event is caused by a click on the tooltip
+      // check if tooltip ref contains relatedTarget
+      if (tooltipHightRef.current?.contains(e.relatedTarget as Node)) {
+        return
       }
 
-      if (index === -1) {
-        itemsRef.current.push({ref, tooltipButtons})
-      } else {
-        itemsRef.current[index] = {ref, tooltipButtons}
+      const element = e.currentTarget as HTMLElement
+
+      // Do not remove the highlight if the new focus is on a child of the original element
+      if (element.contains(e.relatedTarget as Node)) {
+        return
+      }
+
+      highlightRoot.remove()
+    }
+
+    // append event listeners to all itemsRef
+
+    for (const item of items) {
+      if (!item.ref) continue
+
+      item.ref.addEventListener('mouseenter', mouseEnterHandler)
+      item.ref.addEventListener('mouseleave', mouseLeaveHandler)
+      item.ref.addEventListener('focus', focusHandler)
+      item.ref.addEventListener('blur', blurHandler)
+    }
+
+    return () => {
+      for (const item of items) {
+        if (!item.ref) continue
+
+        item.ref.removeEventListener('mouseenter', mouseEnterHandler)
+        item.ref.removeEventListener('mouseleave', mouseLeaveHandler)
+        item.ref.removeEventListener('focus', focusHandler)
+        item.ref.removeEventListener('blur', blurHandler)
       }
     }
-  }
+  }, [isEditing, items])
 
   const children = useMemo(() => {
     return props.children
