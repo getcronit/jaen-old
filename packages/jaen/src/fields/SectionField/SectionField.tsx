@@ -1,5 +1,5 @@
 import {DeleteIcon} from '@chakra-ui/icons'
-import {Box, Button, HStack, IconButton, Text} from '@chakra-ui/react'
+import {Box, Button, HStack, IconButton, Stack, Text} from '@chakra-ui/react'
 import * as React from 'react'
 import {FiBox} from 'react-icons/fi'
 
@@ -53,7 +53,7 @@ export const SectionField = withRedux(
 
     const {isEditing} = useStatus()
 
-    const Wrapper = rest.as || Box
+    const Wrapper = rest.as || Stack
 
     let tooltipButtons = [
       <Button
@@ -139,89 +139,87 @@ export const SectionField = withRedux(
       <HighlightTooltip
         id={name}
         isEditing={isEditing}
-        actions={tooltipButtons}>
-        <Box boxSize="full">
-          <Wrapper
-            minH="64"
-            w="full"
-            {...rest.props}
-            className={rest.className}
-            style={rest.style}>
-            {section.items.map((item, index) => {
-              const s = sectionsDict[item.type]
+        actions={tooltipButtons}
+        as={Wrapper}
+        asProps={{
+          minH: '64',
+          p: '4',
+          ...rest.props,
+          className: rest.className,
+          style: rest.style
+        }}>
+        {section.items.map((item, index) => {
+          const s = sectionsDict[item.type]
 
-              if (s == null) {
-                console.error(
-                  `Section type ${item.type} is not found in sections dictionary!`
-                )
-                return null
-              }
+          if (s == null) {
+            console.error(
+              `Section type ${item.type} is not found in sections dictionary!`
+            )
+            return null
+          }
 
-              const SectionWrapper = rest.sectionAs || Box
+          const SectionWrapper = rest.sectionAs || Box
 
-              const sectionProps =
-                typeof rest.sectionProps === 'function'
-                  ? rest.sectionProps({
-                      count: index + 1,
-                      totalSections: section.items.length,
-                      section: item
-                    })
-                  : rest.sectionProps
+          const sectionProps =
+            typeof rest.sectionProps === 'function'
+              ? rest.sectionProps({
+                  count: index + 1,
+                  totalSections: section.items.length,
+                  section: item
+                })
+              : rest.sectionProps
 
-              return (
-                <HighlightTooltip
-                  key={item.id}
-                  id={`${name}-${index}`}
-                  as={SectionWrapper}
-                  isEditing={isEditing}
-                  actions={[
-                    <Button
-                      variant="jaenHighlightTooltipText"
-                      key={`section-field-tooltip-button-${item.id}`}>
-                      <Text as="span" noOfLines={1}>
-                        {s.Component.options.label}
-                      </Text>
-                    </Button>,
-                    <HStack
-                      spacing="0.5"
-                      key={`section-field-tooltip-buttons-${item.id}`}>
-                      <SectionBlockSelectorButton
-                        onBlockAdd={(block, type) => {
-                          handleSectionAdd(block, type, item)
-                        }}
-                        blocks={blocksForSelector}
-                        onlyAdd={false}
-                      />
-                      <IconButton
-                        variant="jaenHighlightTooltip"
-                        icon={<DeleteIcon />}
-                        aria-label="Delete"
-                        onClick={() => {
-                          void handleSectionDelete(
-                            item.id,
-                            item.ptrPrev,
-                            item.ptrNext
-                          )
-                        }}
-                      />
-                    </HStack>
-                  ]}
-                  asProps={{
-                    ...sectionProps
-                  }}>
-                  <Box>
-                    <JaenSectionBlockProvider
-                      path={sectionPath}
-                      id={item.id}
-                      position={index}
-                      Component={s.Component}
-                    />
-                  </Box>
-                </HighlightTooltip>
-              )
-            })}
-          </Wrapper>
-        </Box>
+          return (
+            <HighlightTooltip
+              key={item.id}
+              id={`${name}-${index}`}
+              as={SectionWrapper}
+              isEditing={isEditing}
+              actions={[
+                <Button
+                  variant="jaenHighlightTooltipText"
+                  key={`section-field-tooltip-button-${item.id}`}>
+                  <Text as="span" noOfLines={1}>
+                    {s.Component.options.label}
+                  </Text>
+                </Button>,
+                <HStack
+                  spacing="0.5"
+                  key={`section-field-tooltip-buttons-${item.id}`}>
+                  <SectionBlockSelectorButton
+                    onBlockAdd={(block, type) => {
+                      handleSectionAdd(block, type, item)
+                    }}
+                    blocks={blocksForSelector}
+                    onlyAdd={false}
+                  />
+                  <IconButton
+                    variant="jaenHighlightTooltip"
+                    icon={<DeleteIcon />}
+                    aria-label="Delete"
+                    onClick={() => {
+                      void handleSectionDelete(
+                        item.id,
+                        item.ptrPrev,
+                        item.ptrNext
+                      )
+                    }}
+                  />
+                </HStack>
+              ]}
+              asProps={{
+                p: '2',
+                ...sectionProps
+              }}>
+              <JaenSectionBlockProvider
+                path={sectionPath}
+                id={item.id}
+                position={index}
+                Component={s.Component}
+              />
+            </HighlightTooltip>
+          )
+        })}
       </HighlightTooltip>
     )
   }
