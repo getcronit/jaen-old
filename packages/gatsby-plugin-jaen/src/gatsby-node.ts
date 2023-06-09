@@ -79,11 +79,21 @@ export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = (
           {
             test: /filerobot-image-editor/,
             use: loaders.null()
+          },
+          {
+            test: /react-editor-js/,
+            use: loaders.null()
+          },
+          {
+            test: /@editorjs/,
+            use: loaders.null()
           }
         ]
       }
     })
   }
+
+  // Modify
 }
 
 export const createSchemaCustomization: GatsbyNode['onCreateWebpackConfig'] = ({
