@@ -82,6 +82,7 @@
     "remark-math": "^5.1.1",
     "rodemirror": "^2.0.0",
     "snek-query": "*",
+    "use-debounce": "^9.0.4",
     "uuid": "^9.0.0",
     "vanilla-cookieconsent": "^2.8.9",
     "vfile": "^5.3.7",
