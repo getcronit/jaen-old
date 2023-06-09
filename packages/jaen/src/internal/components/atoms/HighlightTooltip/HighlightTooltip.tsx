@@ -5,7 +5,7 @@ import {useHighlight} from '../../../context/HighlightContext.js'
 
 export interface HighlightTooltipProps {
   id?: string
-  children: React.ReactNode
+  children?: React.ReactNode
   as?: As
   asProps?: Record<string, any>
   actions: React.ReactNode[]
@@ -16,9 +16,7 @@ export const HighlightTooltip = forwardRef<
   HTMLDivElement,
   HighlightTooltipProps
 >((props, ref) => {
-  const {children, actions} = props
-
-  const {ref: highlightRef} = useHighlight({tooltipButtons: actions})
+  const {ref: highlightRef} = useHighlight({tooltipButtons: props.actions})
 
   const setRefs = useCallback(
     (node: HTMLDivElement) => {
@@ -46,7 +44,7 @@ export const HighlightTooltip = forwardRef<
       _focus={{
         outline: 'none'
       }}>
-      {children}
+      {props.children}
     </Wrapper>
   )
 })

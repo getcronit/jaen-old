@@ -6,7 +6,7 @@ import {connectField} from '../../connectors/index.js'
 import {HighlightTooltip} from '../../internal/components/index.js'
 import {useModals} from '../../internal/context/Modals/ModalContext.js'
 
-export interface TextFieldProps extends TextProps {
+export interface TextFieldProps extends Omit<TextProps, 'children'> {
   as?: As
   asAs?: As
   defaultValue?: string
@@ -52,7 +52,7 @@ export const TextField = connectField<string, TextFieldProps>(
     }, [jaenField.isEditing])
 
     const onContentBlur = useCallback((evt: FocusEvent) => {
-      handleTextSave((evt.currentTarget as HTMLElement).textContent)
+      handleTextSave((evt.currentTarget as HTMLElement).innerHTML)
     }, [])
 
     return (
@@ -78,7 +78,6 @@ export const TextField = connectField<string, TextFieldProps>(
             ...rest.style
           },
           contentEditable: jaenField.isEditing,
-          surpressContentEditableWarning: true,
           onBlur: onContentBlur
         }}>
         {jaenField.value || jaenField.staticValue || defaultValue}
