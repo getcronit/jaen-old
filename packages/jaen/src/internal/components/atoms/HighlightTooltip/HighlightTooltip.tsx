@@ -39,8 +39,6 @@ export const HighlightTooltip = forwardRef<
 
   return (
     <Wrapper
-      h="fit-content"
-      w="fit-content"
       {...props.asProps}
       id={props.id}
       ref={setRefs}

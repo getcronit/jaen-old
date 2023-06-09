@@ -39,7 +39,7 @@ export const connectField = <IValue, P = {}>(
           staticValue?: IValue
           value?: IValue
           isEditing: boolean
-          onUpdateValue: (value: IValue) => void
+          onUpdateValue: (value: IValue | undefined) => void
           register: (props: Record<string, any>) => void
         }
       }

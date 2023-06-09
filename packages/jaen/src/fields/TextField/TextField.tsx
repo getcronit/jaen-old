@@ -1,5 +1,6 @@
 import {As, Button, Text, TextProps, Tooltip} from '@chakra-ui/react'
-import {useEffect} from 'react'
+import {useCallback, useEffect} from 'react'
+import {useDebouncedCallback} from 'use-debounce'
 
 import {connectField} from '../../connectors/index.js'
 import {HighlightTooltip} from '../../internal/components/index.js'
@@ -22,15 +23,18 @@ export const TextField = connectField<string, TextFieldProps>(
       asAs = 'h2'
     }
 
-    const handleTextSave = (data: string) => {
-      jaenField.onUpdateValue(data)
+    const handleTextSave = useDebouncedCallback(
+      useCallback((data: string | null) => {
+        jaenField.onUpdateValue(data || undefined)
 
-      toast({
-        title: 'Text saved',
-        description: 'The text has been saved',
-        status: 'info'
-      })
-    }
+        toast({
+          title: 'Text saved',
+          description: 'The text has been saved',
+          status: 'info'
+        })
+      }, []),
+      500
+    )
 
     useEffect(() => {
       if (jaenField.isEditing) {
@@ -47,6 +51,10 @@ export const TextField = connectField<string, TextFieldProps>(
       }
     }, [jaenField.isEditing])
 
+    const onContentBlur = useCallback((evt: FocusEvent) => {
+      handleTextSave((evt.currentTarget as HTMLElement).textContent)
+    }, [])
+
     return (
       <HighlightTooltip
         id={jaenField.id}
@@ -59,24 +67,21 @@ export const TextField = connectField<string, TextFieldProps>(
             </Tooltip>
           </Button>
         ]}
-        isEditing={jaenField.isEditing}>
-        <Wrapper
-          {...rest}
-          style={{
+        isEditing={jaenField.isEditing}
+        as={Wrapper}
+        asProps={{
+          minW: '1rem',
+          ...rest,
+          className: jaenField.className,
+          style: {
             ...jaenField.style,
-            outline: '0px solid transparent'
-          }}
-          className={jaenField.className}
-          as={asAs}
-          contentEditable={jaenField.isEditing}
-          suppressContentEditableWarning
-          onBlur={(e: any) => {
-            console.log('e.target.value', e.target.textContent)
-
-            handleTextSave(e.target.textContent)
-          }}>
-          {jaenField.value || jaenField.staticValue || defaultValue}
-        </Wrapper>
+            ...rest.style
+          },
+          contentEditable: jaenField.isEditing,
+          surpressContentEditableWarning: true,
+          onBlur: onContentBlur
+        }}>
+        {jaenField.value || jaenField.staticValue || defaultValue}
       </HighlightTooltip>
     )
   },

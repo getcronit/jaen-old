@@ -7,7 +7,6 @@ import '@snek-at/jaen/dist/index.css'
 const {GatsbyRootWrapper, GatsbyPageWrapper} = internal
 
 export const wrapRootElement: GatsbySSR['wrapRootElement'] = ({element}) => {
-  // @ts-expect-error
   return <GatsbyRootWrapper ssr>{element}</GatsbyRootWrapper>
 }
 
@@ -16,7 +15,7 @@ export const wrapPageElement: GatsbySSR['wrapPageElement'] = ({
   props
 }) => {
   return (
-    // @ts-expect-error
+    // @ts-ignore-error
     <GatsbyPageWrapper pageProps={props} ssr>
       {element}
     </GatsbyPageWrapper>

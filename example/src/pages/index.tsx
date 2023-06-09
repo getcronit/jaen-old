@@ -253,14 +253,10 @@ const IndexPage = connectPage(
 
         <Field.Text
           as={Button}
+          asAs="span"
           name="textButton"
           defaultValue="textButton"
-          pos="relative"
-        >
-          <Box bg="orange" pos={"absolute"} top="0" right="0">
-            test
-          </Box>
-        </Field.Text>
+        ></Field.Text>
 
         <Box minW="sm" minH="sm">
           <Field.Image

@@ -16,17 +16,15 @@ const scrollTo = (id: any) => () => {
   } catch (e) {}
 }
 
-export const onRouteUpdate = ({location: {hash}}) => {
+export const onRouteUpdate = ({location: {hash}}: any) => {
   if (hash) {
     window.setTimeout(scrollTo(hash), 10)
   }
 }
 
 export const wrapRootElement: GatsbyBrowser['wrapRootElement'] = ({
-  element,
-  pathname
+  element
 }) => {
-  // @ts-expect-error
   return (
     <GatsbyRootWrapper>
       <CookieConsent />
@@ -39,6 +37,6 @@ export const wrapPageElement: GatsbyBrowser['wrapPageElement'] = ({
   element,
   props
 }) => {
-  // @ts-expect-error
+  // @ts-ignore-error
   return <GatsbyPageWrapper pageProps={props}>{element}</GatsbyPageWrapper>
 }
