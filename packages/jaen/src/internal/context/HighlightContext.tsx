@@ -144,10 +144,12 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = props => {
     find: (element: HTMLElement) => boolean
   ) => {
     let currentElement: HTMLElement | null = element
+    let index = -1
 
     while (currentElement) {
+      index++
       if (find(currentElement)) {
-        return currentElement
+        return {element: currentElement, index}
       }
 
       currentElement = currentElement.parentElement
@@ -258,33 +260,30 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = props => {
     }
 
     const mouseLeaveHandler = (e: MouseEvent) => {
-      if (!isEditing) return
+      if (!isEditing) {
+        return
+      }
 
       const relatedTarget = e.relatedTarget as HTMLElement
 
-      // check if relatedTarget is a itemsRef
+      const nextItem = items.find(item => item.ref === relatedTarget)
 
-      if (relatedTarget) {
-        const index = items.findIndex(item => {
-          return item.ref === relatedTarget
+      if (nextItem) {
+        nextItem?.ref?.focus({
+          preventScroll: true
         })
-
-        if (index !== -1) {
-          return
-        }
-
+      } else {
         const closestParent = findClosestParentMatching(
           relatedTarget,
-          element => {
-            return items.some(item => item.ref === element)
-          }
+          element => items.some(item => item.ref === element)
         )
 
-        // Get ref of relatedTarget
-        const relatedRef = items.find(item => item.ref === closestParent)
+        if (closestParent) {
+          const closestItem = items.find(
+            item => item.ref === closestParent.element
+          )
 
-        if (relatedRef?.ref) {
-          relatedRef.ref.focus({
+          closestItem?.ref?.focus({
             preventScroll: true
           })
         }
