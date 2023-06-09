@@ -14,6 +14,8 @@ export interface TextFieldProps extends Omit<TextProps, 'children'> {
 
 export const TextField = connectField<string, TextFieldProps>(
   ({jaenField, defaultValue, as: Wrapper = Text, asAs, ...rest}) => {
+    const value = jaenField.value || jaenField.staticValue || defaultValue
+
     const {toast} = useModals()
 
     // @ts-expect-error
@@ -24,15 +26,24 @@ export const TextField = connectField<string, TextFieldProps>(
     }
 
     const handleTextSave = useDebouncedCallback(
-      useCallback((data: string | null) => {
-        jaenField.onUpdateValue(data || undefined)
+      useCallback(
+        (data: string | null) => {
+          // skip if data has not changed
 
-        toast({
-          title: 'Text saved',
-          description: 'The text has been saved',
-          status: 'info'
-        })
-      }, []),
+          if (data === value) {
+            return
+          }
+
+          jaenField.onUpdateValue(data || undefined)
+
+          toast({
+            title: 'Text saved',
+            description: 'The text has been saved',
+            status: 'info'
+          })
+        },
+        [value]
+      ),
       500
     )
 
@@ -80,7 +91,7 @@ export const TextField = connectField<string, TextFieldProps>(
           contentEditable: jaenField.isEditing,
           onBlur: onContentBlur
         }}>
-        {jaenField.value || jaenField.staticValue || defaultValue}
+        {value}
       </HighlightTooltip>
     )
   },
