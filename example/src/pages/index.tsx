@@ -7,6 +7,7 @@ import {
   Button,
   Text,
   ButtonGroup,
+  HStack,
 } from "@chakra-ui/react"
 
 import {
@@ -256,7 +257,18 @@ const IndexPage = connectPage(
           asAs="span"
           name="textButton"
           defaultValue="textButton"
-        ></Field.Text>
+        />
+
+        <Field.Section
+          name="section"
+          label="Section"
+          blocks={[Card, FullImageCard, RotatedBox, GrowOnHover]}
+          as={HStack}
+          sectionProps={{
+            ref: (el: any) => console.log("ELEMENT", el),
+            color: "red",
+          }}
+        />
 
         <Box minW="sm" minH="sm">
           <Field.Image
