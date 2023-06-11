@@ -96,11 +96,18 @@ export const connectField = <IValue, P = {}>(
 
         const value = field.value || field.staticValue
 
-        id = `${value
-          .replace(/(<([^>]+)>)/gi, '')
-          .replace(/[^a-zA-Z0-9 ]/g, '')
-          .replace(/\s+/g, '-')
-          .toLowerCase()}`
+        if (value) {
+          id = `${value
+            .replace(/(<([^>]+)>)/gi, '')
+            .replace(/[^a-zA-Z0-9 ]/g, '')
+            .replace(/\s+/g, '-')
+            .toLowerCase()}`
+        }
+      }
+
+      if (!id) {
+        // fallback to name
+        id = name
       }
     }
 
