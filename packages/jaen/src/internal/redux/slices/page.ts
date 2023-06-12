@@ -200,6 +200,43 @@ const pagesSlice = createSlice({
       return state
     },
 
+    section_move(
+      state,
+      action: PayloadAction<{
+        pageId: string
+        path: SectionType['path']
+        sectionId: string
+        between: [string | null, string | null]
+        move: {
+          direction: 'up' | 'down'
+          ptrNew: string | null
+        }
+      }>
+    ) {
+      const {pageId, path, sectionId, between, move} = action.payload
+
+      // find the page
+      // Create the page if not found
+      state.nodes[pageId] = {
+        ...state.nodes[pageId],
+        children: state.nodes[pageId]?.children || []
+      }
+
+      const page = state.nodes[pageId] as IJaenPage
+
+      const sections = page.sections || []
+
+      insertSectionIntoTree(sections, path, {
+        between,
+        sectionId,
+        move
+      })
+
+      page.sections = sections
+
+      return state
+    },
+
     section_register(
       state,
       action: PayloadAction<{

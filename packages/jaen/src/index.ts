@@ -8,6 +8,7 @@ export {
   connectTemplate,
   connectView
 } from './connectors/index.js'
+export {Editor} from './Editor.js'
 export * from './fields/index.js'
 export {usePageManager} from './internal/context/AdminPageManager/AdminPageManager.js'
 export {useAuthentication} from './internal/context/AuthenticationContext.js'

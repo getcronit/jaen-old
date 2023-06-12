@@ -251,6 +251,18 @@ const IndexPage = connectPage(
         <Button>Button 111323</Button>
         <Button>Button 111323</Button>
 
+        <Box maxH="sm">
+          <img src="https://i.giphy.com/media/duzpaTbCUy9Vu/giphy.webp" />
+        </Box>
+
+        <Box maxH="sm">
+          <Field.Image
+            name="image0"
+            defaultValue={"https://i.giphy.com/media/duzpaTbCUy9Vu/giphy.webp"}
+            raw
+          />
+        </Box>
+
         <Field.Text
           as={Button}
           asAs="span"

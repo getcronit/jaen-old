@@ -1,6 +1,6 @@
 import deepmerge from 'deepmerge'
 import * as React from 'react'
-import {IJaenBlock} from '../../../types.js'
+import {IJaenBlock, IJaenSection} from '../../../types.js'
 import {deepmergeArrayIdMerge} from '../../../utils/deepmerge.js'
 import {usePageContext} from '../../context/PageProvider.js'
 import {useSectionBlockContext} from '../../context/SectionBlockContext.js'
@@ -48,33 +48,22 @@ export function useSectionData(
         return false
       }
 
-      if (l === null && r === null) {
-        return true
+      const stringifyWithExclusion = (
+        obj: IJaenSection | null,
+        excludedKey: string
+      ) => {
+        return JSON.stringify(obj, (key, value) => {
+          if (key === excludedKey) {
+            return undefined // Exclude the specified key
+          }
+          return value
+        })
       }
 
-      if (l === null || r === null) {
-        return false
-      }
-
-      const shouldUpdate =
-        JSON.stringify(Object.keys(l.items)) !==
-        JSON.stringify(Object.keys(r.items))
-
-      if (shouldUpdate) {
-        return false
-      }
-
-      for (let i = 0; i < l.items.length; i++) {
-        const lItem = l.items[i]
-        const rItem = r.items[i]
-
-        // check if deleted is not equal
-        if (lItem?.deleted !== rItem?.deleted) {
-          return false
-        }
-      }
-
-      return true
+      return (
+        stringifyWithExclusion(l, 'jaenFields') ===
+        stringifyWithExclusion(r, 'jaenFields')
+      )
     }
   )
 

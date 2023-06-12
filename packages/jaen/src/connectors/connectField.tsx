@@ -1,4 +1,5 @@
-import {memo, useCallback} from 'react'
+import React, {useCallback} from 'react'
+import {TuneSelectorProps} from '../internal/components/index.js'
 import {SectionBlockContextType} from '../internal/context/SectionBlockContext.js'
 import {useField} from '../internal/hooks/field/useField.js'
 import {usePopupField} from '../internal/hooks/field/usePopupField.js'
@@ -11,6 +12,7 @@ export interface JaenFieldProps {
   className?: string
   relatedName?: string
   idStrategy?: 'auto' | 'value'
+  tunes?: TuneSelectorProps['tunes']
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -41,6 +43,9 @@ export const connectField = <IValue, P = {}>(
           isEditing: boolean
           onUpdateValue: (value: IValue | undefined) => void
           register: (props: Record<string, any>) => void
+
+          tuneProps: TuneSelectorProps['tuneProps']
+          tune: (props: TuneSelectorProps['tuneProps']) => void
         }
       }
     >
@@ -54,8 +59,10 @@ export const connectField = <IValue, P = {}>(
     className,
     idStrategy = 'auto',
     relatedName,
+    tunes,
     ...rest
   }) => {
+    console.log('Rest', rest, tunes)
     let field: {
       register: any
       staticValue: any
@@ -65,6 +72,7 @@ export const connectField = <IValue, P = {}>(
       jaenPopupId?: string
       jaenPageId?: string
       SectionBlockContext?: SectionBlockContextType | undefined
+      props?: Record<string, any>
     }
 
     try {
@@ -120,15 +128,30 @@ export const connectField = <IValue, P = {}>(
     // }, [id, relatedName, field.isEditing])
 
     const register = useCallback(
-      (props: Record<string, any>) => {
+      (newProps: Record<string, any>) => {
         field.register({
           id,
           relatedName,
-          ...props
+          ...field.props,
+          ...newProps
         })
       },
-      [id, relatedName]
+      [id, relatedName, field.props]
     )
+
+    const tune = useCallback(
+      (props: Record<string, any>) => {
+        register({
+          tuneProps: {
+            ...field.props?.tuneProps,
+            ...props
+          }
+        })
+      },
+      [field.props?.tuneProps, register]
+    )
+
+    console.log('Field props', field)
 
     return (
       <Component
@@ -141,9 +164,12 @@ export const connectField = <IValue, P = {}>(
           isEditing: field.isEditing,
           onUpdateValue: field.write,
           register,
+          tune,
           style,
           className,
-          relatedName
+          relatedName,
+          tunes,
+          tuneProps: field.props?.tuneProps || {}
         }}
         {...(rest as P)}
       />
@@ -152,7 +178,7 @@ export const connectField = <IValue, P = {}>(
 
   MyComp.options = options
 
-  return memo(MyComp)
+  return React.memo(MyComp)
 }
 
 export type IFieldConnection = ReturnType<typeof connectField>

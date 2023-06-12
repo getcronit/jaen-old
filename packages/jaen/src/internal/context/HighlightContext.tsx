@@ -5,7 +5,6 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useMemo,
   useRef,
   useState
 } from 'react'
@@ -170,6 +169,13 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = props => {
         if (index === -1) {
           setItems([...items, {ref, tooltipButtons}])
         }
+
+        // if tooltipButtons are different, update it
+        if (items[index]?.tooltipButtons !== tooltipButtons) {
+          const newItems = [...items]
+          newItems[index] = {ref, tooltipButtons}
+          setItems(newItems)
+        }
       }
 
       console.log('ref', ref)
@@ -295,6 +301,19 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = props => {
 
       const element = e.target as HTMLElement
 
+      // set the cursor to the end of the element if it is a contenteditable element
+      if (element.isContentEditable) {
+        const range = document.createRange()
+        const selection = window.getSelection()
+
+        if (!selection) return
+
+        range.selectNodeContents(element)
+        range.collapse(false)
+        selection.removeAllRanges()
+        selection.addRange(range)
+      }
+
       setHighlight(element)
     }
 
@@ -346,13 +365,9 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = props => {
     }
   }, [isEditing, items])
 
-  const children = useMemo(() => {
-    return props.children
-  }, [props.children])
-
   return (
     <HighlightProviderContext.Provider value={{ref}}>
-      {children}
+      {props.children}
     </HighlightProviderContext.Provider>
   )
 }

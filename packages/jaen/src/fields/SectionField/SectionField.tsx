@@ -1,6 +1,6 @@
-import {DeleteIcon} from '@chakra-ui/icons'
-import {Box, Button, HStack, IconButton, Stack, Text} from '@chakra-ui/react'
+import {Box, Button, HStack, Stack, Text} from '@chakra-ui/react'
 import * as React from 'react'
+import {FaArrowDown, FaArrowUp, FaTrash} from 'react-icons/fa'
 import {FiBox} from 'react-icons/fi'
 
 import {IBlockConnection} from '../../connectors/index.js'
@@ -8,7 +8,8 @@ import {
   HighlightTooltip,
   SectionBlockSelectorButton,
   SelectorBlockAddType,
-  SelectorBlockType
+  SelectorBlockType,
+  TuneSelectorButton
 } from '../../internal/components/index.js'
 import {useModals} from '../../internal/context/Modals/ModalContext.js'
 import {JaenSectionBlockProvider} from '../../internal/context/SectionBlockContext.js'
@@ -44,6 +45,7 @@ export const SectionField = withRedux(
     const {
       onSectionAdd,
       onSectionDelete,
+      onSectionMove,
       onSectionAppend,
       onSectionPrepend,
       section,
@@ -135,19 +137,19 @@ export const SectionField = withRedux(
       ])
     }
 
+    console.log('section', section)
+
     return (
       <HighlightTooltip
         id={name}
         isEditing={isEditing}
         actions={tooltipButtons}
         as={Wrapper}
-        asProps={{
-          minH: '64',
-          p: '4',
-          ...rest.props,
-          className: rest.className,
-          style: rest.style
-        }}>
+        minH="64"
+        p="4"
+        className={rest.className}
+        style={rest.style}
+        {...rest.props}>
         {section.items.map((item, index) => {
           const s = sectionsDict[item.type]
 
@@ -183,34 +185,73 @@ export const SectionField = withRedux(
                     {s.Component.options.label}
                   </Text>
                 </Button>,
-                <HStack
-                  spacing="0.5"
-                  key={`section-field-tooltip-buttons-${item.id}`}>
-                  <SectionBlockSelectorButton
-                    onBlockAdd={(block, type) => {
-                      handleSectionAdd(block, type, item)
-                    }}
-                    blocks={blocksForSelector}
-                    onlyAdd={false}
-                  />
-                  <IconButton
-                    variant="jaenHighlightTooltip"
-                    icon={<DeleteIcon />}
-                    aria-label="Delete"
-                    onClick={() => {
-                      void handleSectionDelete(
-                        item.id,
-                        item.ptrPrev,
-                        item.ptrNext
-                      )
-                    }}
-                  />
-                </HStack>
+                <SectionBlockSelectorButton
+                  key={`section-field-tooltip-block-selector-${item.id}`}
+                  onBlockAdd={(block, type) => {
+                    handleSectionAdd(block, type, item)
+                  }}
+                  blocks={blocksForSelector}
+                  onlyAdd={false}
+                />,
+                <TuneSelectorButton
+                  key={`section-field-tooltip-tune-selector-${item.id}`}
+                  tunes={[
+                    {
+                      type: 'tune',
+                      name: 'move-up',
+                      label: 'Move up',
+                      isActive: item.id === section.ptrHead,
+                      Icon: FaArrowUp,
+                      onTune: () => {
+                        const prevItem =
+                          section.items.find(el => el.id === item.ptrPrev)
+                            ?.ptrPrev || null
+
+                        onSectionMove(
+                          item.id,
+                          item.ptrPrev,
+                          item.ptrNext,
+                          prevItem,
+                          'up'
+                        )
+                      },
+                      isHiddenOnActive: true
+                    },
+                    {
+                      type: 'tune',
+                      name: 'move-down',
+                      label: 'Move down',
+                      isActive: item.id === section.ptrTail,
+                      Icon: FaArrowDown,
+                      onTune: () => {
+                        const nextItem =
+                          section.items.find(el => el.id === item.ptrNext)
+                            ?.ptrNext || null
+
+                        onSectionMove(
+                          item.id,
+                          item.ptrPrev,
+                          item.ptrNext,
+                          nextItem,
+                          'down'
+                        )
+                      },
+                      isHiddenOnActive: true
+                    },
+                    {
+                      type: 'tune',
+                      name: 'delete',
+                      label: 'Delete',
+                      Icon: FaTrash,
+                      onTune: () => {
+                        handleSectionDelete(item.id, item.ptrPrev, item.ptrNext)
+                      }
+                    }
+                  ]}
+                />
               ]}
-              asProps={{
-                p: '2',
-                ...sectionProps
-              }}>
+              p="2"
+              {...sectionProps}>
               <JaenSectionBlockProvider
                 path={sectionPath}
                 id={item.id}

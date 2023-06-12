@@ -1,13 +1,18 @@
-import {As, Box} from '@chakra-ui/react'
+import {As, Box, BoxProps} from '@chakra-ui/react'
 import React, {forwardRef, useCallback} from 'react'
 
 import {useHighlight} from '../../../context/HighlightContext.js'
 
-export interface HighlightTooltipProps {
+export interface HighlightTooltipProps extends Omit<BoxProps, 'children'> {
   id?: string
-  children?: React.ReactNode
+  children?:
+    | React.ReactNode
+    | ((props: {
+        ref: (node: HTMLDivElement) => void
+        tabIndex?: number
+      }) => React.ReactNode)
   as?: As
-  asProps?: Record<string, any>
+  asAs?: As
   actions: React.ReactNode[]
   isEditing?: boolean
 }
@@ -15,8 +20,8 @@ export interface HighlightTooltipProps {
 export const HighlightTooltip = forwardRef<
   HTMLDivElement,
   HighlightTooltipProps
->((props, ref) => {
-  const {ref: highlightRef} = useHighlight({tooltipButtons: props.actions})
+>(({actions, as, asAs, isEditing, children, ...props}, ref) => {
+  const {ref: highlightRef} = useHighlight({tooltipButtons: actions})
 
   const setRefs = useCallback(
     (node: HTMLDivElement) => {
@@ -33,18 +38,35 @@ export const HighlightTooltip = forwardRef<
     [ref, highlightRef]
   )
 
-  const Wrapper = props.as || Box
+  const Wrapper = as || Box
+
+  console.log('HighlightTooltip', props, asAs)
+
+  if (typeof children === 'function') {
+    return (
+      <Wrapper
+        {...props}
+        as={asAs}
+        id={props.id}
+        _focus={{
+          outline: 'none'
+        }}>
+        {children({ref: setRefs, tabIndex: isEditing ? 1 : undefined})}
+      </Wrapper>
+    )
+  }
 
   return (
     <Wrapper
-      {...props.asProps}
-      id={props.id}
+      {...props}
       ref={setRefs}
-      tabIndex={props.isEditing ? 1 : undefined}
+      as={asAs}
+      id={props.id}
+      tabIndex={isEditing ? 1 : undefined}
       _focus={{
         outline: 'none'
       }}>
-      {props.children}
+      {children}
     </Wrapper>
   )
 })

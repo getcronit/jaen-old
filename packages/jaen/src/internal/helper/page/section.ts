@@ -35,12 +35,17 @@ export const insertSectionIntoTree = (
     sectionId?: string
     shouldDelete?: true
     blockData?: Partial<IJaenBlock>
+    move?: {
+      direction: 'up' | 'down'
+      ptrNew: string | null
+    }
   }
 ): IJaenSection | null => {
   const between = options?.between
   const sectionId = options?.sectionId
   const shouldDelete = options?.shouldDelete
   const blockData = options?.blockData || {}
+  const move = options?.move
 
   const [head, ...tail] = path
 
@@ -119,6 +124,71 @@ export const insertSectionIntoTree = (
               section.ptrHead = null
               section.ptrTail = null
             }
+          }
+        } else if (sectionId && move && between) {
+          const [prev, next] = between
+          const {direction, ptrNew} = move
+
+          if (direction === 'down') {
+            if (ptrNew) {
+              updateItem(section.items, ptrNew, {
+                ptrPrev: sectionId
+              })
+            } else {
+              section.ptrTail = sectionId
+            }
+
+            if (prev) {
+              updateItem(section.items, prev, {
+                ptrNext: next
+              })
+            } else {
+              section.ptrHead = next
+            }
+
+            if (next) {
+              updateItem(section.items, next, {
+                ptrPrev: prev,
+                ptrNext: sectionId
+              })
+            } else {
+              section.ptrTail = sectionId
+            }
+
+            updateItem(section.items, sectionId, {
+              ptrPrev: next,
+              ptrNext: ptrNew
+            })
+          } else if (direction === 'up') {
+            if (ptrNew) {
+              updateItem(section.items, ptrNew, {
+                ptrNext: sectionId
+              })
+            } else {
+              section.ptrHead = sectionId
+            }
+
+            if (prev) {
+              updateItem(section.items, prev, {
+                ptrNext: next,
+                ptrPrev: sectionId
+              })
+            } else {
+              section.ptrHead = sectionId
+            }
+
+            if (next) {
+              updateItem(section.items, next, {
+                ptrPrev: prev
+              })
+            } else {
+              section.ptrTail = prev
+            }
+
+            updateItem(section.items, sectionId, {
+              ptrPrev: ptrNew,
+              ptrNext: prev
+            })
           }
         } else {
           // Generate a new id in the pattern of `JaenSection {uuid}`

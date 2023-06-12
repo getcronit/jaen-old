@@ -58,7 +58,7 @@ const IndexPage = connectPage(
 
         <Field.Image name="image" />
 
-        <Field.RichText name="richtext" defaultValue="Rich Text" my="24" />
+        {/* <Field.RichText name="richtext" defaultValue="Rich Text" my="24" /> */}
       </>
     )
   },

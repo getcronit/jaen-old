@@ -29,9 +29,13 @@ export function useField<IValue>(
 
   const SectionBlockContext = useSectionBlockContext()
 
-  function getPageField(
-    page: IJaenPage | Partial<IJaenPage> | null
-  ): IValue | undefined {
+  function getPageField(page: IJaenPage | Partial<IJaenPage> | null):
+    | {
+        value: IValue
+        props?: Record<string, any>
+        position?: number
+      }
+    | undefined {
     if (page) {
       let fields
 
@@ -46,13 +50,13 @@ export function useField<IValue>(
         fields = page.jaenFields
       }
 
-      return fields?.[type]?.[name]?.value
+      return fields?.[type]?.[name]
     }
 
     return undefined
   }
 
-  const getValue = () => {
+  const getField = () => {
     const state = store.getState() as RootState
 
     const page = state.page.pages.nodes[jaenPage.id]
@@ -64,7 +68,7 @@ export function useField<IValue>(
     return undefined
   }
 
-  const getStaticValue = () => {
+  const getStaticField = () => {
     const page = jaenPage
 
     if (page) {
@@ -74,25 +78,31 @@ export function useField<IValue>(
     return undefined
   }
 
-  const [value, setValue] = React.useState<IValue | undefined>(getValue)
+  const [field, setField] =
+    React.useState<
+      | {
+          value?: IValue
+          props?: Record<string, any>
+          position?: number
+        }
+      | undefined
+    >(getField)
 
   React.useEffect(() => {
     const unsubscribe = store.subscribe(() => {
-      const newValue = getValue()
+      const newField = getField()
 
-      console.log('new value', newValue, value, store.getState())
-
-      if (newValue !== value) {
-        setValue(newValue)
+      if (newField !== field) {
+        setField(newField)
       }
     })
 
     return () => {
       unsubscribe()
     }
-  }, [value, store])
+  }, [field, store])
 
-  const staticValue = getStaticValue()
+  const staticField = getStaticField()
 
   const {isEditing} = useStatus()
 
@@ -113,9 +123,12 @@ export function useField<IValue>(
         })
       )
 
-      setValue(newValue || undefined)
+      setField({
+        ...field,
+        value: newValue || undefined
+      })
     },
-    [jaenPage.id, SectionBlockContext, type, name, value, store]
+    [jaenPage.id, SectionBlockContext, type, name, field, store]
   )
 
   const register = React.useCallback(
@@ -139,8 +152,9 @@ export function useField<IValue>(
   )
 
   return {
-    value,
-    staticValue,
+    value: field?.value,
+    staticValue: staticField?.value,
+    props: field?.props || staticField?.props || {},
     jaenPageId: jaenPage.id,
     isEditing,
     SectionBlockContext,

@@ -1,9 +1,23 @@
-import {As, Button, Text, TextProps, Tooltip} from '@chakra-ui/react'
+import {As, Box, Button, Text, TextProps, Tooltip} from '@chakra-ui/react'
+import DOMPurify from 'dompurify'
 import {useCallback, useEffect} from 'react'
+import {
+  FaAlignCenter,
+  FaAlignJustify,
+  FaAlignLeft,
+  FaAlignRight,
+  FaBold,
+  FaItalic,
+  FaUnderline
+} from 'react-icons/fa'
 import {useDebouncedCallback} from 'use-debounce'
 
 import {connectField} from '../../connectors/index.js'
-import {HighlightTooltip} from '../../internal/components/index.js'
+import {
+  HighlightTooltip,
+  TuneSelectorButton
+} from '../../internal/components/index.js'
+import {TuneOption} from '../../internal/components/molecules/TuneSelector/TuneSelector.js'
 import {useModals} from '../../internal/context/Modals/ModalContext.js'
 
 export interface TextFieldProps extends Omit<TextProps, 'children'> {
@@ -14,7 +28,7 @@ export interface TextFieldProps extends Omit<TextProps, 'children'> {
 
 export const TextField = connectField<string, TextFieldProps>(
   ({jaenField, defaultValue, as: Wrapper = Text, asAs, ...rest}) => {
-    const value = jaenField.value || jaenField.staticValue || defaultValue
+    const value = jaenField.value || jaenField.staticValue || defaultValue || ''
 
     const {toast} = useModals()
 
@@ -62,9 +76,87 @@ export const TextField = connectField<string, TextFieldProps>(
       }
     }, [jaenField.isEditing])
 
-    const onContentBlur = useCallback((evt: FocusEvent) => {
-      handleTextSave((evt.currentTarget as HTMLElement).innerHTML)
-    }, [])
+    const handleContentBlur: React.FocusEventHandler<HTMLSpanElement> =
+      useCallback(evt => {
+        const value = DOMPurify.sanitize(evt.currentTarget.innerHTML, {
+          ALLOWED_TAGS: ['br', 'div', 'span'],
+          ALLOWED_ATTR: []
+        })
+
+        handleTextSave(value)
+      }, [])
+
+    const alignmentTune: TuneOption = {
+      type: 'groupTune',
+      label: 'Alignment',
+      tunes: [
+        {
+          name: 'left',
+          Icon: FaAlignLeft,
+          props: {
+            textAlign: 'left'
+          },
+          isActive: props => props.textAlign === 'left'
+        },
+        {
+          name: 'center',
+          Icon: FaAlignCenter,
+          props: {
+            textAlign: 'center'
+          },
+          isActive: props => props.textAlign === 'center'
+        },
+        {
+          name: 'right',
+          Icon: FaAlignRight,
+          props: {
+            textAlign: 'right'
+          },
+          isActive: props => props.textAlign === 'right'
+        },
+        {
+          name: 'justify',
+          Icon: FaAlignJustify,
+          props: {
+            textAlign: 'justify'
+          },
+          isActive: props => props.textAlign === 'justify'
+        }
+      ]
+    }
+
+    const styleTunes: TuneOption = {
+      type: 'groupTune',
+      label: 'Style',
+      tunes: [
+        {
+          name: 'bold',
+          Icon: FaBold,
+          isActive: props => props.fontWeight === 'bold',
+          props: {
+            fontWeight: 'bold'
+          }
+        },
+        {
+          name: 'italic',
+          Icon: FaItalic,
+          isActive: props => props.fontStyle === 'italic',
+          props: {
+            fontStyle: 'italic'
+          }
+        },
+        {
+          name: 'underline',
+          Icon: FaUnderline,
+          isActive: props => props.textDecoration === 'underline',
+          props: {
+            textDecoration: 'underline'
+          }
+        }
+      ]
+    }
+
+    console.log('TextField', jaenField)
 
     return (
       <HighlightTooltip
@@ -76,22 +168,37 @@ export const TextField = connectField<string, TextFieldProps>(
             <Tooltip label={`ID: ${jaenField.id}`} placement="top-start">
               <Text>Text</Text>
             </Tooltip>
-          </Button>
+          </Button>,
+          <TuneSelectorButton
+            key={`jaen-highlight-tooltip-tune-${jaenField.name}`}
+            tunes={[styleTunes, alignmentTune, ...(jaenField.tunes || [])]}
+            tuneProps={jaenField.tuneProps}
+            onTune={jaenField.tune}
+          />
         ]}
         isEditing={jaenField.isEditing}
         as={Wrapper}
-        asProps={{
-          minW: '1rem',
-          ...rest,
-          className: jaenField.className,
-          style: {
-            ...jaenField.style,
-            ...rest.style
-          },
-          contentEditable: jaenField.isEditing,
-          onBlur: onContentBlur
-        }}>
-        {value}
+        asAs={asAs}
+        minW="1rem"
+        className={jaenField.className}
+        style={{
+          ...jaenField.style,
+          ...rest.style
+        }}
+        {...rest}
+        {...jaenField.tuneProps}>
+        {props => (
+          <Box
+            ref={props.ref}
+            tabIndex={props.tabIndex}
+            as="span"
+            display="block"
+            outline="none"
+            dangerouslySetInnerHTML={{__html: value}}
+            contentEditable={jaenField.isEditing}
+            onBlur={handleContentBlur}
+          />
+        )}
       </HighlightTooltip>
     )
   },

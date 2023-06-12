@@ -232,9 +232,7 @@ export const ImageField = connectField<ImageFieldValue, ImageFieldProps>(
           </ButtonGroup>
         ]}
         isEditing={jaenField.isEditing}
-        asProps={{
-          boxSize: 'full'
-        }}>
+        boxSize="full">
         {
           // The box is needed because the highlight tooltip will not work if the image is the only child
         }

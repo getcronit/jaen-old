@@ -20,6 +20,13 @@ export interface UseSectionField {
     ptrPrev: string | null,
     ptrNext: string | null
   ) => void
+  onSectionMove: (
+    id: string,
+    ptrPrev: string | null,
+    ptrNext: string | null,
+    ptrNew: string | null,
+    direction: 'up' | 'down'
+  ) => void
   onSectionAppend: (
     sectionName: string,
     id: string,
@@ -123,6 +130,30 @@ export const useSectionField = (
     []
   )
 
+  const onSectionMove = useCallback(
+    (
+      id: string,
+      ptrPrev: string | null,
+      ptrNext: string | null,
+      ptrNew: string | null,
+      direction: 'up' | 'down'
+    ) => {
+      store.dispatch(
+        actions.section_move({
+          pageId: jaenPage.id,
+          sectionId: id,
+          path: sectionPath,
+          between: [ptrPrev, ptrNext],
+          move: {
+            direction,
+            ptrNew
+          }
+        })
+      )
+    },
+    []
+  )
+
   const onSectionAppend = useCallback(
     (sectionName: string, id: string, ptrNext: string | null) => {
       onSectionAdd(sectionName, [id, ptrNext || null])
@@ -140,6 +171,7 @@ export const useSectionField = (
   return {
     onSectionAdd,
     onSectionDelete,
+    onSectionMove,
     onSectionAppend,
     onSectionPrepend,
     section,
