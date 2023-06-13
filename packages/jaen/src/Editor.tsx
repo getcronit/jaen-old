@@ -1,15 +1,18 @@
 import {Box, Heading} from '@chakra-ui/react'
 import {connectBlock} from './connectors/connectBlock.js'
 import {Field} from './fields/index.js'
+import {SectionFieldProps} from './fields/SectionField/SectionField.js'
 
-export interface EditorProps {}
+export interface EditorProps {
+  blocks: SectionFieldProps['blocks']
+}
 
-export const Editor: React.FC<EditorProps> = () => {
+export const Editor: React.FC<EditorProps> = props => {
   return (
     <Field.Section
       name="editor"
       label="Editor"
-      blocks={[HeadingBlock, TextBlock, ImageBlock]}
+      blocks={[HeadingBlock, TextBlock, ImageBlock, ...props.blocks]}
     />
   )
 }
