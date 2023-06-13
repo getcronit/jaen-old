@@ -16,7 +16,7 @@ export const Editor: React.FC<EditorProps> = () => {
 
 const TextBlock = connectBlock(
   () => {
-    return <Field.Text name="text" />
+    return <Field.Text name="text" defaultValue="Example Text" />
   },
   {
     label: 'TextBlock',
@@ -30,6 +30,7 @@ const HeadingBlock = connectBlock(
       <Field.Text
         as={Heading}
         name="heading"
+        defaultValue="Example Heading"
         textAlign="center"
         tunes={[
           {
