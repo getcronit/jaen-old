@@ -4,15 +4,15 @@ import {Field} from './fields/index.js'
 import {SectionFieldProps} from './fields/SectionField/SectionField.js'
 
 export interface EditorProps {
-  blocks: SectionFieldProps['blocks']
+  blocks?: SectionFieldProps['blocks']
 }
 
-export const Editor: React.FC<EditorProps> = props => {
+export const Editor: React.FC<EditorProps> = ({blocks = []}) => {
   return (
     <Field.Section
       name="editor"
       label="Editor"
-      blocks={[HeadingBlock, TextBlock, ImageBlock, ...props.blocks]}
+      blocks={[HeadingBlock, TextBlock, ImageBlock, ...blocks]}
     />
   )
 }
