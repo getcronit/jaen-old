@@ -5060,10 +5060,10 @@
     escape-string-regexp "^2.0.0"
     lodash.deburr "^4.1.0"
 
-"@snek-at/snek-finder@^1.0.0-beta.25":
-  version "1.0.0-beta.25"
-  resolved "https://registry.yarnpkg.com/@snek-at/snek-finder/-/snek-finder-1.0.0-beta.25.tgz#edd0082f7026297ac8f4b56e4252617968ebc389"
-  integrity sha512-xSOAB+z5AHOzdNc+LElxMUH7kw9eSJ3v+EYuUoVXlIpDwdXIYq0jDg26KAfWie1UFRLfa2l+nZYl7qCLil3jwg==
+"@snek-at/snek-finder@^1.0.0-beta.29":
+  version "1.0.0-beta.29"
+  resolved "https://registry.yarnpkg.com/@snek-at/snek-finder/-/snek-finder-1.0.0-beta.29.tgz#3c170a347fd64cd1f609a7896c90bd021dd71178"
+  integrity sha512-S/5fmhYJvBUHdbKHLL2zfBLcscMx5ED2wU+kXZ8vcPZf/rjy6MpF7BKAZXubRdRdK9j97ccxel32KUYfF7NoOg==
   dependencies:
     "@chakra-ui/icons" "^2"
     "@chakra-ui/react" "^2.5.5"
@@ -5083,6 +5083,7 @@
     react-dropzone "^14.2.3"
     react-filerobot-image-editor "^4.4.0"
     react-hook-form "^7.43.9"
+    react-lazy-load-image-component "^1.6.0"
     react-pdf "^6.2.2"
     react-table "^7.8.0"
     react-zoom-pan-pinch "^3.0.7"
@@ -18729,6 +18730,14 @@ react-konva@18.2.5:
     its-fine "^1.0.6"
     react-reconciler "~0.29.0"
     scheduler "^0.23.0"
+
+react-lazy-load-image-component@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/react-lazy-load-image-component/-/react-lazy-load-image-component-1.6.0.tgz#f262c2f163052d71011e282031fd60aafa6494ac"
+  integrity sha512-8KFkDTgjh+0+PVbH+cx0AgxLGbdTsxWMnxXzU5HEUztqewk9ufQAu8cstjZhyvtMIPsdMcPZfA0WAa7HtjQbBQ==
+  dependencies:
+    lodash.debounce "^4.0.8"
+    lodash.throttle "^4.1.1"
 
 react-lifecycles-compat@^3.0.4:
   version "3.0.4"

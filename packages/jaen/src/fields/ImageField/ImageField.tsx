@@ -16,6 +16,7 @@ import {
   ImageAltSelector,
   ImageChooseButton
 } from '../../internal/components/index.js'
+import {ImageEditButton} from '../../internal/components/molecules/ImageEditButton/ImageEditButton.js'
 import {useModals} from '../../internal/context/Modals/ModalContext.js'
 import {DataImage} from './DataImage.js'
 import {ImageFieldValue, ImageProps} from './types.js'
@@ -217,6 +218,17 @@ export const ImageField = connectField<ImageFieldValue, ImageFieldProps>(
             size="xs"
             spacing="0.5">
             <ImageChooseButton onClick={handleImageChooseClick} />
+
+            <ImageEditButton
+              src={value.internalImageUrl}
+              name={jaenField.name}
+              onUpdate={({src}) => {
+                jaenField.onUpdateValue({
+                  ...jaenField.value,
+                  internalImageUrl: src
+                })
+              }}
+            />
 
             <IconButton
               variant="jaenHighlightTooltip"
