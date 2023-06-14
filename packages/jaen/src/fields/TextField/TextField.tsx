@@ -78,12 +78,7 @@ export const TextField = connectField<string, TextFieldProps>(
 
     const handleContentBlur: React.FocusEventHandler<HTMLSpanElement> =
       useCallback(evt => {
-        const value = DOMPurify.sanitize(evt.currentTarget.innerHTML, {
-          ALLOWED_TAGS: ['br', 'div', 'span'],
-          ALLOWED_ATTR: []
-        })
-
-        handleTextSave(value)
+        handleTextSave(evt.currentTarget.innerHTML)
       }, [])
 
     const alignmentTune: TuneOption = {
@@ -156,7 +151,7 @@ export const TextField = connectField<string, TextFieldProps>(
       ]
     }
 
-    console.log('TextField', jaenField)
+    // add event listener for selection change
 
     return (
       <HighlightTooltip
@@ -171,7 +166,20 @@ export const TextField = connectField<string, TextFieldProps>(
           </Button>,
           <TuneSelectorButton
             key={`jaen-highlight-tooltip-tune-${jaenField.name}`}
-            tunes={[styleTunes, alignmentTune, ...(jaenField.tunes || [])]}
+            aria-label="Customize"
+            tunes={[styleTunes]}
+            icon={
+              <Text as="span" fontSize="sm" fontFamily="serif">
+                T
+              </Text>
+            }
+            tuneProps={jaenField.tuneProps}
+            onTune={jaenField.tune}
+          />,
+          <TuneSelectorButton
+            key={`jaen-highlight-tooltip-tune-${jaenField.name}`}
+            aria-label="Customize"
+            tunes={[alignmentTune, ...(jaenField.tunes || [])]}
             tuneProps={jaenField.tuneProps}
             onTune={jaenField.tune}
           />
@@ -197,6 +205,18 @@ export const TextField = connectField<string, TextFieldProps>(
             dangerouslySetInnerHTML={{__html: value}}
             contentEditable={jaenField.isEditing}
             onBlur={handleContentBlur}
+            onPaste={evt => {
+              evt.preventDefault()
+
+              const text = evt.clipboardData.getData('text/plain')
+
+              const purifiedText = DOMPurify.sanitize(text, {
+                ALLOWED_TAGS: ['br', 'span', 'div'],
+                ALLOWED_ATTR: []
+              })
+
+              jaenField.onUpdateValue(purifiedText)
+            }}
           />
         )}
       </HighlightTooltip>
