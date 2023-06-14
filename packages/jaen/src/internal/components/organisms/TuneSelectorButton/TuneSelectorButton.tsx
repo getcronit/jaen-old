@@ -1,10 +1,9 @@
-import {DragHandleIcon} from '@chakra-ui/icons'
-import {Box, Flex, IconButton, IconButtonProps} from '@chakra-ui/react'
+import {Box, Flex, Icon, IconButton, IconButtonProps} from '@chakra-ui/react'
 import {useEffect, useState} from 'react'
+import {FaBars} from 'react-icons/fa'
 import {TuneSelector, TuneSelectorProps} from '../../molecules/index.js'
 
-export interface TuneSelectorButtonProps
-  extends Omit<IconButtonProps, 'aria-label'> {
+export interface TuneSelectorButtonProps extends IconButtonProps {
   tunes: TuneSelectorProps['tunes']
   onTune?: TuneSelectorProps['onTune']
   tuneProps?: TuneSelectorProps['tuneProps']
@@ -30,9 +29,8 @@ export const TuneSelectorButton: React.FC<TuneSelectorButtonProps> = ({
     <Flex pos="relative">
       <IconButton
         variant="jaenHighlightTooltip"
-        icon={<DragHandleIcon />}
+        icon={<Icon as={FaBars} />}
         onClick={toggleOpen}
-        aria-label="Tune"
         {...iconButtonProps}
       />
       {isOpen && (
