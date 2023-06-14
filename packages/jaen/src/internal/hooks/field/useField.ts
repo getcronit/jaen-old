@@ -106,6 +106,8 @@ export function useField<IValue>(
 
   const {isEditing} = useStatus()
 
+  const props = field?.props || staticField?.props || {}
+
   const write = React.useCallback(
     (newValue: IValue | null) => {
       store.dispatch(
@@ -119,7 +121,8 @@ export function useField<IValue>(
             : undefined,
           fieldType: type,
           fieldName: name,
-          value: newValue
+          value: newValue,
+          props
         })
       )
 
@@ -128,7 +131,7 @@ export function useField<IValue>(
         value: newValue || undefined
       })
     },
-    [jaenPage.id, SectionBlockContext, type, name, field, store]
+    [jaenPage.id, SectionBlockContext, type, name, field, store, props]
   )
 
   const register = React.useCallback(
@@ -154,7 +157,7 @@ export function useField<IValue>(
   return {
     value: field?.value,
     staticValue: staticField?.value,
-    props: field?.props || staticField?.props || {},
+    props,
     jaenPageId: jaenPage.id,
     isEditing,
     SectionBlockContext,
