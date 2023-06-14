@@ -194,6 +194,7 @@ export const SectionField = withRedux(
                   onlyAdd={false}
                 />,
                 <TuneSelectorButton
+                  aria-label="Section tune selector"
                   key={`section-field-tooltip-tune-selector-${item.id}`}
                   tunes={[
                     {
