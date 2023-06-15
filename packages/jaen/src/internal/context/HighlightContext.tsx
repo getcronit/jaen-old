@@ -5,8 +5,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useRef,
-  useState
+  useRef
 } from 'react'
 import {createRoot} from 'react-dom/client'
 import {useStatus} from '../hooks/useStatus.js'
@@ -57,7 +56,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
 })
 
 export const HighlightProvider: React.FC<HighlightProviderProps> = props => {
-  const [items, setItems] = useState<
+  const itemsRef = useRef<
     Array<{
       ref: HTMLDivElement | null
       tooltipButtons: React.ReactNode[]
@@ -129,7 +128,7 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = props => {
 
     observer.observe(element)
 
-    const item = items.find(item => item.ref === element)
+    const item = itemsRef.current.find(item => item.ref === element)
 
     if (item?.ref) {
       const tooltipButtons = item?.tooltipButtons || []
@@ -159,202 +158,122 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = props => {
 
   const {isEditing} = useStatus()
 
+  const mouseEnterHandler = useCallback((e: MouseEvent) => {
+    const element = e.target as HTMLElement
+
+    element.focus({
+      preventScroll: true
+    })
+  }, [])
+
+  const mouseLeaveHandler = useCallback((e: MouseEvent) => {
+    const relatedTarget = e.relatedTarget as HTMLElement
+
+    const nextItem = itemsRef.current.find(item => item.ref === relatedTarget)
+
+    if (nextItem) {
+      nextItem?.ref?.focus({
+        preventScroll: true
+      })
+    } else {
+      const closestParent = findClosestParentMatching(relatedTarget, element =>
+        itemsRef.current.some(item => item.ref === element)
+      )
+
+      if (closestParent) {
+        const closestItem = itemsRef.current.find(
+          item => item.ref === closestParent.element
+        )
+
+        closestItem?.ref?.focus({
+          preventScroll: true
+        })
+      }
+    }
+  }, [])
+
+  const focusHandler = useCallback((e: FocusEvent) => {
+    const element = e.target as HTMLElement
+
+    // set the cursor to the end of the element if it is a contenteditable element
+    if (element.isContentEditable) {
+      const range = document.createRange()
+      const selection = window.getSelection()
+
+      if (!selection) return
+
+      range.selectNodeContents(element)
+      range.collapse(false)
+      selection.removeAllRanges()
+      selection.addRange(range)
+    }
+
+    setHighlight(element)
+  }, [])
+
+  const blurHandler = useCallback((e: FocusEvent) => {
+    const highlightRoot = document.querySelector(
+      `.${CLASSNAMES.JAEN_HIGHLIGHT_FRAME}`
+    )
+
+    if (!highlightRoot) return
+
+    // Check if the blur event is caused by a click on the tooltip
+    // check if tooltip ref contains relatedTarget
+    if (tooltipHightRef.current?.contains(e.relatedTarget as Node)) {
+      return
+    }
+
+    const element = e.currentTarget as HTMLElement
+
+    // Do not remove the highlight if the new focus is on a child of the original element
+    if (element.contains(e.relatedTarget as Node)) {
+      return
+    }
+
+    highlightRoot.remove()
+  }, [])
+
   const ref = useCallback(
     (ref: HTMLDivElement | null, tooltipButtons: React.ReactNode[]) => {
       if (ref) {
-        const index = items.findIndex(item => {
+        ref.addEventListener('mouseenter', mouseEnterHandler)
+        ref.addEventListener('mouseleave', mouseLeaveHandler)
+        ref.addEventListener('focus', focusHandler)
+        ref.addEventListener('blur', blurHandler)
+
+        const index = itemsRef.current.findIndex(item => {
           return item.ref === ref
         })
 
         if (index === -1) {
-          setItems([...items, {ref, tooltipButtons}])
+          itemsRef.current.push({ref, tooltipButtons})
         }
 
         // if tooltipButtons are different, update it
-        if (items[index]?.tooltipButtons !== tooltipButtons) {
-          const newItems = [...items]
-          newItems[index] = {ref, tooltipButtons}
-          setItems(newItems)
+        else if (itemsRef.current[index]?.tooltipButtons !== tooltipButtons) {
+          itemsRef.current[index] = {ref, tooltipButtons}
         }
       }
-
-      console.log('ref', ref)
     },
-    [items]
+    [itemsRef.current]
   )
 
   useEffect(() => {
-    // ref.addEventListener('mouseenter', () => {
-    //   ref.focus({
-    //     preventScroll: true
-    //   })
-    // })
-
-    // ref.addEventListener('mouseleave', e => {
-    //   const relatedTarget = e.relatedTarget as HTMLElement
-
-    //   // check if relatedTarget is a itemsRef
-
-    //   if (relatedTarget) {
-    //     const index = items.findIndex(item => {
-    //       return item.ref === relatedTarget
-    //     })
-
-    //     if (index !== -1) {
-    //       return
-    //     }
-
-    //     const closestParent = findClosestParentMatching(
-    //       relatedTarget,
-    //       element => {
-    //         return items.some(item => item.ref === element)
-    //       }
-    //     )
-
-    //     // Get ref of relatedTarget
-    //     const relatedRef = items.find(
-    //       item => item.ref === closestParent
-    //     )
-
-    //     if (relatedRef?.ref) {
-    //       relatedRef.ref.focus({
-    //         preventScroll: true
-    //       })
-    //     }
-    //   }
-    // })
-
-    // ref.addEventListener('focus', () => {
-    //   if (!isEditing) return
-
-    //   alert('focus ' + isEditing)
-
-    //   setHighlight(ref)
-    // })
-
-    // ref.addEventListener('blur', e => {
-    //   if (!isEditing) return
-
-    //   const highlightRoot = document.querySelector(
-    //     `.${CLASSNAMES.JAEN_HIGHLIGHT_FRAME}`
-    //   )
-
-    //   if (!highlightRoot) return
-
-    //   // Check if the blur event is caused by a click on the tooltip
-    //   // check if tooltip ref contains relatedTarget
-    //   if (tooltipHightRef.current?.contains(e.relatedTarget as Node)) {
-    //     return
-    //   }
-
-    //   // Do not remove the highlight if the new focus is on a child of the original element
-    //   if (ref.contains(e.relatedTarget as Node)) {
-    //     return
-    //   }
-
-    //   highlightRoot.remove()
-    // })
-
-    const mouseEnterHandler = (e: MouseEvent) => {
-      if (!isEditing) return
-
-      const element = e.target as HTMLElement
-
-      element.focus({
-        preventScroll: true
-      })
-    }
-
-    const mouseLeaveHandler = (e: MouseEvent) => {
-      if (!isEditing) {
-        return
-      }
-
-      const relatedTarget = e.relatedTarget as HTMLElement
-
-      const nextItem = items.find(item => item.ref === relatedTarget)
-
-      if (nextItem) {
-        nextItem?.ref?.focus({
-          preventScroll: true
-        })
-      } else {
-        const closestParent = findClosestParentMatching(
-          relatedTarget,
-          element => items.some(item => item.ref === element)
-        )
-
-        if (closestParent) {
-          const closestItem = items.find(
-            item => item.ref === closestParent.element
-          )
-
-          closestItem?.ref?.focus({
-            preventScroll: true
-          })
-        }
-      }
-    }
-
-    const focusHandler = (e: FocusEvent) => {
-      if (!isEditing) return
-
-      const element = e.target as HTMLElement
-
-      // set the cursor to the end of the element if it is a contenteditable element
-      if (element.isContentEditable) {
-        const range = document.createRange()
-        const selection = window.getSelection()
-
-        if (!selection) return
-
-        range.selectNodeContents(element)
-        range.collapse(false)
-        selection.removeAllRanges()
-        selection.addRange(range)
-      }
-
-      setHighlight(element)
-    }
-
-    const blurHandler = (e: FocusEvent) => {
-      if (!isEditing) return
-
-      const highlightRoot = document.querySelector(
-        `.${CLASSNAMES.JAEN_HIGHLIGHT_FRAME}`
-      )
-
-      if (!highlightRoot) return
-
-      // Check if the blur event is caused by a click on the tooltip
-      // check if tooltip ref contains relatedTarget
-      if (tooltipHightRef.current?.contains(e.relatedTarget as Node)) {
-        return
-      }
-
-      const element = e.currentTarget as HTMLElement
-
-      // Do not remove the highlight if the new focus is on a child of the original element
-      if (element.contains(e.relatedTarget as Node)) {
-        return
-      }
-
-      highlightRoot.remove()
-    }
-
-    // append event listeners to all itemsRef
-
-    for (const item of items) {
+    for (const item of itemsRef.current) {
+      // append event listeners if not already appended
       if (!item.ref) continue
 
-      item.ref.addEventListener('mouseenter', mouseEnterHandler)
-      item.ref.addEventListener('mouseleave', mouseLeaveHandler)
-      item.ref.addEventListener('focus', focusHandler)
-      item.ref.addEventListener('blur', blurHandler)
+      if (isEditing) {
+        item.ref.addEventListener('mouseenter', mouseEnterHandler)
+        item.ref.addEventListener('mouseleave', mouseLeaveHandler)
+        item.ref.addEventListener('focus', focusHandler)
+        item.ref.addEventListener('blur', blurHandler)
+      }
     }
 
     return () => {
-      for (const item of items) {
+      for (const item of itemsRef.current) {
         if (!item.ref) continue
 
         item.ref.removeEventListener('mouseenter', mouseEnterHandler)
@@ -363,7 +282,14 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = props => {
         item.ref.removeEventListener('blur', blurHandler)
       }
     }
-  }, [isEditing, items])
+  }, [
+    isEditing,
+    itemsRef.current,
+    mouseEnterHandler,
+    mouseLeaveHandler,
+    focusHandler,
+    blurHandler
+  ])
 
   return (
     <HighlightProviderContext.Provider value={{ref}}>
@@ -379,9 +305,12 @@ export interface UseHighlightProps {
 export const useHighlight = ({tooltipButtons}: UseHighlightProps) => {
   const {ref} = useContext(HighlightProviderContext)
 
-  const refOnly = (theRef: HTMLDivElement | null) => {
-    ref(theRef, tooltipButtons)
-  }
+  const refOnly = useCallback(
+    (theRef: HTMLDivElement | null) => {
+      ref(theRef, tooltipButtons)
+    },
+    [tooltipButtons, ref]
+  )
 
   return {
     ref: refOnly

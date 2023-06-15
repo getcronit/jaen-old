@@ -1,5 +1,5 @@
 import {As, Box, BoxProps} from '@chakra-ui/react'
-import React, {forwardRef, useCallback} from 'react'
+import React, {forwardRef, useCallback, useMemo} from 'react'
 
 import {useHighlight} from '../../../context/HighlightContext.js'
 
@@ -40,7 +40,13 @@ export const HighlightTooltip = forwardRef<
 
   const Wrapper = as || Box
 
-  console.log('HighlightTooltip', props, asAs)
+  const memoedChildren = useMemo(() => {
+    if (typeof children === 'function') {
+      return children({ref: setRefs, tabIndex: isEditing ? 1 : undefined})
+    }
+
+    return children
+  }, [setRefs, isEditing, children])
 
   if (typeof children === 'function') {
     return (
@@ -51,7 +57,7 @@ export const HighlightTooltip = forwardRef<
         _focus={{
           outline: 'none'
         }}>
-        {children({ref: setRefs, tabIndex: isEditing ? 1 : undefined})}
+        {memoedChildren}
       </Wrapper>
     )
   }
@@ -66,7 +72,7 @@ export const HighlightTooltip = forwardRef<
       _focus={{
         outline: 'none'
       }}>
-      {children}
+      {memoedChildren}
     </Wrapper>
   )
 })
