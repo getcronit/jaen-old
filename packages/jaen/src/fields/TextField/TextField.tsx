@@ -217,13 +217,29 @@ export const TextField = connectField<string, TextFieldProps>(
               evt.preventDefault()
 
               const text = evt.clipboardData.getData('text/plain')
-
               const purifiedText = DOMPurify.sanitize(text, {
                 ALLOWED_TAGS: ['br', 'span', 'div'],
                 ALLOWED_ATTR: []
               })
+              const spanElement = evt.target as HTMLSpanElement
+              const selection = window.getSelection()
 
-              jaenField.onUpdateValue(purifiedText)
+              const range = selection ? selection.getRangeAt(0) : null
+              const startOffset = range
+                ? range.startOffset
+                : spanElement?.textContent?.length ?? 0
+              const endOffset = range
+                ? range.endOffset
+                : spanElement?.textContent?.length ?? 0
+
+              const currentValue = spanElement.innerHTML
+
+              const updatedValue = `${currentValue.substring(
+                0,
+                startOffset
+              )}${purifiedText}${currentValue.substring(endOffset)}`
+
+              jaenField.onUpdateValue(updatedValue)
             }}
           />
         )}
