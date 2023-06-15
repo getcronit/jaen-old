@@ -24,10 +24,18 @@ export interface TextFieldProps extends Omit<TextProps, 'children'> {
   as?: As
   asAs?: As
   defaultValue?: string
+  styleTunes?: TuneOption[]
 }
 
 export const TextField = connectField<string, TextFieldProps>(
-  ({jaenField, defaultValue, as: Wrapper = Text, asAs, ...rest}) => {
+  ({
+    jaenField,
+    defaultValue,
+    as: Wrapper = Text,
+    asAs,
+    styleTunes: fieldStyleTunes = [],
+    ...rest
+  }) => {
     const value = jaenField.value || jaenField.staticValue || defaultValue || ''
 
     const {toast} = useModals()
@@ -128,24 +136,24 @@ export const TextField = connectField<string, TextFieldProps>(
           name: 'bold',
           Icon: FaBold,
           isActive: props => props.fontWeight === 'bold',
-          props: {
-            fontWeight: 'bold'
+          onTune: () => {
+            document.execCommand('bold')
           }
         },
         {
           name: 'italic',
           Icon: FaItalic,
           isActive: props => props.fontStyle === 'italic',
-          props: {
-            fontStyle: 'italic'
+          onTune: () => {
+            document.execCommand('italic')
           }
         },
         {
           name: 'underline',
           Icon: FaUnderline,
           isActive: props => props.textDecoration === 'underline',
-          props: {
-            textDecoration: 'underline'
+          onTune: () => {
+            document.execCommand('underline')
           }
         }
       ]
@@ -167,7 +175,7 @@ export const TextField = connectField<string, TextFieldProps>(
           <TuneSelectorButton
             key={`jaen-highlight-tooltip-tune-${jaenField.name}`}
             aria-label="Customize"
-            tunes={[styleTunes]}
+            tunes={[...fieldStyleTunes, styleTunes]}
             icon={
               <Text as="span" fontSize="sm" fontFamily="serif">
                 T
