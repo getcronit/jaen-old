@@ -46,6 +46,7 @@ const HeadingBlock = connectBlock(
               const tag = `h${n}`
               const fontSize = `${i === 5 ? 'xl' : `${6 - i}xl`}`
               const marginTop = `${2 + (7 - i) * 0.5}rem`
+              const marginBottom = `${(6 - i) * 0.5}rem`
 
               return {
                 type: 'tune',
@@ -58,7 +59,8 @@ const HeadingBlock = connectBlock(
                 props: {
                   asAs: tag,
                   fontSize,
-                  marginTop
+                  marginTop,
+                  marginBottom
                 }
               }
             })
