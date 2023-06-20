@@ -1,5 +1,6 @@
 import {SearchIcon} from '@chakra-ui/icons'
 import {
+  BoxProps,
   HStack,
   Icon,
   IconButton,
@@ -16,37 +17,41 @@ import {useState} from 'react'
 interface BaseTune {
   name: string
   label?: string
-  props?: Record<string, any>
-  onTune?: (props: Record<string, any>) => void
+  props?: BoxProps & Record<string, any>
+  requiredProps?: string[]
+  onTune?: () => void
   Icon: React.ComponentType<{}>
-  isActive?: ((props: Record<string, any>) => boolean) | boolean
   isDisableOnActive?: boolean
   isHiddenOnActive?: boolean
 }
 
-interface Tune extends BaseTune {
+export interface Tune extends BaseTune {
   type: 'tune'
   label: string
 }
 
 interface GroupTune {
   type: 'groupTune'
+  name: string
   label: string
-  tunes: Array<BaseTune>
+  tunes: BaseTune[]
 }
 
 export type TuneOption = Tune | GroupTune
 
 export interface TuneSelectorProps {
-  tunes: Array<TuneOption>
-  tuneProps: Record<string, any>
-  onTune: (props: Record<string, any>) => void
+  tunes: TuneOption[]
+  activeTunes?: Array<{
+    name: string
+    groupName?: string
+  }>
+  onTune: (info: {name: string; groupName?: string; isActive: boolean}) => void
   onClose: () => void
 }
 
 export const TuneSelector: React.FC<TuneSelectorProps> = ({
   tunes,
-  tuneProps,
+  activeTunes = [],
   onTune,
   onClose
 }) => {
@@ -71,23 +76,19 @@ export const TuneSelector: React.FC<TuneSelectorProps> = ({
     }
   })
 
-  const handleTune = (tune: BaseTune) => {
-    const props = tune.props || {}
+  const handleTune = (info: {
+    tune: BaseTune
+    group?: GroupTune
+    isActive: boolean
+  }) => {
+    info.tune.onTune?.()
 
-    // if isActive set all props to undefined
-    const isActive =
-      typeof tune.isActive === 'function'
-        ? tune.isActive(tuneProps)
-        : tune.isActive
+    onTune({
+      name: info.tune.name,
+      groupName: info.group?.name,
+      isActive: info.isActive
+    })
 
-    if (isActive) {
-      Object.keys(props).forEach(key => {
-        props[key] = undefined
-      })
-    }
-
-    tune.onTune?.(props)
-    onTune(props)
     onClose()
   }
 
@@ -136,10 +137,12 @@ export const TuneSelector: React.FC<TuneSelectorProps> = ({
                 </Text>
                 <Wrap spacing="1">
                   {tune.tunes.map((subTune, subIndex) => {
-                    const isActive =
-                      typeof subTune.isActive === 'function'
-                        ? subTune.isActive(tuneProps)
-                        : subTune.isActive
+                    const isActive = activeTunes.some(
+                      activeTune =>
+                        activeTune.name === subTune.name &&
+                        activeTune.groupName === tune.name
+                    )
+
                     const isDisabled = isActive && subTune.isDisableOnActive
 
                     const isHidden = isActive && subTune.isHiddenOnActive
@@ -159,7 +162,7 @@ export const TuneSelector: React.FC<TuneSelectorProps> = ({
                           })}
                           isDisabled={isDisabled}
                           onClick={() => {
-                            handleTune(subTune)
+                            handleTune({tune: subTune, group: tune, isActive})
                           }}
                         />
                       </WrapItem>
@@ -171,10 +174,9 @@ export const TuneSelector: React.FC<TuneSelectorProps> = ({
           }
 
           if ('type' in tune && tune.type === 'tune') {
-            const isActive =
-              typeof tune.isActive === 'function'
-                ? tune.isActive(tuneProps)
-                : tune.isActive
+            const isActive = activeTunes.some(
+              activeTune => activeTune.name === tune.name
+            )
 
             const isDisabled = isActive && tune.isDisableOnActive
 
@@ -201,7 +203,7 @@ export const TuneSelector: React.FC<TuneSelectorProps> = ({
                 })}
                 onClick={() => {
                   if (!isDisabled) {
-                    handleTune(tune)
+                    handleTune({tune, isActive})
                   }
                 }}>
                 {tune.Icon && <Icon as={tune.Icon} />}

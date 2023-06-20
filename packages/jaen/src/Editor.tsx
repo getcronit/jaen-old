@@ -38,22 +38,28 @@ const HeadingBlock = connectBlock(
         tunes={[
           {
             type: 'groupTune',
+            name: 'heading',
             label: 'Heading',
             tunes: new Array(6).fill(0).map((_, i) => {
               const n = i + 1
 
               const tag = `h${n}`
+              const fontSize = `${i === 5 ? 'xl' : `${6 - i}xl`}`
+              const marginTop = `${2 + (7 - i) * 0.5}rem`
 
               return {
                 type: 'tune',
                 name: tag,
                 label: `Heading ${i}`,
                 Icon: () => <Box>{tag.toUpperCase()}</Box>,
+                // Disable on active if tag is h2 because it is the default
+                isDisableOnActive: tag === 'h2',
+                requiredProps: ['asAs'],
                 props: {
                   asAs: tag,
-                  fontSize: `${i === 5 ? 'xl' : 6 - i + 'xl'}`
-                },
-                isActive: props => props.asAs === tag
+                  fontSize,
+                  marginTop
+                }
               }
             })
           }
@@ -77,7 +83,7 @@ const ImageBlock = connectBlock(
         <Field.Text
           name="caption"
           textAlign="center"
-          variant={'cursive'}
+          variant="cursive"
           fontSize="xs"
         />
       </Box>

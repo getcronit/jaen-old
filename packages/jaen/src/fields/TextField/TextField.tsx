@@ -18,6 +18,7 @@ import {
   TuneSelectorButton
 } from '../../internal/components/index.js'
 import {TuneOption} from '../../internal/components/molecules/TuneSelector/TuneSelector.js'
+import {useTunes} from '../../internal/components/molecules/TuneSelector/useTunes.js'
 import {useModals} from '../../internal/context/Modals/ModalContext.js'
 
 export interface TextFieldProps extends Omit<TextProps, 'children'> {
@@ -91,6 +92,7 @@ export const TextField = connectField<string, TextFieldProps>(
 
     const alignmentTune: TuneOption = {
       type: 'groupTune',
+      name: 'alignment',
       label: 'Alignment',
       tunes: [
         {
@@ -98,44 +100,40 @@ export const TextField = connectField<string, TextFieldProps>(
           Icon: FaAlignLeft,
           props: {
             textAlign: 'left'
-          },
-          isActive: props => props.textAlign === 'left'
+          }
         },
         {
           name: 'center',
           Icon: FaAlignCenter,
           props: {
             textAlign: 'center'
-          },
-          isActive: props => props.textAlign === 'center'
+          }
         },
         {
           name: 'right',
           Icon: FaAlignRight,
           props: {
             textAlign: 'right'
-          },
-          isActive: props => props.textAlign === 'right'
+          }
         },
         {
           name: 'justify',
           Icon: FaAlignJustify,
           props: {
             textAlign: 'justify'
-          },
-          isActive: props => props.textAlign === 'justify'
+          }
         }
       ]
     }
 
-    const styleTunes: TuneOption = {
+    const styleTune: TuneOption = {
       type: 'groupTune',
+      name: 'style',
       label: 'Style',
       tunes: [
         {
           name: 'bold',
           Icon: FaBold,
-          isActive: props => props.fontWeight === 'bold',
           onTune: () => {
             document.execCommand('bold')
           }
@@ -143,7 +141,6 @@ export const TextField = connectField<string, TextFieldProps>(
         {
           name: 'italic',
           Icon: FaItalic,
-          isActive: props => props.fontStyle === 'italic',
           onTune: () => {
             document.execCommand('italic')
           }
@@ -151,13 +148,20 @@ export const TextField = connectField<string, TextFieldProps>(
         {
           name: 'underline',
           Icon: FaUnderline,
-          isActive: props => props.textDecoration === 'underline',
           onTune: () => {
             document.execCommand('underline')
           }
         }
       ]
     }
+
+    const tunes = useTunes({
+      props: {...rest, asAs},
+      activeTunes: jaenField.activeTunes,
+      tunes: [alignmentTune, styleTune, ...fieldStyleTunes, ...jaenField.tunes]
+    })
+
+    console.log('TextField tunes', tunes)
 
     // add event listener for selection change
 
@@ -175,20 +179,20 @@ export const TextField = connectField<string, TextFieldProps>(
           <TuneSelectorButton
             key={`jaen-highlight-tooltip-tune-${jaenField.name}`}
             aria-label="Customize"
-            tunes={[...fieldStyleTunes, styleTunes]}
+            tunes={[styleTune, ...fieldStyleTunes]}
             icon={
               <Text as="span" fontSize="sm" fontFamily="serif">
                 T
               </Text>
             }
-            tuneProps={jaenField.tuneProps}
+            activeTunes={tunes.activeTunes}
             onTune={jaenField.tune}
           />,
           <TuneSelectorButton
             key={`jaen-highlight-tooltip-tune-${jaenField.name}`}
             aria-label="Customize"
-            tunes={[alignmentTune, ...(jaenField.tunes || [])]}
-            tuneProps={jaenField.tuneProps}
+            tunes={[alignmentTune, ...jaenField.tunes]}
+            activeTunes={tunes.activeTunes}
             onTune={jaenField.tune}
           />
         ]}
@@ -202,7 +206,7 @@ export const TextField = connectField<string, TextFieldProps>(
           ...rest.style
         }}
         {...rest}
-        {...jaenField.tuneProps}>
+        {...tunes.activeProps}>
         {props => (
           <Box
             ref={props.ref}

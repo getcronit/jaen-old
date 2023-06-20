@@ -196,12 +196,18 @@ export const SectionField = withRedux(
                 <TuneSelectorButton
                   aria-label="Section tune selector"
                   key={`section-field-tooltip-tune-selector-${item.id}`}
+                  activeTunes={
+                    item.id === section.ptrHead
+                      ? [{name: 'move-up'}]
+                      : item.id === section.ptrTail
+                      ? [{name: 'move-down'}]
+                      : []
+                  }
                   tunes={[
                     {
                       type: 'tune',
                       name: 'move-up',
                       label: 'Move up',
-                      isActive: item.id === section.ptrHead,
                       Icon: FaArrowUp,
                       onTune: () => {
                         const prevItem =
@@ -222,7 +228,6 @@ export const SectionField = withRedux(
                       type: 'tune',
                       name: 'move-down',
                       label: 'Move down',
-                      isActive: item.id === section.ptrTail,
                       Icon: FaArrowDown,
                       onTune: () => {
                         const nextItem =
@@ -245,7 +250,11 @@ export const SectionField = withRedux(
                       label: 'Delete',
                       Icon: FaTrash,
                       onTune: () => {
-                        handleSectionDelete(item.id, item.ptrPrev, item.ptrNext)
+                        void handleSectionDelete(
+                          item.id,
+                          item.ptrPrev,
+                          item.ptrNext
+                        )
                       }
                     }
                   ]}

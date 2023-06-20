@@ -6,13 +6,13 @@ import {TuneSelector, TuneSelectorProps} from '../../molecules/index.js'
 export interface TuneSelectorButtonProps extends IconButtonProps {
   tunes: TuneSelectorProps['tunes']
   onTune?: TuneSelectorProps['onTune']
-  tuneProps?: TuneSelectorProps['tuneProps']
+  activeTunes?: TuneSelectorProps['activeTunes']
 }
 
 export const TuneSelectorButton: React.FC<TuneSelectorButtonProps> = ({
   tunes,
   onTune = () => {},
-  tuneProps = {},
+  activeTunes = [],
   ...iconButtonProps
 }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -38,7 +38,7 @@ export const TuneSelectorButton: React.FC<TuneSelectorButtonProps> = ({
           <TuneSelector
             tunes={tunes}
             onTune={onTune}
-            tuneProps={tuneProps}
+            activeTunes={activeTunes}
             onClose={() => {
               setIsOpen(false)
             }}

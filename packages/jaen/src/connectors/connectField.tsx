@@ -44,8 +44,9 @@ export const connectField = <IValue, P = {}>(
           onUpdateValue: (value: IValue | undefined) => void
           register: (props: Record<string, any>) => void
 
-          tuneProps: TuneSelectorProps['tuneProps']
-          tune: (props: TuneSelectorProps['tuneProps']) => void
+          tunes: TuneSelectorProps['tunes']
+          activeTunes: TuneSelectorProps['activeTunes']
+          tune: TuneSelectorProps['onTune']
         }
       }
     >
@@ -139,16 +140,29 @@ export const connectField = <IValue, P = {}>(
       [id, relatedName, field.props]
     )
 
-    const tune = useCallback(
-      (props: Record<string, any>) => {
+    const tune: TuneSelectorProps['onTune'] = useCallback(
+      info => {
+        let activeTunes =
+          (field.props?.activeTunes as TuneSelectorProps['activeTunes']) || []
+
+        activeTunes = activeTunes.filter(
+          activeTune =>
+            activeTune.name !== info.name &&
+            activeTune.groupName !== info.groupName
+        )
+
+        if (!info.isActive) {
+          activeTunes.push({
+            name: info.name,
+            groupName: info.groupName
+          })
+        }
+
         register({
-          tuneProps: {
-            ...field.props?.tuneProps,
-            ...props
-          }
+          activeTunes: activeTunes.length > 0 ? activeTunes : undefined
         })
       },
-      [field.props?.tuneProps, register]
+      [field.props?.activeTunes, register]
     )
 
     console.log('Field props', field)
@@ -168,8 +182,8 @@ export const connectField = <IValue, P = {}>(
           style,
           className,
           relatedName,
-          tunes,
-          tuneProps: field.props?.tuneProps || {}
+          tunes: tunes || [],
+          activeTunes: field.props?.activeTunes
         }}
         {...(rest as P)}
       />

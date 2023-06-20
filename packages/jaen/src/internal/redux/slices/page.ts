@@ -392,7 +392,8 @@ const pagesSlice = createSlice({
           ...page.jaenFields[fieldType],
           [fieldName]: {
             ...page.jaenFields[fieldType]?.[fieldName],
-            value
+            value,
+            props
           }
         }
       }
