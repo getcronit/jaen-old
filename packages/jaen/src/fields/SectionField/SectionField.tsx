@@ -39,8 +39,19 @@ export interface SectionFieldProps {
 }
 
 export const SectionField = withRedux(
-  ({name, label, blocks, ...rest}: SectionFieldProps) => {
+  ({name, label, blocks: unfilteredBlocks, ...rest}: SectionFieldProps) => {
     const {confirm, toast} = useModals()
+
+    // Avoid duplicate blocks. The last block with the same name will be used
+    const blocks = unfilteredBlocks.reduce<IBlockConnection[]>((acc, block) => {
+      const index = acc.findIndex(el => el.options.name === block.options.name)
+
+      if (index === -1) {
+        return [...acc, block]
+      }
+
+      return [...acc.slice(0, index), block]
+    }, [])
 
     const {
       onSectionAdd,
