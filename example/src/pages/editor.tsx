@@ -5,7 +5,7 @@ import { graphql } from "gatsby"
 const ImageBlock = connectBlock(
   () => {
     return (
-      <Box borderRadius={"lg"} overflow="hidden" boxSize={"lg"}>
+      <Box boxShadow="light" overflow="hidden" borderRadius="lg">
         <Field.Image name="image" />
       </Box>
     )
@@ -16,11 +16,25 @@ const ImageBlock = connectBlock(
   }
 )
 
+const AAAA = connectBlock(
+  () => {
+    return (
+      <Box boxShadow="light" overflow="hidden">
+        <Field.Image name="image" />
+      </Box>
+    )
+  },
+  {
+    label: "AAAA",
+    name: "AAAA",
+  }
+)
+
 export default connectPage(
   () => {
     return (
       <Box m="8">
-        <Editor blocks={[ImageBlock]} />
+        <Editor blocks={[AAAA, ImageBlock]} />
       </Box>
     )
   },

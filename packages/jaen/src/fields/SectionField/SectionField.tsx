@@ -44,13 +44,15 @@ export const SectionField = withRedux(
 
     // Avoid duplicate blocks. The last block with the same name will be used
     const blocks = unfilteredBlocks.reduce<IBlockConnection[]>((acc, block) => {
-      const index = acc.findIndex(el => el.options.name === block.options.name)
+      const index: number = acc.findIndex(
+        el => el.options.name === block.options.name
+      )
 
       if (index === -1) {
         return [...acc, block]
       }
 
-      return [...acc.slice(0, index), block]
+      return [...acc.slice(0, index), block, ...acc.slice(index + 1)]
     }, [])
 
     const {
