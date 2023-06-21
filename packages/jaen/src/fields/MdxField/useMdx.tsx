@@ -9,6 +9,7 @@ import remarkDirective from 'remark-directive'
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
+import remarkUnwrapImages from 'remark-unwrap-images'
 import {VFile} from 'vfile'
 import {VFileMessage} from 'vfile-message'
 
@@ -39,6 +40,7 @@ function evaluateFile(file: VFile) {
         remarkFrontmatter,
         remarkMath,
         remarkDirective,
+        remarkUnwrapImages,
         capture('mdast')
       ],
       rehypePlugins: [rehypeSlug],
