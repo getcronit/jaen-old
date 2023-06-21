@@ -10,13 +10,15 @@ export interface DataImageProps {
   alt: string | undefined
   internalImageUrl: string | null | undefined
   renderAsDynamic?: boolean
+  onLoadingComplete?: () => void
 }
 
 export const DataImage: React.FC<DataImageProps> = ({
   imageFieldProps,
   imageData,
   internalImageUrl,
-  renderAsDynamic = false
+  renderAsDynamic = false,
+  onLoadingComplete = () => {}
 }) => {
   let imageElement
 
@@ -28,6 +30,21 @@ export const DataImage: React.FC<DataImageProps> = ({
         src: internalImageUrl
       }
     }
+  }
+
+  const completeLoader = () => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        onLoadingComplete()
+      })
+    })
+  }
+
+  const oldLoad = imageFieldProps.onLoad
+
+  imageFieldProps.onLoad = (...args) => {
+    completeLoader()
+    oldLoad?.(...args)
   }
 
   if (internalImageUrl && renderAsDynamic) {

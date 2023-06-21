@@ -6,7 +6,7 @@ import {
   Text,
   Tooltip
 } from '@chakra-ui/react'
-import {useEffect, useMemo} from 'react'
+import {useEffect, useMemo, useState} from 'react'
 import {BsEraser} from 'react-icons/bs'
 import {PhotoProvider, PhotoView} from 'react-photo-view'
 
@@ -42,22 +42,23 @@ export interface ImageFieldProps extends ImageProps {
   lightboxGroup?: boolean
   defaultValue?: string
   /**
-   * When true, the image will not be optimized by gatsby-image.
-   *
+   * When true, the unoptimized image will be rendered after the optimized image.
    * This is useful when you want to display a GIF image.
    *
    * @example
    * ```tsx
    * import {Field} from '@snek-at/jaen'
    *
-   * <Field.Image ... raw />
+   * <Field.Image ... overload defaultValue="https://i.giphy.com/media/duzpaTbCUy9Vu/giphy.webp" />
    * ```
+   *
+   * In this example, the GIF image will be displayed after the optimized image (no GIF).
    */
-  raw?: boolean
+  overload?: boolean
 }
 
 export const ImageField = connectField<ImageFieldValue, ImageFieldProps>(
-  ({jaenField, defaultValue, lightbox, lightboxGroup, raw, ...props}) => {
+  ({jaenField, defaultValue, lightbox, lightboxGroup, overload, ...props}) => {
     const {toast, confirm} = useModals()
 
     const handleImageChooseClick = (info: {src: string; alt?: string}) => {
@@ -114,18 +115,10 @@ export const ImageField = connectField<ImageFieldValue, ImageFieldProps>(
       ...jaenField.value
     }
 
-    useEffect(() => {
-      console.log(
-        'value',
-        jaenField.name,
-        value.internalImageUrl,
-        defaultValue,
-        !value.internalImageUrl && defaultValue
-      )
+    const [shouldOverload, setShouldOverload] = useState(false)
 
+    useEffect(() => {
       if (!value.internalImageUrl && defaultValue) {
-        console.log('update', defaultValue)
-        console.log('current', jaenField.value?.internalImageUrl)
         jaenField.onUpdateValue({
           ...jaenField.value,
           internalImageUrl: defaultValue
@@ -153,7 +146,7 @@ export const ImageField = connectField<ImageFieldValue, ImageFieldProps>(
       const isLightbox = lightbox && !jaenField.isEditing
 
       const renderAsDynamic =
-        raw || jaenField.value?.internalImageUrl !== undefined
+        jaenField.value?.internalImageUrl !== undefined || shouldOverload
 
       const dataImage = (
         <Box
@@ -166,6 +159,11 @@ export const ImageField = connectField<ImageFieldValue, ImageFieldProps>(
             imageData={gatsbyImage}
             alt={value.alt}
             renderAsDynamic={renderAsDynamic}
+            onLoadingComplete={() => {
+              if (overload) {
+                setShouldOverload(true)
+              }
+            }}
           />
         </Box>
       )
@@ -194,10 +192,10 @@ export const ImageField = connectField<ImageFieldValue, ImageFieldProps>(
       jaenField,
       lightbox,
       lightboxGroup,
-      raw,
       imageFieldProps,
       value,
-      gatsbyImage
+      gatsbyImage,
+      shouldOverload
     ])
 
     console.log('value 2', jaenField.name, value.internalImageUrl)

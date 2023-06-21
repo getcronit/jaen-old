@@ -113,6 +113,7 @@ const Card = connectBlock(
         <Box h="md" m="4">
           <Field.Image
             name="image"
+            overload
             // defaultValue={property.imageUrl}
           />
         </Box>
@@ -255,14 +256,6 @@ const IndexPage = connectPage(
           <img src="https://i.giphy.com/media/duzpaTbCUy9Vu/giphy.webp" />
         </Box>
 
-        <Box maxH="sm">
-          <Field.Image
-            name="image0"
-            defaultValue={"https://i.giphy.com/media/duzpaTbCUy9Vu/giphy.webp"}
-            raw
-          />
-        </Box>
-
         <Field.Text
           as={Button}
           asAs="span"
@@ -273,8 +266,8 @@ const IndexPage = connectPage(
         <Box minW="sm" minH="sm">
           <Field.Image
             name="image0"
+            overload
             defaultValue={"https://i.giphy.com/media/duzpaTbCUy9Vu/giphy.webp"}
-            raw
           />
         </Box>
 
