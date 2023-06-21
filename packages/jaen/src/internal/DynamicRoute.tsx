@@ -69,7 +69,7 @@ export const DynamicRoute = (props: PageProps) => {
 
     return (
       <Component
-        {...({} as any)}
+        {...props}
         pageContext={{jaenPageId: pageId}}
         data={{jaenPage: null}}
       />
