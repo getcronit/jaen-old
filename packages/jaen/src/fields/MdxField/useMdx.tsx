@@ -1,10 +1,13 @@
 import {evaluateSync} from '@mdx-js/mdx'
 import {useDebounceFn} from 'ahooks'
+import {frontmatterToMarkdown} from 'mdast-util-frontmatter'
+import {gfmToMarkdown} from 'mdast-util-gfm'
 import {mdxToMarkdown} from 'mdast-util-mdx'
 import {useEffect, useState} from 'react'
 import * as runtime from 'react/jsx-runtime'
 import rehypeSlug from 'rehype-slug-custom-id'
 
+import {directiveToMarkdown} from 'mdast-util-directive'
 import remarkDirective from 'remark-directive'
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkGfm from 'remark-gfm'
@@ -17,7 +20,14 @@ import {toMarkdown} from 'mdast-util-to-markdown'
 import {MdastRoot} from './components/types.js'
 
 const parseMdast = (tree: MdastRoot) => {
-  const out = toMarkdown(tree, {extensions: [mdxToMarkdown()]})
+  const out = toMarkdown(tree, {
+    extensions: [
+      mdxToMarkdown(),
+      gfmToMarkdown(),
+      directiveToMarkdown,
+      frontmatterToMarkdown()
+    ]
+  })
 
   return out
 }
