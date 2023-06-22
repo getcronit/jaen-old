@@ -34,19 +34,19 @@ export function useWidget<T extends object>(widgetName: string) {
     const widget = jaenInternal?.widgets?.find(node => node.name === widgetName)
 
     if (widget) {
-      return widget.data
+      return widget.data as T
     }
 
     return undefined
   }, [jaenInternal.widgets, widgetName])
 
-  const data = React.useMemo(() => {
-    if (dynamicData) {
-      return dynamicData
-    }
+  const [data, setData] = React.useState<T | undefined>(staticData)
 
-    return staticData
-  }, [dynamicData, staticData]) as T
+  React.useEffect(() => {
+    if (dynamicData) {
+      setData(dynamicData)
+    }
+  }, [dynamicData])
 
   const writeData = (data: T) =>
     store.dispatch(
