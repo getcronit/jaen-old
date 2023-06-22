@@ -68,13 +68,7 @@ const useAuthenticated = (): [
     return localStorage.getItem('isAuthenticated') === 'true'
   }, [])
 
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    if (typeof window === 'undefined') {
-      return false
-    }
-
-    return getIsAuthenticated()
-  })
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   useEffect(() => {
     setIsAuthenticated(getIsAuthenticated())

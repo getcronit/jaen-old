@@ -1,6 +1,6 @@
 import {As, Box, Button, Text, TextProps, Tooltip} from '@chakra-ui/react'
 import DOMPurify from 'dompurify'
-import {useCallback, useEffect} from 'react'
+import {useCallback, useEffect, useState} from 'react'
 import {
   FaAlignCenter,
   FaAlignJustify,
@@ -37,7 +37,15 @@ export const TextField = connectField<string, TextFieldProps>(
     styleTunes: fieldStyleTunes = [],
     ...rest
   }) => {
-    const value = jaenField.value || jaenField.staticValue || defaultValue || ''
+    const [value, setValue] = useState(() => {
+      return jaenField.staticValue || defaultValue || ''
+    })
+
+    useEffect(() => {
+      if (jaenField.value) {
+        setValue(jaenField.value)
+      }
+    }, [jaenField.value])
 
     const {toast} = useModals()
 

@@ -7,7 +7,7 @@ import {
   AuthenticationProvider,
   useAuthentication
 } from './context/AuthenticationContext.js'
-import {IncomingBuildChecker} from './context/IncomingBuildChecker/index.js'
+import {IncomingBuildChecker} from './context/IncomingBuildChecker/IncomingBuildChecker.js'
 import {ModalProvider} from './context/Modals/ModalContext.js'
 import SiteProvider from './context/SiteContext.js'
 import {DynamicPageProps, useDynamicRoute} from './DynamicRoute.js'
@@ -24,25 +24,33 @@ export interface WrapperProps {
   ssr?: boolean
 }
 
+const LazyHighlightProvider: React.FC<{
+  children: React.ReactNode
+}> = ({children}) => {
+  const Provider = React.lazy(
+    async () => await import('./context/HighlightContext.js')
+  )
+
+  return (
+    <React.Suspense fallback={<LoadingPage />}>
+      <Provider>{children}</Provider>
+    </React.Suspense>
+  )
+}
+
 export const GatsbyRootWrapper: React.FC<WrapperProps> = ({children}) => {
   const MayeLazy: React.FC<{
     children: React.ReactNode
   }> = ({children}) => {
-    const {isAuthenticated} = useAuthentication()
+    const {isAuthenticated, isLoading} = useAuthentication()
 
-    if (!isAuthenticated) {
+    if (!isAuthenticated || isLoading) {
       return <>{children}</>
     }
 
-    const LazyHighlightProvider = React.lazy(
-      async () => await import('./context/HighlightContext.js')
-    )
-
-    const MemoedHighlightProvider = useMemo(() => LazyHighlightProvider, [])
-
     return (
       <React.Suspense fallback={<LoadingPage />}>
-        <MemoedHighlightProvider>{children}</MemoedHighlightProvider>
+        <LazyHighlightProvider>{children}</LazyHighlightProvider>
       </React.Suspense>
     )
   }
@@ -51,8 +59,6 @@ export const GatsbyRootWrapper: React.FC<WrapperProps> = ({children}) => {
     <ChakraProvider cssVarsRoot="#coco" resetCSS theme={theme}>
       <SiteProvider>
         <ModalProvider>
-          <IncomingBuildChecker />
-
           <AuthenticationProvider>
             <MayeLazy>{children}</MayeLazy>
           </AuthenticationProvider>
@@ -124,9 +130,14 @@ const WrapperPage: React.FC<{
   isAuthenticated,
   handleActivationButtonClick
 }) => {
-  const children = dynamicRoute.node || propsChildren
-
   const isOnAdmin = path.includes('/admin')
+
+  const children = (
+    <>
+      <IncomingBuildChecker />
+      {dynamicRoute.node || propsChildren}
+    </>
+  )
 
   if (isAuthenticated) {
     return <DynamicAdminShell>{children}</DynamicAdminShell>

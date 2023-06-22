@@ -1,5 +1,5 @@
 import {HamburgerIcon} from '@chakra-ui/icons'
-import {Flex, HStack, IconButton, Spacer} from '@chakra-ui/react'
+import {Box, Flex, HStack, IconButton, Spacer} from '@chakra-ui/react'
 import {ThemeProvider} from '../../../styles/ChakraThemeProvider.js'
 import {LocationBreadcrumbs} from './LocationBreadcrumbs.js'
 import {ToolbarActionContext} from './ToolbarActionContext'
@@ -41,8 +41,8 @@ export const AdminSecondaryToolbar: React.FC<AdminSecondaryToolbarProps> = ({
         <ToolbarActionContext.Consumer>
           {actions => (
             <HStack spacing="4">
-              {actions.actions.map(action => (
-                <>{action}</>
+              {actions.actions.map((action, index) => (
+                <Box key={index}>{action}</Box>
               ))}
             </HStack>
           )}
