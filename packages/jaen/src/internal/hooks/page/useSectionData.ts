@@ -67,7 +67,16 @@ export function useSectionData(
     }
   )
 
-  const section = React.useMemo(() => {
+  const [section, setSection] = React.useState<IJaenSection>(
+    staticSection || {
+      fieldName: sectionName,
+      ptrHead: null,
+      items: [],
+      ptrTail: null
+    }
+  )
+
+  React.useEffect(() => {
     const mergedSection = deepmerge(staticSection || {}, dynamicSection || {}, {
       arrayMerge: deepmergeArrayIdMerge
     })
@@ -104,8 +113,8 @@ export function useSectionData(
 
     mergedSection.items = orderedSectionItems
 
-    return mergedSection
-  }, [staticSection, dynamicSection])
+    setSection(mergedSection)
+  }, [dynamicSection])
 
   return {
     data: section,
