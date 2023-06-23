@@ -11,10 +11,12 @@ export const prepareMigration = async (
 
   const migrationData: MigrationData = {}
 
+  const finderBackendIndex = await Backend.readIndex()
+
   // jaen internal
   migrationData.jaen = {
     site: state.site,
-    finderUrl: await Backend.uploadIndex(),
+    finderUrl: finderBackendIndex?.src,
     widgets: state.widget.nodes
   }
 
