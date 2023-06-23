@@ -132,14 +132,14 @@ export const ImageField = connectField<ImageFieldValue, ImageFieldProps>(
     })
 
     const imageFieldProps = {
-      alt: value.alt || 'Image',
-      title: value.title || 'Image',
       style: {
         ...jaenField.style,
         width: '100%',
         height: '100%'
       },
-      ...props
+      ...props,
+      alt: value.alt || props.alt || `${jaenField.name}-image`,
+      title: value.title
     }
 
     const imageElement = useMemo(() => {
