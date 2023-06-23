@@ -42,9 +42,7 @@ export const TextField = connectField<string, TextFieldProps>(
     })
 
     useEffect(() => {
-      if (jaenField.value) {
-        setValue(jaenField.value)
-      }
+      setValue(jaenField.value || jaenField.staticValue || defaultValue || '')
     }, [jaenField.value])
 
     const {toast} = useModals()
