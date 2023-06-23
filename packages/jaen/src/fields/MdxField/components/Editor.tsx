@@ -1,14 +1,13 @@
 import {EditIcon, ViewIcon} from '@chakra-ui/icons'
 import {Badge, Box, HStack} from '@chakra-ui/react'
-import {markdown as langMarkdown} from '@codemirror/lang-markdown'
-import {basicSetup, EditorView} from 'codemirror'
-import javascript from 'highlight.js/lib/languages/javascript'
-import json from 'highlight.js/lib/languages/json'
-import markdown from 'highlight.js/lib/languages/markdown'
-import {lowlight} from 'lowlight/lib/core.js'
-import React, {useCallback, useEffect, useMemo, useState} from 'react'
+import {markdown, markdownLanguage} from '@codemirror/lang-markdown'
+import {languages} from '@codemirror/language-data'
+
+import CodeMirror, {ReactCodeMirrorProps} from '@uiw/react-codemirror'
+import type {EditorView} from 'codemirror'
+
+import React, {useCallback, useEffect, useState} from 'react'
 import {ErrorBoundary} from 'react-error-boundary'
-import CodeMirror, {CodeMirrorProps} from 'rodemirror'
 import {statistics, Statistics} from 'vfile-statistics'
 
 import {ErrorFallback} from './ErrorFallback.js'
@@ -18,11 +17,7 @@ import TabsTemplate from './TabsTemplate.js'
 import {useMdx} from '../useMdx.js'
 import {BaseEditorProps} from './types.js'
 
-lowlight.registerLanguage('js', javascript)
-lowlight.registerLanguage('json', json)
-lowlight.registerLanguage('md', markdown)
-
-const MemoizedCodeMirror = React.memo<CodeMirrorProps>(props => {
+const MemoizedCodeMirror = React.memo<ReactCodeMirrorProps>(props => {
   console.log('MemoizedCodeMirror', props)
 
   return (
@@ -51,8 +46,6 @@ export const Editor: React.FC<EditorProps> = props => {
 
   console.log(`state`, state)
 
-  const extensions = useMemo(() => [basicSetup, langMarkdown()], [])
-
   const [view, setView] = React.useState<EditorView | null>(null)
 
   const componentsInfo = Object.entries(props.components || {}).filter(
@@ -76,9 +69,18 @@ export const Editor: React.FC<EditorProps> = props => {
     [setConfig]
   )
 
-  useEffect(() => {
-    props.onUpdateValue && props.onUpdateValue(state.file.data.mdast)
-  }, [state])
+  // const onUpdate = useCallback(
+  //   (v: {docChanged: any; state: {doc: any}}) => {
+  //     if (v.docChanged) {
+  //       console.log('docChanged 2', v)
+
+  //       const value = String(v.state.doc)
+
+  //       setConfig({...state, value})
+  //     }
+  //   },
+  //   [setConfig]
+  // )
 
   const insertSnippet = (snippet: string) => {
     if (!view) return
@@ -169,9 +171,18 @@ export const Editor: React.FC<EditorProps> = props => {
 
               <MemoizedCodeMirror
                 value={state.value}
-                extensions={extensions}
+                extensions={[
+                  markdown({base: markdownLanguage, codeLanguages: languages})
+                ]}
+                onCreateEditor={editorView => {
+                  setView(editorView)
+                }}
+                onBlur={() => {
+                  props.onUpdateValue &&
+                    props.onUpdateValue(state.file.data.mdast)
+                }}
                 onUpdate={onUpdate}
-                onEditorViewChange={setView}
+                theme="dark"
               />
             </>
           )

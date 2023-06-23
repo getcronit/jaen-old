@@ -44,6 +44,8 @@ function evaluateFile(file: VFile) {
   try {
     file.result = evaluateSync(file, {
       ...(runtime as any),
+      development: false,
+
       useDynamicImport: true,
       remarkPlugins: [
         remarkGfm,

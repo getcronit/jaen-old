@@ -13,14 +13,12 @@ export interface MdxFieldProps {
   components: BaseEditorProps['components']
 }
 
-let Editor: React.FC<BaseEditorProps> | null = null
-
 export const MdxField = connectField<MdxFieldValue, MdxFieldProps>(
   ({jaenField, components}) => {
     console.log(jaenField.staticValue)
 
     const [rawValue, setRawValue] = React.useState<MdastRoot | undefined>(
-      jaenField.value || jaenField.staticValue || defaultData
+      jaenField.staticValue || defaultData
     )
 
     useEffect(() => {
@@ -50,18 +48,12 @@ export const MdxField = connectField<MdxFieldValue, MdxFieldProps>(
     if (jaenField.isEditing) {
       // Render editor in edit mode
 
-      if (!Editor) {
-        Editor = React.lazy(async () => await import('./components/Editor.js'))
-      }
-
       return (
-        <React.Suspense fallback={<div>Loading...</div>}>
-          <Editor
-            components={components}
-            onUpdateValue={jaenField.onUpdateValue}
-            mode="editAndPreview"
-            mdast={rawValue}></Editor>
-        </React.Suspense>
+        <LayzEditor
+          components={components}
+          onUpdateValue={jaenField.onUpdateValue}
+          rawValue={rawValue}
+        />
       )
     } else {
       return <Preview components={components} mdast={rawValue} />
@@ -71,3 +63,23 @@ export const MdxField = connectField<MdxFieldValue, MdxFieldProps>(
     fieldType: 'IMA:MdxField'
   }
 )
+
+const LayzEditor: React.FC<{
+  components: BaseEditorProps['components']
+  onUpdateValue: (value: MdastRoot) => void
+  rawValue?: MdastRoot
+}> = ({components, onUpdateValue, rawValue}) => {
+  const Editor = React.lazy(async () => await import('./components/Editor.js'))
+
+  const MemoedEditor = React.useMemo(() => Editor, [])
+
+  return (
+    <React.Suspense fallback={<div>Loading...</div>}>
+      <MemoedEditor
+        components={components}
+        onUpdateValue={onUpdateValue}
+        mode="editAndPreview"
+        mdast={rawValue}></MemoedEditor>
+    </React.Suspense>
+  )
+}
