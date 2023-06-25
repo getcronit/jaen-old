@@ -1,6 +1,6 @@
 {
   "name": "@snek-at/jaen",
-  "version": "0.0.94",
+  "version": "0.0.95",
   "source": "src/index.ts",
   "main": "./dist/index.js",
   "module": "./dist/index.module.js",
@@ -81,7 +81,6 @@
     "remark-frontmatter": "^4.0.1",
     "remark-gfm": "^3.0.1",
     "remark-math": "^5.1.1",
-    "remark-unwrap-images": "^3.0.1",
     "snek-query": "*",
     "use-debounce": "^9.0.4",
     "uuid": "^9.0.0",

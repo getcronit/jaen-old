@@ -12,12 +12,13 @@ import remarkDirective from 'remark-directive'
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
-import remarkUnwrapImages from 'remark-unwrap-images'
 import {VFile} from 'vfile'
 import {VFileMessage} from 'vfile-message'
 
 import {toMarkdown} from 'mdast-util-to-markdown'
 import {MdastRoot} from './components/types.js'
+
+import {rehypeUnwrapImages} from './rehype-unwrap-images'
 
 const parseMdast = (tree: MdastRoot) => {
   const out = toMarkdown(tree, {
@@ -52,10 +53,9 @@ function evaluateFile(file: VFile) {
         remarkFrontmatter,
         remarkMath,
         remarkDirective,
-        remarkUnwrapImages,
         capture('mdast')
       ],
-      rehypePlugins: [rehypeSlug],
+      rehypePlugins: [rehypeSlug, rehypeUnwrapImages],
       recmaPlugins: []
     }).default
   } catch (error) {

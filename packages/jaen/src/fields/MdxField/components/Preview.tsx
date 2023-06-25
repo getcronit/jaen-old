@@ -3,7 +3,7 @@ import {BaseEditorProps, MdastRoot} from './types.js'
 import React, {useMemo} from 'react'
 import {Statistics, statistics} from 'vfile-statistics'
 
-import {useMdx} from '../useMdx.js'
+import {useMdx} from '../use-mdx.js'
 import {PreviewComponent} from './PreviewComponent'
 
 export interface BuildEditorProps {

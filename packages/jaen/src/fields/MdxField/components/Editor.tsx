@@ -14,7 +14,7 @@ import {ErrorFallback} from './ErrorFallback.js'
 import {PreviewComponent} from './PreviewComponent.js'
 import TabsTemplate from './TabsTemplate.js'
 
-import {useMdx} from '../useMdx.js'
+import {useMdx} from '../use-mdx.js'
 import {BaseEditorProps} from './types.js'
 
 const MemoizedCodeMirror = React.memo<ReactCodeMirrorProps>(props => {
