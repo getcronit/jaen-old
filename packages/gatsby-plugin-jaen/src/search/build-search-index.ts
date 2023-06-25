@@ -1,23 +1,51 @@
 import slugify from '@sindresorhus/slugify'
-import {MdastRoot} from '@snek-at/jaen/dist/fields/MdxField/components/types.js'
-import {IJaenPage} from '@snek-at/jaen/dist/types.js'
-import {generatePageOriginPath} from 'jaen-utils'
-import {SearchIndex} from './gatsby-node'
+// import type {IJaenPage} from '@snek-at/jaen/dist/types.js'
+import {Root as MdastRoot} from 'mdast'
+import {SearchIndex} from './types.js'
 
-export const buildSearchIndex = async (nodes: IJaenPage[]) => {
+interface Node {
+  id: string
+  path: string
+  jaenPageMetadata?: {
+    title?: string
+    description?: string
+  }
+  jaenFields?: {
+    'IMA:MdxField'?: Record<
+      string,
+      {
+        value: MdastRoot
+      }
+    >
+    'IMA:TextField'?: Record<
+      string,
+      {
+        value: string
+        props?: {
+          as?: string
+          id?: string
+          relatedName?: string
+        }
+      }
+    >
+  }
+}
+
+export const buildSearchIndex = async (nodes: Node[]) => {
   const searchIndex: SearchIndex = {}
 
   for (const node of nodes) {
-    const pagePath = generatePageOriginPath(nodes, node)
+    const pagePath = node.path
 
     if (!pagePath) {
       continue
     }
 
     const title = node.jaenPageMetadata?.title || pagePath
+    const description = node.jaenPageMetadata?.description || ''
 
-    let data: SearchIndex[string]['data'] = {
-      '': ''
+    const data: SearchIndex[string]['data'] = {
+      '': description
     }
 
     if (node.jaenFields) {
@@ -42,8 +70,8 @@ export const buildSearchIndex = async (nodes: IJaenPage[]) => {
           return `${slug}#${value}`
         }
 
-        for (const [_, value] of Object.entries(mdxField)) {
-          const mdast = value.value as MdastRoot
+        for (const value of Object.values(mdxField)) {
+          const mdast = value.value
 
           // const headings: string[] = []
           for (const node of mdast.children) {
@@ -79,9 +107,7 @@ export const buildSearchIndex = async (nodes: IJaenPage[]) => {
       }
 
       if (textField) {
-        for (const [key, value] of Object.entries(textField)) {
-          console.log(`key`, key, value)
-
+        for (const value of Object.values(textField)) {
           const isHeading =
             value.props?.as &&
             ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(value.props.as)
@@ -89,6 +115,8 @@ export const buildSearchIndex = async (nodes: IJaenPage[]) => {
           const id = value.props?.id
 
           const relatedName = value.props?.relatedName
+
+          const textValue = value.value || ''
 
           if (isHeading && id) {
             data[`${id}#${value.value || ''}`] = ''
@@ -100,15 +128,18 @@ export const buildSearchIndex = async (nodes: IJaenPage[]) => {
               const relatedValue = realtedField.value
 
               if (relatedId) {
-                data[`${relatedId}#${relatedValue}`] += `${value.value}\n`
+                data[`${relatedId}#${relatedValue}`] += `${textValue}\n`
               }
             }
+          } else {
+            data[''] += `${textValue}\n`
           }
         }
       }
     }
 
     searchIndex[pagePath] = {
+      id: node.id,
       title,
       data
     }

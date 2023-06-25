@@ -21,6 +21,7 @@ export {useStatus} from './internal/hooks/useStatus.js'
 export {useWidget} from './internal/hooks/useWidget.js'
 export * as internal from './internal/index.js'
 export {withJaenMock} from './internal/testing/withJaenMock.js'
+export * from './search/index.js'
 export {snekResourceId} from './snekResourceId.js'
 export type {IJaenPage, PageProps, SiteMetadata} from './types.js'
 

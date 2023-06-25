@@ -3,7 +3,8 @@ import fs from 'fs'
 import {GatsbyNode, Node} from 'gatsby'
 import {convertToSlug, generatePageOriginPath, JaenSource} from 'jaen-utils'
 import path from 'path'
-import {buildSearchIndex} from './build-search-index.js'
+
+import {buildSearchIndex} from './search/index.js'
 
 import {processPage} from './iam-process.js'
 
@@ -422,27 +423,9 @@ export const createPages: GatsbyNode['createPages'] = async ({
         })
       }
     }
-
-    const searchIndex = await buildSearchIndex(allJaenPage.nodes)
-
-    console.log(`searchIndex`, searchIndex)
-
-    await fs.promises.writeFile(
-      path.join('public', 'search-index-alpha.json'),
-      JSON.stringify(searchIndex)
-    )
   }
 
   await createJaenPages()
-}
-
-export interface SearchIndex {
-  [path: string]: {
-    title: string
-    data: {
-      [type: string]: string
-    }
-  }
 }
 
 export const onCreatePage: GatsbyNode['onCreatePage'] = async ({
@@ -539,7 +522,7 @@ export const sourceNodes: GatsbyNode['onCreateWebpackConfig'] = async ({
   for (const [id, jaenPage] of Object.entries(JaenSource.jaenData.pages)) {
     const page = await jaenPage.context.fetchRemoteFile<IJaenPage>()
 
-    //!! Skip deleted pages. In the future is should be impossible that deleted pages are in the source.
+    //! ! Skip deleted pages. In the future is should be impossible that deleted pages are in the source.
     if (page.deleted) {
       continue
     }
@@ -575,6 +558,92 @@ export const sourceNodes: GatsbyNode['onCreateWebpackConfig'] = async ({
       }
     }
 
-    createNode(node)
+    await createNode(node)
   }
+}
+
+export const onPostBuild: GatsbyNode['onPostBuild'] = async ({
+  graphql,
+  reporter
+}) => {
+  const result = await graphql<{
+    allJaenPage: {
+      nodes: Array<{
+        id: string
+        slug: string
+        parent: {
+          id: string
+        } | null
+        template: string | null
+        jaenPageMetadata: {
+          title: string
+        }
+        jaenFields: Record<string, any> | null
+      }>
+    }
+  }>(`
+    query {
+      allJaenPage {
+        nodes {
+          id
+          slug
+          parent {
+            id
+          }
+          template
+          jaenPageMetadata {
+            title
+          }
+          jaenFields
+        }
+      }
+    }
+  `)
+
+  if (result.errors || !result.data) {
+    reporter.panicOnBuild(`Error while running GraphQL query. ${result.errors}`)
+
+    return
+  }
+
+  const {allJaenPage} = result.data
+
+  await preparePagesAndBuildSearch(allJaenPage)
+}
+
+async function preparePagesAndBuildSearch(allJaenPage: {
+  nodes: Array<{
+    id: string
+    slug: string
+    parent: {
+      id: string
+    } | null
+    template: string | null
+    jaenPageMetadata: {
+      title: string
+    }
+    jaenFields: Record<string, any> | null
+  }>
+}) {
+  const nodesForSearchIndex = allJaenPage.nodes.map(node => {
+    const path = generatePageOriginPath(allJaenPage.nodes, node) || ''
+
+    return {
+      id: node.id,
+      path,
+      jaenPageMetadata: node.jaenPageMetadata,
+      jaenFields: node.jaenFields
+    }
+  })
+
+  console.log('nodesForSearchIndex', nodesForSearchIndex, allJaenPage.nodes)
+
+  const searchIndex = await buildSearchIndex(nodesForSearchIndex as any)
+
+  console.log('searchIndex', searchIndex)
+
+  await fs.promises.writeFile(
+    path.join('public', 'search-index.json'),
+    JSON.stringify(searchIndex)
+  )
 }
