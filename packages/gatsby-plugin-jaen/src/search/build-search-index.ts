@@ -29,6 +29,7 @@ interface Node {
       }
     >
   }
+  type: string
 }
 
 export const buildSearchIndex = async (nodes: Node[]) => {
@@ -140,6 +141,7 @@ export const buildSearchIndex = async (nodes: Node[]) => {
 
     searchIndex[pagePath] = {
       id: node.id,
+      type: node.type,
       title,
       data
     }

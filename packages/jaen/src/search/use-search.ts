@@ -7,7 +7,6 @@ import {
 import {useEffect, useRef, useState} from 'react'
 import {useDynamicPaths} from '../internal/hooks/routing/useDynamicPaths.js'
 import {useAppSelector} from '../internal/redux/index.js'
-import {IJaenPage} from '../types.js'
 
 /**
  * Represents the result of the useSearch hook.
@@ -60,8 +59,6 @@ export const useSearch = (): UseSearchResult => {
           builtSearchIndexRef.current || {}
         ).find(([_, node]) => node.id === pageId)?.[0]
 
-        console.log('pageId', pageId)
-
         const title =
           value?.jaenPageMetadata?.title ||
           (builtPagePath
@@ -75,9 +72,10 @@ export const useSearch = (): UseSearchResult => {
             title
           },
           id: pageId,
-          path: dynamicPagePath || builtPagePath
+          path: dynamicPagePath || builtPagePath,
+          type: value?.template
         }
-      }) as IJaenPage[]
+      })
 
       const pageSearchIndex = await buildSearchIndex(pageValuesWithId as any)
       const merged = mergeSearchIndex(

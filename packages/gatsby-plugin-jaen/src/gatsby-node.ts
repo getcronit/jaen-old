@@ -575,6 +575,7 @@ export const onPostBuild: GatsbyNode['onPostBuild'] = async ({
           id: string
         } | null
         template: string | null
+        componentName: string | null
         jaenPageMetadata: {
           title: string
         }
@@ -591,6 +592,7 @@ export const onPostBuild: GatsbyNode['onPostBuild'] = async ({
             id
           }
           template
+          componentName
           jaenPageMetadata {
             title
           }
@@ -619,6 +621,7 @@ async function preparePagesAndBuildSearch(allJaenPage: {
       id: string
     } | null
     template: string | null
+    componentName: string | null
     jaenPageMetadata: {
       title: string
     }
@@ -626,13 +629,19 @@ async function preparePagesAndBuildSearch(allJaenPage: {
   }>
 }) {
   const nodesForSearchIndex = allJaenPage.nodes.map(node => {
-    const path = generatePageOriginPath(allJaenPage.nodes, node) || ''
+    const originPath = generatePageOriginPath(allJaenPage.nodes, node) || ''
+
+    let type = node.template || node.componentName || undefined
+    if (type && path.extname(type)) {
+      type = path.basename(type, path.extname(type))
+    }
 
     return {
       id: node.id,
-      path,
+      path: originPath,
       jaenPageMetadata: node.jaenPageMetadata,
-      jaenFields: node.jaenFields
+      jaenFields: node.jaenFields,
+      type
     }
   })
 

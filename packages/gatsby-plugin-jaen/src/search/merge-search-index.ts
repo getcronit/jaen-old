@@ -20,6 +20,7 @@ export const mergeSearchIndex = (
       result[key] = {
         id: bValue.id || aValue.id,
         title: bValue.title || aValue.title,
+        type: bValue.type || aValue.type,
         data: {
           ...(aValue.data || {}),
           ...(bValue.data || {})
