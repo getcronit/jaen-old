@@ -80,6 +80,11 @@ export default connectPage(
             h4: props => <chakra.h4 fontSize="md" {...props} />,
             TestCard,
             Wrap,
+            code: props => {
+              console.log(props)
+
+              return <chakra.code color="red" {...props} />
+            },
           }}
         />
       </Box>

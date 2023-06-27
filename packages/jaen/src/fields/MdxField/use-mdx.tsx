@@ -16,6 +16,8 @@ import {VFile} from 'vfile'
 import {VFileMessage} from 'vfile-message'
 
 import {toMarkdown} from 'mdast-util-to-markdown'
+import rehypeMdxCodeProps from 'rehype-mdx-code-props'
+
 import {MdastRoot} from './components/types.js'
 
 import {rehypeUnwrapImages} from './rehype-unwrap-images'
@@ -55,7 +57,16 @@ function evaluateFile(file: VFile) {
         remarkDirective,
         capture('mdast')
       ],
-      rehypePlugins: [rehypeSlug, rehypeUnwrapImages],
+      rehypePlugins: [
+        rehypeSlug,
+        rehypeUnwrapImages,
+        [
+          rehypeMdxCodeProps,
+          {
+            tagName: 'code'
+          }
+        ]
+      ],
       recmaPlugins: []
     }).default
   } catch (error) {
