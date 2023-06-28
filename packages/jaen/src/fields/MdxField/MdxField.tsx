@@ -15,8 +15,6 @@ export interface MdxFieldProps {
 
 export const MdxField = connectField<MdxFieldValue, MdxFieldProps>(
   ({jaenField, components}) => {
-    console.log(jaenField.staticValue)
-
     const [rawValue, setRawValue] = React.useState<MdastRoot | undefined>(
       jaenField.staticValue || defaultData
     )
@@ -28,8 +26,6 @@ export const MdxField = connectField<MdxFieldValue, MdxFieldProps>(
     components = {
       ...components,
       img: (props: any) => {
-        console.log('props', props)
-
         const src = props.src
         const alt = props.alt
 

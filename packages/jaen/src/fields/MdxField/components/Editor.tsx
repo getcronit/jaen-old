@@ -18,8 +18,6 @@ import {useMdx} from '../use-mdx.js'
 import {BaseEditorProps} from './types.js'
 
 const MemoizedCodeMirror = React.memo<ReactCodeMirrorProps>(props => {
-  console.log('MemoizedCodeMirror', props)
-
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <CodeMirror {...props} />
@@ -30,11 +28,8 @@ const MemoizedCodeMirror = React.memo<ReactCodeMirrorProps>(props => {
 export interface EditorProps extends BaseEditorProps {}
 
 export const Editor: React.FC<EditorProps> = props => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [defaultValue, _] = useState(props.mdast)
-
-  useEffect(() => {
-    console.log('Editorr', defaultValue)
-  }, [defaultValue])
 
   const [state, setConfig] = useMdx({
     gfm: true,
@@ -43,8 +38,6 @@ export const Editor: React.FC<EditorProps> = props => {
     directive: true,
     mdast: defaultValue
   }) as any
-
-  console.log(`state`, state)
 
   const [view, setView] = React.useState<EditorView | null>(null)
 
@@ -59,8 +52,6 @@ export const Editor: React.FC<EditorProps> = props => {
   const onUpdate = useCallback(
     (v: {docChanged: any; state: {doc: any}}) => {
       if (v.docChanged) {
-        console.log('docChanged 2', v)
-
         const value = String(v.state.doc)
 
         setConfig({...state, value})
@@ -87,16 +78,13 @@ export const Editor: React.FC<EditorProps> = props => {
 
     // Get the current selection
     const {from, to} =
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       view.state.selection.ranges[view.state.selection.mainIndex]!
-
-    console.log('from', from)
-    console.log('to', to)
-    console.log(view.state)
 
     // Check if there is a selection
     if (from !== to) {
       // Replace the selected text with the snippet
-      const changes = {from: from, to: to, insert: snippet}
+      const changes = {from, to, insert: snippet}
       const tr = view.state.update({
         changes: {from: changes.from, to: changes.to, insert: changes.insert}
       })
@@ -191,8 +179,6 @@ export const Editor: React.FC<EditorProps> = props => {
       componentsInfo={componentsInfo.map(([name, component]) => ({
         label: component.displayName || name,
         onClick: () => {
-          console.log('defaultProps', component.defaultProps) // {hello: "world"}
-
           const props = Object.entries(
             component.defaultProps || {}
           ).reduce<any>((acc, [name, value]) => {
