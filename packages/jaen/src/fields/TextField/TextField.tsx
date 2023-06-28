@@ -1,6 +1,6 @@
 import {As, Box, Button, Text, TextProps, Tooltip} from '@chakra-ui/react'
 import DOMPurify from 'dompurify'
-import {useCallback, useEffect, useState} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import {
   FaAlignCenter,
   FaAlignJustify,
@@ -166,8 +166,6 @@ export const TextField = connectField<string, TextFieldProps>(
       activeTunes: jaenField.activeTunes,
       tunes: [alignmentTune, styleTune, ...fieldStyleTunes, ...jaenField.tunes]
     })
-
-    console.log('TextField tunes', tunes)
 
     // add event listener for selection change
 

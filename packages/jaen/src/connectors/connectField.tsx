@@ -13,6 +13,7 @@ export interface JaenFieldProps {
   relatedName?: string
   idStrategy?: 'auto' | 'value'
   tunes?: TuneSelectorProps['tunes']
+  isDisabled?: boolean
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -61,6 +62,7 @@ export const connectField = <IValue, P = {}>(
     idStrategy = 'auto',
     relatedName,
     tunes,
+    isDisabled,
     ...rest
   }) => {
     console.log('Rest', rest, tunes)
@@ -175,7 +177,7 @@ export const connectField = <IValue, P = {}>(
           name,
           staticValue: field.staticValue,
           value: field.value,
-          isEditing: field.isEditing,
+          isEditing: field.isEditing && !isDisabled,
           onUpdateValue: field.write,
           register,
           tune,
@@ -183,7 +185,8 @@ export const connectField = <IValue, P = {}>(
           className,
           relatedName,
           tunes: tunes || [],
-          activeTunes: field.props?.activeTunes
+          activeTunes: field.props?.activeTunes,
+          isDisabled
         }}
         {...(rest as P)}
       />

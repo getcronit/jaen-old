@@ -196,6 +196,8 @@ const IndexPage = connectPage(
 
     return (
       <>
+        <Field.Text name="test" defaultValue="test" isDisabled />
+
         {auth.isAuthenticated ? (
           <Button onClick={() => auth.logout()}>Logout</Button>
         ) : (
