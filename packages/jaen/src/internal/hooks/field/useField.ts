@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useMemo} from 'react'
 
 import {IJaenPage} from '../../../types'
 import {usePageContext} from '../../context/PageProvider.js'
@@ -92,7 +92,7 @@ export function useField<IValue>(
     const unsubscribe = store.subscribe(() => {
       const newField = getField()
 
-      if (newField !== field) {
+      if (JSON.stringify(newField) !== JSON.stringify(field)) {
         setField(newField)
       }
     })
@@ -106,7 +106,9 @@ export function useField<IValue>(
 
   const {isEditing} = useStatus()
 
-  const props = field?.props || staticField?.props || {}
+  const props = useMemo(() => {
+    return field?.props || staticField?.props || {}
+  }, [field, staticField])
 
   const write = React.useCallback(
     (newValue: IValue | null) => {
@@ -125,11 +127,6 @@ export function useField<IValue>(
           props
         })
       )
-
-      setField({
-        ...field,
-        value: newValue || undefined
-      })
     },
     [jaenPage.id, SectionBlockContext, type, name, field, store, props]
   )
