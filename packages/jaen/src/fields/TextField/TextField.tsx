@@ -1,5 +1,5 @@
 import {As, Box, Button, Text, TextProps, Tooltip} from '@chakra-ui/react'
-import DOMPurify from 'dompurify'
+import DOMPurify from 'isomorphic-dompurify'
 import React, {useCallback, useEffect, useState} from 'react'
 import {
   FaAlignCenter,
@@ -21,11 +21,30 @@ import {TuneOption} from '../../internal/components/molecules/TuneSelector/TuneS
 import {useTunes} from '../../internal/components/molecules/TuneSelector/useTunes.js'
 import {useModals} from '../../internal/context/Modals/ModalContext.js'
 
+const cleanRichText = (
+  text: string,
+  options: {
+    isRTF?: boolean
+  }
+) => {
+  const {isRTF} = options
+
+  if (isRTF) {
+    return DOMPurify.sanitize(text)
+  }
+
+  return DOMPurify.sanitize(text, {
+    ALLOWED_TAGS: [],
+    ALLOWED_ATTR: []
+  })
+}
+
 export interface TextFieldProps extends Omit<TextProps, 'children'> {
   as?: As
   asAs?: As
   defaultValue?: string
   styleTunes?: TuneOption[]
+  isRTF?: boolean
 }
 
 export const TextField = connectField<string, TextFieldProps>(
@@ -35,15 +54,25 @@ export const TextField = connectField<string, TextFieldProps>(
     as: Wrapper = Text,
     asAs,
     styleTunes: fieldStyleTunes = [],
+    isRTF = true,
     ...rest
   }) => {
     const [value, setValue] = useState(() => {
-      return jaenField.staticValue || defaultValue || ''
+      return cleanRichText(jaenField.staticValue || defaultValue || '', {
+        isRTF
+      })
     })
 
     useEffect(() => {
-      setValue(jaenField.value || jaenField.staticValue || defaultValue || '')
-    }, [jaenField.value])
+      const newValue = cleanRichText(
+        jaenField.value || jaenField.staticValue || defaultValue || '',
+        {
+          isRTF
+        }
+      )
+
+      setValue(newValue)
+    }, [jaenField.value, isRTF])
 
     const {toast} = useModals()
 
@@ -164,10 +193,12 @@ export const TextField = connectField<string, TextFieldProps>(
     const tunes = useTunes({
       props: {...rest, asAs},
       activeTunes: jaenField.activeTunes,
-      tunes: [alignmentTune, styleTune, ...fieldStyleTunes, ...jaenField.tunes]
+      tunes: [
+        alignmentTune,
+        ...(isRTF ? [styleTune, ...fieldStyleTunes] : []),
+        ...jaenField.tunes
+      ]
     })
-
-    // add event listener for selection change
 
     return (
       <HighlightTooltip
@@ -180,18 +211,22 @@ export const TextField = connectField<string, TextFieldProps>(
               <Text>Text</Text>
             </Tooltip>
           </Button>,
-          <TuneSelectorButton
-            key={`jaen-highlight-tooltip-tune-${jaenField.name}`}
-            aria-label="Customize"
-            tunes={[styleTune, ...fieldStyleTunes]}
-            icon={
-              <Text as="span" fontSize="sm" fontFamily="serif">
-                T
-              </Text>
-            }
-            activeTunes={tunes.activeTunes}
-            onTune={jaenField.tune}
-          />,
+          ...(isRTF
+            ? [
+                <TuneSelectorButton
+                  key={`jaen-highlight-tooltip-tune-${jaenField.name}`}
+                  aria-label="Customize"
+                  tunes={[styleTune, ...fieldStyleTunes]}
+                  icon={
+                    <Text as="span" fontSize="sm" fontFamily="serif">
+                      T
+                    </Text>
+                  }
+                  activeTunes={tunes.activeTunes}
+                  onTune={jaenField.tune}
+                />
+              ]
+            : []),
           <TuneSelectorButton
             key={`jaen-highlight-tooltip-tune-${jaenField.name}`}
             aria-label="Customize"
@@ -224,11 +259,19 @@ export const TextField = connectField<string, TextFieldProps>(
             onPaste={evt => {
               evt.preventDefault()
 
-              const text = evt.clipboardData.getData('text/plain')
-              const purifiedText = DOMPurify.sanitize(text, {
-                ALLOWED_TAGS: ['br', 'span', 'div'],
-                ALLOWED_ATTR: []
-              })
+              let text = ''
+
+              if (isRTF) {
+                text = evt.clipboardData.getData('text/html')
+
+                text = DOMPurify.sanitize(text, {
+                  ALLOWED_TAGS: ['br', 'span', 'div'],
+                  ALLOWED_ATTR: []
+                })
+              } else {
+                text = evt.clipboardData.getData('text/plain')
+              }
+
               const spanElement = evt.target as HTMLSpanElement
               const selection = window.getSelection()
 
@@ -245,7 +288,7 @@ export const TextField = connectField<string, TextFieldProps>(
               const updatedValue = `${currentValue.substring(
                 0,
                 startOffset
-              )}${purifiedText}${currentValue.substring(endOffset)}`
+              )}${text}${currentValue.substring(endOffset)}`
 
               jaenField.onUpdateValue(updatedValue)
             }}
