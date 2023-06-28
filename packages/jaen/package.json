@@ -1,6 +1,6 @@
 {
   "name": "@snek-at/jaen",
-  "version": "0.0.100",
+  "version": "0.0.101",
   "source": "src/index.ts",
   "main": "./dist/index.js",
   "module": "./dist/index.module.js",
