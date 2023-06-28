@@ -135,6 +135,10 @@ export const Editor: React.FC<EditorProps> = props => {
     }
   }
 
+  useEffect(() => {
+    props.onUpdateValue?.(state.file.data.mdast)
+  }, [state.file.data?.mdast])
+
   return (
     <TabsTemplate
       tabs={[
@@ -176,10 +180,6 @@ export const Editor: React.FC<EditorProps> = props => {
                 ]}
                 onCreateEditor={editorView => {
                   setView(editorView)
-                }}
-                onBlur={() => {
-                  props.onUpdateValue &&
-                    props.onUpdateValue(state.file.data.mdast)
                 }}
                 onUpdate={onUpdate}
                 theme="dark"
