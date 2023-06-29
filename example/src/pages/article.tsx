@@ -9,15 +9,26 @@ import {
   Heading,
 } from "@chakra-ui/react"
 
-import { connectBlock, connectPage, Field, useWidget } from "@snek-at/jaen"
+import {
+  connectBlock,
+  connectPage,
+  Field,
+  useIndexField,
+  useWidget,
+} from "@snek-at/jaen"
 import * as React from "react"
 
 import { graphql, Link } from "gatsby"
+import { useJaenPageIndex } from "@snek-at/jaen/dist/internal/context/PageProvider.js"
 
 const IndexPage = connectPage(
   function () {
+    const index = useIndexField()
+
     return (
       <>
+        <pre>{JSON.stringify(index, null, 2)}</pre>
+
         <Field.Text
           as={Heading}
           asAs="h1"
@@ -71,6 +82,12 @@ const IndexPage = connectPage(
 export const query = graphql`
   query ($jaenPageId: String!) {
     ...JaenPageQuery
+    jaenPage(id: { eq: $jaenPageId }) {
+      ...JaenPageData
+      children {
+        ...JaenPageData
+      }
+    }
     allJaenPage {
       nodes {
         ...JaenPageData

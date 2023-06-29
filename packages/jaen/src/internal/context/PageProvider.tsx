@@ -183,7 +183,7 @@ export const useJaenPageIndex = (
   // merge children with staticChildren by id
   let children = [...staticChildren, ...dynamicChildren]
 
-  children = children.filter(c => !c.excludedFromIndex)
+  children = children.filter(c => !c.excludedFromIndex && !c.deleted)
 
   if (props) {
     const {filter, sort} = props
