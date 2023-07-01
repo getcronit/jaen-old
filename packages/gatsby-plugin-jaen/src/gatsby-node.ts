@@ -8,6 +8,18 @@ import {buildSearchIndex} from './search/index.js'
 
 import {processPage} from './iam-process.js'
 
+function getParentId(page: {parent: {id: string} | null; id: string}) {
+  if (page.parent) {
+    return page.parent.id
+  }
+
+  if (page.id === 'JaenPage /') {
+    return null
+  }
+
+  return 'JaenPage /'
+}
+
 export const onPreBootstrap: GatsbyNode['onPreBootstrap'] = async ({
   reporter
 }) => {
@@ -245,6 +257,7 @@ export const createSchemaCustomization: GatsbyNode['onCreateWebpackConfig'] = ({
       buildPath: String @buildPath
       componentName: String @componentName
       excludedFromIndex: Boolean
+      
     }
 
     type JaenSection {
@@ -459,7 +472,10 @@ export const onCreatePage: GatsbyNode['onCreatePage'] = async ({
         const jaenPage = {
           id: jaenPageId,
           slug: slugifiedPath,
-          parent: null,
+          parent: getParentId({
+            parent: null,
+            id: jaenPageId
+          }),
           children: [],
           jaenPageMetadata: {
             title: page.path
@@ -472,15 +488,52 @@ export const onCreatePage: GatsbyNode['onCreatePage'] = async ({
 
         await createNode({
           ...jaenPage,
-          parent: null,
-          children: [],
-          jaenFiles: [],
           internal: {
             type: 'JaenPage',
             content: JSON.stringify(jaenPage),
             contentDigest: createContentDigest(jaenPage)
           }
         })
+
+        console.log(`Created JaenPage ${jaenPageId}`)
+
+        // get parent page and add the new page to its children
+        const pageNode = getNode(jaenPage.id)
+        const parentPageNode = jaenPage.parent ? getNode(jaenPage.parent) : null
+
+        console.log(
+          `Trying to create parent-child link between`,
+          pageNode?.id,
+          parentPageNode?.id
+        )
+
+        if (pageNode && parentPageNode) {
+          console.log(
+            `Creating parent-child link between`,
+            pageNode.id,
+            parentPageNode.id
+          )
+          actions.createParentChildLink({
+            parent: parentPageNode,
+            child: pageNode
+          })
+        }
+      } else {
+        const parentNode = existingNode.parent
+          ? getNode(existingNode.parent)
+          : null
+
+        if (parentNode && existingNode) {
+          console.log(
+            `Establishing parent-child link between`,
+            existingNode.id,
+            parentNode.id
+          )
+          // actions.createParentChildLink({
+          //   parent: parentNode,
+          //   child: existingNode
+          // })
+        }
       }
 
       stepPage = {...stepPage, context: {...page.context, jaenPageId}}
@@ -495,6 +548,7 @@ export const sourceNodes: GatsbyNode['onCreateWebpackConfig'] = async ({
   actions,
   createNodeId,
   createContentDigest,
+  getNode,
   cache,
   store,
   reporter
@@ -538,7 +592,9 @@ export const sourceNodes: GatsbyNode['onCreateWebpackConfig'] = async ({
 
     const path = id.split('JaenPage ')[1]
 
-    const node = {
+    // get cached page
+
+    const updatedPage = {
       ...page,
       jaenPageMetadata: {
         ...page.jaenPageMetadata,
@@ -549,16 +605,37 @@ export const sourceNodes: GatsbyNode['onCreateWebpackConfig'] = async ({
       template: page.template || null,
       componentName: page.componentName || null,
       sections: page.sections || [],
-      parent: page.parent ? page.parent.id : null,
-      children: page.children?.map(child => child.id) || [],
+      parent: getParentId({
+        parent: page.parent,
+        id
+      }),
+      children: page.children?.map(child => child.id)
+    }
+
+    const node = {
+      ...updatedPage,
       internal: {
         type: 'JaenPage',
-        content: JSON.stringify(page),
-        contentDigest: createContentDigest(page)
+        content: JSON.stringify(updatedPage),
+        contentDigest: createContentDigest(updatedPage)
       }
     }
 
     await createNode(node)
+
+    const parentPageNode = node.parent ? getNode(node.parent) : null
+
+    if (node && parentPageNode) {
+      console.log(
+        `Creating parent-child link between`,
+        node.id,
+        parentPageNode.id
+      )
+      actions.createParentChildLink({
+        parent: parentPageNode,
+        child: node
+      })
+    }
   }
 }
 
@@ -645,11 +722,7 @@ async function preparePagesAndBuildSearch(allJaenPage: {
     }
   })
 
-  console.log('nodesForSearchIndex', nodesForSearchIndex, allJaenPage.nodes)
-
   const searchIndex = await buildSearchIndex(nodesForSearchIndex as any)
-
-  console.log('searchIndex', searchIndex)
 
   await fs.promises.writeFile(
     path.join('public', 'search-index.json'),

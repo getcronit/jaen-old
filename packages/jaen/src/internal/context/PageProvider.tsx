@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useMemo} from 'react'
 import {IJaenPage} from '../../types.js'
 import {RootState, store, useAppDispatch, withRedux} from '../redux'
 import {actions} from '../redux/slices/page.js'
@@ -99,7 +99,6 @@ export const useJaenPageIndex = (
   const {jaenPage, jaenPages} = usePageContext()
 
   let id = jaenPage.id
-  let staticChildren = jaenPage.children
 
   if (props?.jaenPageId) {
     id = props?.jaenPageId
@@ -133,13 +132,25 @@ export const useJaenPageIndex = (
     id = newId
   }
 
-  if (id !== jaenPage.id) {
-    if (jaenPages) {
-      staticChildren = jaenPages.find(page => page.id === id)?.children
-    } else {
-      console.warn('There are no jaenPages in the context')
+  const staticChildren = useMemo(() => {
+    const jaenPagesChildren: Array<{id: string} & Partial<IJaenPage>> =
+      jaenPages?.find(page => page.id === id)?.children || []
+
+    let children: Array<{id: string} & Partial<IJaenPage>> = []
+
+    if (jaenPage.id === id) {
+      children = jaenPage.children || []
     }
-  }
+
+    const mergedChildren = [...children, ...jaenPagesChildren]
+
+    // Filter out duplicates based on the ID
+    const uniqueChildren = mergedChildren.filter(
+      (child, index, self) => index === self.findIndex(c => c.id === child.id)
+    )
+
+    return uniqueChildren
+  }, [jaenPage, jaenPage.children, jaenPages, id])
 
   const [dynamicChildrenIds, setDynamicChildrenIds] = React.useState(() => {
     const state = store.getState() as IJaenState
@@ -153,7 +164,9 @@ export const useJaenPageIndex = (
 
       const page = state.page.pages.nodes[id]
       if (page) {
-        setDynamicChildrenIds(page.children)
+        const onlyNotDeleted = page.children?.filter(c => !c.deleted)
+
+        setDynamicChildrenIds(onlyNotDeleted)
       }
     })
 
@@ -178,24 +191,27 @@ export const useJaenPageIndex = (
     }
   }, [dynamicChildrenIds])
 
-  staticChildren = staticChildren || []
-
   // merge children with staticChildren by id
-  let children = [...staticChildren, ...dynamicChildren]
+  const children = useMemo(() => {
+    // This is a double check for deleted pages just in case
+    let mergedChildren = [...staticChildren, ...dynamicChildren].filter(
+      c => !c.excludedFromIndex && !c.deleted
+    )
 
-  children = children.filter(c => !c.excludedFromIndex && !c.deleted)
+    if (props) {
+      const {filter, sort} = props
 
-  if (props) {
-    const {filter, sort} = props
+      if (filter) {
+        mergedChildren = mergedChildren.filter(filter)
+      }
 
-    if (filter) {
-      children = children.filter(filter)
+      if (sort) {
+        mergedChildren = mergedChildren.sort(sort)
+      }
     }
 
-    if (sort) {
-      children = children.sort(sort)
-    }
-  }
+    return mergedChildren
+  }, [staticChildren, dynamicChildren, props])
 
   return {
     children,

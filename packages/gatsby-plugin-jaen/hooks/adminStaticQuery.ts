@@ -52,7 +52,7 @@ export const useAdminStaticQuery = <JaenSiteMetadata, JaenPageNode>() => {
         allJaenPage {
           totalCount
           nodes {
-            ...JaenPageData
+            ...JaenPageDataStructure
             parent {
               id
             }

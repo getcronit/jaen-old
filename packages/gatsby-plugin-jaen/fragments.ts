@@ -25,6 +25,36 @@ export const fragments = graphql`
     }
   }
 
+  fragment JaenPageDataStructure on JaenPage {
+    id
+    buildPath
+    slug
+    template
+    jaenPageMetadata {
+      title
+      isBlogPost
+      image
+      description
+      datePublished
+      canonical
+    }
+  }
+
+  fragment JaenPageChildrenData on JaenPage {
+    ...JaenPageDataStructure
+    jaenFields
+    jaenFiles {
+      id
+      childImageSharp {
+        gatsbyImageData(
+          placeholder: BLURRED
+          formats: [AUTO, WEBP, AVIF]
+          layout: FULL_WIDTH
+        )
+      }
+    }
+  }
+
   fragment JaenPageData on JaenPage {
     id
     buildPath
