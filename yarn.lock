@@ -4346,10 +4346,10 @@
   optionalDependencies:
     ipfs-http-client "^60.0.0"
 
-"@snek-functions/origin@^0.2.3":
-  version "0.2.9"
-  resolved "https://registry.yarnpkg.com/@snek-functions/origin/-/origin-0.2.9.tgz#2e4bb11c7ce0278e399d6f450eccd26c00df8d91"
-  integrity sha512-0XQgEzFI0IfBQWUP6XBJwF+P3BFVoLKmMeioyO6mslFcdjoWBG1xRoZjhZu86G2Z3VSBC/ueB/M3zjIlxsn9mw==
+"@snek-functions/origin@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@snek-functions/origin/-/origin-0.3.0.tgz#736f1a7586220413dec9fac38967a99ad4ac2985"
+  integrity sha512-ZKAqYBNKtYyURHFshlLe3rThNPYb6F4VojmVIkTo/pdiQ0M6LW6JLKYnxfTjLYRkVHPiZp9PDrX9tspoHAzPNw==
   dependencies:
     snek-query "*"
 
