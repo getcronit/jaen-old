@@ -30,7 +30,9 @@ const cleanRichText = (
   const {isRTF} = options
 
   if (isRTF) {
-    return DOMPurify.sanitize(text)
+    return DOMPurify.sanitize(text, {
+      FORBID_TAGS: ['p']
+    })
   }
 
   return DOMPurify.sanitize(text, {
@@ -265,7 +267,7 @@ export const TextField = connectField<string, TextFieldProps>(
                 text = evt.clipboardData.getData('text/html')
 
                 text = DOMPurify.sanitize(text, {
-                  ALLOWED_TAGS: ['br', 'span', 'div'],
+                  ALLOWED_TAGS: ['br', 'span'],
                   ALLOWED_ATTR: []
                 })
               } else {
