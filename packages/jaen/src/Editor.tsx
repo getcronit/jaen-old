@@ -43,8 +43,37 @@ const HeadingBlock = connectBlock(
             tunes: new Array(6).fill(0).map((_, i) => {
               const n = i + 1
 
-              const tag = `h${n}`
-              const fontSize = `${i === 5 ? 'xl' : `${6 - i}xl`}`
+              const tag = `h${n}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+
+              const responsiveFontSize = {
+                h1: {
+                  base: '4xl',
+                  sm: '5xl',
+                  md: '6xl',
+                  lg: '6xl',
+                  '2xl': '6xl'
+                },
+                h2: {
+                  base: '3xl',
+                  sm: '4xl',
+                  md: '5xl',
+                  lg: '6xl',
+                  '2xl': '6xl'
+                },
+                h3: {
+                  base: '2xl',
+                  sm: '3xl',
+                  md: '4xl',
+                  lg: '5xl',
+                  '2xl': '6xl'
+                },
+                h4: {base: 'xl', sm: '2xl', md: '3xl', lg: '4xl', '2xl': '5xl'},
+                h5: {base: 'lg', sm: 'xl', md: '2xl', lg: '3xl', '2xl': '4xl'},
+                h6: {base: 'md', sm: 'lg', md: 'xl', lg: '2xl', '2xl': '3xl'}
+              }
+
+              const responsiveFontSizeValue = responsiveFontSize[tag]
+
               const marginTop = `${2 + (7 - i) * 0.5}rem`
               const marginBottom = `${(6 - i) * 0.5}rem`
 
@@ -58,7 +87,7 @@ const HeadingBlock = connectBlock(
                 requiredProps: ['asAs'],
                 props: {
                   asAs: tag,
-                  fontSize,
+                  fontSize: responsiveFontSizeValue,
                   marginTop,
                   marginBottom
                 }
