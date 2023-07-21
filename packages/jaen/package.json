@@ -36,7 +36,7 @@
   "license": "MIT",
   "dependencies": {
     "@chakra-ui/icons": "^2.0.18",
-    "@chakra-ui/pro-theme": "^0.0.64",
+    "@chakra-ui/pro-theme": "^0.9.0",
     "@chakra-ui/react": "^2.5.5",
     "@codemirror/lang-markdown": "^6.1.1",
     "@codemirror/language-data": "^6.3.1",

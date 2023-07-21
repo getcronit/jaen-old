@@ -1,1 +1,0 @@
-export {AdminPageManagerProvider} from './AdminPageManagerProvider'

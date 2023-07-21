@@ -1,1 +1,1 @@
-module.exports = require('./dist/gatsby-config.js')
+module.exports = require('./dist/src/gatsby-config.js')

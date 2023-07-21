@@ -92,6 +92,10 @@ export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = (
           {
             test: /filerobot-image-editor/,
             use: loaders.null()
+          },
+          {
+            test: /reagraph/,
+            use: loaders.null()
           }
         ]
       }
@@ -329,18 +333,119 @@ export const createPages: GatsbyNode['createPages'] = async ({
 }) => {
   const {createPage, createNodeField} = actions
 
+  // createPage({
+  //   path: '/admin',
+  //   // matchPath to ignore trailing slash
+  //   matchPath: '/admin/*',
+  //   component: require.resolve('../pages/'),
+  //   context: {}
+  // })
+
   createPage({
-    path: '/admin',
-    // matchPath to ignore trailing slash
-    matchPath: '/admin/*',
-    component: require.resolve('../AdminPage.tsx'),
-    context: {}
+    path: '/login',
+    component: require.resolve('../../pages/login.tsx'),
+    context: {
+      withoutJaenFrame: true
+    }
   })
 
   createPage({
-    path: '/admin/login',
-    component: require.resolve('../LoginPage.tsx'),
-    context: {}
+    path: '/logout',
+    component: require.resolve('../../pages/logout.tsx'),
+    context: {
+      withoutJaenFrame: true
+    }
+  })
+
+  createPage({
+    path: '/cms',
+    component: require.resolve('../../pages/cms/index.tsx'),
+    context: {
+      withoutJaenFrameStickyHeader: true,
+      breadcrumbs: [
+        {
+          label: 'CMS',
+          path: '/cms'
+        }
+      ]
+    }
+  })
+
+  createPage({
+    path: '/cms/pages',
+    component: require.resolve('../../pages/cms/pages/index.tsx'),
+    context: {
+      withoutJaenFrameStickyHeader: true,
+
+      breadcrumbs: [
+        {
+          label: 'CMS',
+          path: '/cms'
+        },
+        {
+          label: 'Pages',
+          path: '/cms/pages'
+        }
+      ]
+    }
+  })
+
+  createPage({
+    path: '/cms/pages/new',
+    component: require.resolve('../../pages/cms/pages/new.tsx'),
+    context: {
+      withoutJaenFrameStickyHeader: true,
+      breadcrumbs: [
+        {
+          label: 'CMS',
+          path: '/cms'
+        },
+        {
+          label: 'Pages',
+          path: '/cms/pages'
+        },
+        {
+          label: 'New',
+          path: '/cms/pages/new'
+        }
+      ]
+    }
+  })
+
+  createPage({
+    path: '/cms/settings',
+    component: require.resolve('../../pages/cms/settings.tsx'),
+    context: {
+      withoutJaenFrameStickyHeader: true,
+      breadcrumbs: [
+        {
+          label: 'CMS',
+          path: '/cms'
+        },
+        {
+          label: 'Settings',
+          path: '/cms/settings'
+        }
+      ]
+    }
+  })
+
+  createPage({
+    path: '/cms/media',
+    component: require.resolve('../../pages/cms/media.tsx'),
+    context: {
+      withoutJaenFrameStickyHeader: true,
+      breadcrumbs: [
+        {
+          label: 'CMS',
+          path: '/cms'
+        },
+        {
+          label: 'Media',
+          path: '/cms/media'
+        }
+      ]
+    }
   })
 
   const createJaenPages = async () => {

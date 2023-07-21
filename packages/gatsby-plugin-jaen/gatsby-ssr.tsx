@@ -1,23 +1,23 @@
-import {GatsbySSR} from 'gatsby'
+// import {GatsbySSR} from 'gatsby'
 
-import {internal} from '@snek-at/jaen'
+// import {internal} from '@snek-at/jaen'
 
-import '@snek-at/jaen/dist/index.css'
+// import '@snek-at/jaen/dist/index.css'
 
-const {GatsbyRootWrapper, GatsbyPageWrapper} = internal
+// const {GatsbyRootWrapper, GatsbyPageWrapper} = internal
 
-export const wrapRootElement: GatsbySSR['wrapRootElement'] = ({element}) => {
-  return <GatsbyRootWrapper ssr>{element}</GatsbyRootWrapper>
-}
+// export const wrapRootElement: GatsbySSR['wrapRootElement'] = ({element}) => {
+//   return <GatsbyRootWrapper ssr>{element}</GatsbyRootWrapper>
+// }
 
-export const wrapPageElement: GatsbySSR['wrapPageElement'] = ({
-  element,
-  props
-}) => {
-  return (
-    // @ts-ignore-error
-    <GatsbyPageWrapper pageProps={props} ssr>
-      {element}
-    </GatsbyPageWrapper>
-  )
-}
+// export const wrapPageElement: GatsbySSR['wrapPageElement'] = ({
+//   element,
+//   props
+// }) => {
+//   return (
+//     // @ts-ignore-error
+//     <GatsbyPageWrapper pageProps={props} ssr>
+//       {element}
+//     </GatsbyPageWrapper>
+//   )
+// }

@@ -2,7 +2,7 @@
   "name": "gatsby-plugin-jaen",
   "version": "0.0.31",
   "main": "index.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/src/index.d.ts",
   "license": "MIT",
   "files": [
     "dist",
@@ -15,9 +15,12 @@
   ],
   "scripts": {
     "build": "tsc",
-    "watch": "tsc -w"
+    "watch": "tsc -w",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "peerDependencies": {
+    "@chakra-ui/react": "^2.7.1",
     "@snek-at/jaen": "*",
     "gatsby": "^5",
     "gatsby-plugin-image": "^3",
@@ -26,10 +29,36 @@
   },
   "dependencies": {
     "@chakra-ui/gatsby-plugin": "^3.1.1",
+    "@snek-at/snek-finder": "^1.0.0-beta.29",
     "gatsby-plugin-compile-es6-packages": "^2.1.1",
     "gatsby-plugin-emotion": "^8.9",
     "gatsby-plugin-nprogress": "^5.4.0",
     "gatsby-source-filesystem": "^5.4.0",
-    "jaen-utils": "*"
+    "jaen-utils": "*",
+    "react-complex-tree": "^2.2.0",
+    "react-dropzone": "^14.2.3",
+    "react-filerobot-image-editor": "^4.5.1",
+    "react-hook-form": "^7.45.2",
+    "react-icons": "^4.10.1",
+    "react-zoom-pan-pinch": "^3.1.0",
+    "reagraph": "^4.10.5",
+    "slugify": "^1.6.6"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.22.7",
+    "@babel/preset-react": "^7.22.5",
+    "@babel/preset-typescript": "^7.22.5",
+    "@storybook/addon-actions": "^6.5.12",
+    "@storybook/addon-essentials": "^6.5.12",
+    "@storybook/addon-interactions": "^6.5.12",
+    "@storybook/addon-links": "^6.5.12",
+    "@storybook/builder-webpack5": "^6.5.12",
+    "@storybook/manager-webpack5": "^6.5.12",
+    "@storybook/react": "^6.5.12",
+    "@storybook/testing-library": "^0.0.13",
+    "prop-types": "^15.8.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.1.6"
   }
 }

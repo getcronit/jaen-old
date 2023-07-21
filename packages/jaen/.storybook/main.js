@@ -1,3 +1,5 @@
+const DefinePlugin = require('webpack').DefinePlugin
+
 module.exports = {
   stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
   addons: [
@@ -23,6 +25,13 @@ module.exports = {
     // Use babel-plugin-remove-graphql-queries to remove static queries from components when rendering in storybook
     config.module.rules[0].use[0].options.plugins.push(
       require.resolve('babel-plugin-remove-graphql-queries')
+    )
+
+    // add ___SNEK_RESOURCE_ID___ variable to webpack
+    config.plugins.push(
+      new DefinePlugin({
+        ___SNEK_RESOURCE_ID___: JSON.stringify(process.env.SNEK_RESOURCE_ID)
+      })
     )
 
     return config
