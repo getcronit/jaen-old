@@ -3,7 +3,6 @@ import {
   Button,
   ButtonGroup,
   Center,
-  ChakraProvider,
   Flex,
   FormControl,
   FormErrorMessage,
@@ -17,12 +16,10 @@ import {
   StackDivider,
   Text,
   Textarea,
-  theme,
   useColorModeValue,
   useToast,
   VStack
 } from '@chakra-ui/react'
-import {useSnekFinder} from '@snek-at/snek-finder'
 import React from 'react'
 import {Controller, useForm} from 'react-hook-form'
 import {FaRocket} from 'react-icons/fa'
@@ -83,25 +80,7 @@ export const Settings: React.FC<SettingsProps> = ({
     defaultValues
   })
 
-  const [finderReference, setFinderReference] = React.useState<any | null>(null)
-
-  const finder = useSnekFinder({
-    mode: 'selector',
-    onSelect: ({src}) => {
-      if (finderReference) {
-        setValue(finderReference, src, {
-          shouldDirty: true
-        })
-
-        setFinderReference(null)
-      }
-    }
-  })
-
-  const handleSiteImageUpload = () => {
-    setFinderReference('siteMetadata.image')
-    finder.toggleSelector()
-  }
+  const handleSiteImageUpload = () => {}
 
   const handleSiteImageDelete = () => {
     setValue('siteMetadata.image', '', {
@@ -109,10 +88,7 @@ export const Settings: React.FC<SettingsProps> = ({
     })
   }
 
-  const handleOrganizationLogoUpload = () => {
-    setFinderReference('siteMetadata.organization.logo')
-    finder.toggleSelector()
-  }
+  const handleOrganizationLogoUpload = () => {}
 
   const handleOrganizationLogoDelete = () => {
     setValue('siteMetadata.organization.logo', '', {
@@ -143,9 +119,6 @@ export const Settings: React.FC<SettingsProps> = ({
 
   return (
     <Box id="coco">
-      <ChakraProvider theme={theme} disableGlobalStyle>
-        {finder.finderElement}
-      </ChakraProvider>
       <form
         onSubmit={data => {
           void handleSubmit(onSubmit)(data)

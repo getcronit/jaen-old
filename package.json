@@ -14,8 +14,7 @@
   "workspaces": [
     "packages/jaen",
     "packages/gatsby-plugin-jaen",
-    "packages/jaen-utils",
-    "example"
+    "my-gatsby-site"
   ],
   "dependencies": {
     "eslint-config-prettier": "^8.6.0",

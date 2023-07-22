@@ -1,4 +1,3 @@
-import {HamburgerIcon} from '@chakra-ui/icons'
 import {
   Box,
   Drawer,
@@ -9,11 +8,13 @@ import {
   DrawerHeader,
   DrawerOverlay,
   HStack,
+  Icon,
   IconButton,
   Text,
   useDisclosure
 } from '@chakra-ui/react'
 import {useRef} from 'react'
+import {FaBars} from 'react-icons/fa'
 import {JaenFullLogo} from '../../../shared/JaenLogo/JaenLogo'
 import {
   NavigationGroups,
@@ -39,7 +40,7 @@ export const DrawerLeft: React.FC<DrawerLeftProps> = ({
     <>
       <IconButton
         aria-label="Open main menu"
-        icon={<HamburgerIcon fontSize="lg" color="brand.500 !important" />}
+        icon={<Icon as={FaBars} fontSize="lg" color="brand.500 !important" />}
         size="sm"
         onClick={onToggle}
         variant="outline"

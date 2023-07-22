@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import {ArrowBackIcon} from '@chakra-ui/icons'
 import {
   Alert,
   AlertDescription,
@@ -21,8 +20,10 @@ import {
 } from '@chakra-ui/react'
 import {useState} from 'react'
 import {SubmitHandler, useForm} from 'react-hook-form'
+import {FaArrowLeft} from 'react-icons/fa'
 
 import {withTheme} from '../../theme/with-theme'
+
 import Logo from '../Logo'
 import {JaenFullLogo} from '../shared/JaenLogo/JaenLogo'
 import {Link} from '../shared/Link/Link'
@@ -102,7 +103,7 @@ export const JaenLogin: React.FC<JaenLoginProps> = props => {
               <Link
                 as={Button}
                 variant="outline"
-                leftIcon={<ArrowBackIcon />}
+                leftIcon={<FaArrowLeft />}
                 to={props.goBackPath}
                 onClick={props.onGoBack}>
                 Back to website

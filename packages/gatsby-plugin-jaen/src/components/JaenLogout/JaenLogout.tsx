@@ -1,5 +1,5 @@
-import {ArrowBackIcon} from '@chakra-ui/icons'
 import {Box, Button, Container, Heading, HStack, Stack} from '@chakra-ui/react'
+import {FaArrowLeft} from 'react-icons/fa'
 
 import Logo from '../Logo'
 import {JaenFullLogo} from '../shared/JaenLogo/JaenLogo'
@@ -32,7 +32,7 @@ export const JaenLogout: React.FC<JaenLogoutProps> = props => {
               <Link
                 as={Button}
                 variant="outline"
-                leftIcon={<ArrowBackIcon />}
+                leftIcon={<FaArrowLeft />}
                 to={props.goBackPath}
                 onClick={props.onGoBack}>
                 Back to website

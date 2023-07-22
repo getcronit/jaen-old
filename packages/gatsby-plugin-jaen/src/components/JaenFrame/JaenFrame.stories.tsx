@@ -1,4 +1,3 @@
-import {QuestionIcon} from '@chakra-ui/icons'
 import {Button, ButtonGroup, HStack, Icon} from '@chakra-ui/react'
 import {ComponentMeta, Story} from '@storybook/react'
 import React, {useContext, useEffect} from 'react'
@@ -13,6 +12,7 @@ import {
   FaImage,
   FaLifeRing,
   FaPencilAlt,
+  FaQuestion,
   FaSignOutAlt,
   FaSitemap,
   FaTrash,
@@ -176,7 +176,7 @@ Basic.args = {
       version: '3.0.0',
       logo: (
         <HStack>
-          <QuestionIcon boxSize={6} />
+          <FaQuestion boxSize={6} />
           <span>Your Brand</span>
         </HStack>
       )

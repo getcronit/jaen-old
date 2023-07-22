@@ -1,0 +1,691 @@
+import {
+  AspectRatio,
+  Box,
+  Button,
+  ButtonGroup,
+  Flex,
+  HStack,
+  Icon,
+  IconButton,
+  Image,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  SimpleGrid,
+  Skeleton,
+  Slider,
+  SliderFilledTrack,
+  SliderThumb,
+  SliderTrack,
+  Spacer,
+  Stack
+} from '@chakra-ui/react'
+import React, {MouseEventHandler, useCallback, useEffect, useState} from 'react'
+import {
+  FaArrowLeft,
+  FaArrowRight,
+  FaDownload,
+  FaMinus,
+  FaPlus,
+  FaSlidersH,
+  FaTrash
+} from 'react-icons/fa'
+
+import {useDropzone} from 'react-dropzone'
+import {BsLayoutSidebarInset} from 'react-icons/bs'
+
+import FilerobotImageEditor, {TABS} from 'react-filerobot-image-editor'
+import {TransformComponent, TransformWrapper} from 'react-zoom-pan-pinch'
+import {PageTree} from '../../shared/PageTree/PageTree'
+
+export interface MediaNode {
+  id: string
+  preview?: {
+    url: string
+  }
+  url: string
+  description?: string
+  width: number
+  height: number
+  revisions: MediaNode[]
+}
+
+export interface MediaProps {
+  isLoading?: boolean
+  media: MediaNode[]
+
+  onUpload: (files: File[]) => void
+
+  onDelete: (ids: string) => void
+  onUpdate: (
+    id: string,
+    data: Partial<
+      MediaNode & {
+        file: File
+      }
+    >
+  ) => void
+  onDownload: (id: string) => void
+
+  onLoadMore: () => void
+}
+
+const Photo = React.memo<{
+  node: MediaNode
+  isLast: boolean
+
+  isSelected?: boolean
+  onClick?: MouseEventHandler<HTMLDivElement> | undefined
+  onDoubleClick?: MouseEventHandler<HTMLDivElement> | undefined
+  onUpdateDescription?: (description: string) => void
+}>(
+  ({node, isLast, isSelected, onClick, onDoubleClick, onUpdateDescription}) => {
+    console.log(node)
+
+    useEffect(() => {
+      console.log('rendered')
+    }, [node])
+
+    return (
+      <Stack
+        key={node.id}
+        id={node.id}
+        justifyContent="center"
+        onClick={onClick}>
+        <AspectRatio
+          ratio={node.width / node.height}
+          objectFit="contain"
+          {...(isSelected && {
+            outline: '2px solid',
+            outlineColor: 'brand.500',
+            outlineOffset: '2px',
+            borderRadius: 'lg'
+          })}>
+          <Image
+            key={node.id}
+            id={isLast ? 'last-media-item' : undefined}
+            fallback={
+              <Skeleton w="100%" borderRadius="lg" display="inline-block" />
+            }
+            w="100%"
+            h="100%"
+            src={node.preview?.url ?? node.url}
+            alt={node.description}
+            onDoubleClick={onDoubleClick}
+          />
+        </AspectRatio>
+        <Input
+          size="xs"
+          textAlign="center"
+          border="none"
+          fontSize="xs"
+          fontWeight="bold"
+          defaultValue={node.description}
+          onChange={e => {
+            onUpdateDescription?.(e.target.value)
+          }}
+        />
+      </Stack>
+    )
+  }
+)
+
+export const Media: React.FC<MediaProps> = ({
+  media,
+  isLoading,
+  onUpload,
+  onLoadMore,
+  onDelete,
+  onUpdate,
+  onDownload
+}) => {
+  const [columnCount, setColumnCount] = useState(3)
+
+  const [isSidebarOpen, setSidebarOpen] = useState(false) // State variable for sidebar visibility
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!isSidebarOpen)
+  }
+
+  const handleDrop = useCallback((acceptedFiles: File[]) => {
+    // Perform actions with the dropped files (e.g., upload to a server, process, etc.)
+    console.log('Dropped files:', acceptedFiles)
+
+    if (acceptedFiles.length > 0) {
+      // call onUpload callback
+
+      onUpload(acceptedFiles)
+    }
+  }, [])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const lastMediaItem = document.getElementById('last-media-item') // Add an ID to the last media item in the list
+
+      if (lastMediaItem) {
+        const rect = lastMediaItem.getBoundingClientRect()
+        const isAtBottom = rect.bottom <= window.innerHeight
+
+        if (isAtBottom) {
+          onLoadMore()
+        }
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [onLoadMore])
+
+  const [selectedMediaNode, setSelectedMediaNode] =
+    useState<MediaNode | null>(null)
+
+  const [isMediaPreviewOpen, setMediaPreviewOpen] =
+    useState<'PREVIEW' | 'EDIT' | false>(false)
+
+  useEffect(() => {
+    // scroll to selected media item
+    if (selectedMediaNode) {
+      const selectedMediaItem = document.getElementById(selectedMediaNode.id)
+
+      if (selectedMediaItem) {
+        selectedMediaItem.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        })
+      }
+    }
+  }, [selectedMediaNode?.id])
+
+  const memoizedMedia = React.useMemo(() => {
+    return (
+      <SimpleGrid
+        onClick={event => {
+          setSelectedMediaNode(null)
+        }}
+        columns={[1, 2, columnCount, columnCount + 1]}
+        spacing={2}
+        p="1">
+        {media.map((node, index) => (
+          <Photo
+            key={node.id}
+            node={node}
+            isLast={index === media.length - 1}
+            isSelected={selectedMediaNode?.id === node.id}
+            onClick={e => {
+              e.stopPropagation() // Prevent event propagation to parent element
+              setSelectedMediaNode(node)
+            }}
+            onDoubleClick={e => {
+              e.stopPropagation() // Prevent event propagation to parent element
+              setMediaPreviewOpen('PREVIEW')
+            }}
+            onUpdateDescription={description => {
+              handleUpdate({
+                description
+              })
+            }}
+          />
+        ))}
+      </SimpleGrid>
+    )
+  }, [media, columnCount, isLoading, selectedMediaNode])
+
+  const {
+    getRootProps,
+    getInputProps,
+    isDragActive,
+    open: openUpload
+  } = useDropzone({
+    onDrop: handleDrop,
+    accept: {
+      'image/*': []
+    }
+  })
+
+  const handleDownload = () => {
+    if (selectedMediaNode) {
+      // call onDownload callback
+
+      onDownload(selectedMediaNode.id)
+    }
+  }
+
+  const handleDelete = () => {
+    if (selectedMediaNode) {
+      // call onDelete callback
+
+      onDelete(selectedMediaNode.id)
+      setSelectedMediaNode(null)
+
+      if (isMediaPreviewOpen) {
+        setMediaPreviewOpen(false)
+      }
+    }
+  }
+
+  const handleEdit = () => {
+    if (selectedMediaNode) {
+      // call onEdit callback
+
+      setMediaPreviewOpen('EDIT')
+    }
+  }
+
+  const handleUpdate = (
+    data: Partial<
+      MediaNode & {
+        file: File
+      }
+    >
+  ) => {
+    if (selectedMediaNode) {
+      // call onUpdate callback
+
+      onUpdate(selectedMediaNode.id, data)
+    }
+  }
+
+  return (
+    <Flex id="coco" pos="relative">
+      <Stack
+        as="nav"
+        h="calc(100dvh - 4rem )"
+        pos="sticky"
+        top="0"
+        w="xs"
+        borderRight="1px solid"
+        borderColor="border.emphasized"
+        overflow="auto"
+        display={isSidebarOpen ? 'block' : 'none'} // Show/hide sidebar based on state
+      >
+        <HStack h="12" w="full" p="4">
+          <IconButton
+            aria-label="close sidebar"
+            icon={<BsLayoutSidebarInset />}
+            variant="ghost"
+            onClick={toggleSidebar}
+          />
+        </HStack>
+
+        <PageTree />
+      </Stack>
+
+      <Box w="full">
+        <Box>
+          <HStack
+            visibility={isMediaPreviewOpen ? 'hidden' : 'visible'}
+            h="12"
+            w="full"
+            p="4"
+            top="0"
+            pos="sticky"
+            zIndex="2"
+            bg="bg.surface"
+            borderBottom="1px solid"
+            borderColor="border.emphasized">
+            {!isSidebarOpen && (
+              <IconButton
+                aria-label="open sidebar"
+                icon={<BsLayoutSidebarInset />}
+                variant="ghost"
+                onClick={toggleSidebar}
+              />
+            )}
+
+            <HStack>
+              <Icon as={FaMinus} boxSize="2" />
+              <Slider
+                w="12"
+                aria-label="slider-image-size"
+                defaultValue={3}
+                min={1}
+                max={5}
+                onChange={value => {
+                  setColumnCount(6 - value)
+                }}>
+                <SliderTrack>
+                  <SliderFilledTrack />
+                </SliderTrack>
+                <SliderThumb />
+              </Slider>
+              <Icon as={FaPlus} boxSize="2" />
+            </HStack>
+
+            <Spacer />
+
+            <ButtonGroup
+              variant="outline"
+              size="xs"
+              isDisabled={selectedMediaNode === null}>
+              <IconButton
+                aria-label="Customize selected image"
+                icon={<FaSlidersH />}
+                onClick={handleEdit}
+              />
+
+              <IconButton
+                aria-label="Download selected image"
+                icon={<FaDownload />}
+                onClick={handleDownload}
+              />
+              <IconButton
+                aria-label="Delete selected image"
+                icon={<FaTrash />}
+                onClick={handleDelete}
+              />
+            </ButtonGroup>
+
+            {isDragActive ? (
+              <Button size="xs" leftIcon={<FaPlus />} colorScheme="orange">
+                Drop to upload
+              </Button>
+            ) : (
+              <Button
+                variant="outline"
+                size="xs"
+                leftIcon={<FaPlus />}
+                onClick={openUpload}>
+                Upload
+              </Button>
+            )}
+          </HStack>
+
+          <Box
+            {...getRootProps({
+              onClick: event => {
+                event.stopPropagation()
+              }
+            })}
+            pos="relative">
+            <input {...getInputProps()} />
+
+            {isDragActive && (
+              <Box
+                bg="bg.translucent"
+                backdropFilter="blur(8px) saturate(180%) contrast(46%) brightness(120%)"
+                pos="absolute"
+                top="0"
+                left="0"
+                w="full"
+                h="full"
+                zIndex={1}
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+              />
+            )}
+
+            {memoizedMedia}
+          </Box>
+        </Box>
+
+        <Modal
+          isOpen={isMediaPreviewOpen !== false}
+          onClose={() => {
+            setMediaPreviewOpen(false)
+          }}
+          size="full"
+          motionPreset="none">
+          <ModalOverlay />
+
+          <ModalContent
+            containerProps={{
+              id: 'coco'
+            }}
+            bg="transparent"
+            sx={{
+              '.react-transform-wrapper': {
+                width: 'unset !important',
+                height: 'unset !important',
+                flex: 1,
+                display: isMediaPreviewOpen === 'PREVIEW' ? 'flex' : 'none'
+              },
+              '.react-transform-component': {
+                width: 'unset !important',
+                height: 'unset !important',
+                justifyContent: 'center'
+              },
+              '.react-transform-element': {
+                width: 'unset !important',
+                height: 'unset !important'
+              }
+            }}>
+            <ModalHeader p="0">
+              <HStack
+                h="12"
+                w="full"
+                p="4"
+                top="0"
+                pos="sticky"
+                zIndex="2"
+                bg="bg.surface"
+                borderBottom="1px solid"
+                borderColor="border.emphasized">
+                <Button
+                  variant="text"
+                  leftIcon={<FaArrowLeft />}
+                  onClick={() => {
+                    setMediaPreviewOpen(false)
+                  }}>
+                  Back to media
+                </Button>
+
+                <Spacer />
+
+                <Input
+                  size="xs"
+                  textAlign="center"
+                  border="none"
+                  fontSize="xs"
+                  fontWeight="bold"
+                  defaultValue={selectedMediaNode?.description}
+                  maxW="sm"
+                />
+
+                <Spacer />
+
+                <ButtonGroup
+                  variant="outline"
+                  size="xs"
+                  isDisabled={selectedMediaNode === null}>
+                  <IconButton
+                    aria-label="Customize selected image"
+                    icon={<FaSlidersH />}
+                    onClick={handleEdit}
+                  />
+
+                  <IconButton
+                    aria-label="Download selected image"
+                    icon={<FaDownload />}
+                    onClick={handleDownload}
+                  />
+                  <IconButton
+                    aria-label="Delete selected image"
+                    icon={<FaTrash />}
+                    onClick={handleDelete}
+                  />
+                </ButtonGroup>
+              </HStack>
+            </ModalHeader>
+
+            <ModalBody
+              display="flex"
+              h="calc(100dvh - 3rem - 6rem)"
+              flex="unset">
+              <TransformWrapper centerOnInit>
+                {({zoomIn, zoomOut, resetTransform, ...rest}) => {
+                  useEffect(() => {
+                    resetTransform()
+                  }, [selectedMediaNode?.url])
+
+                  return (
+                    <TransformComponent>
+                      <Image
+                        maxW="800px"
+                        maxH="800px"
+                        objectFit="contain"
+                        src={selectedMediaNode?.url}
+                        alt={selectedMediaNode?.description}
+                      />
+                    </TransformComponent>
+                  )
+                }}
+              </TransformWrapper>
+
+              {isMediaPreviewOpen === 'EDIT' && (
+                <FilerobotImageEditor
+                  source={selectedMediaNode?.url}
+                  closeAfterSave
+                  onSave={async (editedImageObject, designState) => {
+                    console.log('saved', editedImageObject, designState)
+
+                    editedImageObject.imageCanvas?.toBlob(blob => {
+                      if (blob) {
+                        const newFile = new File(
+                          [blob],
+                          editedImageObject.fullName ?? 'image.png',
+                          {
+                            type: blob.type
+                          }
+                        )
+
+                        handleUpdate({
+                          file: newFile
+                        })
+                      }
+                    })
+                  }}
+                  onBeforeSave={() => false}
+                  onClose={() => {
+                    setMediaPreviewOpen('PREVIEW')
+                  }}
+                  annotationsCommon={{
+                    fill: '#ff0000'
+                  }}
+                  Rotate={{angle: 90, componentType: 'slider'}}
+                  Text={{text: 'Text...'}}
+                  tabsIds={[
+                    TABS.RESIZE,
+                    TABS.ADJUST,
+                    TABS.FILTERS,
+                    TABS.FINETUNE,
+                    TABS.ANNOTATE,
+                    TABS.WATERMARK
+                  ]}
+                  savingPixelRatio={0}
+                  previewPixelRatio={0}
+                />
+              )}
+            </ModalBody>
+
+            <ModalFooter p="0">
+              <HStack
+                h="24"
+                w="full"
+                p="4"
+                justifyContent="center"
+                bg="bg.surface"
+                borderTop="1px solid"
+                borderColor="border.emphasized">
+                <IconButton
+                  variant="ghost"
+                  aria-label="Previous image"
+                  icon={<FaArrowLeft />}
+                  onClick={() => {
+                    // use previous image
+                    const currentIndex = media.findIndex(
+                      node => node.id === selectedMediaNode?.id
+                    )
+
+                    // make sure to loop around
+                    const previousIndex =
+                      (currentIndex - 1 + media.length) % media.length
+
+                    const node = media[previousIndex]
+                    setSelectedMediaNode(node)
+                  }}
+                />
+
+                <HStack>
+                  {[...Array(9)].map((_, index) => {
+                    const startIndex = media.findIndex(
+                      node => node.id === selectedMediaNode?.id
+                    )
+
+                    const offset = index - Math.floor(9 / 2)
+                    const nodeIndex =
+                      (startIndex + offset + media.length) % media.length
+                    const node = media[nodeIndex]
+
+                    if (!node) {
+                      return null
+                    }
+
+                    return (
+                      <AspectRatio
+                        key={node.id}
+                        ratio={node.width / node.height}
+                        objectFit="contain"
+                        w="16"
+                        h="16"
+                        {...(selectedMediaNode?.id === node.id && {
+                          outline: '2px solid',
+                          outlineColor: 'brand.500',
+                          outlineOffset: '2px',
+                          borderRadius: 'lg'
+                        })}
+                        onClick={() => {
+                          setSelectedMediaNode(node)
+                        }}>
+                        <Image
+                          key={node.id}
+                          id={index === 8 ? 'last-media-item' : undefined}
+                          fallback={
+                            <Skeleton
+                              w="100%"
+                              borderRadius="lg"
+                              display="inline-block"
+                            />
+                          }
+                          w="100%"
+                          h="100%"
+                          src={node.preview?.url ?? node.url}
+                          alt={node.description}
+                        />
+                      </AspectRatio>
+                    )
+                  })}
+                </HStack>
+
+                <IconButton
+                  variant="ghost"
+                  aria-label="Next image"
+                  icon={<FaArrowRight />}
+                  onClick={() => {
+                    // use next image
+                    const currentIndex = media.findIndex(
+                      node => node.id === selectedMediaNode?.id
+                    )
+
+                    // make sure to loop around
+                    const nextIndex = (currentIndex + 1) % media.length
+
+                    const node = media[nextIndex]
+                    setSelectedMediaNode(node)
+                  }}
+                />
+              </HStack>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </Box>
+    </Flex>
+  )
+}

@@ -365,6 +365,35 @@ const variants = {
         [vars.color.variable]: `colors.gray.200`
       }
     }
+  }),
+
+  'field-highlighter-tooltip': defineStyle({
+    bg: 'rgba(254, 215, 226, 0.9)',
+    backdropBlur: 8,
+    color: 'pink.900',
+    _hover: {
+      bg: 'pink.200'
+    },
+    borderRadius: '0.5em',
+    fontWeight: 'normal',
+    fontSize: 'xs',
+    height: '6',
+    minWidth: '6',
+    px: '2'
+  }),
+
+  'field-highlighter-tooltip-text': defineStyle({
+    bg: 'rgba(254, 215, 226, 0.9)',
+    backdropBlur: 8,
+    color: 'pink.900',
+    borderRadius: 'full',
+    fontWeight: 'normal',
+    cursor: 'default',
+    fontSize: 'xs',
+    height: '6',
+    minWidth: '6',
+    px: '2',
+    mr: '2'
   })
 }
 

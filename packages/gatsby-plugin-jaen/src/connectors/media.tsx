@@ -1,60 +1,11 @@
-import {useEffect, useMemo, useState} from 'react'
-import {MediaNode} from 'src/components/cms/Media/types.js'
 import {Media, MediaProps} from '../components/cms/Media/Media'
+import {MediaNode} from '../components/cms/Media/types'
 
-interface Photo {
-  id: string
-  author: string
-  width: number
-  height: number
-  url: string
-  download_url: string
+export interface MediaConnectorProps {
+  mediaNodes: MediaNode[]
 }
 
-async function fetchRandomPhotos(
-  page: number,
-  count: number
-): Promise<Photo[]> {
-  const apiUrl = `https://picsum.photos/v2/list?page=${page}&limit=${count}`
-  const response = await fetch(apiUrl)
-
-  if (!response.ok) {
-    throw new Error(
-      `Failed to fetch photos: ${response.status} ${response.statusText}`
-    )
-  }
-
-  const data: Photo[] = await response.json()
-  return data
-}
-
-export interface MediaConnectorProps {}
-
-export const MediaConnector: React.FC<MediaConnectorProps> = () => {
-  const [photos, setPhotos] = useState<Photo[]>([])
-
-  useEffect(() => {
-    void fetchRandomPhotos(1, 30).then(photos => {
-      setPhotos(photos)
-    })
-  }, [])
-
-  const media = useMemo(
-    () =>
-      photos.map((photo, i) => ({
-        id: `${photo.id}-${i}`,
-        preview: {
-          url: photo.download_url
-        },
-        url: photo.download_url,
-        description: photo.author,
-        width: photo.width,
-        height: photo.height,
-        revisions: [] as MediaNode[]
-      })),
-    [photos]
-  )
-
+export const MediaConnector: React.FC<MediaConnectorProps> = ({mediaNodes}) => {
   const onUpload = (files: File[]) => {
     console.log(files)
 
@@ -66,7 +17,7 @@ export const MediaConnector: React.FC<MediaConnectorProps> = () => {
 
     // Download media
 
-    const m = media.find(photo => photo.id === mediaId)
+    const m = mediaNodes.find(media => media.id === mediaId)
 
     if (!m) {
       return
@@ -94,9 +45,9 @@ export const MediaConnector: React.FC<MediaConnectorProps> = () => {
 
     // Delete media
 
-    const photoId = mediaId.split('-')[0]
+    // const photoId = mediaId.split('-')[0]
 
-    setPhotos(photos.filter(photo => photoId !== photo.id))
+    // setPhotos(photos.filter(photo => photoId !== photo.id))
   }
 
   const onUpdate: MediaProps['onUpdate'] = (mediaId, media) => {
@@ -104,25 +55,25 @@ export const MediaConnector: React.FC<MediaConnectorProps> = () => {
 
     // Update media
 
-    const photoId = mediaId.split('-')[0]
+    // const photoId = mediaId.split('-')[0]
 
-    setPhotos(
-      photos.map(photo => {
-        if (photoId === photo.id) {
-          return {
-            ...photo,
-            ...media
-          }
-        }
+    // setPhotos(
+    //   photos.map(photo => {
+    //     if (photoId === photo.id) {
+    //       return {
+    //         ...photo,
+    //         ...media
+    //       }
+    //     }
 
-        return photo
-      })
-    )
+    //     return photo
+    //   })
+    // )
   }
 
   return (
     <Media
-      mediaNodes={media}
+      mediaNodes={mediaNodes}
       onUpload={onUpload}
       onDownload={onDownload}
       onDelete={onDelete}

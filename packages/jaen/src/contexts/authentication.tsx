@@ -8,7 +8,6 @@ import React, {
 } from 'react'
 
 import {setTokenPair, sq} from '@snek-functions/origin'
-import {navigate} from 'gatsby'
 
 export interface AutenticationContext {
   isAuthenticated: boolean
@@ -159,7 +158,6 @@ export const AuthenticationProvider: React.FC<{
       setUser(data.user)
 
       setIsAuthenticated(true)
-      void navigate('/')
     },
     []
   )
@@ -184,15 +182,11 @@ export const AuthenticationProvider: React.FC<{
     }
 
     setIsAuthenticated(false)
-
-    void navigate('/')
   }, [isDemo])
 
   const demoLogin = useCallback(async () => {
     setIsDemo(true)
     setIsAuthenticated(true)
-
-    void navigate('/admin')
   }, [])
 
   const bootstrap = useCallback(async () => {

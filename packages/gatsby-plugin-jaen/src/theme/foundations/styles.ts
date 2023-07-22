@@ -20,6 +20,21 @@ export default {
       display: 'flex',
       flexDirection: 'column',
       minH: '100%'
+    },
+    '.jaen-highlight-frame': {
+      borderRadius: '11px',
+      pointerEvents: 'none'
+    },
+    [`.jaen-highlight-frame:before`]: {
+      content: '""',
+      position: 'absolute',
+      top: '-6px', // border: 2px + offset: 4px
+      right: ' -6px', // border: 2px + offset: 4px
+      bottom: '-6px', // border: 2px + offset: 4px
+      left: '-6px', // border: 2px + offset: 4px
+      border: ' 2px solid var(--chakra-colors-pink-100)',
+      borderRadius: '15px', // border—radius: 11px + offset: 4px
+      pointerEvents: 'none'
     }
   })
 }
