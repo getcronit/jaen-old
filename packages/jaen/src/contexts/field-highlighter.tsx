@@ -1,4 +1,5 @@
-import {Box, Button, ChakraProvider, HStack} from '@chakra-ui/react'
+import {ChakraBaseProvider, HStack} from '@chakra-ui/react'
+import {ChakraProvider} from '@chakra-ui/provider'
 import React, {
   createContext,
   forwardRef,
@@ -145,7 +146,11 @@ export const FieldHighlighterProvider: React.FC<
 
       console.log('props.theme', props.theme)
       root.render(
-        <ChakraProvider theme={props.theme} cssVarsRoot="#coco">
+        <ChakraProvider
+          theme={props.theme}
+          cssVarsRoot="#coco"
+          disableEnvironment
+          disableGlobalStyle>
           <Tooltip actions={tooltipButtons} ref={tooltipHightRef} />
         </ChakraProvider>
       )

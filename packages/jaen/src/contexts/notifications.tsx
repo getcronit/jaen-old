@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  ChakraProvider,
   CreateToastFnReturn,
   Input,
   Modal,
@@ -11,7 +10,8 @@ import {
   ModalOverlay,
   Stack,
   Text,
-  useToast
+  useToast,
+  ChakraProvider
 } from '@chakra-ui/react'
 import {
   createContext,

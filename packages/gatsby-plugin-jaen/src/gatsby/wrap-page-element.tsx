@@ -1,4 +1,6 @@
-import {ChakraProvider, useTheme} from '@chakra-ui/react'
+import {useTheme} from '@chakra-ui/react'
+import {ChakraProvider} from '@chakra-ui/provider'
+
 import {useAuthentication} from '@snek-at/jaen'
 import {GatsbyBrowser} from 'gatsby'
 import {useContext, useEffect} from 'react'
@@ -129,7 +131,7 @@ export const wrapPageElement: GatsbyBrowser['wrapPageElement'] = ({
             links: breadcrumbs
           }
         }}>
-        <ChakraProvider disableGlobalStyle theme={userTheme}>
+        <ChakraProvider disableEnvironment disableGlobalStyle theme={userTheme}>
           <ToolbarProvider jaenPageId={jaenPageId}>{element}</ToolbarProvider>
         </ChakraProvider>
       </StyledJaenFrame>

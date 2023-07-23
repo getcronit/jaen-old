@@ -465,7 +465,10 @@ export const onCreatePage: GatsbyNode['onCreatePage'] = async ({
       }
 
       deletePage(page)
-      createPage({...page, context: {...page.context, jaenPageId}})
+      createPage({
+        ...page,
+        context: {...page.context, ...jaenPage?.context, jaenPageId}
+      })
     }
   }
 }
