@@ -4,10 +4,10 @@ import SyntaxHighlighter from 'react-syntax-highlighter'
 import {VFileMessage} from 'vfile-message'
 import {Statistics} from 'vfile-statistics'
 
-import {ErrorFallback} from './ErrorFallback.js'
-import {BaseEditorProps} from './types.js'
+import {ErrorFallback} from './ErrorFallback'
+import {BaseEditorProps} from './types'
 
-import StatsReporterError from './StatsReporterError.js'
+import StatsReporterError from './StatsReporterError'
 
 const FallbackComponent: React.FC<{error: Error}> = ({error}) => {
   const message = new VFileMessage(error)

@@ -65,7 +65,7 @@ const LayzEditor: React.FC<{
   onUpdateValue: (value: MdastRoot) => void
   rawValue?: MdastRoot
 }> = ({components, onUpdateValue, rawValue}) => {
-  const Editor = React.lazy(async () => await import('./components/Editor.js'))
+  const Editor = React.lazy(async () => await import('./components/Editor'))
 
   const MemoedEditor = React.useMemo(() => Editor, [])
 

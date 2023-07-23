@@ -36,6 +36,7 @@
     "react-hook-form": "^7.45.2",
     "react-icons": "^4.10.1",
     "react-konva": "^18.2.10",
+    "react-syntax-highlighter": "^15.5.0",
     "react-zoom-pan-pinch": "^3.1.0",
     "reagraph": "^4.10.5",
     "rehype-mdx-code-props": "^1.0.0",
@@ -54,6 +55,7 @@
   },
   "devDependencies": {
     "@types/mdast": "^4.0.0",
+    "@types/react-syntax-highlighter": "^15.5.7",
     "gatsby": "^5.11.0"
   }
 }
