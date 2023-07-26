@@ -1,7 +1,7 @@
 import {useTheme} from '@chakra-ui/react'
 import {ChakraProvider} from '@chakra-ui/provider'
 
-import {useAuthentication} from '@snek-at/jaen'
+import {useAuthenticationContext} from '@snek-at/jaen'
 import {GatsbyBrowser} from 'gatsby'
 import {useContext, useEffect} from 'react'
 import {FaCog, FaHome, FaImage, FaSignOutAlt, FaSitemap} from 'react-icons/fa'
@@ -10,7 +10,7 @@ import {JaenFrame} from '../components/JaenFrame/JaenFrame'
 import {ToolbarContext} from '../components/JaenFrame/contexts/toolbar'
 import Logo from '../components/Logo'
 import {withTheme} from '../theme/with-theme'
-import {CMSToolbar} from '../connectors/cms-toolbar'
+import {CMSToolbarContainer} from '../containers/cms-toolbar'
 
 const StyledJaenFrame = withTheme(JaenFrame)
 
@@ -24,7 +24,7 @@ const ToolbarProvider: React.FC<{
     if (!jaenPageId) return
 
     setToolbar({
-      components: [CMSToolbar],
+      components: [CMSToolbarContainer],
       origin: 'cms'
     })
   }, [jaenPageId])
@@ -36,7 +36,7 @@ export const wrapPageElement: GatsbyBrowser['wrapPageElement'] = ({
   element,
   props
 }) => {
-  const authentication = useAuthentication()
+  const authentication = useAuthenticationContext()
 
   const userTheme = useTheme()
 

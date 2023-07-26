@@ -13,7 +13,9 @@ export const EditButton: React.FC<EditButtonProps> = props => {
   return (
     <Button
       size="sm"
-      leftIcon={<Icon as={FaEdit} color="brand.500" />}
+      leftIcon={<Icon as={FaEdit} color={isEditing ? 'white' : 'brand.500'} />}
+      colorScheme={'brand'}
+      variant={isEditing ? 'solid' : 'outline'}
       onClick={onToggleEditing}>
       {isEditing ? 'Stop editing' : 'Edit'}
     </Button>

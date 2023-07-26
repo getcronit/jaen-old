@@ -18,124 +18,51 @@ import React from 'react'
 import {Link} from '../../shared/Link'
 import {PageContentForm} from './shared/PageContentForm/PageContentForm'
 import {PageVisualizer} from './shared/PageVisualizer/PageVisualizer'
-
-const pages = [
-  {
-    title: 'Home',
-    description:
-      'Discover the latest fashion trends and shop for stylish clothing, accessories, and footwear. Stay ahead of the fashion curve with our curated collection.',
-    childPages: 0,
-    author: 'John Doe',
-    publishedDate: '2023-07-01T12:00:00Z',
-    lastModifiedDate: '2023-07-01T12:00:00Z',
-    imageSrc:
-      'https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60'
-  },
-  {
-    title: 'Content',
-    description:
-      'Explore our web development, mobile development, design, and marketing services.',
-    childPages: 4,
-    author: 'Jane Smith',
-    publishedDate: '2023-07-05T09:30:00Z',
-    lastModifiedDate: '2023-07-05T09:30:00Z',
-    imageSrc:
-      'https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60'
-  },
-  {
-    title: 'Grosshandel',
-    description: 'Read our latest blog posts on various topics.',
-    childPages: 0,
-    publishedDate: '2023-07-10T15:45:00Z',
-    imageSrc:
-      'https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60'
-  },
-  {
-    title: 'Wissen',
-    description: 'Get answers to frequently asked questions.',
-    childPages: 0,
-    publishedDate: '2023-07-15T10:20:00Z',
-    lastModifiedDate: '2023-07-15T10:20:00Z',
-    imageSrc:
-      'https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60'
-  },
-  {
-    title: 'FAQ',
-    description: 'Get answers to frequently asked questions.',
-    childPages: 0,
-    publishedDate: '2023-07-15T10:20:00Z',
-    lastModifiedDate: '2023-07-15T10:20:00Z',
-    imageSrc:
-      'https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60'
-  },
-  {
-    title: '404',
-    description: 'Page not found.',
-    childPages: 0,
-    publishedDate: '2023-07-15T10:20:00Z',
-    lastModifiedDate: '2023-07-15T10:20:00Z'
-  },
-  {
-    title: 'Impressum',
-    description: 'Legal notice.',
-    childPages: 0,
-    publishedDate: '2023-07-15T10:20:00Z',
-    lastModifiedDate: '2023-07-15T10:20:00Z'
-  },
-  {
-    title: 'Datenschutz',
-    description: 'Data protection policy.',
-    childPages: 0,
-    publishedDate: '2023-07-15T10:20:00Z'
-  },
-  {
-    title: 'AGB',
-    description: 'Terms and conditions.',
-    childPages: 0,
-    publishedDate: '2023-07-15T10:20:00Z'
-  }
-  // Add more pages as needed
-]
+import {IJaenPage} from '@snek-at/jaen'
 
 export interface PagesProps {
-  jaenPageId?: string
+  page: IJaenPage
+  children: Array<{
+    title: string
+    description: string
+    publishedDate: string
+    lastModifiedDate?: string
+    author?: string
+  }>
 }
 
-export const Pages: React.FC<PagesProps> = () => {
+export const Pages: React.FC<PagesProps> = props => {
   return (
     <Stack id="coco" flexDir="column" spacing="14">
       <Stack spacing="4" divider={<StackDivider />}>
-        <Stack>
-          <Heading as="h2" size="sm">
-            Overview
-          </Heading>
-          <Text color="fg.muted" fontSize="xs">
-            This is the overview of all pages on your website. You can click on
-            a page to navigate to it.
-          </Text>
-        </Stack>
+        <PageContentForm
+          mode="edit"
+          onSubmit={data => {
+            console.log(data)
+          }}
+          values={{
+            title: props.page.jaenPageMetadata.title,
+            slug: props.page.slug,
+            template: props.page.template,
+            description: props.page.jaenPageMetadata.description
+          }}
+          templates={{}}
+          parentPages={{}}
+        />
 
         <PageVisualizer />
       </Stack>
 
-      <PageContentForm
-        mode="edit"
-        onSubmit={data => {
-          console.log(data)
-        }}
-        values={{
-          title: 'Home',
-          slug: 'home',
-          template: 'HomeTemplate',
-          description:
-            'Discover the latest fashion trends and shop for stylish clothing, accessories, and footwear. Stay ahead of the fashion curve with our curated collection.'
-        }}
-      />
-
       <Stack spacing="4" divider={<StackDivider />}>
-        <Heading as="h2" size="sm">
-          Subpages
-        </Heading>
+        <HStack justifyContent="space-between">
+          <Heading as="h2" size="sm">
+            Subpages
+          </Heading>
+
+          <Link as={Button} to="new" leftIcon={<FaPlus />} variant="outline">
+            New page
+          </Link>
+        </HStack>
 
         <Table>
           <Thead>
@@ -147,7 +74,7 @@ export const Pages: React.FC<PagesProps> = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {pages.map((page, index) => (
+            {props.children.map((page, index) => (
               <Tr key={index}>
                 <Td>
                   <Link to={`?page=${page.title.toLowerCase()}`}>
@@ -185,12 +112,6 @@ export const Pages: React.FC<PagesProps> = () => {
             ))}
           </Tbody>
         </Table>
-
-        <HStack justifyContent="end">
-          <Link as={Button} to="new" leftIcon={<FaPlus />} variant="outline">
-            New page
-          </Link>
-        </HStack>
       </Stack>
     </Stack>
   )

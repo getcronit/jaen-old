@@ -1,4 +1,4 @@
-import {useAuthentication} from '@snek-at/jaen'
+import {useAuthenticationContext} from '@snek-at/jaen'
 import {PageProps} from 'gatsby'
 import React from 'react'
 
@@ -6,7 +6,7 @@ import {JaenLogout} from '../components/JaenLogout/JaenLogout'
 import {withTheme} from '../theme/with-theme'
 
 const LogoutPage: React.FC<PageProps> = () => {
-  const {logout, isAuthenticated} = useAuthentication()
+  const {logout, isAuthenticated} = useAuthenticationContext()
 
   React.useEffect(() => {}, [isAuthenticated])
 

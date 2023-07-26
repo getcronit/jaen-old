@@ -1,20 +1,15 @@
-import {useContentManagement} from '@snek-at/jaen'
-
 import {ToolbarButtons} from '../components/cms/ToolbarButtons'
-import React from 'react'
-import {withRedux} from '@snek-at/jaen/src/redux'
+import {CMSManagement, useCMSManagement} from '../connectors/cms-management'
 
-export const CMSToolbar: React.FC = withRedux(() => {
-  const cm = useContentManagement()
+const CMSToolbar: React.FC = () => {
+  const manager = useCMSManagement()
 
   return (
     <ToolbarButtons
-      pageTreeLabel={''}
-      pageTreeOnClick={function (): void {
-        throw new Error('Function not implemented.')
+      editButtonIsEditing={manager.isEditing}
+      editButtonToggle={() => {
+        manager.setIsEditing(!manager.isEditing)
       }}
-      editButtonIsEditing={cm.isEditing}
-      editButtonToggle={cm.toggleIsEditing}
       saveLabel={''}
       saveOnClick={function (): void {
         throw new Error('Function not implemented.')
@@ -29,4 +24,12 @@ export const CMSToolbar: React.FC = withRedux(() => {
       }}
     />
   )
-})
+}
+
+export const CMSToolbarContainer = () => {
+  return (
+    <CMSManagement>
+      <CMSToolbar />
+    </CMSManagement>
+  )
+}

@@ -288,6 +288,6 @@ export const AuthenticationProvider: React.FC<{
   )
 }
 
-export const useAuthentication = () => {
+export const useAuthenticationContext = () => {
   return useContext(AuthenticationContext)
 }

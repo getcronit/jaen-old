@@ -1,11 +1,11 @@
 import {Media, MediaProps} from '../components/cms/Media/Media'
 import {MediaNode} from '../components/cms/Media/types'
 
-export interface MediaConnectorProps {
+export interface MediaContainerProps {
   mediaNodes: MediaNode[]
 }
 
-export const MediaConnector: React.FC<MediaConnectorProps> = ({mediaNodes}) => {
+export const MediaContainer: React.FC<MediaContainerProps> = ({mediaNodes}) => {
   const onUpload = (files: File[]) => {
     console.log(files)
 

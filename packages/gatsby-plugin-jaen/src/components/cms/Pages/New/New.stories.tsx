@@ -1,5 +1,8 @@
 import {ComponentMeta, Story} from '@storybook/react'
 import React from 'react'
+
+import {Basic as PageContentForm} from '../shared/PageContentForm/PageContentForm.stories.js'
+
 import {New} from './New.js'
 export default {
   title: 'Components/New',
@@ -15,3 +18,7 @@ type ComponentProps = React.ComponentProps<typeof New>
 const Template: Story<ComponentProps> = args => <New {...args} />
 
 export const Basic: Story<ComponentProps> = Template.bind({})
+
+Basic.args = {
+  form: PageContentForm.args
+}

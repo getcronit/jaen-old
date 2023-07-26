@@ -62,6 +62,12 @@ export const fragments = graphql`
     slug
     jaenFields
     excludedFromIndex
+    parent {
+      id
+    }
+    children {
+      id
+    }
     jaenPageMetadata {
       title
       isBlogPost

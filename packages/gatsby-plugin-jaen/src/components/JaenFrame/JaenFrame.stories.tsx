@@ -50,6 +50,7 @@ const CMSView: React.FC = () => {
       <Button
         size="sm"
         leftIcon={<Icon as={FaEdit} color="brand.500" />}
+        colorScheme={isEditing ? 'orange' : undefined}
         onClick={toggleEditing}>
         {isEditing ? 'Stop editing' : 'Edit'}
       </Button>

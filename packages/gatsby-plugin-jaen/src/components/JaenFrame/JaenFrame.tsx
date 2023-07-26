@@ -1,4 +1,4 @@
-import {Box, Flex, HStack, Icon} from '@chakra-ui/react'
+import {Box, Divider, Flex, HStack, Icon, Spacer} from '@chakra-ui/react'
 import React, {useMemo, useState} from 'react'
 import {FaPlus} from 'react-icons/fa'
 
@@ -82,14 +82,19 @@ export const JaenFrame: React.FC<JaenFrameProps> = props => {
           </Box>
           <Breadcrumbs links={props.navigation.breadcrumbs.links} />
 
-          <>
-            {toolbar?.components?.map(
-              (Component, index) => Component && <Component key={index} />
-            )}
-          </>
+          <Spacer />
         </HStack>
 
-        <HStack spacing="5">
+        <HStack spacing="5" h="full">
+          {toolbar?.components && toolbar?.components.length > 0 && (
+            <HStack spacing="5" h="full">
+              {toolbar?.components?.map(
+                (Component, index) => Component && <Component key={index} />
+              )}
+              <Divider orientation="vertical" />
+            </HStack>
+          )}
+
           <MenuButton
             leftIcon={<Icon as={FaPlus} color="brand.500" />}
             variant="outline"

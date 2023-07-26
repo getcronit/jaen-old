@@ -2,12 +2,12 @@ import {PageProps} from 'gatsby'
 import {withTheme} from '../../theme/with-theme'
 
 import {JaenPageLayout} from '../../components/JaenPageLayout/JaenPageLayout'
-import {MediaConnector} from '../../connectors/media'
+import {MediaContainer} from '../../containers/media'
 
 const MediaPage: React.FC<PageProps> = () => {
   return (
     <JaenPageLayout layout="full">
-      <MediaConnector mediaNodes={[]} />
+      <MediaContainer mediaNodes={[]} />
     </JaenPageLayout>
   )
 }

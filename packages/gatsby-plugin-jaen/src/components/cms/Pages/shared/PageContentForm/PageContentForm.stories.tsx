@@ -15,3 +15,16 @@ type ComponentProps = React.ComponentProps<typeof PageContentForm>
 const Template: Story<ComponentProps> = args => <PageContentForm {...args} />
 
 export const Basic: Story<ComponentProps> = Template.bind({})
+
+Basic.args = {
+  templates: {
+    BlogTemplate: {
+      label: 'Blog'
+    }
+  },
+  parentPages: {
+    BlogIndex: {
+      label: 'The Blog'
+    }
+  }
+}

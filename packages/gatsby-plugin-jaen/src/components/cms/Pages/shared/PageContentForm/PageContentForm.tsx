@@ -25,7 +25,7 @@ import {FaEdit, FaImage, FaNewspaper} from 'react-icons/fa'
 import {FaEyeLowVision} from 'react-icons/fa6'
 import slugify from 'slugify'
 
-import {ChooseButton} from '../ChooseButton/ChooseButton'
+import {ChooseButton, ChooseButtonProps} from '../ChooseButton/ChooseButton'
 
 const texts = {
   heading: {
@@ -128,7 +128,7 @@ interface FormValues {
   slug: string
   description: string
   parent: string
-  template: string
+  template: string | null
   blogPost?: {
     isBlogPost?: boolean
     date?: string
@@ -143,6 +143,8 @@ interface FormValues {
 }
 
 export interface PageContentFormProps {
+  templates: ChooseButtonProps['items']
+  parentPages: ChooseButtonProps['items']
   onSubmit: (data: FormValues) => void
   values?: Partial<FormValues>
   mode?: 'create' | 'edit'
@@ -160,7 +162,7 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
     setValue,
     reset,
     control,
-    formState: {errors}
+    formState: {errors, isSubmitting}
   } = useForm<FormValues>({
     defaultValues: props.values
   })
@@ -177,6 +179,8 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
 
   const onSubmit: SubmitHandler<FormValues> = data => {
     console.log(data)
+
+    return props.onSubmit(data)
   }
 
   const title = watch('title', '') // Get the value of the 'title' field
@@ -194,44 +198,26 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
   if (mode === 'edit' && isEditFormLocked) {
     return (
       <Stack w="full" divider={<StackDivider />} spacing="4">
-        <Heading as="h1" size="sm">
-          Page
-        </Heading>
-
-        <HStack spacing="4">
-          {props.values?.image?.src ? (
-            <Image
-              src={props.values?.image?.src}
-              boxSize={36}
-              borderRadius="lg"
-              fallback={<Skeleton boxSize={36} borderRadius="lg" />}
-            />
-          ) : (
-            <Center boxSize={36} borderRadius="lg" bg="bg.subtle">
-              <FaImage fontSize="2xl" />
-            </Center>
-          )}
-
-          <Stack>
-            <Heading as="h2" size="xs">
-              {props.values?.title}
+        <Stack>
+          <HStack justifyContent="space-between">
+            <Heading as="h1" size="md">
+              {props.values?.title || 'Page'}
             </Heading>
 
-            <Text fontSize="sm" color="fg.muted">
-              {props.values?.description}
-            </Text>
-          </Stack>
-        </HStack>
-        <HStack justifyContent="end">
-          <Button
-            variant="outline"
-            leftIcon={<FaEdit />}
-            onClick={() => {
-              setIsEditFormLocked(false)
-            }}>
-            Edit page
-          </Button>
-        </HStack>
+            <Button
+              variant="outline"
+              leftIcon={<FaEdit />}
+              onClick={() => {
+                setIsEditFormLocked(false)
+              }}>
+              Edit page
+            </Button>
+          </HStack>
+
+          <Text fontSize="sm" color="fg.muted">
+            {props.values?.description}
+          </Text>
+        </Stack>
       </Stack>
     )
   }
@@ -267,14 +253,7 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
                 return (
                   <ChooseButton
                     onChange={field.onChange}
-                    items={{
-                      BlogPost: {
-                        label: 'Post'
-                      },
-                      GridPage: {
-                        label: 'Grid'
-                      }
-                    }}
+                    items={props.templates}
                   />
                 )
               }}
@@ -335,14 +314,7 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
               return (
                 <ChooseButton
                   onChange={field.onChange}
-                  items={{
-                    HomePage: {
-                      label: 'Home'
-                    },
-                    AboutPage: {
-                      label: 'About'
-                    }
-                  }}
+                  items={props.parentPages}
                 />
               )
             }}
@@ -535,7 +507,7 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
                 Cancel
               </Button>
             )}
-            <Button type="submit">
+            <Button type="submit" isLoading={isSubmitting}>
               {mode === 'create' ? 'Create page' : 'Save page'}
             </Button>
           </ButtonGroup>

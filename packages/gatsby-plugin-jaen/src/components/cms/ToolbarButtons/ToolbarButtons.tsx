@@ -11,10 +11,6 @@ import {MenuButton} from '../../shared/MenuButton'
 import {EditButton} from './components/EditButton'
 
 export interface ToolbarButtonsProps {
-  // Props for the MenuButton with a single item
-  pageTreeLabel: string
-  pageTreeOnClick: () => void
-
   // Props for the EditButton
   editButtonIsEditing: boolean
   editButtonToggle: () => void
@@ -30,8 +26,6 @@ export interface ToolbarButtonsProps {
 
 export const ToolbarButtons: React.FC<ToolbarButtonsProps> = props => {
   const {
-    pageTreeLabel,
-    pageTreeOnClick,
     editButtonIsEditing,
     editButtonToggle,
     saveLabel,
@@ -44,17 +38,6 @@ export const ToolbarButtons: React.FC<ToolbarButtonsProps> = props => {
 
   return (
     <ButtonGroup variant="outline">
-      <MenuButton
-        variant="outline"
-        size="sm"
-        leftIcon={<Icon as={FaSitemap} color="brand.500" />}
-        rightIcon={<Icon as={FaCaretDown} />}
-        renderItems={() => {
-          return <>{pageTreeLabel}</>
-        }}
-        onClick={pageTreeOnClick}>
-        Navigate pages
-      </MenuButton>
       <EditButton
         isEditing={editButtonIsEditing}
         onToggleEditing={editButtonToggle}

@@ -1,18 +1,19 @@
 import {Flex} from '@chakra-ui/react'
 import React from 'react'
 
-import {PageContentForm} from '../shared/PageContentForm/PageContentForm'
+import {
+  PageContentForm,
+  PageContentFormProps
+} from '../shared/PageContentForm/PageContentForm'
 
-export interface NewProps {}
+export interface NewProps {
+  form: PageContentFormProps
+}
 
-export const New: React.FC<NewProps> = () => {
+export const New: React.FC<NewProps> = props => {
   return (
     <Flex id="coco">
-      <PageContentForm
-        onSubmit={data => {
-          console.log(data)
-        }}
-      />
+      <PageContentForm {...props.form} />
     </Flex>
   )
 }
