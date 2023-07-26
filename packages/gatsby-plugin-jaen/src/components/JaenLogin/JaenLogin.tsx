@@ -85,6 +85,7 @@ export const JaenLogin: React.FC<JaenLoginProps> = props => {
   return (
     <Box
       id="coco"
+      overflow="auto"
       zIndex={props.isModal ? 'modal' : undefined}
       pos="fixed"
       top="0"

@@ -15,6 +15,7 @@ export const JaenLogout: React.FC<JaenLogoutProps> = props => {
   return (
     <Box
       id="coco"
+      overflow="auto"
       pos="fixed"
       top="0"
       left="0"
