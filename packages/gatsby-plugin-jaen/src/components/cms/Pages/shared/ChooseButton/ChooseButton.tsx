@@ -1,9 +1,10 @@
 import {As, Box, HStack, Icon, Input, Stack, Text} from '@chakra-ui/react'
-import {useMemo, useState} from 'react'
+import {useEffect, useMemo, useState} from 'react'
 
 import {MenuButton} from '../../../../shared/MenuButton/MenuButton'
 
 export interface ChooseButtonProps {
+  defaultValue?: string
   items: Record<
     string,
     {
@@ -16,6 +17,7 @@ export interface ChooseButtonProps {
 }
 
 export const ChooseButton: React.FC<ChooseButtonProps> = ({
+  defaultValue,
   items,
   placeholder = {
     label: 'Choose'
@@ -24,6 +26,12 @@ export const ChooseButton: React.FC<ChooseButtonProps> = ({
 }) => {
   const [chosen, setChosen] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
+
+  useEffect(() => {
+    if (defaultValue) {
+      setChosen(defaultValue)
+    }
+  }, [defaultValue])
 
   const menuButtonItems = useMemo(() => {
     const filteredItems = Object.entries(items)
@@ -74,7 +82,9 @@ export const ChooseButton: React.FC<ChooseButtonProps> = ({
                   setSearchQuery(e.target.value)
                 }}
               />
-              {items}
+              <Stack overflowY="auto" maxH="200px">
+                {items}
+              </Stack>
             </Stack>
           )
         }}>

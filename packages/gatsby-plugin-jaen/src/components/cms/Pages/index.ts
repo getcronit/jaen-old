@@ -1,1 +1,1 @@
-export {Pages, PagesProps} from './Pages.js'
+export {Pages, PagesProps} from './Pages'

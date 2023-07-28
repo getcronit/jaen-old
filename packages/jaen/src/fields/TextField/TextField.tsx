@@ -17,7 +17,7 @@ import {useTunes} from '../../components/TuneSelectorButton/components/TuneSelec
 import {TuneSelectorButton} from '../../components/TuneSelectorButton/TuneSelectorButton'
 
 import {connectField} from '../../connectors'
-import {useNotifications} from '../../contexts/notifications'
+import {useNotificationsContext} from '../../contexts/notifications'
 import {HighlightTooltip} from '../components/HighlightTooltip/HighlightTooltip'
 
 const cleanRichText = (
@@ -75,7 +75,7 @@ export const TextField = connectField<string, TextFieldProps>(
       setValue(newValue)
     }, [jaenField.value, isRTF])
 
-    const {toast} = useNotifications()
+    const {toast} = useNotificationsContext()
 
     // @ts-expect-error
     const isWrapperHeading = Wrapper.displayName === 'Heading'

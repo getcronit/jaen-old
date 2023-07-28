@@ -6,7 +6,7 @@ import {FiBox} from 'react-icons/fi'
 import {TuneSelectorButton} from '../../components/TuneSelectorButton'
 import {IBlockConnection} from '../../connectors/connect-block'
 import {JaenSectionBlockProvider} from '../../contexts/block'
-import {useNotifications} from '../../contexts/notifications'
+import {useNotificationsContext} from '../../contexts/notifications'
 import {useContentManagement} from '../../hooks/use-content-management'
 import {useSectionField} from '../../hooks/use-section-field'
 import {withRedux} from '../../redux'
@@ -40,7 +40,7 @@ export interface SectionFieldProps {
 
 export const SectionField = withRedux(
   ({name, label, blocks: unfilteredBlocks, ...rest}: SectionFieldProps) => {
-    const {confirm, toast} = useNotifications()
+    const {confirm, toast} = useNotificationsContext()
 
     // Avoid duplicate blocks. The last block with the same name will be used
     const blocks = unfilteredBlocks.reduce<IBlockConnection[]>((acc, block) => {

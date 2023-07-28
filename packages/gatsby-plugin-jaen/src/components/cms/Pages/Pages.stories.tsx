@@ -17,14 +17,8 @@ const Template: Story<ComponentProps> = args => <Pages {...args} />
 export const Basic: Story<ComponentProps> = Template.bind({})
 
 Basic.args = {
-  page: {
-    slug: '',
-    parent: null,
-    excludedFromIndex: true,
-    jaenPageMetadata: {
-      title: 'Home'
-    }
-  },
+  pageId: 'JaenPage /',
+  form: {},
   children: [
     {
       title: 'Home',
@@ -101,5 +95,34 @@ Basic.args = {
       publishedDate: '2023-07-15T10:20:00Z'
     }
     // Add more pages as needed
+  ],
+  tree: [
+    {
+      id: 'JaenPage /',
+      label: 'Home',
+      children: [
+        {
+          id: 'JaenPage /content/',
+          label: 'Content',
+          children: [
+            {
+              id: 'JaenPage /content/grosshandel/',
+              label: 'Grosshandel',
+              children: []
+            },
+            {
+              id: 'JaenPage /content/wissen/',
+              label: 'Wissen',
+              children: []
+            },
+            {
+              id: 'JaenPage /content/faq/',
+              label: 'FAQ',
+              children: []
+            }
+          ]
+        }
+      ]
+    }
   ]
 }

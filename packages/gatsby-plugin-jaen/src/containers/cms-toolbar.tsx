@@ -10,15 +10,15 @@ const CMSToolbar: React.FC = () => {
       editButtonToggle={() => {
         manager.setIsEditing(!manager.isEditing)
       }}
-      saveLabel={''}
+      saveLabel="Local save"
       saveOnClick={function (): void {
         throw new Error('Function not implemented.')
       }}
-      discardLabel={''}
+      discardLabel="Discard changes"
       discardOnClick={function (): void {
         throw new Error('Function not implemented.')
       }}
-      publishLabel={''}
+      publishLabel="Publish"
       publishOnClick={function (): void {
         throw new Error('Function not implemented.')
       }}

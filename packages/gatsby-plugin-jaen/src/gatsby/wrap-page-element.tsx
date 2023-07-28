@@ -3,7 +3,7 @@ import {ChakraProvider} from '@chakra-ui/provider'
 
 import {useAuthenticationContext} from '@snek-at/jaen'
 import {GatsbyBrowser} from 'gatsby'
-import {useContext, useEffect} from 'react'
+import {useContext, useEffect, useMemo} from 'react'
 import {FaCog, FaHome, FaImage, FaSignOutAlt, FaSitemap} from 'react-icons/fa'
 
 import {JaenFrame} from '../components/JaenFrame/JaenFrame'
@@ -52,6 +52,14 @@ export const wrapPageElement: GatsbyBrowser['wrapPageElement'] = ({
     label: string
     path: string
   }>
+
+  const memoedElement = useMemo(() => {
+    return (
+      <ChakraProvider disableEnvironment disableGlobalStyle theme={userTheme}>
+        <ToolbarProvider jaenPageId={jaenPageId}>{element}</ToolbarProvider>
+      </ChakraProvider>
+    )
+  }, [element, jaenPageId])
 
   if (
     authentication.isAuthenticated &&
@@ -122,7 +130,7 @@ export const wrapPageElement: GatsbyBrowser['wrapPageElement'] = ({
                 label: 'New page',
                 icon: FaSitemap,
                 path: jaenPageId
-                  ? `/cms/pages/new/?parent=${jaenPageId}`
+                  ? `/cms/pages/new/?parentId=${btoa(jaenPageId)}`
                   : '/cms/pages/new/'
               }
             }
@@ -131,12 +139,10 @@ export const wrapPageElement: GatsbyBrowser['wrapPageElement'] = ({
             links: breadcrumbs
           }
         }}>
-        <ChakraProvider disableEnvironment disableGlobalStyle theme={userTheme}>
-          <ToolbarProvider jaenPageId={jaenPageId}>{element}</ToolbarProvider>
-        </ChakraProvider>
+        {memoedElement}
       </StyledJaenFrame>
     )
   }
 
-  return element
+  return memoedElement
 }

@@ -16,6 +16,7 @@ import {
   Skeleton,
   Stack,
   StackDivider,
+  Tag,
   Text,
   Textarea
 } from '@chakra-ui/react'
@@ -147,6 +148,7 @@ export interface PageContentFormProps {
   parentPages: ChooseButtonProps['items']
   onSubmit: (data: FormValues) => void
   values?: Partial<FormValues>
+  isRoot?: boolean
   mode?: 'create' | 'edit'
 }
 
@@ -166,6 +168,18 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
   } = useForm<FormValues>({
     defaultValues: props.values
   })
+
+  useEffect(() => {
+    // set default values
+    if (mode === 'edit') {
+      reset(props.values)
+
+      // lock the form
+      setIsEditFormLocked(true)
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.values])
 
   const [isEditFormLocked, setIsEditFormLocked] = useState<boolean>(true)
 
@@ -200,9 +214,17 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
       <Stack w="full" divider={<StackDivider />} spacing="4">
         <Stack>
           <HStack justifyContent="space-between">
-            <Heading as="h1" size="md">
-              {props.values?.title || 'Page'}
-            </Heading>
+            <HStack>
+              {props.values?.template && (
+                <Tag colorScheme="brand" variant="solid" w="fit-content">
+                  {props.values.template}
+                </Tag>
+              )}
+
+              <Heading as="h2" size="sm">
+                {props.values?.title || 'Page'}
+              </Heading>
+            </HStack>
 
             <Button
               variant="outline"
@@ -214,7 +236,7 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
             </Button>
           </HStack>
 
-          <Text fontSize="sm" color="fg.muted">
+          <Text fontSize="sm" color="fg.muted" maxW="70%">
             {props.values?.description}
           </Text>
         </Stack>
@@ -231,7 +253,7 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
       }}>
       <Stack w="full" divider={<StackDivider />} spacing="4">
         <Stack>
-          <Heading as="h1" size="sm">
+          <Heading as="h2" size="sm">
             {texts.heading[mode]}
           </Heading>
 
@@ -301,27 +323,30 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
           </FormControl>
         </Stack>
 
-        <FormControl as="fieldset" isInvalid={!!errors.parent} isRequired>
-          <FormLabel as="legend">{texts.parent[mode]}</FormLabel>
+        {(mode === 'edit' ? props.values?.parent : true) && (
+          <FormControl as="fieldset" isInvalid={!!errors.parent} isRequired>
+            <FormLabel as="legend">{texts.parent[mode]}</FormLabel>
 
-          <Controller
-            control={control}
-            name="parent"
-            rules={{
-              required: true
-            }}
-            render={({field}) => {
-              return (
-                <ChooseButton
-                  onChange={field.onChange}
-                  items={props.parentPages}
-                />
-              )
-            }}
-          />
+            <Controller
+              control={control}
+              name="parent"
+              rules={{
+                required: true
+              }}
+              render={({field}) => {
+                return (
+                  <ChooseButton
+                    defaultValue={field.value}
+                    onChange={field.onChange}
+                    items={props.parentPages}
+                  />
+                )
+              }}
+            />
 
-          <FormHelperText>{texts.parentHelperText[mode]}</FormHelperText>
-        </FormControl>
+            <FormHelperText>{texts.parentHelperText[mode]}</FormHelperText>
+          </FormControl>
+        )}
 
         <FormControl as="fieldset">
           <Stack spacing="4">

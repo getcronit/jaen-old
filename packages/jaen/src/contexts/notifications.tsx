@@ -144,4 +144,4 @@ export const NotificationsProvider = ({children}: {children: ReactNode}) => {
   )
 }
 
-export const useNotifications = () => useContext(Context)
+export const useNotificationsContext = () => useContext(Context)

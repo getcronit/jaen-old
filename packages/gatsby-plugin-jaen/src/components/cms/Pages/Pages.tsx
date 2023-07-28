@@ -7,7 +7,6 @@ import {
   Table,
   Tbody,
   Td,
-  Text,
   Th,
   Thead,
   Tr
@@ -16,41 +15,58 @@ import {FaPlus} from 'react-icons/fa'
 
 import React from 'react'
 import {Link} from '../../shared/Link'
-import {PageContentForm} from './shared/PageContentForm/PageContentForm'
+import {PageBreadcrumb} from './shared/PageBreadcrumb'
+import {
+  PageContentForm,
+  PageContentFormProps
+} from './shared/PageContentForm/PageContentForm'
+import {TreeNode} from './shared/PageVisualizer'
 import {PageVisualizer} from './shared/PageVisualizer/PageVisualizer'
-import {IJaenPage} from '@snek-at/jaen'
 
 export interface PagesProps {
-  page: IJaenPage
+  pageId: string
+  form: PageContentFormProps
   children: Array<{
+    id: string
     title: string
     description: string
     publishedDate: string
     lastModifiedDate?: string
     author?: string
   }>
+  tree: Array<TreeNode>
+  onTreeSelect?: (id: string) => void
 }
 
 export const Pages: React.FC<PagesProps> = props => {
   return (
     <Stack id="coco" flexDir="column" spacing="14">
       <Stack spacing="4" divider={<StackDivider />}>
-        <PageContentForm
-          mode="edit"
-          onSubmit={data => {
-            console.log(data)
-          }}
-          values={{
-            title: props.page.jaenPageMetadata.title,
-            slug: props.page.slug,
-            template: props.page.template,
-            description: props.page.jaenPageMetadata.description
-          }}
-          templates={{}}
-          parentPages={{}}
-        />
+        <Stack spacing="4">
+          <PageBreadcrumb tree={props.tree} activePageId={props.pageId} />
 
-        <PageVisualizer />
+          <PageContentForm
+            mode="edit"
+            {...props.form}
+            // onSubmit={data => {
+            //   props.onPageUpdate(props.page.id, data)
+            // }}
+            // values={{
+            //   title: props.page.jaenPageMetadata.title,
+            //   slug: props.page.slug,
+            //   template: props.page.template,
+            //   description: props.page.jaenPageMetadata.description
+            // }}
+            // templates={{}}
+            // parentPages={{}}
+          />
+        </Stack>
+
+        <PageVisualizer
+          tree={props.tree}
+          selection={props.pageId}
+          onSelect={props.onTreeSelect}
+        />
       </Stack>
 
       <Stack spacing="4" divider={<StackDivider />}>
@@ -59,7 +75,7 @@ export const Pages: React.FC<PagesProps> = props => {
             Subpages
           </Heading>
 
-          <Link as={Button} to="new" leftIcon={<FaPlus />} variant="outline">
+          <Link as={Button} to="./new" leftIcon={<FaPlus />} variant="outline">
             New page
           </Link>
         </HStack>
@@ -77,9 +93,7 @@ export const Pages: React.FC<PagesProps> = props => {
             {props.children.map((page, index) => (
               <Tr key={index}>
                 <Td>
-                  <Link to={`?page=${page.title.toLowerCase()}`}>
-                    {page.title}
-                  </Link>
+                  <Link to={`#${btoa(page.id)}`}>{page.title}</Link>
                 </Td>
                 <Td>{page.description}</Td>
                 <Td>

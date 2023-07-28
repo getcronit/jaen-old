@@ -11,7 +11,7 @@ import {FaEraser} from 'react-icons/fa'
 import {PhotoProvider, PhotoView} from 'react-photo-view'
 
 import {connectField} from '../../connectors/index'
-import {useNotifications} from '../../contexts/notifications'
+import {useNotificationsContext} from '../../contexts/notifications'
 import {HighlightTooltip} from '../components/HighlightTooltip'
 import {DataImage} from './DataImage'
 import {ImageFieldValue, ImageProps} from './types'
@@ -54,7 +54,7 @@ export interface ImageFieldProps extends ImageProps {
 
 export const ImageField = connectField<ImageFieldValue, ImageFieldProps>(
   ({jaenField, defaultValue, lightbox, lightboxGroup, overload, ...props}) => {
-    const {toast, confirm} = useNotifications()
+    const {toast, confirm} = useNotificationsContext()
 
     // const handleImageChooseClick = (info: {src: string; alt?: string}) => {
     //   jaenField.onUpdateValue({

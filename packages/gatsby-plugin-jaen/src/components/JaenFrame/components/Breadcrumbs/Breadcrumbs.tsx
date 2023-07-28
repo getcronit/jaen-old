@@ -43,7 +43,7 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({links}) => {
               variant="ghost"
               to={link.path}
               onClick={link.onClick}
-              isCurrentPage={isCurrentPage}
+              aria-current={isCurrentPage ? 'page' : undefined}
               fontWeight={isCurrentPage ? 'bold' : 'normal'}
               textDecoration="none">
               {link.label}
