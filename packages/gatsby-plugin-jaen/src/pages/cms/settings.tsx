@@ -4,6 +4,7 @@ import {withTheme} from '../../theme/with-theme'
 
 import {FormDataType, Settings} from '../../components/cms/Settings/Settings'
 import {JaenPageLayout} from '../../components/JaenPageLayout/JaenPageLayout'
+import {PageConfig} from '@snek-at/jaen'
 
 const SettingsPage: React.FC<PageProps> = () => {
   return (
@@ -21,3 +22,29 @@ const SettingsPage: React.FC<PageProps> = () => {
 }
 
 export default withTheme(SettingsPage)
+
+export const pageConfig: PageConfig = {
+  label: 'Settings',
+  icon: 'FaCog',
+  menu: {
+    type: 'app',
+    group: 'cms',
+    groupLabel: 'Jaen CMS',
+    order: 400
+  },
+
+  breadcrumbs: [
+    {
+      label: 'CMS',
+      path: '/cms/'
+    },
+    {
+      label: 'Settings',
+      path: '/cms/settings/'
+    }
+  ],
+  withoutJaenFrameStickyHeader: true,
+  auth: {
+    isRequired: true
+  }
+}

@@ -1,3 +1,4 @@
+import {PageConfig} from '@snek-at/jaen'
 import {PageProps} from 'gatsby'
 
 import {CMSIndex} from '../../components/cms/CMSIndex'
@@ -31,3 +32,24 @@ const PagesPage: React.FC<PageProps> = () => {
 }
 
 export default withTheme(PagesPage)
+
+export const pageConfig: PageConfig = {
+  label: 'Dashboard',
+  icon: 'FaTachometerAlt',
+  menu: {
+    type: 'app',
+    group: 'cms',
+    groupLabel: 'Jaen CMS',
+    order: 100
+  },
+  breadcrumbs: [
+    {
+      label: 'CMS',
+      path: '/cms/'
+    }
+  ],
+  withoutJaenFrameStickyHeader: true,
+  auth: {
+    isRequired: true
+  }
+}

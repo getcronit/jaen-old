@@ -1,7 +1,8 @@
-import type {JaenPage} from '@snek-at/jaen'
+import {JaenPage, PageConfig} from '@snek-at/jaen'
 import {generatePageOriginPath} from '@snek-at/jaen/src/utils/path'
 import {GatsbyNode, Node} from 'gatsby'
 import slugify from 'slugify'
+import path from 'path'
 
 import {capitalizeLastPathElement} from './helper/capitalize-last-path-element'
 import {getJaenPageParentId} from './helper/get-jaen-page-parent-id'
@@ -267,128 +268,10 @@ export const onCreatePage: GatsbyNode['onCreatePage'] = async ({
   page,
   actions,
   getNode,
-  createContentDigest
+  createContentDigest,
+  store
 }) => {
   const {createPage, deletePage, createNode} = actions
-
-  const jaenPages = [
-    {
-      path: '/login',
-      context: {
-        withoutJaenFrame: true
-      }
-    },
-    {
-      path: '/logout',
-      context: {
-        withoutJaenFrame: true
-      }
-    },
-    {
-      path: '/cms',
-      context: {
-        withoutJaenFrameStickyHeader: true,
-        breadcrumbs: [
-          {
-            label: 'CMS',
-            path: '/cms'
-          }
-        ]
-      }
-    },
-    {
-      path: '/cms/pages',
-      context: {
-        withoutJaenFrameStickyHeader: true,
-        breadcrumbs: [
-          {
-            label: 'CMS',
-            path: '/cms'
-          },
-          {
-            label: 'Pages',
-            path: '/cms/pages'
-          }
-        ]
-      },
-      parent: 'JaenPage /cms'
-    },
-    {
-      path: '/cms/pages/new',
-      context: {
-        withoutJaenFrameStickyHeader: true,
-        breadcrumbs: [
-          {
-            label: 'CMS',
-            path: '/cms'
-          },
-          {
-            label: 'Pages',
-            path: '/cms/pages'
-          },
-          {
-            label: 'New',
-            path: '/cms/pages/new'
-          }
-        ]
-      },
-      parent: 'JaenPage /cms/pages'
-    },
-    {
-      path: '/cms/settings',
-      context: {
-        withoutJaenFrameStickyHeader: true,
-        breadcrumbs: [
-          {
-            label: 'CMS',
-            path: '/cms'
-          },
-          {
-            label: 'Settings',
-            path: '/cms/settings'
-          }
-        ]
-      },
-      parent: 'JaenPage /cms'
-    },
-    {
-      path: '/cms/media',
-      context: {
-        withoutJaenFrameStickyHeader: true,
-        breadcrumbs: [
-          {
-            label: 'CMS',
-            path: '/cms'
-          },
-          {
-            label: 'Media',
-            path: '/cms/media'
-          }
-        ]
-      },
-      parent: 'JaenPage /cms'
-    }
-  ]
-
-  const jaenPage = jaenPages.find(jaenPage => {
-    // match regardless of trailing slash
-
-    const a = page.path.replace(/\/$/, '')
-    const b = jaenPage.path.replace(/\/$/, '')
-
-    return a === b
-  })
-
-  if (jaenPage) {
-    deletePage(page)
-    createPage({
-      ...page,
-      context: {
-        ...page.context,
-        ...jaenPage.context
-      }
-    })
-  }
 
   const pageConfig = readPageConfig(page.component)
 
@@ -401,8 +284,6 @@ export const onCreatePage: GatsbyNode['onCreatePage'] = async ({
       const slugifiedPath = slugify(page.path)
 
       const existingNode = getNode(jaenPageId)
-
-      console.log('config', pageConfig)
 
       if (!existingNode) {
         const jaenPage = {
@@ -448,9 +329,11 @@ export const onCreatePage: GatsbyNode['onCreatePage'] = async ({
       deletePage(page)
       createPage({
         ...page,
-        context: {...page.context, ...jaenPage?.context, jaenPageId}
+        context: {...page.context, jaenPageId, pageConfig}
       })
     }
+
+    console.log(store.getState().components.values())
   }
 }
 
@@ -460,7 +343,7 @@ export const createPages: GatsbyNode['createPages'] = async ({
   reporter,
   actions
 }) => {
-  const {createPage, createNodeField} = actions
+  const {createPage, createNodeField, createSlice} = actions
 
   const createJaenPages = async () => {
     interface QueryData {
@@ -550,6 +433,13 @@ export const createPages: GatsbyNode['createPages'] = async ({
   }
 
   await createJaenPages()
+
+  // Create JaenFrame slice
+
+  createSlice({
+    id: `jaen-frame`,
+    component: path.resolve(__dirname, '../src/slices/jaen-frame.tsx')
+  })
 }
 
 export const shouldOnCreateNode: GatsbyNode['shouldOnCreateNode'] = ({

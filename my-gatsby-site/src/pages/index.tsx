@@ -196,9 +196,13 @@ const IndexPage: React.FC<PageProps> = () => {
 
 export default IndexPage
 
-export const config: PageConfig = {
+export const pageConfig: PageConfig = {
   label: 'Home Page',
-  childTemplates: ['BlogPage']
+  icon: 'FaHome',
+  childTemplates: ['BlogPage'],
+  menu: {
+    type: 'app'
+  }
 }
 
 export const query = graphql`

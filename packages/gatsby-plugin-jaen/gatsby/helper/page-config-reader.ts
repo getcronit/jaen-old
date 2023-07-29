@@ -5,6 +5,9 @@ import traverse, {NodePath} from '@babel/traverse'
 import * as t from '@babel/types'
 import ts from 'typescript'
 
+import * as FaIcons from 'react-icons/fa'
+import {PageConfig} from '@snek-at/jaen'
+
 function readFileContent(filePath: string): string {
   return fs.readFileSync(filePath, 'utf-8')
 }
@@ -31,31 +34,33 @@ function parseFileContent(
   }
 }
 
-function extractDataFromConfig(configObject: t.ObjectExpression): object {
-  const data: any = {} // Use any as the type for now since we don't know the structure of the config object
+function extractDataFromConfig(
+  configObject: t.ObjectExpression
+): Record<string, any> {
+  const data: Record<string, any> = {}
+
+  function processValue(value: t.Expression): any {
+    if (
+      t.isStringLiteral(value) ||
+      t.isNumericLiteral(value) ||
+      t.isBooleanLiteral(value)
+    ) {
+      return value.value
+    } else if (t.isArrayExpression(value)) {
+      return value.elements.map(element => processValue(element))
+    } else if (t.isObjectExpression(value)) {
+      return extractDataFromConfig(value)
+    } else {
+      // Handle other types as needed (null, undefined, object expressions, etc.)
+      return null // You can modify this default behavior according to your requirements
+    }
+  }
 
   configObject.properties.forEach(property => {
     if (t.isObjectProperty(property) && t.isIdentifier(property.key)) {
       const key = property.key.name
       const value = property.value
-
-      // You may want to handle other types of property values as needed (e.g., arrays, nested objects)
-      if (
-        t.isStringLiteral(value) ||
-        t.isNumericLiteral(value) ||
-        t.isBooleanLiteral(value)
-      ) {
-        data[key] = value.value
-      }
-      // handle arrays
-      else if (t.isArrayExpression(value)) {
-        data[key] = []
-        value.elements.forEach(element => {
-          if (t.isStringLiteral(element)) {
-            data[key].push(element.value)
-          }
-        })
-      }
+      data[key] = processValue(value)
     }
   })
 
@@ -71,7 +76,7 @@ function findConfigObject(ast: t.File): t.ObjectExpression | undefined {
       if (node && t.isVariableDeclaration(node)) {
         const declarationName = (node.declarations[0]?.id as t.Identifier)?.name
         if (
-          declarationName === 'config' &&
+          declarationName === 'pageConfig' &&
           t.isObjectExpression(node.declarations[0]?.init)
         ) {
           configObject = node.declarations[0]?.init
@@ -104,11 +109,6 @@ function readConfigFromFile(filePath: string): object | undefined {
   return data
 }
 
-interface PageConfig {
-  label: string
-  childTemplates: string[]
-}
-
 export const readPageConfig = (filePath: string): PageConfig | undefined => {
   const configObject = readConfigFromFile(filePath)
 
@@ -118,7 +118,6 @@ export const readPageConfig = (filePath: string): PageConfig | undefined => {
 
   console.log(configObject)
 
-  const label = (configObject as any).label
   let childTemplates = (configObject as any).childTemplates || []
 
   // Prepend `JaenTemplate` to child templates if not already present
@@ -131,7 +130,8 @@ export const readPageConfig = (filePath: string): PageConfig | undefined => {
   })
 
   return {
-    label,
+    ...configObject,
+    label: (configObject as any).label || 'Untitled',
     childTemplates
   }
 }

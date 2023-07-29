@@ -1,40 +1,21 @@
-import React, {useContext, useEffect, useMemo} from 'react'
-import {useTheme} from '@chakra-ui/react'
 import {ChakraProvider} from '@chakra-ui/provider'
-import {PageProvider, useAuthenticationContext} from '@snek-at/jaen'
-import {GatsbyBrowser} from 'gatsby'
-import {FaCog, FaHome, FaImage, FaSignOutAlt, FaSitemap} from 'react-icons/fa'
+import {Flex, useTheme} from '@chakra-ui/react'
+import {
+  PageConfig,
+  PageProvider,
+  useAuthenticationContext,
+  withAuthentication
+} from '@snek-at/jaen'
+import {GatsbyBrowser, navigate, Slice} from 'gatsby'
+import React, {useContext, useEffect, useMemo} from 'react'
 
 // Import other necessary components here
-import {JaenFrame} from '../components/JaenFrame/JaenFrame'
-import {ToolbarContext} from '../components/JaenFrame/contexts/toolbar'
-import Logo from '../components/Logo'
-import {withTheme} from '../theme/with-theme'
+import {JaenFrameToolbarContext} from '../components/JaenFrame/contexts/jaen-frame-toolbar'
 import {CMSToolbarContainer} from '../containers/cms-toolbar'
 
-const ToolbarProvider: React.FC<{
-  jaenPageId?: string
-  children: React.ReactNode
-}> = ({jaenPageId, children}) => {
-  const {setToolbar} = useContext(ToolbarContext)
-
-  useEffect(() => {
-    if (!jaenPageId) return
-
-    setToolbar({
-      components: [CMSToolbarContainer],
-      origin: 'cms'
-    })
-  }, [jaenPageId])
-
-  return <>{children}</>
-}
-
 interface PageContext {
-  withoutJaenFrame?: boolean
-  withoutJaenFrameStickyHeader?: boolean
+  pageConfig?: PageConfig
   jaenPageId?: string
-  breadcrumbs?: Array<{label: string; path: string}>
 }
 
 interface CustomPageElementProps {
@@ -42,22 +23,15 @@ interface CustomPageElementProps {
   props: {pageContext?: PageContext}
 }
 
-const StyledJaenFrame = withTheme(JaenFrame)
-
 const CustomPageElement: React.FC<CustomPageElementProps> = ({
   element,
   props
 }) => {
-  const authentication = useAuthenticationContext()
   const userTheme = useTheme()
-  const {setToolbar} = useContext(ToolbarContext)
+  const {setToolbar} = useContext(JaenFrameToolbarContext)
 
-  const withoutJaenFrame = props.pageContext?.withoutJaenFrame
-  const withoutJaenFrameStickyHeader =
-    props.pageContext?.withoutJaenFrameStickyHeader
+  const withoutJaenFrame = props.pageContext?.pageConfig?.withoutJaenFrame
   const jaenPageId = props.pageContext?.jaenPageId
-
-  const breadcrumbs = props.pageContext?.breadcrumbs || []
 
   useEffect(() => {
     if (!jaenPageId) return
@@ -68,98 +42,131 @@ const CustomPageElement: React.FC<CustomPageElementProps> = ({
     })
   }, [jaenPageId, setToolbar])
 
-  const memoedElement = useMemo(() => {
-    return (
-      <ChakraProvider disableEnvironment disableGlobalStyle theme={userTheme}>
-        <ToolbarProvider jaenPageId={jaenPageId}>{element}</ToolbarProvider>
-      </ChakraProvider>
-    )
-  }, [element, jaenPageId, userTheme])
-
-  if (
-    authentication.isAuthenticated &&
-    authentication.user &&
-    !withoutJaenFrame
-  ) {
-    return (
-      <StyledJaenFrame
-        logo={<Logo />}
-        navigation={{
-          isStickyDisabled: withoutJaenFrameStickyHeader,
-          app: {
-            navigationGroups: {
-              you: {
-                items: {
-                  home: {
-                    icon: FaHome,
-                    label: 'Home',
-                    path: '/'
-                  }
-                }
-              },
-              cms: {
-                label: 'Jaen CMS',
-                items: {
-                  pages: {
-                    icon: FaSitemap,
-                    label: 'Pages',
-                    path: '/cms/pages/'
-                  },
-                  media: {
-                    icon: FaImage,
-                    label: 'Media',
-                    path: '/cms/media/'
-                  },
-                  settings: {
-                    icon: FaCog,
-                    label: 'Settings',
-                    path: '/cms/settings/'
-                  }
-                }
-              }
-            },
-            version: '3.0.0',
-            logo: <Logo />
-          },
-          user: {
-            user: {
-              username: authentication.user.username,
-              firstName: authentication.user.details?.firstName,
-              lastName: authentication.user.details?.lastName
-            },
-            navigationGroups: {
-              more: {
-                items: {
-                  logout: {
-                    icon: FaSignOutAlt,
-                    label: 'Logout',
-                    path: '/logout'
-                  }
-                }
-              }
-            }
-          },
-          addMenu: {
-            items: {
-              addPage: {
-                label: 'New page',
-                icon: FaSitemap,
-                path: jaenPageId
-                  ? `/cms/pages/new/#${btoa(jaenPageId)}`
-                  : '/cms/pages/new/'
-              }
-            }
-          },
-          breadcrumbs: {
-            links: breadcrumbs
+  const AuthenticatedJaenFrame = useMemo(
+    () =>
+      withAuthentication(
+        () => (
+          <>
+            <Slice
+              alias="jaen-frame"
+              jaenPageId={props.pageContext?.jaenPageId}
+              pageConfig={props.pageContext?.pageConfig as any}
+            />
+          </>
+        ),
+        props.pageContext?.pageConfig,
+        {
+          onRedirectToLogin: () => {
+            navigate('/login')
           }
-        }}>
-        {memoedElement}
-      </StyledJaenFrame>
+        }
+      ),
+    [props.pageContext?.jaenPageId, props.pageContext?.pageConfig]
+  )
+
+  const authentication = useAuthenticationContext()
+
+  if (!withoutJaenFrame) {
+    return (
+      <Flex
+        pos="relative"
+        flexDirection="column"
+        visibility={
+          props.pageContext?.pageConfig?.auth?.isRequired &&
+          !authentication.isAuthenticated
+            ? 'hidden'
+            : 'visible'
+        }>
+        <AuthenticatedJaenFrame />
+        <ChakraProvider disableEnvironment disableGlobalStyle theme={userTheme}>
+          {element}
+        </ChakraProvider>
+      </Flex>
     )
+
+    // return (
+    //   <StyledJaenFrame
+    //     logo={<Logo />}
+    //     navigation={{
+    //       isStickyDisabled: withoutJaenFrameStickyHeader,
+    //       app: {
+    //         navigationGroups: {
+    //           you: {
+    //             items: {
+    //               home: {
+    //                 icon: FaHome,
+    //                 label: 'Home',
+    //                 path: '/'
+    //               }
+    //             }
+    //           },
+    //           cms: {
+    //             label: 'Jaen CMS',
+    //             items: {
+    //               pages: {
+    //                 icon: FaSitemap,
+    //                 label: 'Pages',
+    //                 path: '/cms/pages/'
+    //               },
+    //               media: {
+    //                 icon: FaImage,
+    //                 label: 'Media',
+    //                 path: '/cms/media/'
+    //               },
+    //               settings: {
+    //                 icon: FaCog,
+    //                 label: 'Settings',
+    //                 path: '/cms/settings/'
+    //               }
+    //             }
+    //           }
+    //         },
+    //         version: '3.0.0',
+    //         logo: <Logo />
+    //       },
+    //       user: {
+    //         user: {
+    //           username: authentication.user.username,
+    //           firstName: authentication.user.details?.firstName,
+    //           lastName: authentication.user.details?.lastName
+    //         },
+    //         navigationGroups: {
+    //           more: {
+    //             items: {
+    //               logout: {
+    //                 icon: FaSignOutAlt,
+    //                 label: 'Logout',
+    //                 path: '/logout'
+    //               }
+    //             }
+    //           }
+    //         }
+    //       },
+    //       addMenu: {
+    //         items: {
+    //           addPage: {
+    //             label: 'New page',
+    //             icon: FaSitemap,
+    //             path: jaenPageId
+    //               ? `/cms/pages/new/#${btoa(jaenPageId)}`
+    //               : '/cms/pages/new/'
+    //           }
+    //         }
+    //       },
+    //       breadcrumbs: {
+    //         links: breadcrumbs
+    //       }
+    //     }}>
+    //     {memoedElement}
+    //   </StyledJaenFrame>
+    // )
   }
 
-  return memoedElement
+  return (
+    <ChakraProvider disableEnvironment disableGlobalStyle theme={userTheme}>
+      {element}
+    </ChakraProvider>
+  )
 }
 
 export const wrapPageElement: GatsbyBrowser['wrapPageElement'] = ({
@@ -170,6 +177,8 @@ export const wrapPageElement: GatsbyBrowser['wrapPageElement'] = ({
     id: props.pageContext.jaenPageId as string,
     ...(props.data?.jaenPage || {})
   }
+
+  console.log('context', props.pageContext)
 
   return (
     <PageProvider jaenPage={jaenPage}>

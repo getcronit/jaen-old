@@ -9,7 +9,7 @@ import {
   useCMSManagement
 } from '../../../connectors/cms-management'
 import {useCallback, useEffect, useMemo, useState} from 'react'
-import {useNotificationsContext} from '@snek-at/jaen'
+import {PageConfig, useNotificationsContext} from '@snek-at/jaen'
 
 const PagesPage: React.FC = withTheme(() => {
   const {toast} = useNotificationsContext()
@@ -214,3 +214,29 @@ const Page: React.FC<PageProps> = () => {
 }
 
 export default Page
+
+export const pageConfig: PageConfig = {
+  label: 'Pages',
+  icon: 'FaSitemap',
+
+  menu: {
+    type: 'app',
+    group: 'cms',
+    groupLabel: 'Jaen CMS',
+    order: 200
+  },
+  breadcrumbs: [
+    {
+      label: 'CMS',
+      path: '/cms/'
+    },
+    {
+      label: 'Pages',
+      path: '/cms/pages/'
+    }
+  ],
+  withoutJaenFrameStickyHeader: true,
+  auth: {
+    isRequired: true
+  }
+}

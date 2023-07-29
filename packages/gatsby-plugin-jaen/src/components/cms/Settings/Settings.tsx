@@ -22,8 +22,7 @@ import {
 } from '@chakra-ui/react'
 import React from 'react'
 import {Controller, useForm} from 'react-hook-form'
-import {FaRocket} from 'react-icons/fa'
-import {HiCloudUpload} from 'react-icons/hi'
+import {FaRocket, FaCloudUploadAlt} from 'react-icons/fa'
 
 import {FieldGroup} from '../../shared/FieldGroup'
 import {List} from './components/List/List'
@@ -210,7 +209,7 @@ export const Settings: React.FC<SettingsProps> = ({
                           <HStack spacing="5">
                             <Button
                               variant="outline"
-                              leftIcon={<HiCloudUpload />}
+                              leftIcon={<FaCloudUploadAlt />}
                               onClick={handleSiteImageUpload}>
                               Change photo
                             </Button>
@@ -349,7 +348,7 @@ export const Settings: React.FC<SettingsProps> = ({
                         <HStack spacing="5">
                           <Button
                             variant="outline"
-                            leftIcon={<HiCloudUpload />}
+                            leftIcon={<FaCloudUploadAlt />}
                             onClick={handleOrganizationLogoUpload}>
                             Change photo
                           </Button>

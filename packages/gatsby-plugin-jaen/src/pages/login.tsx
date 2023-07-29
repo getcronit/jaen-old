@@ -1,4 +1,4 @@
-import {useAuthenticationContext} from '@snek-at/jaen'
+import {PageConfig, useAuthenticationContext} from '@snek-at/jaen'
 import {navigate, PageProps} from 'gatsby'
 import React from 'react'
 
@@ -31,3 +31,8 @@ const LoginPage: React.FC<PageProps> = () => {
 }
 
 export default withTheme(LoginPage)
+
+export const pageConfig: PageConfig = {
+  label: 'Login',
+  withoutJaenFrame: true
+}

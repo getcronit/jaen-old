@@ -1,11 +1,35 @@
 import type {PageProps as GatsbyPageProps} from 'gatsby'
 import type {IGatsbyImageData} from 'gatsby-plugin-image'
+import type * as FaIcons from 'react-icons/fa'
 
 import {IBlockConnection} from './connectors/connect-block'
 
 export interface PageConfig {
   label: string
+  icon?: keyof typeof FaIcons
+
   childTemplates?: string[]
+
+  breadcrumbs?: Array<{
+    label: string
+    path: string
+  }>
+
+  withoutJaenFrame?: boolean
+  withoutJaenFrameStickyHeader?: boolean
+
+  menu?: {
+    group?: string
+    groupLabel?: string
+    order?: number
+    type?: 'app' | 'user'
+  }
+
+  // auth
+  auth?: {
+    isRequired?: boolean
+    permissions?: string[]
+  }
 }
 
 export interface IWidget {

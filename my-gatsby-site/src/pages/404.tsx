@@ -49,6 +49,6 @@ export default NotFoundPage
 
 export const Head: HeadFC = () => <title>Not found</title>
 
-export const config: PageConfig = {
+export const pageConfig: PageConfig = {
   label: 'Oops! Page not found'
 }

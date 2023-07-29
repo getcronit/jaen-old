@@ -11,7 +11,7 @@ import {
   useMergeRefs
 } from '@chakra-ui/react'
 import {forwardRef, useRef} from 'react'
-import {HiEye, HiEyeOff} from 'react-icons/hi'
+import {FaEye, FaEyeSlash} from 'react-icons/fa'
 
 export const PasswordField = forwardRef<HTMLInputElement, InputProps>(
   ({isInvalid, ...props}, ref) => {
@@ -44,7 +44,7 @@ export const PasswordField = forwardRef<HTMLInputElement, InputProps>(
               variant="text"
               color="brand.500"
               aria-label={isOpen ? 'Mask password' : 'Reveal password'}
-              icon={isOpen ? <HiEyeOff /> : <HiEye />}
+              icon={isOpen ? <FaEyeSlash /> : <FaEye />}
               onClick={onClickReveal}
             />
           </InputRightElement>

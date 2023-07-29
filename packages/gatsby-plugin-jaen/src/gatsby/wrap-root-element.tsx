@@ -8,6 +8,7 @@ import {GatsbyBrowser} from 'gatsby'
 import {lazy} from 'react'
 
 import {theme} from '../theme/index'
+import {JaenFrameToolbarProvider} from '../components/JaenFrame/contexts/jaen-frame-toolbar'
 
 const JaenLogin = lazy(
   async () => await import('../components/JaenLogin/JaenLogin')
@@ -30,7 +31,7 @@ export const wrapRootElement: GatsbyBrowser['wrapRootElement'] = (
           <AuthenticationProvider
             snekResourceId={snekResourceId}
             JaenLoginComponent={JaenLogin}>
-            {element}
+            <JaenFrameToolbarProvider>{element}</JaenFrameToolbarProvider>
           </AuthenticationProvider>
         </FieldHighlighterProvider>
       </NotificationsProvider>

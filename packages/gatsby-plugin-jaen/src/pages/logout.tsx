@@ -1,4 +1,4 @@
-import {useAuthenticationContext} from '@snek-at/jaen'
+import {PageConfig, useAuthenticationContext} from '@snek-at/jaen'
 import {PageProps} from 'gatsby'
 import React from 'react'
 
@@ -23,3 +23,16 @@ const LogoutPage: React.FC<PageProps> = () => {
 }
 
 export default withTheme(LogoutPage)
+
+export const pageConfig: PageConfig = {
+  label: 'Logout',
+  icon: 'FaSignOutAlt',
+  withoutJaenFrame: true,
+  menu: {
+    order: 1000,
+    type: 'user'
+  },
+  auth: {
+    isRequired: true
+  }
+}

@@ -1,5 +1,5 @@
 import {useLocation} from '@reach/router'
-import {useNotificationsContext} from '@snek-at/jaen'
+import {PageConfig, useNotificationsContext} from '@snek-at/jaen'
 import {navigate, PageProps} from 'gatsby'
 import {useEffect, useMemo, useState} from 'react'
 
@@ -115,3 +115,25 @@ const Page: React.FC<PageProps> = () => {
 }
 
 export default Page
+
+export const pageConfig: PageConfig = {
+  label: 'New',
+  breadcrumbs: [
+    {
+      label: 'CMS',
+      path: '/cms/'
+    },
+    {
+      label: 'Pages',
+      path: '/cms/pages/'
+    },
+    {
+      label: 'New',
+      path: '/cms/pages/new/'
+    }
+  ],
+  withoutJaenFrameStickyHeader: true,
+  auth: {
+    isRequired: true
+  }
+}

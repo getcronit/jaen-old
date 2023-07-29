@@ -62,8 +62,6 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
 export const FieldHighlighterProvider: React.FC<
   HighlightProviderProps
 > = props => {
-  console.log('PROPS', props)
-
   const itemsRef = useRef<
     Array<{
       ref: HTMLDivElement | null
@@ -144,7 +142,6 @@ export const FieldHighlighterProvider: React.FC<
       const tooltipButtons = item?.tooltipButtons || []
       const root = createRoot(tooltipRoot)
 
-      console.log('props.theme', props.theme)
       root.render(
         <ChakraProvider
           theme={props.theme}

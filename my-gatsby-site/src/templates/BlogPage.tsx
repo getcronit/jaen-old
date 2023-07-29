@@ -49,7 +49,7 @@ export default BlogPage
 
 export const Head: HeadFC = () => <title>BlogPage</title>
 
-export const config: PageConfig = {
+export const pageConfig: PageConfig = {
   label: 'My Custom Blog Page',
   childTemplates: ['BlogPage']
 }

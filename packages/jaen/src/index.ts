@@ -1,7 +1,8 @@
 export * from './connectors'
 export {
   AuthenticationProvider,
-  useAuthenticationContext
+  useAuthenticationContext,
+  withAuthentication
 } from './contexts/authentication'
 export {
   CMSManagementProvider,

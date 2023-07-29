@@ -8,6 +8,7 @@ import React, {
 } from 'react'
 
 import {setTokenPair, sq} from '@snek-functions/origin'
+import {PageConfig} from '../types'
 
 export interface AutenticationContext {
   isAuthenticated: boolean
@@ -290,4 +291,34 @@ export const AuthenticationProvider: React.FC<{
 
 export const useAuthenticationContext = () => {
   return useContext(AuthenticationContext)
+}
+
+export const withAuthentication = <P extends {}>(
+  Component: React.ComponentType<P>,
+  pageConfig?: PageConfig,
+  cbs?: {
+    onRedirectToLogin?: () => void
+  }
+): React.FC<P> => {
+  const WithAuthentication: React.FC<P> = props => {
+    const {isAuthenticated, isLoading} = useAuthenticationContext()
+
+    if (pageConfig?.auth?.isRequired) {
+      if (isLoading) {
+        return null
+      }
+
+      if (!isAuthenticated) {
+        if (cbs?.onRedirectToLogin) {
+          cbs.onRedirectToLogin()
+        }
+
+        return null
+      }
+    }
+
+    return <Component {...props} />
+  }
+
+  return WithAuthentication
 }
