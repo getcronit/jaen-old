@@ -22,6 +22,7 @@ interface CMSManagementContextData {
     label: string
     children: Array<CMSManagementContextData['tree'][0]>
   }>
+  pagePath: (pageId: string) => string
   addPage: (page: Partial<JaenPage>) => string
   removePage: (pageId: string) => void
   updatePage: (pageId: string, updatedPage: Partial<JaenPage>) => void
@@ -41,6 +42,7 @@ const CMSManagementContext = createContext<CMSManagementContextData>({
   },
   pages: () => [],
   tree: [],
+  pagePath: () => '',
   isEditing: false,
   addPage: () => '',
   removePage: () => {},
@@ -182,6 +184,28 @@ export const CMSManagementProvider = withRedux(
       return tree
     }, [pages])
 
+    const pagePath = useCallback(
+      (pageId: string) => {
+        const page = pagesDict[pageId]
+
+        if (!page) {
+          throw new Error(`Could not find page with id ${pageId}`)
+        }
+
+        const path = [page.slug]
+
+        let parent = pagesDict[page.parent?.id || '']
+
+        while (parent) {
+          path.unshift(parent.slug)
+          parent = pagesDict[parent.parent?.id || '']
+        }
+
+        return path.join('/') || '/'
+      },
+      [pagesDict]
+    )
+
     const templatesForPage = useCallback(
       (pageId: string) => {
         const page = pagesDict[pageId]
@@ -229,6 +253,7 @@ export const CMSManagementProvider = withRedux(
           pages,
           templatesForPage,
           tree,
+          pagePath,
           isEditing,
           addPage,
           removePage,

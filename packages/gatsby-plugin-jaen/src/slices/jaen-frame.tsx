@@ -75,7 +75,7 @@ const Slice: React.FC<
   return (
     <JaenFrame
       navigation={{
-        isStickyDisabled: props.pageConfig.withoutJaenFrameStickyHeader,
+        isStickyDisabled: props.pageConfig?.withoutJaenFrameStickyHeader,
         app: {
           navigationGroups: navigationGroups.app,
           version: '3.0.0',
@@ -105,7 +105,7 @@ const Slice: React.FC<
           }
         },
         breadcrumbs: {
-          links: props.pageConfig.breadcrumbs || []
+          links: props.pageConfig?.breadcrumbs || []
         }
       }}
       logo={<Logo />}

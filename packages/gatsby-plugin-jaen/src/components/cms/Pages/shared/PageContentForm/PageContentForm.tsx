@@ -24,10 +24,11 @@ import {
 import {JaenTemplate} from '@snek-at/jaen'
 import {useEffect, useState} from 'react'
 import {Controller, SubmitHandler, useForm} from 'react-hook-form'
-import {FaEdit, FaImage, FaNewspaper} from 'react-icons/fa'
+import {FaEdit, FaEye, FaImage, FaNewspaper} from 'react-icons/fa'
 import {FaEyeLowVision} from 'react-icons/fa6'
 import slugify from 'slugify'
 
+import {Link} from '../../../../shared/Link'
 import {ChooseButton, ChooseButtonProps} from '../ChooseButton/ChooseButton'
 
 const texts = {
@@ -154,6 +155,7 @@ export interface PageContentFormProps {
     }
   }
   onSubmit: (data: FormValues) => void
+  path?: string
   values?: Partial<FormValues>
   disableSlug?: boolean
   mode?: 'create' | 'edit'
@@ -240,14 +242,20 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
               </Heading>
             </HStack>
 
-            <Button
-              variant="outline"
-              leftIcon={<FaEdit />}
-              onClick={() => {
-                setIsEditFormLocked(false)
-              }}>
-              Edit page
-            </Button>
+            <ButtonGroup variant="outline">
+              <Link as={Button} leftIcon={<FaEye />} to={props.path}>
+                Preview
+              </Link>
+
+              <Button
+                variant="outline"
+                leftIcon={<FaEdit />}
+                onClick={() => {
+                  setIsEditFormLocked(false)
+                }}>
+                Edit page
+              </Button>
+            </ButtonGroup>
           </HStack>
 
           <Text fontSize="sm" color="fg.muted" maxW="70%">

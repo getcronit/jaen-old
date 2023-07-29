@@ -194,7 +194,8 @@ const PagesPage: React.FC = withTheme(() => {
               description: `Page ${data.title} has been updated`,
               status: 'success'
             })
-          }
+          },
+          path: manager.pagePath(currentPage.id)
         }}
         children={children}
         tree={manager.tree}
