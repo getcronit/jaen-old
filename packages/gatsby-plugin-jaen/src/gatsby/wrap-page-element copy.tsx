@@ -1,16 +1,18 @@
-import React, {useContext, useEffect, useMemo} from 'react'
 import {useTheme} from '@chakra-ui/react'
 import {ChakraProvider} from '@chakra-ui/provider'
-import {PageProvider, useAuthenticationContext} from '@snek-at/jaen'
+
+import {useAuthenticationContext} from '@snek-at/jaen'
 import {GatsbyBrowser} from 'gatsby'
+import {useContext, useEffect, useMemo} from 'react'
 import {FaCog, FaHome, FaImage, FaSignOutAlt, FaSitemap} from 'react-icons/fa'
 
-// Import other necessary components here
 import {JaenFrame} from '../components/JaenFrame/JaenFrame'
 import {ToolbarContext} from '../components/JaenFrame/contexts/toolbar'
 import Logo from '../components/Logo'
 import {withTheme} from '../theme/with-theme'
 import {CMSToolbarContainer} from '../containers/cms-toolbar'
+
+const StyledJaenFrame = withTheme(JaenFrame)
 
 const ToolbarProvider: React.FC<{
   jaenPageId?: string
@@ -30,43 +32,26 @@ const ToolbarProvider: React.FC<{
   return <>{children}</>
 }
 
-interface PageContext {
-  withoutJaenFrame?: boolean
-  withoutJaenFrameStickyHeader?: boolean
-  jaenPageId?: string
-  breadcrumbs?: Array<{label: string; path: string}>
-}
-
-interface CustomPageElementProps {
-  element: React.ReactNode
-  props: {pageContext?: PageContext}
-}
-
-const StyledJaenFrame = withTheme(JaenFrame)
-
-const CustomPageElement: React.FC<CustomPageElementProps> = ({
+export const wrapPageElement: GatsbyBrowser['wrapPageElement'] = ({
   element,
   props
 }) => {
   const authentication = useAuthenticationContext()
+
   const userTheme = useTheme()
-  const {setToolbar} = useContext(ToolbarContext)
 
   const withoutJaenFrame = props.pageContext?.withoutJaenFrame
-  const withoutJaenFrameStickyHeader =
-    props.pageContext?.withoutJaenFrameStickyHeader
-  const jaenPageId = props.pageContext?.jaenPageId
+  const withoutJaenFrameStickyHeader = props.pageContext
+    ?.withoutJaenFrameStickyHeader as boolean | undefined
 
-  const breadcrumbs = props.pageContext?.breadcrumbs || []
+  const jaenPageId = props.pageContext?.jaenPageId as string | undefined
 
-  useEffect(() => {
-    if (!jaenPageId) return
+  console.log('pageContext', props.pageContext)
 
-    setToolbar({
-      components: [CMSToolbarContainer],
-      origin: 'cms'
-    })
-  }, [jaenPageId, setToolbar])
+  const breadcrumbs = (props.pageContext?.breadcrumbs || []) as Array<{
+    label: string
+    path: string
+  }>
 
   const memoedElement = useMemo(() => {
     return (
@@ -74,7 +59,7 @@ const CustomPageElement: React.FC<CustomPageElementProps> = ({
         <ToolbarProvider jaenPageId={jaenPageId}>{element}</ToolbarProvider>
       </ChakraProvider>
     )
-  }, [element, jaenPageId, userTheme])
+  }, [element, jaenPageId])
 
   if (
     authentication.isAuthenticated &&
@@ -160,20 +145,4 @@ const CustomPageElement: React.FC<CustomPageElementProps> = ({
   }
 
   return memoedElement
-}
-
-export const wrapPageElement: GatsbyBrowser['wrapPageElement'] = ({
-  element,
-  props
-}) => {
-  const jaenPage = {
-    id: props.pageContext.jaenPageId as string,
-    ...(props.data?.jaenPage || {})
-  }
-
-  return (
-    <PageProvider jaenPage={jaenPage}>
-      <CustomPageElement element={element} props={props} />
-    </PageProvider>
-  )
 }

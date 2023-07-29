@@ -13,8 +13,8 @@ export {
   NotificationsProvider,
   useNotificationsContext
 } from './contexts/notifications'
-export {usePageContext} from './contexts/page'
+export {usePageContext, PageProvider} from './contexts/page'
 export {Field} from './fields'
 export {useField} from './hooks/use-field'
-export {IJaenPage, PageProps} from './types'
+export {JaenPage, PageConfig, PageProps, JaenTemplate} from './types'
 export {generatePageOriginPath} from './utils/path'

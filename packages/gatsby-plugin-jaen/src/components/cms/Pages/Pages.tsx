@@ -36,6 +36,7 @@ export interface PagesProps {
   }>
   tree: Array<TreeNode>
   onTreeSelect?: (id: string) => void
+  disableNewButton?: boolean
 }
 
 export const Pages: React.FC<PagesProps> = props => {
@@ -75,7 +76,12 @@ export const Pages: React.FC<PagesProps> = props => {
             Subpages
           </Heading>
 
-          <Link as={Button} to="./new" leftIcon={<FaPlus />} variant="outline">
+          <Link
+            isDisabled={props.disableNewButton}
+            as={Button}
+            to={`./new/#${btoa(props.pageId)}`}
+            leftIcon={<FaPlus />}
+            variant="outline">
             New page
           </Link>
         </HStack>

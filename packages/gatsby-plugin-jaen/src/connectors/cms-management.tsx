@@ -1,4 +1,4 @@
-import {CMSManagementProvider, IJaenPage} from '@snek-at/jaen'
+import {CMSManagementProvider, JaenPage, JaenTemplate} from '@snek-at/jaen'
 import {graphql, useStaticQuery} from 'gatsby'
 
 export {useCMSManagementContext as useCMSManagement} from '@snek-at/jaen'
@@ -10,7 +10,10 @@ export interface CMSManagementProps {
 export const CMSManagement: React.FC<CMSManagementProps> = props => {
   const staticData = useStaticQuery<{
     allJaenPage: {
-      nodes: IJaenPage[]
+      nodes: JaenPage[]
+    }
+    allJaenTemplate: {
+      nodes: JaenTemplate[]
     }
   }>(graphql`
     query CMSManagementData {
@@ -19,11 +22,18 @@ export const CMSManagement: React.FC<CMSManagementProps> = props => {
           ...JaenPageData
         }
       }
+      allJaenTemplate {
+        nodes {
+          ...JaenTemplateData
+        }
+      }
     }
   `)
 
   return (
-    <CMSManagementProvider staticPages={staticData.allJaenPage.nodes}>
+    <CMSManagementProvider
+      staticPages={staticData.allJaenPage.nodes}
+      templates={staticData.allJaenTemplate.nodes}>
       {props.children}
     </CMSManagementProvider>
   )

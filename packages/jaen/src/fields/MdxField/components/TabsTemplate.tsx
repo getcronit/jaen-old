@@ -12,9 +12,10 @@ import {
   TabPanels,
   Tabs,
   useTheme,
-  Icon,
-  ChakraProvider
+  Icon
 } from '@chakra-ui/react'
+import {ChakraProvider} from '@chakra-ui/provider'
+
 import React, {useState} from 'react'
 import {FaPlus} from 'react-icons/fa'
 

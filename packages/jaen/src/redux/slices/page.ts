@@ -1,7 +1,7 @@
 import {combineReducers, createSlice, PayloadAction} from '@reduxjs/toolkit'
 import {v4 as uuidv4} from 'uuid'
 
-import {IJaenPage, SectionType} from '../../types'
+import {JaenPage, SectionType} from '../../types'
 import {deepRemoveUndefinedProperties} from '../../utils/deep-remove-undefined-properties'
 import {findSection, insertSectionIntoTree} from '../../utils/page/section'
 import {generatePagePaths} from '../../utils/path'
@@ -67,7 +67,7 @@ const pagesSlice = createSlice({
           jaenPageMetadata: {
             ...state.nodes[id]?.jaenPageMetadata,
             ...jaenPageMetadata
-          } as IJaenPage['jaenPageMetadata']
+          } as JaenPage['jaenPageMetadata']
         }
 
         // If `fromId` then remove the page from the fromPage children
@@ -155,7 +155,7 @@ const pagesSlice = createSlice({
         children: state.nodes[pageId]?.children || []
       }
 
-      const page = state.nodes[pageId] as IJaenPage
+      const page = state.nodes[pageId] as JaenPage
       const sections = page.sections || []
 
       insertSectionIntoTree(sections, path, {
@@ -187,7 +187,7 @@ const pagesSlice = createSlice({
         children: state.nodes[pageId]?.children || []
       }
 
-      const page = state.nodes[pageId] as IJaenPage
+      const page = state.nodes[pageId] as JaenPage
       const sections = page.sections || []
 
       insertSectionIntoTree(sections, path, {
@@ -223,7 +223,7 @@ const pagesSlice = createSlice({
         children: state.nodes[pageId]?.children || []
       }
 
-      const page = state.nodes[pageId] as IJaenPage
+      const page = state.nodes[pageId] as JaenPage
 
       const sections = page.sections || []
 
@@ -255,7 +255,7 @@ const pagesSlice = createSlice({
         children: state.nodes[pageId]?.children || []
       }
 
-      const page = state.nodes[pageId] as IJaenPage
+      const page = state.nodes[pageId] as JaenPage
       const sections = page.sections || []
 
       const section = findSection(sections, path)
@@ -308,7 +308,7 @@ const pagesSlice = createSlice({
         sections: state.nodes[pageId]?.sections || []
       }
 
-      const page = state.nodes[pageId] as IJaenPage
+      const page = state.nodes[pageId] as JaenPage
 
       if (section) {
         const sections = page.sections || []
@@ -367,7 +367,7 @@ const pagesSlice = createSlice({
         children: state.nodes[pageId]?.children || []
       }
 
-      const page = state.nodes[pageId] as IJaenPage
+      const page = state.nodes[pageId] as JaenPage
 
       // If the page is found, add the field
 
@@ -429,7 +429,7 @@ const routingSlice = createSlice({
     updateDynamicPaths(
       state,
       action: PayloadAction<{
-        jaenPageTree: IJaenPage[]
+        jaenPageTree: JaenPage[]
         pageId: string
         create?: boolean
       }>

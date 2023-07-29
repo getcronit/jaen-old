@@ -7,7 +7,7 @@ import {
 import {usePageContext} from '../contexts/page'
 import {RootState, store} from '../redux'
 import {actions} from '../redux/slices/page'
-import {IJaenPage} from '../types'
+import {JaenPage} from '../types'
 import {findSection} from '../utils/page/section'
 import {useContentManagement} from './use-content-management'
 
@@ -29,7 +29,7 @@ export function useField<IValue>(
 
   const SectionBlockContext = useSectionBlockContext()
 
-  function getPageField(page: IJaenPage | Partial<IJaenPage> | null):
+  function getPageField(page: JaenPage | Partial<JaenPage> | null):
     | {
         value: IValue
         props?: Record<string, any>

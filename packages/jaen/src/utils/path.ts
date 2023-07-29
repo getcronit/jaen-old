@@ -1,4 +1,4 @@
-import {IJaenPage} from '../types'
+import {JaenPage} from '../types'
 
 interface PageNode {
   id: string
@@ -30,7 +30,7 @@ export const generatePageOriginPath = (
   return normalizedPath
 }
 
-export const generatePagePaths = (allNodes: IJaenPage[], pageId: string) => {
+export const generatePagePaths = (allNodes: JaenPage[], pageId: string) => {
   const originNode = allNodes.find(node => node.id === pageId)
 
   if (originNode) {
@@ -38,7 +38,7 @@ export const generatePagePaths = (allNodes: IJaenPage[], pageId: string) => {
 
     const originPath = generatePageOriginPath(allNodes, originNode)
 
-    const lookupPath = (node: IJaenPage, pathPrefix = '/') => {
+    const lookupPath = (node: JaenPage, pathPrefix = '/') => {
       paths[pathPrefix] = node.id
 
       if (node.children.length > 0) {
@@ -65,7 +65,7 @@ export const generatePagePaths = (allNodes: IJaenPage[], pageId: string) => {
   }
 }
 
-export const generateAllPaths = (allNodes: IJaenPage[]) => {
+export const generateAllPaths = (allNodes: JaenPage[]) => {
   const paths: Record<string, string> = {}
 
   for (const node of allNodes) {

@@ -1,14 +1,15 @@
+import {useLocation} from '@reach/router'
+import {useNotificationsContext} from '@snek-at/jaen'
 import {navigate, PageProps} from 'gatsby'
+import {useEffect, useMemo, useState} from 'react'
 
-import {New, NewProps} from '../../../components/cms/Pages/New'
+import {New} from '../../../components/cms/Pages/New'
 import {JaenPageLayout} from '../../../components/JaenPageLayout/JaenPageLayout'
-import {withTheme} from '../../../theme/with-theme'
 import {
   CMSManagement,
   useCMSManagement
 } from '../../../connectors/cms-management'
-import {useMemo} from 'react'
-import {useNotificationsContext} from '@snek-at/jaen'
+import {withTheme} from '../../../theme/with-theme'
 
 const PagesNew: React.FC = withTheme(() => {
   const {toast} = useNotificationsContext()
@@ -17,25 +18,63 @@ const PagesNew: React.FC = withTheme(() => {
   const parentPages = useMemo(() => {
     const pages = manager.pages()
 
-    return pages.reduce<NewProps['form']['parentPages']>((acc, page) => {
-      acc[page.id] = {
-        label: page.jaenPageMetadata.title || page.id
+    const _parentPages: {
+      [pageId: string]: {
+        label: string
+        templates: {
+          [templateId: string]: {
+            label: string
+          }
+        }
       }
+    } = {}
 
-      return acc
-    }, {})
+    for (const page of pages) {
+      const pageTemplates = manager.templatesForPage(page.id)
+
+      if (pageTemplates.length > 0) {
+        _parentPages[page.id] = {
+          label: page.jaenPageMetadata.title || page.slug,
+          templates: pageTemplates.reduce((acc, template) => {
+            acc[template.id] = {
+              label: template.label
+            }
+
+            return acc
+          }, {} as {[key: string]: {label: string}})
+        }
+      }
+    }
+
+    return _parentPages
   }, [])
+
+  const location = useLocation()
+
+  const [defaultParentPageId, setDefaultParentPageId] = useState<
+    string | undefined
+  >(undefined)
+
+  useEffect(() => {
+    try {
+      const pageId = atob(location.hash.replace('#', ''))
+
+      if (parentPages[pageId]) {
+        setDefaultParentPageId(pageId)
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }, [location.hash, parentPages])
 
   return (
     <JaenPageLayout layout="form">
       <New
         form={{
-          parentPages,
-          templates: {
-            Example: {
-              label: 'Example'
-            }
+          values: {
+            parent: defaultParentPageId
           },
+          parentPages,
           onSubmit: data => {
             const addedPageId = manager.addPage({
               slug: data.slug,

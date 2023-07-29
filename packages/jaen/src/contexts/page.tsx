@@ -2,13 +2,13 @@ import {createContext, useContext, useEffect, useMemo, useState} from 'react'
 
 import {RootState, store} from '../redux'
 import {IJaenState} from '../redux/types'
-import {IJaenPage} from '../types'
+import {JaenPage} from '../types'
 
 export interface PageProviderProps {
   jaenPage: {
     id: string
-  } & Partial<IJaenPage>
-  jaenPages?: Array<Partial<IJaenPage>>
+  } & Partial<JaenPage>
+  jaenPages?: Array<Partial<JaenPage>>
 }
 
 export interface PageContextType extends PageProviderProps {}
@@ -64,14 +64,14 @@ export interface UsePageIndexProps {
    * Priority: jaenPageId > path > current page
    */
   path?: string
-  filter?: (page: Partial<IJaenPage>) => boolean
-  sort?: (a: Partial<IJaenPage>, b: Partial<IJaenPage>) => number
+  filter?: (page: Partial<JaenPage>) => boolean
+  sort?: (a: Partial<JaenPage>, b: Partial<JaenPage>) => number
 }
 
 export const useJaenPageIndex = (
   props?: UsePageIndexProps
 ): {
-  children: Array<{id: string} & Partial<IJaenPage>>
+  children: Array<{id: string} & Partial<JaenPage>>
   withJaenPage: (childId: string, children: React.ReactNode) => React.ReactNode
 } => {
   const {jaenPage, jaenPages} = usePageContext()
@@ -87,7 +87,7 @@ export const useJaenPageIndex = (
 
     const resolveJaenPageIdByPath = (
       path: string,
-      staticPages: Array<Partial<IJaenPage>>
+      staticPages: Array<Partial<JaenPage>>
     ) => {
       const state = store.getState() as IJaenState
       const dynamicPageId = state.page.routing.dynamicPaths[path]?.pageId
@@ -111,10 +111,10 @@ export const useJaenPageIndex = (
   }
 
   const staticChildren = useMemo(() => {
-    const jaenPagesChildren: Array<{id: string} & Partial<IJaenPage>> =
+    const jaenPagesChildren: Array<{id: string} & Partial<JaenPage>> =
       jaenPages?.find(page => page.id === id)?.children || []
 
-    let children: Array<{id: string} & Partial<IJaenPage>> = []
+    let children: Array<{id: string} & Partial<JaenPage>> = []
 
     if (jaenPage.id === id) {
       children = jaenPage.children || []
@@ -153,7 +153,7 @@ export const useJaenPageIndex = (
     }
   }, [id])
 
-  const [dynamicChildren, setDynamicChildren] = useState<IJaenPage[]>([])
+  const [dynamicChildren, setDynamicChildren] = useState<JaenPage[]>([])
 
   useEffect(() => {
     if (dynamicChildrenIds) {
@@ -163,7 +163,7 @@ export const useJaenPageIndex = (
       const ds = dynamicChildrenIds.map(({id}) => ({
         id,
         ...dynamicJaenPages[id]
-      })) as IJaenPage[]
+      })) as JaenPage[]
 
       setDynamicChildren(ds)
     }

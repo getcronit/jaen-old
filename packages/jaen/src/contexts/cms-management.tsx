@@ -5,28 +5,34 @@ import {createContext, ReactNode, useCallback, useContext, useMemo} from 'react'
 import {store, useAppDispatch, useAppSelector, withRedux} from '../redux'
 import {actions as pageActions} from '../redux/slices/page'
 import * as statusActions from '../redux/slices/status'
-import {IJaenPage} from '../types'
+import {JaenPage, JaenTemplate} from '../types'
 import {deepmergeArrayIdMerge} from '../utils/deepmerge'
 
 // Define the type for the CMSManagementContext data
 interface CMSManagementContextData {
-  page: (pageId?: string) => IJaenPage
-  usePage: (pageId?: string) => IJaenPage
-  pages: (parentId?: string) => IJaenPage[]
+  templates: JaenTemplate[]
+  templatesForPage: (pageId: string) => JaenTemplate[]
+
+  page: (pageId?: string) => JaenPage
+  usePage: (pageId?: string) => JaenPage
+  pages: (parentId?: string) => JaenPage[]
   isEditing: boolean
   tree: Array<{
     id: string
     label: string
     children: Array<CMSManagementContextData['tree'][0]>
   }>
-  addPage: (page: Partial<IJaenPage>) => string
+  addPage: (page: Partial<JaenPage>) => string
   removePage: (pageId: string) => void
-  updatePage: (pageId: string, updatedPage: Partial<IJaenPage>) => void
+  updatePage: (pageId: string, updatedPage: Partial<JaenPage>) => void
   setIsEditing: (editing: boolean) => void
 }
 
 // Create the initial context
 const CMSManagementContext = createContext<CMSManagementContextData>({
+  templates: [],
+  templatesForPage: () => [],
+
   page: function () {
     throw new Error('Function not implemented.')
   },
@@ -44,13 +50,14 @@ const CMSManagementContext = createContext<CMSManagementContextData>({
 
 // Define the CMSManagementProvider props
 interface CMSManagementProviderProps {
-  staticPages: IJaenPage[]
+  staticPages: JaenPage[]
+  templates: JaenTemplate[]
   children: ReactNode
 }
 
 // Create the CMSManagementProvider component
 export const CMSManagementProvider = withRedux(
-  ({staticPages, children}: CMSManagementProviderProps) => {
+  ({staticPages, children, templates}: CMSManagementProviderProps) => {
     const dispatch = useAppDispatch()
 
     // flags?
@@ -92,10 +99,10 @@ export const CMSManagementProvider = withRedux(
 
           return valuesWithIds.filter(
             page => page.parent?.id === parentId
-          ) as IJaenPage[]
+          ) as JaenPage[]
         }
         // If no parentId is provided, return all pages
-        return Object.values(valuesWithIds) as IJaenPage[]
+        return Object.values(valuesWithIds) as JaenPage[]
       },
       [pagesDict]
     )
@@ -121,18 +128,20 @@ export const CMSManagementProvider = withRedux(
           throw new Error(`Could not find page with id ${pageId}`)
         }
 
+        console.log('found', found)
+
         return found
       },
       [pages]
     )
 
-    const addPage = (page: Partial<IJaenPage>) => {
+    const addPage = (page: Partial<JaenPage>) => {
       dispatch(pageActions.page_updateOrCreate(page))
 
       return store.getState().page.pages.lastAddedNodeId
     }
 
-    const updatePage = (pageId: string, updatedPage: Partial<IJaenPage>) => {
+    const updatePage = (pageId: string, updatedPage: Partial<JaenPage>) => {
       dispatch(
         pageActions.page_updateOrCreate({
           id: pageId,
@@ -173,12 +182,52 @@ export const CMSManagementProvider = withRedux(
       return tree
     }, [pages])
 
+    const templatesForPage = useCallback(
+      (pageId: string) => {
+        const page = pagesDict[pageId]
+
+        if (!page) {
+          throw new Error(`Could not find page with id ${pageId}`)
+        }
+
+        console.log('page', page)
+
+        if (page.template) {
+          return (
+            templates.find(template => template.id === page.template)
+              ?.childTemplates || []
+          )
+        }
+
+        if (page.childTemplates) {
+          const childTemplates: JaenTemplate[] = []
+
+          for (const childTemplateId of page.childTemplates) {
+            const childTemplate = templates.find(
+              template => template.id === childTemplateId
+            )
+
+            if (childTemplate) {
+              childTemplates.push(childTemplate)
+            }
+          }
+
+          return childTemplates
+        }
+
+        return []
+      },
+      [pagesDict, templates]
+    )
+
     return (
       <CMSManagementContext.Provider
         value={{
+          templates,
           page,
           usePage,
           pages,
+          templatesForPage,
           tree,
           isEditing,
           addPage,

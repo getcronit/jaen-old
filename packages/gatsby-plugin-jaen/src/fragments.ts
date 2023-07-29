@@ -1,6 +1,15 @@
 import {graphql} from 'gatsby'
 
 export const fragments = graphql`
+  fragment JaenTemplateData on JaenTemplate {
+    id
+    label
+    childTemplates {
+      id
+      label
+    }
+  }
+
   fragment JaenSiteMetadataData on JaenSiteMetadata {
     siteUrl
     title
@@ -30,6 +39,7 @@ export const fragments = graphql`
     buildPath
     slug
     template
+    childTemplates
     excludedFromIndex
     jaenPageMetadata {
       title
@@ -62,6 +72,8 @@ export const fragments = graphql`
     slug
     jaenFields
     excludedFromIndex
+    template
+    childTemplates
     parent {
       id
     }

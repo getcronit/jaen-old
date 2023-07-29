@@ -5,6 +5,7 @@ import {MenuButton} from '../../../../shared/MenuButton/MenuButton'
 
 export interface ChooseButtonProps {
   defaultValue?: string
+  isDisabled?: boolean
   items: Record<
     string,
     {
@@ -18,6 +19,7 @@ export interface ChooseButtonProps {
 
 export const ChooseButton: React.FC<ChooseButtonProps> = ({
   defaultValue,
+  isDisabled,
   items,
   placeholder = {
     label: 'Choose'
@@ -67,6 +69,7 @@ export const ChooseButton: React.FC<ChooseButtonProps> = ({
   return (
     <Box pos="relative">
       <MenuButton
+        isDisabled={isDisabled}
         bgColor="bg.subtle"
         items={menuButtonItems}
         renderItems={items => {

@@ -23,8 +23,6 @@ export const wrapRootElement: GatsbyBrowser['wrapRootElement'] = (
     throw new Error('snekResourceId is not defined')
   }
 
-  console.log('THEME', theme)
-
   return (
     <JaenThemeProvider theme={theme}>
       <NotificationsProvider>

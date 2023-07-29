@@ -1,4 +1,4 @@
-import {IJaenPage, IJaenPopup, ISite, IWidget} from '../types'
+import {JaenPage, IJaenPopup, ISite, IWidget} from '../types'
 
 export interface IError {
   code: string
@@ -10,7 +10,7 @@ export interface IPageState {
   pages: {
     lastAddedNodeId?: string
     registeredPageFields: Record<string, number>
-    nodes: Record<string, Partial<IJaenPage>>
+    nodes: Record<string, Partial<JaenPage>>
   }
   routing: {
     dynamicPaths: Record<

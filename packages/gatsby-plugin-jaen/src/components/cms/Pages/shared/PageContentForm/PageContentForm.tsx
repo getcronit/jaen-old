@@ -5,6 +5,7 @@ import {
   Center,
   Checkbox,
   FormControl,
+  FormErrorMessage,
   FormHelperText,
   FormLabel,
   Grid,
@@ -20,6 +21,7 @@ import {
   Text,
   Textarea
 } from '@chakra-ui/react'
+import {JaenTemplate} from '@snek-at/jaen'
 import {useEffect, useState} from 'react'
 import {Controller, SubmitHandler, useForm} from 'react-hook-form'
 import {FaEdit, FaImage, FaNewspaper} from 'react-icons/fa'
@@ -43,7 +45,8 @@ const texts = {
     edit: 'The template that is used for your page'
   },
   templateHelperText: {
-    create: 'This is the template that will be used for your new page.',
+    create:
+      'This template will be used for your new page, based on the parent page.',
     edit: 'If you want to change the template, create a new page and copy the content over.'
   },
   title: {
@@ -144,11 +147,15 @@ interface FormValues {
 }
 
 export interface PageContentFormProps {
-  templates: ChooseButtonProps['items']
-  parentPages: ChooseButtonProps['items']
+  parentPages: {
+    [pageId: string]: {
+      label: string
+      templates: ChooseButtonProps['items']
+    }
+  }
   onSubmit: (data: FormValues) => void
   values?: Partial<FormValues>
-  isRoot?: boolean
+  disableSlug?: boolean
   mode?: 'create' | 'edit'
 }
 
@@ -171,9 +178,10 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
 
   useEffect(() => {
     // set default values
-    if (mode === 'edit') {
-      reset(props.values)
 
+    reset(props.values)
+
+    if (mode === 'edit') {
       // lock the form
       setIsEditFormLocked(true)
     }
@@ -209,6 +217,12 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
     setValue('slug', slug) // Set the value of the 'slug' field using setValue from react-hook-form
   }, [mode, title, setValue])
 
+  const parent = watch('parent', '') // Get the value of the 'parent' field
+
+  const jaenTemplate = props.parentPages[props.values?.parent]?.templates[
+    props.values?.template || ''
+  ] as JaenTemplate
+
   if (mode === 'edit' && isEditFormLocked) {
     return (
       <Stack w="full" divider={<StackDivider />} spacing="4">
@@ -217,7 +231,7 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
             <HStack>
               {props.values?.template && (
                 <Tag colorScheme="brand" variant="solid" w="fit-content">
-                  {props.values.template}
+                  {jaenTemplate.label}
                 </Tag>
               )}
 
@@ -262,67 +276,6 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
           </Text>
         </Stack>
 
-        <FormControl as="fieldset" isRequired isInvalid={!!errors.template}>
-          <FormLabel as="legend">{texts.template[mode]}</FormLabel>
-          {mode === 'create' ? (
-            <Controller
-              control={control}
-              name="template"
-              rules={{
-                required: true
-              }}
-              render={({field}) => {
-                return (
-                  <ChooseButton
-                    onChange={field.onChange}
-                    items={props.templates}
-                  />
-                )
-              }}
-            />
-          ) : (
-            <Button variant="outline" bgColor="bg.subtle" isDisabled>
-              {props.values?.template} (cannot be changed)
-            </Button>
-          )}
-          <FormHelperText>{texts.templateHelperText[mode]}</FormHelperText>
-        </FormControl>
-
-        <Stack spacing="4">
-          <FormControl
-            as="fieldset"
-            isRequired
-            isInvalid={!!errors.title || !!errors.slug}>
-            <FormLabel as="legend">{texts.title[mode]}</FormLabel>
-            <Grid templateColumns="70% 30%" gap="2">
-              <Input
-                {...register('title', {required: true})}
-                placeholder="Title"
-              />
-              <Input
-                {...register('slug', {required: true})}
-                placeholder="slug"
-              />
-            </Grid>
-            <FormHelperText>{texts.titleHelperText[mode]}</FormHelperText>
-          </FormControl>
-
-          <FormControl
-            as="fieldset"
-            isRequired
-            isInvalid={!!errors.description}>
-            <FormLabel as="legend">{texts.description[mode]}</FormLabel>
-            <Textarea
-              {...register('description', {required: true})}
-              placeholder="Description"
-            />
-            <FormHelperText as={HStack} justifyContent="space-between">
-              <Text>{texts.descriptionHelperText[mode]}</Text>
-              <Text>{watch('description')?.length || 0}</Text>
-            </FormHelperText>
-          </FormControl>
-        </Stack>
-
         {(mode === 'edit' ? props.values?.parent : true) && (
           <FormControl as="fieldset" isInvalid={!!errors.parent} isRequired>
             <FormLabel as="legend">{texts.parent[mode]}</FormLabel>
@@ -345,6 +298,90 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
             />
 
             <FormHelperText>{texts.parentHelperText[mode]}</FormHelperText>
+            <FormErrorMessage>
+              {errors.parent && 'Parent is required'}
+            </FormErrorMessage>
+          </FormControl>
+        )}
+
+        <Stack spacing="4">
+          {props.disableSlug ? (
+            <FormControl as="fieldset" isRequired isInvalid={!!errors.slug}>
+              <FormLabel as="legend">{texts.title[mode]}</FormLabel>
+              <Input
+                {...register('title', {
+                  required: true
+                })}
+                placeholder="Title"
+              />
+              <FormHelperText>{texts.titleHelperText[mode]}</FormHelperText>
+            </FormControl>
+          ) : (
+            <FormControl
+              as="fieldset"
+              isRequired
+              isInvalid={!!errors.title || !!errors.slug}>
+              <FormLabel as="legend">{texts.title[mode]}</FormLabel>
+              <Grid templateColumns="70% 30%" gap="2">
+                <Input
+                  {...register('title', {required: true})}
+                  placeholder="Title"
+                />
+                <Input
+                  {...register('slug', {required: true})}
+                  placeholder="slug"
+                />
+              </Grid>
+              <FormHelperText>{texts.titleHelperText[mode]}</FormHelperText>
+            </FormControl>
+          )}
+
+          <FormControl
+            as="fieldset"
+            isRequired
+            isInvalid={!!errors.description}>
+            <FormLabel as="legend">{texts.description[mode]}</FormLabel>
+            <Textarea
+              {...register('description', {required: true})}
+              placeholder="Description"
+            />
+            <FormHelperText as={HStack} justifyContent="space-between">
+              <Text>{texts.descriptionHelperText[mode]}</Text>
+              <Text>{watch('description')?.length || 0}</Text>
+            </FormHelperText>
+          </FormControl>
+        </Stack>
+
+        {!(mode === 'edit' && !props.values?.template) && (
+          <FormControl as="fieldset" isRequired isInvalid={!!errors.template}>
+            <FormLabel as="legend">{texts.template[mode]}</FormLabel>
+            {mode === 'create' ? (
+              <Controller
+                control={control}
+                name="template"
+                rules={{
+                  required: true
+                }}
+                render={({field}) => {
+                  return (
+                    <ChooseButton
+                      isDisabled={!props.parentPages[parent]?.templates}
+                      onChange={field.onChange}
+                      items={props.parentPages[parent]?.templates || {}}
+                    />
+                  )
+                }}
+              />
+            ) : (
+              <Button variant="outline" bgColor="bg.subtle" isDisabled>
+                {jaenTemplate.label} (cannot be changed)
+              </Button>
+            )}
+            <FormHelperText>{texts.templateHelperText[mode]}</FormHelperText>
+
+            <FormErrorMessage>
+              {errors.template && 'Template is required'}
+            </FormErrorMessage>
           </FormControl>
         )}
 

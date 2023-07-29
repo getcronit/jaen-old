@@ -24,7 +24,7 @@ const codeStyles = {
   borderRadius: 4
 }
 
-const NotFoundPage: React.FC<PageProps> = () => {
+const BlogPage: React.FC<PageProps> = () => {
   return (
     <main style={pageStyles}>
       <h1 style={headingStyles}>Page not found</h1>
@@ -45,10 +45,11 @@ const NotFoundPage: React.FC<PageProps> = () => {
   )
 }
 
-export default NotFoundPage
+export default BlogPage
 
-export const Head: HeadFC = () => <title>Not found</title>
+export const Head: HeadFC = () => <title>BlogPage</title>
 
 export const config: PageConfig = {
-  label: 'Oops! Page not found'
+  label: 'My Custom Blog Page',
+  childTemplates: ['BlogPage']
 }

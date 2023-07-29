@@ -66,11 +66,102 @@ const PagesPage: React.FC = withTheme(() => {
     [manager]
   )
 
+  // const parentPages = useMemo(() => {
+  //   if (!currentPage.parent?.id) return {}
+
+  //   const parentPage = manager.page(currentPage.parent.id)
+
+  //   return {
+  //     [currentPage.parent.id]: {
+  //       label: parentPage.jaenPageMetadata?.title || parentPage.slug,
+  //       templates: manager
+  //         .templatesForPage(currentPage.parent.id)
+  //         .reduce((acc, template) => {
+  //           acc[template.id] = {
+  //             label: template.label
+  //           }
+
+  //           return acc
+  //         }, {} as {[key: string]: {label: string}})
+  //     }
+  //   }
+  // }, [currentPage.parent?.id, manager])
+
+  const parentPages = useMemo(() => {
+    const pages = manager.pages()
+
+    // use the manager.tree to blacklist all children of current page
+    const blacklist: string[] = []
+
+    const recursiveBlacklist = (pageId?: string) => {
+      if (!pageId) return
+
+      const page = manager.page(pageId)
+
+      if (!page) return
+
+      for (const child of page.children) {
+        blacklist.push(child.id)
+        recursiveBlacklist(child.id)
+      }
+    }
+
+    recursiveBlacklist(currentPage.id)
+
+    const _parentPages: {
+      [pageId: string]: {
+        label: string
+        templates: {
+          [templateId: string]: {
+            label: string
+          }
+        }
+      }
+    } = {}
+
+    for (const page of pages) {
+      // skip if page is current page
+      if (page.id === currentPage.id) {
+        continue
+      }
+
+      // skip if page is in blacklist
+      if (blacklist.includes(page.id)) {
+        continue
+      }
+
+      const pageTemplates = manager.templatesForPage(page.id)
+
+      if (pageTemplates.length > 0) {
+        // skip if pageTemplates do not contain current page template
+        if (
+          !pageTemplates.find(template => template.id === currentPage.template)
+        ) {
+          continue
+        }
+
+        _parentPages[page.id] = {
+          label: page.jaenPageMetadata.title || page.slug,
+          templates: pageTemplates.reduce((acc, template) => {
+            acc[template.id] = {
+              label: template.label
+            }
+
+            return acc
+          }, {} as {[key: string]: {label: string}})
+        }
+      }
+    }
+
+    return _parentPages
+  }, [manager, currentPage])
+
   return (
     <JaenPageLayout>
       <Pages
         pageId={currentPage.id}
         form={{
+          disableSlug: !currentPage.template,
           values: {
             title: currentPage.jaenPageMetadata?.title || 'No title',
             slug: currentPage.slug,
@@ -80,22 +171,7 @@ const PagesPage: React.FC = withTheme(() => {
             parent: currentPage.parent?.id,
             isExcludedFromIndex: currentPage.excludedFromIndex
           },
-          templates: currentPage.template
-            ? {
-                [currentPage.template]: {
-                  label: currentPage.template
-                }
-              }
-            : {},
-          parentPages: currentPage.parent?.id
-            ? {
-                [currentPage.parent.id || '']: {
-                  label:
-                    manager.page(currentPage.parent.id).jaenPageMetadata
-                      ?.title || 'No parent'
-                }
-              }
-            : {},
+          parentPages,
           onSubmit: data => {
             manager.updatePage(currentPage.id, {
               slug: data.slug,
@@ -123,6 +199,7 @@ const PagesPage: React.FC = withTheme(() => {
         children={children}
         tree={manager.tree}
         onTreeSelect={handleTreeSelect}
+        disableNewButton={manager.templatesForPage(currentPage.id).length === 0}
       />
     </JaenPageLayout>
   )

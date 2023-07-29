@@ -2,7 +2,7 @@ import {Button, Text} from '@chakra-ui/react'
 
 import {useJaenPageIndex} from '../../contexts/page'
 import {withRedux} from '../../redux/index'
-import {IJaenPage} from '../../types'
+import {JaenPage} from '../../types'
 import {HighlightTooltip} from '../components/HighlightTooltip/HighlightTooltip'
 
 export interface IndexFieldProps {
@@ -29,9 +29,9 @@ export interface IndexFieldProps {
    *
    * Filtering is done by the `filter` prop.
    */
-  renderPage: (page: Partial<IJaenPage>) => JSX.Element
-  filter?: (page: Partial<IJaenPage>) => boolean
-  sort?: (a: Partial<IJaenPage>, b: Partial<IJaenPage>) => number
+  renderPage: (page: Partial<JaenPage>) => JSX.Element
+  filter?: (page: Partial<JaenPage>) => boolean
+  sort?: (a: Partial<JaenPage>, b: Partial<JaenPage>) => number
 }
 
 export const IndexField: React.FC<IndexFieldProps> = withRedux(

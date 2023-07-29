@@ -1,4 +1,4 @@
-import {ChakraBaseProvider, HStack} from '@chakra-ui/react'
+import {HStack} from '@chakra-ui/react'
 import {ChakraProvider} from '@chakra-ui/provider'
 import React, {
   createContext,

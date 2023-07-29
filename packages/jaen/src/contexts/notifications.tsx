@@ -137,7 +137,11 @@ export const NotificationsProvider = ({children}: {children: ReactNode}) => {
         toast
       }}>
       {children}
-      <ChakraProvider disableEnvironment disableGlobalStyle theme={jaenTheme}>
+      <ChakraProvider
+        cssVarsRoot="#coco"
+        disableEnvironment
+        disableGlobalStyle
+        theme={jaenTheme}>
         {modal}
       </ChakraProvider>
     </Context.Provider>

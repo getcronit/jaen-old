@@ -16,7 +16,7 @@ export default {
     'html,body': {
       height: '100%'
     },
-    '#__next, #root': {
+    '#___gatsby, #root': {
       display: 'flex',
       flexDirection: 'column',
       minH: '100%'

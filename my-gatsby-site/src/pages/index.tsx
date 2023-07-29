@@ -1,4 +1,4 @@
-import {connectPage, Field, PageProps} from '@snek-at/jaen'
+import {connectPage, Field, PageConfig, PageProps} from '@snek-at/jaen'
 import {graphql, HeadFC} from 'gatsby'
 import * as React from 'react'
 
@@ -194,11 +194,12 @@ const IndexPage: React.FC<PageProps> = () => {
   )
 }
 
-export default connectPage(IndexPage, {
-  label: 'Home Page'
-})
+export default IndexPage
 
-export const Head: HeadFC = () => <title>Home Page</title>
+export const config: PageConfig = {
+  label: 'Home Page',
+  childTemplates: ['BlogPage']
+}
 
 export const query = graphql`
   query ($jaenPageId: String!) {

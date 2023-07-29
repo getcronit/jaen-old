@@ -3,6 +3,11 @@ import type {IGatsbyImageData} from 'gatsby-plugin-image'
 
 import {IBlockConnection} from './connectors/connect-block'
 
+export interface PageConfig {
+  label: string
+  childTemplates?: string[]
+}
+
 export interface IWidget {
   nodes: Array<{
     name: string
@@ -33,14 +38,10 @@ export interface ISite {
   siteMetadata: Partial<SiteMetadata>
 }
 
-export interface IJaenTemplate {
-  name: string
+export interface JaenTemplate {
+  id: string
   label: string
-  children: Array<{
-    name: string
-    label: string
-  }>
-  isRootTemplate?: boolean
+  childTemplates: Array<JaenTemplate>
 }
 
 export interface IJaenView {
@@ -64,7 +65,7 @@ export type IJaenFields = Record<
   >
 > | null
 
-export interface IJaenPage {
+export interface JaenPage {
   id: string
   slug: string
   buildPath?: string
@@ -86,7 +87,7 @@ export interface IJaenPage {
   parent: {
     id: string
   } | null
-  children: Array<{id: string} & Partial<IJaenPage>>
+  children: Array<{id: string} & Partial<JaenPage>>
   sections: IJaenSection[]
   [customFieldName: string]: any
 
@@ -96,6 +97,7 @@ export interface IJaenPage {
    * - Used to determine the component to render.
    */
   template: string | null
+  childTemplates: string[]
   /**
    * Name of the component
    * Used for page loading
@@ -157,14 +159,16 @@ export interface IJaenConnection<ReactProps, Options>
   options: Options
 }
 
-export type PageProps<DataType = object, PageContextType = object> =
-  GatsbyPageProps<
-    DataType & {
-      jaenPage: IJaenPage | null
-      allJaenPage?: {nodes: Array<Partial<IJaenPage>>}
-    },
-    PageContextType & {jaenPageId: string}
-  >
+export type PageProps<
+  DataType = object,
+  PageContextType = object
+> = GatsbyPageProps<
+  DataType & {
+    jaenPage: JaenPage | null
+    allJaenPage?: {nodes: Array<Partial<JaenPage>>}
+  },
+  PageContextType & {jaenPageId: string}
+>
 
 export interface IFormProps<Values> {
   values: Values

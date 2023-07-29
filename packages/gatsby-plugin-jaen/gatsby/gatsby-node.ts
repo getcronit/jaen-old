@@ -1,23 +1,14 @@
-import type {IJaenPage} from '@snek-at/jaen'
+import type {JaenPage} from '@snek-at/jaen'
 import {generatePageOriginPath} from '@snek-at/jaen/src/utils/path'
-
 import {GatsbyNode, Node} from 'gatsby'
 import slugify from 'slugify'
 
-function getParentId(page: {parent: {id: string} | null; id: string}) {
-  if (page.parent) {
-    return page.parent.id
-  }
-
-  if (page.id === 'JaenPage /') {
-    return null
-  }
-
-  return 'JaenPage /'
-}
+import {capitalizeLastPathElement} from './helper/capitalize-last-path-element'
+import {getJaenPageParentId} from './helper/get-jaen-page-parent-id'
+import {readPageConfig} from './helper/page-config-reader'
 
 export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = (
-  {actions, loaders, plugins, stage},
+  {actions, loaders, stage},
   pluginOptions
 ) => {
   const snekResourceId = pluginOptions.snekResourceId
@@ -184,6 +175,13 @@ export const createSchemaCustomization: GatsbyNode['onCreateWebpackConfig'] = ({
       siteMetadata: JaenSiteMetadata
     }
 
+    type JaenTemplate implements Node {
+      id: ID!
+      absolutePath: String!
+      label: String!
+      childTemplates: [JaenTemplate!]! @link
+    }
+
     type JaenPage implements Node {
       id: ID!
       slug: String!
@@ -195,6 +193,8 @@ export const createSchemaCustomization: GatsbyNode['onCreateWebpackConfig'] = ({
       sections: [JaenSection!]!
 
       template: String
+      childTemplates: [String!]!
+
       buildPath: String @buildPath
       componentName: String @componentName
       excludedFromIndex: Boolean
@@ -310,7 +310,8 @@ export const onCreatePage: GatsbyNode['onCreatePage'] = async ({
             path: '/cms/pages'
           }
         ]
-      }
+      },
+      parent: 'JaenPage /cms'
     },
     {
       path: '/cms/pages/new',
@@ -330,7 +331,8 @@ export const onCreatePage: GatsbyNode['onCreatePage'] = async ({
             path: '/cms/pages/new'
           }
         ]
-      }
+      },
+      parent: 'JaenPage /cms/pages'
     },
     {
       path: '/cms/settings',
@@ -346,7 +348,8 @@ export const onCreatePage: GatsbyNode['onCreatePage'] = async ({
             path: '/cms/settings'
           }
         ]
-      }
+      },
+      parent: 'JaenPage /cms'
     },
     {
       path: '/cms/media',
@@ -362,7 +365,8 @@ export const onCreatePage: GatsbyNode['onCreatePage'] = async ({
             path: '/cms/media'
           }
         ]
-      }
+      },
+      parent: 'JaenPage /cms'
     }
   ]
 
@@ -386,6 +390,8 @@ export const onCreatePage: GatsbyNode['onCreatePage'] = async ({
     })
   }
 
+  const pageConfig = readPageConfig(page.component)
+
   // Check if the page has a `jaenPageId` in its context.
   // If not it means it's not a JaenPage and we must create one.
   if (!page.context?.jaenPageId) {
@@ -396,22 +402,26 @@ export const onCreatePage: GatsbyNode['onCreatePage'] = async ({
 
       const existingNode = getNode(jaenPageId)
 
+      console.log('config', pageConfig)
+
       if (!existingNode) {
         const jaenPage = {
           id: jaenPageId,
           slug: slugifiedPath,
-          parent: getParentId({
+          parent: getJaenPageParentId({
             parent: null,
             id: jaenPageId
           }),
           children: [],
           jaenPageMetadata: {
-            title: page.path
+            title: pageConfig?.label || capitalizeLastPathElement(page.path),
+            datePublished: new Date(page.updatedAt).toISOString()
           },
           jaenFields: null,
           jaenFiles: [],
           sections: [],
-          template: null
+          template: null,
+          childTemplates: pageConfig?.childTemplates || []
         }
 
         await createNode({
@@ -423,44 +433,15 @@ export const onCreatePage: GatsbyNode['onCreatePage'] = async ({
           }
         })
 
-        console.log(`Created JaenPage ${jaenPageId}`)
-
         // get parent page and add the new page to its children
         const pageNode = getNode(jaenPage.id)
         const parentPageNode = jaenPage.parent ? getNode(jaenPage.parent) : null
 
-        console.log(
-          `Trying to create parent-child link between`,
-          pageNode?.id,
-          parentPageNode?.id
-        )
-
         if (pageNode && parentPageNode) {
-          console.log(
-            `Creating parent-child link between`,
-            pageNode.id,
-            parentPageNode.id
-          )
           actions.createParentChildLink({
             parent: parentPageNode,
             child: pageNode
           })
-        }
-      } else {
-        const parentNode = existingNode.parent
-          ? getNode(existingNode.parent)
-          : null
-
-        if (parentNode && existingNode) {
-          console.log(
-            `Establishing parent-child link between`,
-            existingNode.id,
-            parentNode.id
-          )
-          // actions.createParentChildLink({
-          //   parent: parentNode,
-          //   child: existingNode
-          // })
         }
       }
 
@@ -491,7 +472,7 @@ export const createPages: GatsbyNode['createPages'] = async ({
       }
       allJaenPage: {
         nodes: Array<
-          IJaenPage & {
+          JaenPage & {
             template: string
           }
         >
@@ -500,14 +481,6 @@ export const createPages: GatsbyNode['createPages'] = async ({
 
     const result = await graphql<QueryData>(`
       query {
-        allTemplate: allFile(
-          filter: {sourceInstanceName: {eq: "jaen-templates"}}
-        ) {
-          nodes {
-            name
-            absolutePath
-          }
-        }
         allJaenPage {
           nodes {
             id
@@ -577,4 +550,55 @@ export const createPages: GatsbyNode['createPages'] = async ({
   }
 
   await createJaenPages()
+}
+
+export const shouldOnCreateNode: GatsbyNode['shouldOnCreateNode'] = ({
+  node
+}) => {
+  const {internal, sourceInstanceName} = node as any
+
+  // Check if the node is a File node of instance `templates`
+  if (internal.type === 'File' && sourceInstanceName === 'templates') {
+    return true
+  }
+
+  return false
+}
+
+export const onCreateNode: GatsbyNode['onCreateNode'] = async ({
+  node,
+  actions,
+  createContentDigest
+}) => {
+  // Check if the node is a File node of instance `templates`
+  if (
+    node.internal.type === 'File' &&
+    node.sourceInstanceName === 'templates'
+  ) {
+    const name = node.name as string
+    const absolutePath = node.absolutePath as string
+
+    const pageConfig = readPageConfig(absolutePath)
+
+    const templateNode = {
+      id: `JaenTemplate ${name}`, // id must be unique across all nodes
+      absolutePath: absolutePath,
+      label: pageConfig?.label || name,
+      childTemplates: pageConfig?.childTemplates || []
+    }
+
+    // Create link to other templates
+
+    console.log('templateNode', templateNode)
+
+    actions.createNode({
+      ...templateNode,
+      parent: node.id,
+      internal: {
+        type: 'JaenTemplate',
+        content: JSON.stringify(templateNode),
+        contentDigest: createContentDigest(templateNode)
+      }
+    })
+  }
 }
