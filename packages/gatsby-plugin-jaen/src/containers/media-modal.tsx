@@ -8,7 +8,6 @@ import {
 import {PageProvider, useMediaModal} from '@snek-at/jaen'
 
 import {MediaNode} from '../components/cms/Media/types'
-import {withTheme} from '../theme/with-theme'
 import Media from './media'
 
 export interface MediaSelectorProps {
@@ -43,4 +42,4 @@ const MediaModal: React.FC<MediaSelectorProps> = props => {
   )
 }
 
-export default withTheme(MediaModal)
+export default MediaModal

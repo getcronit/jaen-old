@@ -9,9 +9,8 @@ import {
   CMSManagement,
   useCMSManagement
 } from '../../../connectors/cms-management'
-import {withTheme} from '../../../theme/with-theme'
 
-const PagesNew: React.FC = withTheme(() => {
+const PagesNew: React.FC = () => {
   const {toast} = useNotificationsContext()
   const manager = useCMSManagement()
 
@@ -104,7 +103,7 @@ const PagesNew: React.FC = withTheme(() => {
       />
     </JaenPageLayout>
   )
-})
+}
 
 const Page: React.FC<PageProps> = () => {
   return (

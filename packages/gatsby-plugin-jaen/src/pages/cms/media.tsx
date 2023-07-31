@@ -3,7 +3,6 @@ import {PageProps} from 'gatsby'
 
 import {JaenPageLayout} from '../../components/JaenPageLayout/JaenPageLayout'
 import MediaContainer from '../../containers/media'
-import {withTheme} from '../../theme/with-theme'
 
 const MediaPage: React.FC<PageProps> = () => {
   return (
@@ -13,7 +12,7 @@ const MediaPage: React.FC<PageProps> = () => {
   )
 }
 
-export default withTheme(MediaPage)
+export default MediaPage
 
 export const pageConfig: PageConfig = {
   label: 'Media',

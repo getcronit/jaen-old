@@ -3,7 +3,6 @@ import {PageProps} from 'gatsby'
 import React from 'react'
 
 import {JaenLogout} from '../components/JaenLogout/JaenLogout'
-import {withTheme} from '../theme/with-theme'
 
 const LogoutPage: React.FC<PageProps> = () => {
   const {logout, isAuthenticated} = useAuthenticationContext()
@@ -22,7 +21,7 @@ const LogoutPage: React.FC<PageProps> = () => {
   )
 }
 
-export default withTheme(LogoutPage)
+export default LogoutPage
 
 export const pageConfig: PageConfig = {
   label: 'Logout',

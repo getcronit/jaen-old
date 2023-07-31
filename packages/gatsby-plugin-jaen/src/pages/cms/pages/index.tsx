@@ -3,7 +3,6 @@ import {useLocation} from '@reach/router'
 
 import {Pages} from '../../../components/cms/Pages/Pages'
 import {JaenPageLayout} from '../../../components/JaenPageLayout/JaenPageLayout'
-import {withTheme} from '../../../theme/with-theme'
 import {
   CMSManagement,
   useCMSManagement
@@ -11,7 +10,7 @@ import {
 import {useCallback, useEffect, useMemo, useState} from 'react'
 import {PageConfig, useNotificationsContext} from '@snek-at/jaen'
 
-const PagesPage: React.FC = withTheme(() => {
+const PagesPage: React.FC = () => {
   const {toast} = useNotificationsContext()
   const manager = useCMSManagement()
 
@@ -208,7 +207,7 @@ const PagesPage: React.FC = withTheme(() => {
       />
     </JaenPageLayout>
   )
-})
+}
 
 const Page: React.FC<PageProps> = () => {
   return (

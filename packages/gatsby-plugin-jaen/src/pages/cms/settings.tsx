@@ -1,7 +1,5 @@
 import {PageProps} from 'gatsby'
 
-import {withTheme} from '../../theme/with-theme'
-
 import {FormDataType, Settings} from '../../components/cms/Settings/Settings'
 import {JaenPageLayout} from '../../components/JaenPageLayout/JaenPageLayout'
 import {PageConfig} from '@snek-at/jaen'
@@ -21,7 +19,7 @@ const SettingsPage: React.FC<PageProps> = () => {
   )
 }
 
-export default withTheme(SettingsPage)
+export default SettingsPage
 
 export const pageConfig: PageConfig = {
   label: 'Settings',

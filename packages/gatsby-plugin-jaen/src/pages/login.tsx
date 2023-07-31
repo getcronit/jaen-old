@@ -3,7 +3,6 @@ import {navigate, PageProps} from 'gatsby'
 import React from 'react'
 
 import {JaenLogin} from '../components/JaenLogin/JaenLogin'
-import {withTheme} from '../theme/with-theme'
 
 const LoginPage: React.FC<PageProps> = () => {
   const {login, isAuthenticated, isLoading} = useAuthenticationContext()
@@ -30,7 +29,7 @@ const LoginPage: React.FC<PageProps> = () => {
   )
 }
 
-export default withTheme(LoginPage)
+export default LoginPage
 
 export const pageConfig: PageConfig = {
   label: 'Login',

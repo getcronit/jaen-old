@@ -3,7 +3,6 @@ import {PageProps} from 'gatsby'
 
 import {CMSIndex} from '../../components/cms/CMSIndex'
 import {JaenPageLayout} from '../../components/JaenPageLayout/JaenPageLayout'
-import {withTheme} from '../../theme/with-theme'
 
 const PagesPage: React.FC<PageProps> = () => {
   return (
@@ -31,7 +30,7 @@ const PagesPage: React.FC<PageProps> = () => {
   )
 }
 
-export default withTheme(PagesPage)
+export default PagesPage
 
 export const pageConfig: PageConfig = {
   label: 'Dashboard',

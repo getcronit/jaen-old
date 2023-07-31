@@ -22,8 +22,6 @@ import {useState} from 'react'
 import {SubmitHandler, useForm} from 'react-hook-form'
 import {FaArrowLeft} from 'react-icons/fa'
 
-import {withTheme} from '../../theme/with-theme'
-
 import Logo from '../Logo'
 import {JaenFullLogo} from '../shared/JaenLogo/JaenLogo'
 import {Link} from '../shared/Link/Link'
@@ -55,12 +53,11 @@ export const JaenLogin: React.FC<JaenLoginProps> = props => {
 
   console.log(errors)
 
-  const [alert, setAlert] =
-    useState<{
-      status: 'error' | 'success' | 'info'
-      message: string | JSX.Element
-      description?: string
-    } | null>(null)
+  const [alert, setAlert] = useState<{
+    status: 'error' | 'success' | 'info'
+    message: string | JSX.Element
+    description?: string
+  } | null>(null)
 
   const resetAlert = () => {
     setAlert(null)
@@ -211,4 +208,4 @@ export const JaenLogin: React.FC<JaenLoginProps> = props => {
   )
 }
 
-export default withTheme(JaenLogin)
+export default JaenLogin

@@ -2,7 +2,6 @@ import {Box, Divider, Flex, HStack, Icon, Spacer} from '@chakra-ui/react'
 import React from 'react'
 import {FaPlus} from 'react-icons/fa'
 
-import {withTheme} from '../../theme/with-theme'
 import {JaenLogo} from '../shared/JaenLogo/JaenLogo'
 import {MenuButton, MenuButtonProps} from '../shared/MenuButton/MenuButton'
 import {
@@ -169,4 +168,4 @@ export const JaenFrame: React.FC<JaenFrameProps> = props => {
   )
 }
 
-export default withTheme(JaenFrame)
+export default JaenFrame
