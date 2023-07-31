@@ -43,7 +43,7 @@ export const MediaGrid: React.FC<MediaGridProps> = ({
       p="1">
       {mediaNodes.map((node, index) => (
         <MemoedMediaItem
-          key={node.id}
+          key={`${node.id}-${node.modifiedAt}`}
           node={node}
           isLast={index === mediaNodes.length - 1}
           isSelected={selectedMediaNode?.id === node.id}

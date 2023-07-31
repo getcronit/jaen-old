@@ -29,7 +29,7 @@ export const MediaItem: React.FC<MediaItemProps> = ({
         {...(isSelected && {
           outline: '2px solid',
           outlineColor: 'brand.500',
-          outlineOffset: '2px',
+          outlineOffset: '3px',
           borderRadius: 'lg'
         })}>
         <Image
@@ -40,19 +40,20 @@ export const MediaItem: React.FC<MediaItemProps> = ({
           }
           w="100%"
           h="100%"
-          src={node.preview?.url ?? node.url}
+          src={node.url}
           alt={node.description}
           onDoubleClick={onDoubleClick}
         />
       </AspectRatio>
       <Input
+        key={node?.description}
         size="xs"
         textAlign="center"
         border="none"
         fontSize="xs"
         fontWeight="bold"
         defaultValue={node.description}
-        onChange={e => {
+        onBlur={e => {
           onUpdateDescription?.(e.target.value)
         }}
       />

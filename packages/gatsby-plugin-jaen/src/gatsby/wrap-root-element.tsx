@@ -2,6 +2,7 @@ import {
   AuthenticationProvider,
   FieldHighlighterProvider,
   JaenThemeProvider,
+  MediaModalProvider,
   NotificationsProvider
 } from '@snek-at/jaen'
 import {GatsbyBrowser} from 'gatsby'
@@ -12,6 +13,10 @@ import {JaenFrameToolbarProvider} from '../components/JaenFrame/contexts/jaen-fr
 
 const JaenLogin = lazy(
   async () => await import('../components/JaenLogin/JaenLogin')
+)
+
+const MediaModalComponent = lazy(
+  async () => await import('../containers/media-modal')
 )
 
 export const wrapRootElement: GatsbyBrowser['wrapRootElement'] = (
@@ -31,7 +36,9 @@ export const wrapRootElement: GatsbyBrowser['wrapRootElement'] = (
           <AuthenticationProvider
             snekResourceId={snekResourceId}
             JaenLoginComponent={JaenLogin}>
-            <JaenFrameToolbarProvider>{element}</JaenFrameToolbarProvider>
+            <MediaModalProvider MediaModalComponent={MediaModalComponent}>
+              <JaenFrameToolbarProvider>{element}</JaenFrameToolbarProvider>
+            </MediaModalProvider>
           </AuthenticationProvider>
         </FieldHighlighterProvider>
       </NotificationsProvider>

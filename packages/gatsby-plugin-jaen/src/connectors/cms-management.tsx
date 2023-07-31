@@ -38,3 +38,17 @@ export const CMSManagement: React.FC<CMSManagementProps> = props => {
     </CMSManagementProvider>
   )
 }
+
+export const withCMSManagement = <P extends object>(
+  Component: React.ComponentType<P>
+): React.FC<P> => {
+  const WithCMSManagement: React.FC<P> = props => {
+    return (
+      <CMSManagement>
+        <Component {...props} />
+      </CMSManagement>
+    )
+  }
+
+  return WithCMSManagement
+}

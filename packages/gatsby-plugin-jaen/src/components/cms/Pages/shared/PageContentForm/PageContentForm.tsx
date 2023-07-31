@@ -21,7 +21,7 @@ import {
   Text,
   Textarea
 } from '@chakra-ui/react'
-import {JaenTemplate} from '@snek-at/jaen'
+import {JaenTemplate, useMediaModal} from '@snek-at/jaen'
 import {useEffect, useState} from 'react'
 import {Controller, SubmitHandler, useForm} from 'react-hook-form'
 import {FaEdit, FaEye, FaImage, FaNewspaper} from 'react-icons/fa'
@@ -176,6 +176,12 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
     formState: {errors, isSubmitting}
   } = useForm<FormValues>({
     defaultValues: props.values
+  })
+
+  const mediaModal = useMediaModal({
+    onSelect: (media: any) => {
+      setValue('image.src', media.url)
+    }
   })
 
   useEffect(() => {
@@ -437,12 +443,7 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
                       <ButtonGroup>
                         <Button
                           variant="outline"
-                          onClick={() => {
-                            // Open the media library
-
-                            // set example image
-                            field.onChange('https://picsum.photos/200/300')
-                          }}>
+                          onClick={mediaModal.toggleModal}>
                           Choose image
                         </Button>
                         <Button

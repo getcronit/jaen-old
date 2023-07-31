@@ -13,7 +13,8 @@ import {
   ModalHeader,
   ModalOverlay,
   Skeleton,
-  Spacer
+  Spacer,
+  Text
 } from '@chakra-ui/react'
 import {useEffect} from 'react'
 import FilerobotImageEditor, {TABS} from 'react-filerobot-image-editor'
@@ -98,6 +99,8 @@ export const MediaPreview: React.FC<MediaPreviewProps> = ({
     }
   }
 
+  const previewItemsLength = Math.min(mediaNodes.length, 9)
+
   return (
     <Modal
       isOpen={isPreview !== false}
@@ -116,19 +119,14 @@ export const MediaPreview: React.FC<MediaPreviewProps> = ({
         bg="transparent"
         sx={{
           '.react-transform-wrapper': {
-            width: 'unset !important',
-            height: 'unset !important',
-            flex: 1,
+            w: 'full',
+            h: 'full',
+            justifyContent: 'center',
             display: isPreview === 'PREVIEW' ? 'flex' : 'none'
           },
           '.react-transform-component': {
-            width: 'unset !important',
-            height: 'unset !important',
-            justifyContent: 'center'
-          },
-          '.react-transform-element': {
-            width: 'unset !important',
-            height: 'unset !important'
+            w: 'full',
+            h: 'full'
           }
         }}>
         <ModalHeader p="0">
@@ -154,6 +152,7 @@ export const MediaPreview: React.FC<MediaPreviewProps> = ({
             <Spacer />
 
             <Input
+              key={selectedMediaNode?.description}
               size="xs"
               textAlign="center"
               border="none"
@@ -161,6 +160,11 @@ export const MediaPreview: React.FC<MediaPreviewProps> = ({
               fontWeight="bold"
               defaultValue={selectedMediaNode?.description}
               maxW="sm"
+              onBlur={e => {
+                handleUpdate({
+                  description: e.target.value
+                })
+              }}
             />
 
             <Spacer />
@@ -190,7 +194,10 @@ export const MediaPreview: React.FC<MediaPreviewProps> = ({
         </ModalHeader>
 
         <ModalBody display="flex" h="calc(100dvh - 3rem - 6rem)" flex="unset">
-          <TransformWrapper centerOnInit>
+          <TransformWrapper
+            doubleClick={{
+              mode: 'reset'
+            }}>
             {({resetTransform}) => {
               useEffect(() => {
                 resetTransform()
@@ -199,8 +206,8 @@ export const MediaPreview: React.FC<MediaPreviewProps> = ({
               return (
                 <TransformComponent>
                   <Image
-                    maxW="800px"
-                    maxH="800px"
+                    w="100%"
+                    h="100%"
                     objectFit="contain"
                     src={selectedMediaNode?.url}
                     alt={selectedMediaNode?.description}
@@ -288,18 +295,19 @@ export const MediaPreview: React.FC<MediaPreviewProps> = ({
             />
 
             <HStack>
-              {[...Array(9)].map((_, index) => {
+              {[...Array(previewItemsLength)].map((_, index) => {
                 const startIndex = mediaNodes.findIndex(
                   node => node.id === selectedMediaNode?.id
                 )
 
-                const offset = index - Math.floor(9 / 2)
+                const offset = index - Math.floor(previewItemsLength / 2)
                 const nodeIndex =
                   (startIndex + offset + mediaNodes.length) % mediaNodes.length
+
                 const node = mediaNodes[nodeIndex]
 
                 if (!node) {
-                  return null
+                  return <Text>{nodeIndex}</Text>
                 }
 
                 return (

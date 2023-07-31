@@ -164,6 +164,10 @@ const PagesPage: React.FC = withTheme(() => {
           disableSlug: !currentPage.template,
           values: {
             title: currentPage.jaenPageMetadata?.title || 'No title',
+            image: {
+              useImage: !!currentPage.jaenPageMetadata?.image,
+              src: currentPage.jaenPageMetadata?.image || ''
+            },
             slug: currentPage.slug,
             template: currentPage.template,
             description:
@@ -223,7 +227,6 @@ export const pageConfig: PageConfig = {
   menu: {
     type: 'app',
     group: 'cms',
-    groupLabel: 'Jaen CMS',
     order: 200
   },
   breadcrumbs: [

@@ -29,7 +29,6 @@ export const pageConfig: PageConfig = {
   menu: {
     type: 'app',
     group: 'cms',
-    groupLabel: 'Jaen CMS',
     order: 400
   },
 

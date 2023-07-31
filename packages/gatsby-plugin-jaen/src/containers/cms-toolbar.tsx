@@ -1,7 +1,7 @@
 import {ToolbarButtons} from '../components/cms/ToolbarButtons'
-import {CMSManagement, useCMSManagement} from '../connectors/cms-management'
+import {useCMSManagement, withCMSManagement} from '../connectors/cms-management'
 
-const CMSToolbar: React.FC = () => {
+const CMSToolbarContainer: React.FC = withCMSManagement(() => {
   const manager = useCMSManagement()
 
   return (
@@ -24,12 +24,6 @@ const CMSToolbar: React.FC = () => {
       }}
     />
   )
-}
+})
 
-export const CMSToolbarContainer = () => {
-  return (
-    <CMSManagement>
-      <CMSToolbar />
-    </CMSManagement>
-  )
-}
+export default CMSToolbarContainer

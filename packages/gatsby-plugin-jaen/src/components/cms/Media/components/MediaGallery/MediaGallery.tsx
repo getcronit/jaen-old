@@ -22,7 +22,10 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react'
 import {useDropzone} from 'react-dropzone'
 import {BsLayoutSidebarInset} from 'react-icons/bs'
 import {
+  FaCheck,
+  FaDotCircle,
   FaDownload,
+  FaHandPointer,
   FaMinus,
   FaPlus,
   FaSearch,
@@ -30,9 +33,11 @@ import {
   FaTimes,
   FaTrash
 } from 'react-icons/fa'
+import {useLocation} from '@reach/router'
 
 import {MediaNode, MediaPreviewState} from '../../types'
 import {MediaGrid} from './components/MediaGrid/MediaGrid'
+import {FaRadio} from 'react-icons/fa6'
 
 export interface MediaGalleryProps {
   mediaNodes: MediaNode[]
@@ -40,7 +45,7 @@ export interface MediaGalleryProps {
   selectedMediaNode: MediaNode | null
   onSelectMediaNode: (node: MediaNode | null) => void
 
-  onUpload: (files: File[]) => void
+  onUpload: (files: File[]) => Promise<void>
   onDelete: (ids: string) => void
   onUpdate: (
     id: string,
@@ -58,8 +63,8 @@ export interface MediaGalleryProps {
   isPreview: MediaPreviewState
   onPreview: (state: MediaPreviewState) => void
 
-  isSidebarDisabled?: boolean
-  isSizeSliderDisabled?: boolean
+  isSelector?: boolean
+  onSelect?: (id: string) => void
 }
 
 export const MediaGallery: React.FC<MediaGalleryProps> = ({
@@ -74,18 +79,19 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
   onToggleSidebar,
   isPreview,
   onPreview,
-  isSidebarDisabled,
-  isSizeSliderDisabled
+  isSelector,
+  onSelect
 }) => {
   const [searchQuery, setSearchQuery] = useState<string>('')
 
-  const handleSearchChange: React.ChangeEventHandler<HTMLInputElement> =
-    event => {
-      setSearchQuery(event.target.value)
+  const handleSearchChange: React.ChangeEventHandler<
+    HTMLInputElement
+  > = event => {
+    setSearchQuery(event.target.value)
 
-      // reset selected media node
-      onSelectMediaNode(null)
-    }
+    // reset selected media node
+    onSelectMediaNode(null)
+  }
 
   const [pageFilter, setPageFilter] = useState<string | null>('Home')
 
@@ -96,9 +102,11 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
   }, [mediaNodesLimit])
 
   const filteredMediaNodes = useMemo(() => {
-    return mediaNodes.filter(node =>
-      node.description?.toLowerCase().includes(searchQuery.toLowerCase())
-    )
+    return mediaNodes.filter(node => {
+      if (searchQuery.length === 0) return true
+
+      return node.description?.toLowerCase().includes(searchQuery.toLowerCase())
+    })
   }, [mediaNodes, searchQuery])
 
   const limitedMediaNodes = useMemo(
@@ -149,6 +157,8 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
     }
   }
 
+  console.log('nodes', mediaNodes)
+
   useEffect(() => {
     const handleScroll = () => {
       const lastMediaItem = document.getElementById('last-media-item') // Add an ID to the last media item in the list
@@ -184,25 +194,53 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
     }
   }, [selectedMediaNode?.id])
 
-  const {
-    getRootProps,
-    getInputProps,
-    isDragActive,
-    open: openUpload
-  } = useDropzone({
-    onDrop: acceptedFiles => {
-      console.log('Dropped files:', acceptedFiles)
+  const [isUploading, setIsUploading] = useState<boolean>(false)
 
-      if (acceptedFiles.length > 0) {
-        // call onUpload callback
+  const handleOnUpload = async (files: File[]) => {
+    setIsUploading(true)
 
-        onUpload(acceptedFiles)
-      }
-    },
+    await onUpload(files)
+
+    setIsUploading(false)
+  }
+
+  const dropzone = useDropzone({
+    onDrop: handleOnUpload,
     accept: {
       'image/*': []
     }
   })
+
+  // useEffect(() => {
+  //   const searchParams = new URLSearchParams(window.location.search)
+
+  //   const pageFilter = searchParams.get('page')
+
+  //   if (pageFilter) {
+  //     setPageFilter(pageFilter)
+  //   }
+
+  //   const upload = searchParams.get('upload')
+
+  //   console.log('upload', dropzone)
+
+  //   if (upload === 'true' && !dropzone.isFileDialogActive) {
+  //     // wait for media gallery to be rendered
+  //     dropzone.open()
+  //   }
+
+  //   // // reset search params
+  //   // searchParams.delete('page')
+  //   // searchParams.delete('upload')
+
+  //   // window.history.replaceState(
+  //   //   {},
+  //   //   '',
+  //   //   `${window.location.pathname}?${searchParams.toString()}`
+  //   // )
+  // }, [dropzone.isFileDialogActive])
+
+  console.log('MediaGallery.tsx')
 
   return (
     <Box w="full">
@@ -210,58 +248,75 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
         visibility={isPreview ? 'hidden' : 'visible'}
         h="12"
         w="full"
-        p="4"
+        px="4"
         top="0"
         pos="sticky"
         zIndex="2"
         bg="bg.surface"
         borderBottom="1px solid"
         borderColor="border.emphasized">
-        {!isSidebarDisabled && !isSidebarOpen && (
-          <IconButton
-            aria-label="open sidebar"
-            icon={<BsLayoutSidebarInset />}
-            variant="ghost"
-            onClick={onToggleSidebar}
-          />
-        )}
+        <HStack display={{base: 'none', md: 'flex'}}>
+          <HStack display={{base: 'none', md: 'flex'}}>
+            {!isSelector && !isSidebarOpen && (
+              <IconButton
+                aria-label="open sidebar"
+                fontSize="1.2em"
+                icon={<BsLayoutSidebarInset />}
+                variant="ghost"
+                onClick={onToggleSidebar}
+              />
+            )}
 
-        {!isSizeSliderDisabled && (
-          <HStack>
-            <Icon as={FaMinus} boxSize="2" />
+            <Icon
+              as={FaMinus}
+              boxSize="2"
+              onClick={() => {
+                if (columnCount === 1) return
+
+                setColumnCount(columnCount - 1)
+              }}
+            />
             <Slider
               w="12"
               aria-label="slider-image-size"
-              defaultValue={3}
+              value={columnCount}
               min={1}
               max={5}
               onChange={value => {
-                setColumnCount(6 - value)
+                setColumnCount(value)
               }}>
               <SliderTrack>
                 <SliderFilledTrack />
               </SliderTrack>
               <SliderThumb />
             </Slider>
-            <Icon as={FaPlus} boxSize="2" />
-          </HStack>
-        )}
-
-        {pageFilter && (
-          <Tag size="md" variant="subtle">
-            {pageFilter}
-            <TagCloseButton
+            <Icon
+              as={FaPlus}
+              boxSize="2"
               onClick={() => {
-                setPageFilter(null)
+                if (columnCount === 5) return
+
+                setColumnCount(columnCount + 1)
               }}
             />
-          </Tag>
-        )}
+          </HStack>
+
+          {!isSelector && pageFilter && (
+            <Tag size="md" variant="subtle">
+              {pageFilter}
+              <TagCloseButton
+                onClick={() => {
+                  setPageFilter(null)
+                }}
+              />
+            </Tag>
+          )}
+        </HStack>
 
         <Spacer />
 
         <InputGroup maxW="md" size="sm">
-          <InputLeftElement pointerEvents="none">
+          <InputLeftElement pointerEvents="none" h="full">
             <Icon as={FaSearch} color="gray.300" />
           </InputLeftElement>
           <Input
@@ -271,7 +326,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
             onChange={handleSearchChange}
           />
           {searchQuery.length > 0 && (
-            <InputRightElement>
+            <InputRightElement h="full" mr="1">
               <IconButton
                 aria-label="Clear search"
                 variant="ghost"
@@ -307,31 +362,68 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
           />
         </ButtonGroup>
 
-        {isDragActive ? (
-          <Button size="xs" leftIcon={<FaPlus />} colorScheme="orange">
-            Drop to upload
-          </Button>
-        ) : (
-          <Button
-            variant="outline"
+        <Box display={{base: 'block', md: 'none'}}>
+          <IconButton
             size="xs"
-            leftIcon={<FaPlus />}
-            onClick={openUpload}>
-            Upload
-          </Button>
-        )}
+            variant="outline"
+            aria-label={
+              dropzone.isDragActive ? 'Drop to upload' : 'Upload images'
+            }
+            icon={
+              <FaPlus
+                style={{
+                  transform: dropzone.isDragActive ? 'rotate(15deg)' : 'none'
+                }}
+              />
+            }
+            isLoading={isUploading}
+            onClick={dropzone.open}
+          />
+        </Box>
+
+        <Box display={{base: 'none', md: 'block'}}>
+          {dropzone.isDragActive ? (
+            <Button size="xs" leftIcon={<FaPlus />} colorScheme="orange">
+              Drop to upload
+            </Button>
+          ) : (
+            <Button
+              variant="outline"
+              size="xs"
+              leftIcon={<FaPlus />}
+              isLoading={isUploading}
+              onClick={dropzone.open}>
+              Upload
+            </Button>
+          )}
+        </Box>
+
+        <Button
+          display={isSelector ? 'block' : 'none'}
+          leftIcon={<FaCheck />}
+          size="sm"
+          isDisabled={selectedMediaNode === null}
+          onClick={() => {
+            if (isSelector && selectedMediaNode) {
+              onSelect?.(selectedMediaNode?.id)
+            }
+          }}>
+          Choose
+        </Button>
       </HStack>
 
       <Box
-        {...getRootProps({
+        {...dropzone.getRootProps({
           onClick: event => {
             event.stopPropagation()
           }
         })}
-        pos="relative">
-        <input {...getInputProps()} />
+        h="full"
+        pos="relative"
+        p="1">
+        <input {...dropzone.getInputProps()} />
 
-        {isDragActive && (
+        {dropzone.isDragActive && (
           <Box
             bg="bg.translucent"
             backdropFilter="blur(8px) saturate(180%) contrast(46%) brightness(120%)"
@@ -349,7 +441,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
 
         <MediaGrid
           mediaNodes={limitedMediaNodes}
-          columnCount={columnCount}
+          columnCount={6 - columnCount}
           selectedMediaNode={selectedMediaNode}
           onSelect={onSelectMediaNode}
           onDoubleClick={() => {

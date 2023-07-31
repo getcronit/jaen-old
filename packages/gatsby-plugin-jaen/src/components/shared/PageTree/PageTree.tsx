@@ -6,21 +6,24 @@ import {
 } from 'react-complex-tree'
 
 import 'react-complex-tree/lib/style-modern.css'
-
+import {convertTreeToPageTree, TreeNode} from './convert-tree-to-page-tree'
 import {cmsTree} from './treeData'
 
-export interface PageTreeProps {}
+export interface PageTreeProps {
+  tree: TreeNode[]
+  onSelected: (id: string) => void
+}
 
-const provider = new StaticTreeDataProvider(cmsTree.items, (item, data) => ({
-  ...item,
-  data
-}))
+export const PageTree: React.FC<PageTreeProps> = ({tree}) => {
+  const pageTree = convertTreeToPageTree(tree)
 
-provider.onDidChangeTreeData(items => {
-  console.log(items)
-})
+  console.log('items', cmsTree.items, pageTree)
 
-export const PageTree: React.FC<PageTreeProps> = () => {
+  const provider = new StaticTreeDataProvider(pageTree.items, (item, data) => ({
+    ...item,
+    data
+  }))
+
   return (
     <UncontrolledTreeEnvironment
       dataProvider={provider}
@@ -34,7 +37,7 @@ export const PageTree: React.FC<PageTreeProps> = () => {
             '--rct-bar-color': 'var(--chakra-colors-brand-500)',
             '--rct-color-drag-between-line-bg':
               'var(--chakra-colors-brand-500)',
-            '--rct-item-height': '2.5rem'
+            '--rct-item-height': '2rem'
           }}>
           <ul className="tree-root tree-node-list" {...props.containerProps}>
             {props.children}
@@ -48,6 +51,9 @@ export const PageTree: React.FC<PageTreeProps> = () => {
         console.log(items, target)
 
         return true
+      }}
+      onSelectItems={items => {
+        console.log(items)
       }}
       canDragAndDrop
       canDropOnFolder

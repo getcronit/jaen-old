@@ -1,17 +1,27 @@
-import {Flex, HStack, IconButton, Stack} from '@chakra-ui/react'
-import React, {useState} from 'react'
+import {
+  Button,
+  Flex,
+  Heading,
+  HStack,
+  IconButton,
+  Stack,
+  StackDivider
+} from '@chakra-ui/react'
+import React, {useEffect, useState} from 'react'
 
 import {BsLayoutSidebarInset} from 'react-icons/bs'
 
 import {PageTree} from '../../shared/PageTree/PageTree'
+import {TreeNode} from '../Pages/shared/PageVisualizer'
 import {MediaGallery} from './components/MediaGallery/MediaGallery'
 import {MediaPreview} from './components/MediaPreview/MediaPreview'
 import {MediaNode, MediaPreviewState} from './types'
 
 export interface MediaProps {
   mediaNodes: MediaNode[]
+  tree: Array<TreeNode>
 
-  onUpload: (files: File[]) => void
+  onUpload: (files: File[]) => Promise<void>
 
   onDelete: (ids: string) => void
   onUpdate: (
@@ -24,18 +34,19 @@ export interface MediaProps {
   ) => void
   onDownload: (id: string) => void
 
-  isSidebarDisabled?: boolean
-  isSizeSliderDisabled?: boolean
+  isSelector?: boolean
+  onSelect?: (id: string) => void
 }
 
 export const Media: React.FC<MediaProps> = ({
+  tree,
   mediaNodes,
   onUpload,
   onDelete,
   onUpdate,
   onDownload,
-  isSidebarDisabled,
-  isSizeSliderDisabled
+  isSelector,
+  onSelect
 }) => {
   const [isSidebarOpen, setSidebarOpen] = useState(false) // State variable for sidebar visibility
 
@@ -49,8 +60,26 @@ export const Media: React.FC<MediaProps> = ({
     setPreview(state)
   }
 
-  const [selectedMediaNode, setSelectedMediaNode] =
-    useState<MediaNode | null>(null)
+  const [selectedMediaNode, setSelectedMediaNode] = useState<MediaNode | null>(
+    null
+  )
+
+  useEffect(() => {
+    // reselect media node if it still exists
+    if (selectedMediaNode) {
+      const node = mediaNodes.find(node => node.id === selectedMediaNode.id)
+
+      if (node) {
+        setSelectedMediaNode(node)
+      } else {
+        setSelectedMediaNode(null)
+      }
+    }
+  }, [mediaNodes])
+
+  const sortedMediaNodes = mediaNodes.sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  })
 
   return (
     <Flex id="coco" pos="relative" minH="calc(100dvh - 4rem - 3rem)">
@@ -65,20 +94,35 @@ export const Media: React.FC<MediaProps> = ({
         overflow="auto"
         display={isSidebarOpen ? 'block' : 'none'} // Show/hide sidebar based on state
       >
-        <HStack h="12" w="full" p="4">
+        <HStack w="full" px="4" h="12">
           <IconButton
             aria-label="close sidebar"
+            fontSize="1.2em"
             icon={<BsLayoutSidebarInset />}
             variant="ghost"
             onClick={toggleSidebar}
           />
         </HStack>
+        <Stack px="4" py="1" ml="2">
+          <Stack>
+            <Heading size="xs">Media</Heading>
 
-        <PageTree />
+            <Stack>
+              <Button size="sm" variant="outline" onClick={() => {}}>
+                Upload
+              </Button>
+            </Stack>
+          </Stack>
+
+          <Stack>
+            <Heading size="xs">Pages</Heading>
+            <PageTree tree={tree} onSelected={() => {}} />
+          </Stack>
+        </Stack>
       </Stack>
 
       <MediaGallery
-        mediaNodes={mediaNodes}
+        mediaNodes={sortedMediaNodes}
         selectedMediaNode={selectedMediaNode}
         onSelectMediaNode={setSelectedMediaNode}
         onUpload={onUpload}
@@ -89,12 +133,12 @@ export const Media: React.FC<MediaProps> = ({
         onToggleSidebar={toggleSidebar}
         isPreview={isPreview}
         onPreview={handlePreview}
-        isSidebarDisabled={isSidebarDisabled}
-        isSizeSliderDisabled={isSizeSliderDisabled}
+        isSelector={isSelector}
+        onSelect={onSelect}
       />
 
       <MediaPreview
-        mediaNodes={mediaNodes}
+        mediaNodes={sortedMediaNodes}
         isPreview={isPreview}
         selectedMediaNode={selectedMediaNode}
         onSelectMediaNode={setSelectedMediaNode}

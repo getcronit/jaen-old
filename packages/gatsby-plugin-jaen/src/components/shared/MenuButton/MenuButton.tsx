@@ -37,8 +37,8 @@ export const MenuButton: React.FC<MenuButtonProps> = ({
   const rendredItems = Object.entries(items).map(([key, value]) => {
     return (
       <Box key={key} mx="2">
-        <Link
-          as={ChakraMenuItem}
+        <ChakraMenuItem
+          as={Link}
           variant="ghost"
           icon={
             value.icon ? <Icon as={value.icon} color="brand.500" /> : undefined
@@ -46,7 +46,7 @@ export const MenuButton: React.FC<MenuButtonProps> = ({
           onClick={value.onClick}
           to={value.path}>
           {value.label}
-        </Link>
+        </ChakraMenuItem>
         {value.divider && <MenuDivider borderColor="border.emphasized" />}
       </Box>
     )

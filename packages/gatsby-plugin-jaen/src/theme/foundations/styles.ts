@@ -2,10 +2,10 @@ import {defineStyle} from '@chakra-ui/styled-system'
 
 export default {
   global: defineStyle({
-    body: {
-      color: 'fg.default',
-      bg: 'bg.canvas'
-    },
+    // body: {
+    //   color: 'fg.default',
+    //   bg: 'bg.canvas'
+    // },
     '*::placeholder': {
       opacity: 1,
       color: 'fg.muted'

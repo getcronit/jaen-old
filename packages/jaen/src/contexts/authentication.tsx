@@ -317,6 +317,10 @@ export const withAuthentication = <P extends {}>(
       }
     }
 
+    if (!isAuthenticated) {
+      return null
+    }
+
     return <Component {...props} />
   }
 

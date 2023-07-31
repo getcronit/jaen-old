@@ -1,14 +1,14 @@
+import {PageConfig} from '@snek-at/jaen'
 import {PageProps} from 'gatsby'
-import {withTheme} from '../../theme/with-theme'
 
 import {JaenPageLayout} from '../../components/JaenPageLayout/JaenPageLayout'
-import {MediaContainer} from '../../containers/media'
-import {PageConfig} from '@snek-at/jaen'
+import MediaContainer from '../../containers/media'
+import {withTheme} from '../../theme/with-theme'
 
 const MediaPage: React.FC<PageProps> = () => {
   return (
     <JaenPageLayout layout="full">
-      <MediaContainer mediaNodes={[]} />
+      <MediaContainer />
     </JaenPageLayout>
   )
 }
@@ -21,12 +21,11 @@ export const pageConfig: PageConfig = {
   menu: {
     type: 'app',
     group: 'cms',
-    groupLabel: 'Jaen CMS',
     order: 300
   },
   breadcrumbs: [
     {
-      label: 'Media',
+      label: 'CMS',
       path: '/cms/'
     },
     {

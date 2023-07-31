@@ -11,7 +11,7 @@ import React, {useContext, useEffect, useMemo} from 'react'
 
 // Import other necessary components here
 import {JaenFrameToolbarContext} from '../components/JaenFrame/contexts/jaen-frame-toolbar'
-import {CMSToolbarContainer} from '../containers/cms-toolbar'
+import CMSToolbarContainer from '../containers/cms-toolbar'
 
 interface PageContext {
   pageConfig?: PageConfig
@@ -46,13 +46,11 @@ const CustomPageElement: React.FC<CustomPageElementProps> = ({
     () =>
       withAuthentication(
         () => (
-          <>
-            <Slice
-              alias="jaen-frame"
-              jaenPageId={props.pageContext?.jaenPageId}
-              pageConfig={props.pageContext?.pageConfig as any}
-            />
-          </>
+          <Slice
+            alias="jaen-frame"
+            jaenPageId={props.pageContext?.jaenPageId}
+            pageConfig={props.pageContext?.pageConfig as any}
+          />
         ),
         props.pageContext?.pageConfig,
         {
@@ -78,7 +76,10 @@ const CustomPageElement: React.FC<CustomPageElementProps> = ({
             : 'visible'
         }>
         <AuthenticatedJaenFrame />
-        <ChakraProvider disableEnvironment disableGlobalStyle theme={userTheme}>
+        <ChakraProvider
+          disableEnvironment
+          theme={userTheme}
+          cssVarsRoot=":root">
           {element}
         </ChakraProvider>
       </Flex>

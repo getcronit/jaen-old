@@ -19,3 +19,6 @@ export {Field} from './fields'
 export {useField} from './hooks/use-field'
 export {JaenPage, PageConfig, PageProps, JaenTemplate} from './types'
 export {generatePageOriginPath} from './utils/path'
+export * from './utils/open-storage-gateway'
+
+export {useMediaModal, MediaModalProvider} from './contexts/media-modal'
