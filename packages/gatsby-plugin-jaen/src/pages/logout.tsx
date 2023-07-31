@@ -34,5 +34,6 @@ export const pageConfig: PageConfig = {
   },
   auth: {
     isRequired: true
-  }
+  },
+  theme: 'jaen'
 }

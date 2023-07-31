@@ -30,6 +30,8 @@ export interface PageConfig {
     isRequired?: boolean
     permissions?: string[]
   }
+
+  theme?: 'jaen'
 }
 
 export interface IWidget {

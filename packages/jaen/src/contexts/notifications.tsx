@@ -10,8 +10,7 @@ import {
   ModalOverlay,
   Stack,
   Text,
-  useToast,
-  ChakraProvider
+  useToast
 } from '@chakra-ui/react'
 import {
   createContext,
@@ -21,8 +20,6 @@ import {
   useRef,
   useState
 } from 'react'
-
-import {useJaenTheme} from './jaen-theme'
 
 enum ModalType {
   Alert,
@@ -68,7 +65,7 @@ export const NotificationsProvider = ({children}: {children: ReactNode}) => {
   const input = useRef<HTMLInputElement>(null)
   const ok = useRef<HTMLButtonElement>(null)
 
-  const jaenTheme = useJaenTheme()
+  // const jaenTheme = useJaenTheme()
 
   const createOpener = useCallback(
     (type: ModalType) =>
@@ -137,13 +134,8 @@ export const NotificationsProvider = ({children}: {children: ReactNode}) => {
         toast
       }}>
       {children}
-      <ChakraProvider
-        cssVarsRoot="#coco"
-        disableEnvironment
-        disableGlobalStyle
-        theme={jaenTheme}>
-        {modal}
-      </ChakraProvider>
+
+      {modal}
     </Context.Provider>
   )
 }

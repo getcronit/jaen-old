@@ -10,6 +10,7 @@ import {lazy} from 'react'
 
 import {theme} from '../theme/index'
 import {JaenFrameToolbarProvider} from '../components/JaenFrame/contexts/jaen-frame-toolbar'
+import {ChakraProvider} from '@chakra-ui/react'
 
 const JaenLogin = lazy(
   async () => await import('../components/JaenLogin/JaenLogin')
@@ -30,7 +31,7 @@ export const wrapRootElement: GatsbyBrowser['wrapRootElement'] = (
   }
 
   return (
-    <JaenThemeProvider theme={theme}>
+    <ChakraProvider theme={theme} cssVarsRoot="#coco">
       <NotificationsProvider>
         <FieldHighlighterProvider theme={theme}>
           <AuthenticationProvider
@@ -42,6 +43,6 @@ export const wrapRootElement: GatsbyBrowser['wrapRootElement'] = (
           </AuthenticationProvider>
         </FieldHighlighterProvider>
       </NotificationsProvider>
-    </JaenThemeProvider>
+    </ChakraProvider>
   )
 }

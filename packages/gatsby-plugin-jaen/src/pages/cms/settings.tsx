@@ -45,5 +45,6 @@ export const pageConfig: PageConfig = {
   withoutJaenFrameStickyHeader: true,
   auth: {
     isRequired: true
-  }
+  },
+  theme: 'jaen'
 }

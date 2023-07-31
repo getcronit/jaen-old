@@ -1,5 +1,10 @@
-import {ChakraProvider} from '@chakra-ui/provider'
-import {Flex, useTheme} from '@chakra-ui/react'
+import {
+  ChakraProvider,
+  useColorMode,
+  ThemeProvider,
+  GlobalStyle
+} from '@chakra-ui/react'
+import {Button, Flex, useTheme} from '@chakra-ui/react'
 import {
   PageConfig,
   PageProvider,
@@ -8,6 +13,8 @@ import {
 } from '@snek-at/jaen'
 import {GatsbyBrowser, navigate, Slice} from 'gatsby'
 import React, {useContext, useEffect, useMemo} from 'react'
+
+import userTheme from '../theme/theme'
 
 // Import other necessary components here
 import {JaenFrameToolbarContext} from '../components/JaenFrame/contexts/jaen-frame-toolbar'
@@ -27,7 +34,21 @@ const CustomPageElement: React.FC<CustomPageElementProps> = ({
   element,
   props
 }) => {
-  const userTheme = useTheme()
+  const shouldUseJaenTheme = props.pageContext?.pageConfig?.theme === 'jaen'
+
+  const themedElement = useMemo(() => {
+    if (!shouldUseJaenTheme) {
+      return (
+        <ThemeProvider theme={userTheme}>
+          <GlobalStyle />
+          {element}
+        </ThemeProvider>
+      )
+    }
+
+    return element
+  }, [element, userTheme, shouldUseJaenTheme])
+
   const {setToolbar} = useContext(JaenFrameToolbarContext)
 
   const withoutJaenFrame = props.pageContext?.pageConfig?.withoutJaenFrame
@@ -76,12 +97,7 @@ const CustomPageElement: React.FC<CustomPageElementProps> = ({
             : 'visible'
         }>
         <AuthenticatedJaenFrame />
-        <ChakraProvider
-          disableEnvironment
-          theme={userTheme}
-          cssVarsRoot=":root">
-          {element}
-        </ChakraProvider>
+        {themedElement}
       </Flex>
     )
 
@@ -163,11 +179,7 @@ const CustomPageElement: React.FC<CustomPageElementProps> = ({
     // )
   }
 
-  return (
-    <ChakraProvider disableEnvironment disableGlobalStyle theme={userTheme}>
-      {element}
-    </ChakraProvider>
-  )
+  return <>{themedElement}</>
 }
 
 export const wrapPageElement: GatsbyBrowser['wrapPageElement'] = ({

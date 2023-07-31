@@ -231,10 +231,6 @@ export const AuthenticationProvider: React.FC<{
     }
   }, [isDemo, isAuthenticated])
 
-  const children = useMemo(() => {
-    return props.children
-  }, [])
-
   const value = useMemo(() => {
     return {
       isAuthenticated,
@@ -284,7 +280,7 @@ export const AuthenticationProvider: React.FC<{
           />
         </React.Suspense>
       )}
-      {children}
+      {props.children}
     </AuthenticationContext.Provider>
   )
 }

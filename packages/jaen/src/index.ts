@@ -9,7 +9,6 @@ export {
   useCMSManagementContext
 } from './contexts/cms-management'
 export {FieldHighlighterProvider} from './contexts/field-highlighter'
-export {JaenThemeProvider} from './contexts/jaen-theme'
 export {
   NotificationsProvider,
   useNotificationsContext
