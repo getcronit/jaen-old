@@ -7,12 +7,11 @@ import React, {
   useState
 } from 'react'
 
-import {setTokenPair, sq} from '@snek-functions/origin'
+import {setTokenPair, getTokenPair, sq} from '@snek-functions/origin'
 import {PageConfig} from '../types'
 
 export interface AutenticationContext {
   isAuthenticated: boolean
-  isDemo: boolean
   isLoading: boolean
   user: {
     id: string
@@ -29,59 +28,17 @@ export interface AutenticationContext {
     logMeOutAfterwards?: boolean
   ) => Promise<void>
   logout: () => Promise<void>
-  demoLogin: () => Promise<void>
   openLoginModal: () => void
 }
 
 export const AuthenticationContext = createContext<AutenticationContext>({
   isAuthenticated: false,
-  isDemo: false,
   isLoading: true,
   user: null,
   login: async () => {},
   logout: async () => {},
-  demoLogin: async () => {},
   openLoginModal: () => {}
 })
-
-const useDemoLogin = (): [
-  isDemo: boolean,
-  setIsDemo: React.Dispatch<React.SetStateAction<boolean>>
-] => {
-  const [isDemo, setIsDemo] = useState(false)
-
-  useEffect(() => {
-    const storedIsDemo = localStorage.getItem('isDemo')
-    setIsDemo(storedIsDemo === 'true')
-  }, [])
-
-  useEffect(() => {
-    localStorage.setItem('isDemo', isDemo ? 'true' : 'false')
-  }, [isDemo])
-
-  return [isDemo, setIsDemo]
-}
-
-const useAuthenticated = (): [
-  isAuthenticated: boolean,
-  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
-] => {
-  const getIsAuthenticated = useCallback(() => {
-    return localStorage.getItem('isAuthenticated') === 'true'
-  }, [])
-
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-
-  useEffect(() => {
-    setIsAuthenticated(getIsAuthenticated())
-  }, [])
-
-  useEffect(() => {
-    localStorage.setItem('isAuthenticated', isAuthenticated ? 'true' : 'false')
-  }, [isAuthenticated])
-
-  return [isAuthenticated, setIsAuthenticated]
-}
 
 export const AuthenticationProvider: React.FC<{
   snekResourceId: string
@@ -103,13 +60,11 @@ export const AuthenticationProvider: React.FC<{
   >
   children: React.ReactNode
 }> = props => {
-  const [isAuthenticated, setIsAuthenticated] = useAuthenticated()
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   const [user, setUser] = useState<AutenticationContext['user']>(null)
 
   const [isLoading, setIsLoading] = useState(true)
-
-  const [isDemo, setIsDemo] = useDemoLogin()
 
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
 
@@ -164,33 +119,17 @@ export const AuthenticationProvider: React.FC<{
   )
 
   const logout = useCallback(async () => {
-    if (isDemo) {
-      setIsDemo(false)
-    } else {
-      // const [data, errors] = await sq.mutate(m =>
-      //   m.userSignOut({
-      //     resourceId: props.snekResourceId
-      //   })
-      // )
-
-      // const isSuccess = !!data && !errors
-
-      // if (!isSuccess) {
-      //   throw new Error('Logout failed')
-      // }
-
-      setTokenPair(null)
-    }
-
     setIsAuthenticated(false)
-  }, [isDemo])
-
-  const demoLogin = useCallback(async () => {
-    setIsDemo(true)
-    setIsAuthenticated(true)
-  }, [])
+  }, [setIsAuthenticated])
 
   const bootstrap = useCallback(async () => {
+    // skip bootstrap if no token pair is present
+    if (getTokenPair() === null) {
+      setIsLoading(false)
+      return
+    }
+
+    setIsLoading(true)
     const [me, errors] = await sq.query(q => {
       const user = q.userMe
 
@@ -211,47 +150,30 @@ export const AuthenticationProvider: React.FC<{
       setIsAuthenticated(true)
       setUser(me)
     }
+
+    setIsLoading(false)
   }, [])
 
   useEffect(() => {
-    if (isDemo) {
-      setUser({
-        id: 'demo',
-        primaryEmail: 'snekman@snek.at',
-        username: 'snekman'
-      })
-    } else {
-      if (isAuthenticated) {
-        setIsLoading(true)
-        void bootstrap()
-        setIsLoading(false)
-      } else {
-        setIsLoading(false)
-      }
+    void bootstrap()
+  }, [])
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setUser(null)
     }
-  }, [isDemo, isAuthenticated])
+  }, [isAuthenticated])
 
   const value = useMemo(() => {
     return {
       isAuthenticated,
-      isDemo,
       isLoading,
       user,
       login,
       logout,
-      demoLogin,
       openLoginModal
     }
-  }, [
-    isAuthenticated,
-    isDemo,
-    isLoading,
-    user,
-    login,
-    logout,
-    demoLogin,
-    openLoginModal
-  ])
+  }, [isAuthenticated, isLoading, user, login, logout, , openLoginModal])
 
   const JaenLogin = props.JaenLoginComponent
 
@@ -292,7 +214,8 @@ export const useAuthenticationContext = () => {
 export const withAuthentication = <P extends {}>(
   Component: React.ComponentType<P>,
   pageConfig?: PageConfig,
-  cbs?: {
+  options?: {
+    forceAuth?: boolean
     onRedirectToLogin?: () => void
   }
 ): React.FC<P> => {
@@ -305,15 +228,15 @@ export const withAuthentication = <P extends {}>(
       }
 
       if (!isAuthenticated) {
-        if (cbs?.onRedirectToLogin) {
-          cbs.onRedirectToLogin()
+        if (options?.onRedirectToLogin) {
+          options.onRedirectToLogin()
         }
 
         return null
       }
     }
 
-    if (!isAuthenticated) {
+    if (options?.forceAuth && !isAuthenticated) {
       return null
     }
 

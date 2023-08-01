@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react'
 import {FaBullhorn, FaRocket} from 'react-icons/fa'
 
-import {List, ListItem} from './components/List'
+import {List, ListItem} from '../../shared/components/List'
 
 export interface DashboardProps {
   user?: string

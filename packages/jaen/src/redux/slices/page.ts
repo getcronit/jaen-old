@@ -475,6 +475,7 @@ export const actions = {
   ...pagesSlice.actions,
   ...routingSlice.actions
 }
+
 export const reducers = {
   pages: pagesSlice.reducer,
   routing: routingSlice.reducer

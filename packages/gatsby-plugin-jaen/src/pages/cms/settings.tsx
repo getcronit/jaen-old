@@ -1,25 +1,40 @@
 import {PageProps} from 'gatsby'
+import {PageConfig, useNotificationsContext} from '@snek-at/jaen'
 
 import {FormDataType, Settings} from '../../components/cms/Settings/Settings'
 import {JaenPageLayout} from '../../components/JaenPageLayout/JaenPageLayout'
-import {PageConfig} from '@snek-at/jaen'
+import {CMSManagement, useCMSManagement} from '../../connectors/cms-management'
 
 const SettingsPage: React.FC<PageProps> = () => {
+  const manager = useCMSManagement()
+  const {toast} = useNotificationsContext()
+
   return (
     <JaenPageLayout>
       <Settings
-        data={{}}
-        isPublishing={false}
-        migrations={[]}
-        onUpdate={function (_data: FormDataType): void {
-          throw new Error('Function not implemented.')
+        data={{siteMetadata: manager.siteMetadata}}
+        onUpdate={({siteMetadata}: FormDataType) => {
+          manager.updateSiteMetadata(siteMetadata || {})
+
+          toast({
+            title: 'Settings updated',
+            status: 'success'
+          })
         }}
       />
     </JaenPageLayout>
   )
 }
 
-export default SettingsPage
+const Page: React.FC<PageProps> = props => {
+  return (
+    <CMSManagement>
+      <SettingsPage {...props} />
+    </CMSManagement>
+  )
+}
+
+export default Page
 
 export const pageConfig: PageConfig = {
   label: 'Settings',

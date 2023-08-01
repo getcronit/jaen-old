@@ -81,7 +81,8 @@ const Slice: React.FC<
         isStickyDisabled: props.pageConfig?.withoutJaenFrameStickyHeader,
         app: {
           navigationGroups: navigationGroups.app,
-          version: '3.0.0',
+          // @ts-ignore
+          version: __VERSION__,
           logo: <Logo />
         },
         user: {

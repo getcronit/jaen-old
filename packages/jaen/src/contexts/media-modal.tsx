@@ -1,10 +1,11 @@
 import React, {createContext, useContext, useEffect, useState} from 'react'
+import {v4 as uuidv4} from 'uuid' // Import uuid to generate unique IDs
 
 // Define the context type
 type MediaModalContextType = {
   isOpen: boolean
   MediaModalComponent: React.LazyExoticComponent<any>
-  toggleModal: (isSelector?: boolean) => void
+  toggleModal: (args?: {isSelector?: boolean; id?: string}) => void
 }
 
 // Create the initial context with default values
@@ -27,21 +28,27 @@ export const MediaModalProvider: React.FC<MediaModalProviderProps> = ({
   const [open, setOpen] = useState<{
     isOpen: boolean
     isSelector: boolean
+    id: string
   }>({
     isOpen: false,
-    isSelector: false
+    isSelector: false,
+    id: 'default'
   })
 
-  const toggleModal = (isSelector: boolean = false) => {
+  const toggleModal = (args?: {isSelector?: boolean; id?: string}) => {
     setOpen({
       isOpen: !open.isOpen,
-      isSelector
+      isSelector: !!args?.isSelector,
+      id: args?.id || 'default'
     })
   }
 
   const handleSelect = (mediaNode: any) => {
     const onSelectEvent = new CustomEvent('mediaNodeSelected', {
-      detail: mediaNode
+      detail: {
+        mediaNode,
+        uniqueId: open.id
+      }
     })
     window.dispatchEvent(onSelectEvent)
   }
@@ -72,13 +79,18 @@ export const useMediaModal = (args?: UseMediaModalArgs) => {
     throw new Error('useMediaModal must be used within a MediaModalProvider')
   }
 
+  const [uniqueId] = useState<string>(uuidv4())
+
   useEffect(() => {
     if (!args?.onSelect) return
 
     const onSelectHandler: EventListener = (event: CustomEvent) => {
       // Check if the event is the 'mediaNodeSelected' event
-      if (event.type === 'mediaNodeSelected') {
-        const selectedMediaNode = event.detail
+      if (
+        event.type === 'mediaNodeSelected' &&
+        event.detail.uniqueId === uniqueId
+      ) {
+        const selectedMediaNode = event.detail.mediaNode
         // Call the onSelect callback with the selected media node
 
         args?.onSelect?.(selectedMediaNode)
@@ -101,7 +113,11 @@ export const useMediaModal = (args?: UseMediaModalArgs) => {
   }
 
   return {
-    toggleModal: () => context.toggleModal(!!args?.onSelect),
+    toggleModal: () =>
+      context.toggleModal({
+        id: uniqueId,
+        isSelector: !!args?.onSelect
+      }),
     isOpen: context.isOpen
   }
 }

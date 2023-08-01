@@ -8,35 +8,43 @@ import {capitalizeLastPathElement} from './helper/capitalize-last-path-element'
 import {getJaenPageParentId} from './helper/get-jaen-page-parent-id'
 import {readPageConfig} from './helper/page-config-reader'
 
-export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = (
-  {actions, loaders, stage},
-  pluginOptions
-) => {
-  const snekResourceId = pluginOptions.snekResourceId
+export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] =
+  async ({actions, loaders, stage, plugins}, pluginOptions) => {
+    const snekResourceId = pluginOptions.snekResourceId
 
-  if (!snekResourceId) {
-    throw new Error(
-      `The plugin option 'snekResourceId' is required. Please add the option to your gatsby-config.js file.`
-    )
-  }
+    if (!snekResourceId) {
+      throw new Error(
+        `The plugin option 'snekResourceId' is required. Please add the option to your gatsby-config.js file.`
+      )
+    }
 
-  if (stage === 'build-html' || stage === 'develop-html') {
+    const {version} = await import('@snek-at/jaen/package.json')
+
+    if (stage === 'build-html' || stage === 'develop-html') {
+      actions.setWebpackConfig({
+        module: {
+          rules: [
+            {
+              test: /filerobot-image-editor/,
+              use: loaders.null()
+            },
+            {
+              test: /reagraph/,
+              use: loaders.null()
+            }
+          ]
+        }
+      })
+    }
+
     actions.setWebpackConfig({
-      module: {
-        rules: [
-          {
-            test: /filerobot-image-editor/,
-            use: loaders.null()
-          },
-          {
-            test: /reagraph/,
-            use: loaders.null()
-          }
-        ]
-      }
+      plugins: [
+        plugins.define({
+          __VERSION__: JSON.stringify(version)
+        })
+      ]
     })
   }
-}
 
 export const createSchemaCustomization: GatsbyNode['onCreateWebpackConfig'] = ({
   actions

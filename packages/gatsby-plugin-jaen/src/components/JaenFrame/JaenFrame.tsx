@@ -2,6 +2,7 @@ import {Box, Divider, Flex, HStack, Icon, Spacer} from '@chakra-ui/react'
 import React from 'react'
 import {FaPlus} from 'react-icons/fa'
 
+import {Link} from '../../components/shared/Link'
 import {JaenLogo} from '../shared/JaenLogo/JaenLogo'
 import {MenuButton, MenuButtonProps} from '../shared/MenuButton/MenuButton'
 import {
@@ -72,9 +73,19 @@ export const JaenFrame: React.FC<JaenFrameProps> = props => {
           version={props.navigation.app.version}
           logo={props.navigation.app.logo}
         />
-        <Box cursor="pointer" maxW="12rem">
+        <Link
+          to="/"
+          maxW="12rem"
+          textDecoration="none"
+          sx={{
+            // before
+            _before: {
+              content: 'none'
+            }
+          }}>
           {props.logo || <JaenLogo h="full" w="auto" transform="scale(1.05)" />}
-        </Box>
+        </Link>
+
         <Breadcrumbs links={props.navigation.breadcrumbs.links} />
 
         <Spacer />

@@ -4,6 +4,7 @@ import {PageProps} from 'gatsby'
 import {CMSManagement, useCMSManagement} from '../../connectors/cms-management'
 import {Dashboard} from '../../components/cms/Dashboard'
 import {JaenPageLayout} from '../../components/JaenPageLayout/JaenPageLayout'
+import {useEffect} from 'react'
 
 const DashboardPage: React.FC<PageProps> = () => {
   const authentication = useAuthenticationContext()

@@ -29,7 +29,8 @@ export const pageConfig: PageConfig = {
   withoutJaenFrame: true,
   menu: {
     order: 1000,
-    type: 'user'
+    type: 'user',
+    group: 'logout'
   },
   auth: {
     isRequired: true

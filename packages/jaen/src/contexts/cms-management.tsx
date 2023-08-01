@@ -11,13 +11,18 @@ import {
 } from '../redux'
 import {actions as pageActions} from '../redux/slices/page'
 import * as statusActions from '../redux/slices/status'
-import {JaenPage, JaenTemplate} from '../types'
+import {actions as siteActions} from '../redux/slices/site'
+
+import {JaenPage, JaenTemplate, SiteMetadata} from '../types'
 import {deepmergeArrayIdMerge} from '../utils/deepmerge'
 
 // Define the type for the CMSManagementContext data
 interface CMSManagementContextData {
   templates: JaenTemplate[]
   templatesForPage: (pageId: string) => JaenTemplate[]
+
+  siteMetadata: Partial<SiteMetadata>
+  updateSiteMetadata: (siteMetadata: Partial<SiteMetadata>) => void
 
   page: (pageId?: string) => JaenPage
   usePage: (pageId?: string) => JaenPage
@@ -48,6 +53,9 @@ interface CMSManagementContextData {
 const CMSManagementContext = createContext<CMSManagementContextData>({
   templates: [],
   templatesForPage: () => [],
+
+  siteMetadata: {},
+  updateSiteMetadata: () => {},
 
   page: function () {
     throw new Error('Function not implemented.')
@@ -84,6 +92,15 @@ interface CMSManagementProviderProps {
 export const CMSManagementProvider = withRedux(
   ({staticPages, children, templates}: CMSManagementProviderProps) => {
     const dispatch = useAppDispatch()
+
+    const siteMetadata = useAppSelector(state => state.site.siteMetadata)
+
+    const updateSiteMetadata = useCallback(
+      (siteMetadata: Partial<SiteMetadata>) => {
+        dispatch(siteActions.updateSiteMetadata(siteMetadata))
+      },
+      [dispatch]
+    )
 
     // flags?
     const isEditing = useAppSelector(state => state.status.isEditing)
@@ -367,6 +384,8 @@ export const CMSManagementProvider = withRedux(
       <CMSManagementContext.Provider
         value={{
           templates,
+          siteMetadata,
+          updateSiteMetadata,
           page,
           usePage,
           pages,

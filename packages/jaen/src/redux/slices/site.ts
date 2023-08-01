@@ -22,5 +22,6 @@ const siteSlice = createSlice({
   }
 })
 
-export const {updateSiteMetadata} = siteSlice.actions
+export const actions = siteSlice.actions
+
 export default siteSlice.reducer

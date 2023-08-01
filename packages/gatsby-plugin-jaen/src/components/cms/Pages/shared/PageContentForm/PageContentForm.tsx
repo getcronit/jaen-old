@@ -28,6 +28,7 @@ import {FaEdit, FaEye, FaImage, FaNewspaper} from 'react-icons/fa'
 import {FaEyeLowVision} from 'react-icons/fa6'
 import slugify from 'slugify'
 
+import FormMediaChooser from '../../../../../containers/form-media-chooser'
 import {Link} from '../../../../shared/Link'
 import {ChooseButton, ChooseButtonProps} from '../ChooseButton/ChooseButton'
 
@@ -426,37 +427,20 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
                 name="image.src"
                 render={({field}) => {
                   return (
-                    <HStack spacing="4">
-                      {!field.value ? (
-                        <Center boxSize={36} borderRadius="lg" bg="bg.subtle">
-                          <FaImage fontSize="2xl" />
-                        </Center>
-                      ) : (
-                        <Image
-                          src={field.value}
-                          boxSize={36}
-                          borderRadius="lg"
-                          fallback={<Skeleton boxSize={36} borderRadius="lg" />}
-                        />
-                      )}
-
-                      <ButtonGroup>
-                        <Button
-                          variant="outline"
-                          onClick={mediaModal.toggleModal}>
-                          Choose image
-                        </Button>
-                        <Button
-                          // visibility={field.value ? 'visible' : 'hidden'}
-                          variant="ghost"
-                          colorScheme="red"
-                          onClick={() => {
-                            field.onChange(null)
-                          }}>
-                          Remove
-                        </Button>
-                      </ButtonGroup>
-                    </HStack>
+                    <FormMediaChooser
+                      value={field.value}
+                      onChoose={media => {
+                        setValue('image.src', media.url, {
+                          shouldDirty: true
+                        })
+                      }}
+                      onRemove={() => {
+                        setValue('image.src', '', {
+                          shouldDirty: true
+                        })
+                      }}
+                      description="Upload a photo to represent the organization."
+                    />
                   )
                 }}
               />
