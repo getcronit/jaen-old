@@ -50,7 +50,7 @@ const PagesPage: React.FC = () => {
         // author: 'Nico Schett'
       }
     })
-  }, [currentPage.id])
+  }, [currentPage.id, manager.pages])
 
   const handleTreeSelect = useCallback(
     (id: string) => {

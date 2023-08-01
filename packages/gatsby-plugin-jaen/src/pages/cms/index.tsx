@@ -1,28 +1,26 @@
-import {PageConfig} from '@snek-at/jaen'
+import {PageConfig, useAuthenticationContext} from '@snek-at/jaen'
 import {PageProps} from 'gatsby'
 
-import {CMSIndex} from '../../components/cms/CMSIndex'
+import {CMSManagement, useCMSManagement} from '../../connectors/cms-management'
+import {Dashboard} from '../../components/cms/Dashboard'
 import {JaenPageLayout} from '../../components/JaenPageLayout/JaenPageLayout'
 
-const PagesPage: React.FC<PageProps> = () => {
+const DashboardPage: React.FC<PageProps> = () => {
+  const authentication = useAuthenticationContext()
+
+  const manager = useCMSManagement()
+
+  const user =
+    authentication.user?.details?.firstName || authentication.user?.username
+
   return (
     <JaenPageLayout>
-      <CMSIndex
-        pages={[
+      <Dashboard
+        user={user}
+        isPublishing={manager.isPublishing}
+        migrations={[
           {
-            title: 'Pages',
-            description: 'Manage your pages',
-            path: '/cms/pages'
-          },
-          {
-            title: 'Media',
-            description: 'Manage your media',
-            path: '/cms/media'
-          },
-          {
-            title: 'Settings',
-            description: 'Manage your settings',
-            path: '/cms/settings'
+            createdAt: '2021-08-01T00:00:00.000Z'
           }
         ]}
       />
@@ -30,7 +28,15 @@ const PagesPage: React.FC<PageProps> = () => {
   )
 }
 
-export default PagesPage
+const Page: React.FC<PageProps> = props => {
+  return (
+    <CMSManagement>
+      <DashboardPage {...props} />
+    </CMSManagement>
+  )
+}
+
+export default Page
 
 export const pageConfig: PageConfig = {
   label: 'Dashboard',

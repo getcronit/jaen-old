@@ -162,8 +162,6 @@ const IndexPage: React.FC<PageProps> = () => {
     }
   })
 
-  alert('rendering index page')
-
   return (
     <>
       {/* <Text>{cm.colorMode}</Text> */}

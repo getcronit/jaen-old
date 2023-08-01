@@ -2,7 +2,13 @@
 import deepmerge from 'deepmerge'
 import {createContext, ReactNode, useCallback, useContext, useMemo} from 'react'
 
-import {store, useAppDispatch, useAppSelector, withRedux} from '../redux'
+import {
+  resetState,
+  store,
+  useAppDispatch,
+  useAppSelector,
+  withRedux
+} from '../redux'
 import {actions as pageActions} from '../redux/slices/page'
 import * as statusActions from '../redux/slices/status'
 import {JaenPage, JaenTemplate} from '../types'
@@ -17,6 +23,8 @@ interface CMSManagementContextData {
   usePage: (pageId?: string) => JaenPage
   pages: (parentId?: string) => JaenPage[]
   isEditing: boolean
+  isPublishing: boolean
+  setIsPublishing: (publishing: boolean) => void
   tree: Array<{
     id: string
     label: string
@@ -27,6 +35,13 @@ interface CMSManagementContextData {
   removePage: (pageId: string) => void
   updatePage: (pageId: string, updatedPage: Partial<JaenPage>) => void
   setIsEditing: (editing: boolean) => void
+
+  draft: {
+    save: () => void
+    import: () => Promise<void>
+    discard: () => void
+    publish: () => void
+  }
 }
 
 // Create the initial context
@@ -44,10 +59,18 @@ const CMSManagementContext = createContext<CMSManagementContextData>({
   tree: [],
   pagePath: () => '',
   isEditing: false,
+  isPublishing: false,
+  setIsPublishing: () => {},
   addPage: () => '',
   removePage: () => {},
   updatePage: () => {},
-  setIsEditing: () => {}
+  setIsEditing: () => {},
+  draft: {
+    save: () => {},
+    import: () => Promise.resolve(),
+    discard: () => {},
+    publish: () => {}
+  }
 })
 
 // Define the CMSManagementProvider props
@@ -67,6 +90,12 @@ export const CMSManagementProvider = withRedux(
 
     const setIsEditing = (flag: boolean) => {
       dispatch(statusActions.setIsEditing(flag))
+    }
+
+    const isPublishing = useAppSelector(state => state.status.isPublishing)
+
+    const setIsPublishing = (flag: boolean) => {
+      dispatch(statusActions.setIsPublishing(flag))
     }
 
     const dynamicPagesDict = useAppSelector(state => state.page.pages.nodes)
@@ -244,6 +273,96 @@ export const CMSManagementProvider = withRedux(
       [pagesDict, templates]
     )
 
+    const saveDraft = useCallback(() => {
+      // Implement the logic to save the draft state in the Redux store
+      // For example, you can update the draft state for the current page in the DraftData object
+      // dispatch(draftActions.saveDraft(pageId));
+
+      const state = store.getState()
+
+      // Generate a unique identifier for the draft
+      const draftId = Date.now()
+      const blob = new Blob([JSON.stringify({draftId, state})], {
+        type: 'application/json'
+      })
+
+      const blobUrl = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = blobUrl
+      a.download = `jaen-draft-${draftId}.json`
+
+      // Programmatically initiate the download
+      a.click()
+
+      // Remove the temporary anchor element
+      a.remove()
+    }, [])
+
+    const importDraft = useCallback(async () => {
+      return new Promise<void>((resolve, reject) => {
+        const input = document.createElement('input')
+        input.type = 'file'
+        input.accept = 'application/json'
+
+        // Attach an onchange event handler to handle the file selection
+        input.onchange = () => {
+          const file = input.files?.item(0)
+
+          if (!file) return
+
+          const reader = new FileReader()
+
+          // Read the selected file as text
+          reader.onload = () => {
+            try {
+              const content = JSON.parse(reader.result as string)
+              const {draftId, state} = content
+
+              // Perform a validation here to check if the draftId exists and matches the filename
+              const regex = /^jaen-draft-(\d+)\.json$/
+              const match = file.name.match(regex)
+              if (match && match[1] === draftId.toString()) {
+                // Dispatch an action with the parsed state object to update the Redux store
+                resetState(state)
+
+                // Resolve the promise
+                resolve()
+              } else {
+                // Handle invalid file (the file is not a valid draft file)
+                reject('Invalid draft file. Please select a valid draft file.')
+              }
+            } catch (error) {
+              console.error(error)
+              // Handle JSON parsing error
+              reject(
+                'Error parsing draft file. Please select a valid draft file.'
+              )
+            }
+          }
+
+          // Start reading the selected file
+          reader.readAsText(file)
+        }
+
+        // Programmatically trigger the file input click to open the file picker
+        input.click()
+      })
+    }, [])
+
+    const discardDraft = useCallback(() => {
+      dispatch(pageActions.discardAllChanges())
+
+      // reset status
+      setIsEditing(false)
+      setIsPublishing(false)
+    }, [setIsEditing, setIsPublishing])
+
+    const publishDraft = useCallback(() => {
+      // Implement the logic to publish the draft state in the Redux store
+      // For example, you can apply the draft changes to the actual page state
+      // dispatch(draftActions.publishDraft(pageId));
+    }, [])
+
     return (
       <CMSManagementContext.Provider
         value={{
@@ -255,10 +374,18 @@ export const CMSManagementProvider = withRedux(
           tree,
           pagePath,
           isEditing,
+          isPublishing,
+          setIsPublishing,
           addPage,
           removePage,
           updatePage,
-          setIsEditing
+          setIsEditing,
+          draft: {
+            save: saveDraft,
+            import: importDraft,
+            discard: discardDraft,
+            publish: publishDraft
+          }
         }}>
         {children}
       </CMSManagementContext.Provider>

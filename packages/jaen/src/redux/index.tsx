@@ -27,7 +27,6 @@ import status, {statusInitialState} from './slices/status'
 import widget, {widgetInitialState} from './slices/widget'
 
 import {useDeepEqualSelector} from '../utils/use-deep-equal-selector'
-import {IJaenFinderUrl} from './types'
 
 export const persistKey = 'jaenjs-state'
 
@@ -39,25 +38,20 @@ const combinedReducer = combineReducers({
   page,
   status,
   popup,
-  widget,
-  finderUrl: (state: string = '') => state
+  widget
 })
 
 // Reset state if action called
 const rootReducer = (state: any, action: any) => {
   if (action.type === 'RESET_STATE') {
     const payload: {
-      finderUrl?: IJaenFinderUrl
       site?: typeof siteInitialState
       page?: typeof pageInitialState
       popup?: typeof popupInitialState
       widget?: typeof widgetInitialState
     } = action.payload || {}
 
-    console.log('payload', payload)
-
     return {
-      finderUrl: payload.finderUrl,
       site: deepmerge(siteInitialState, payload.site || {}),
       page: deepmerge(pageInitialState, payload.page || {}),
       status: statusInitialState,

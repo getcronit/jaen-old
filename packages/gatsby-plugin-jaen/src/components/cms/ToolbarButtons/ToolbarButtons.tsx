@@ -4,7 +4,8 @@ import {
   FaCaretDown,
   FaDownload,
   FaTrash,
-  FaGlobe
+  FaGlobe,
+  FaUpload
 } from 'react-icons/fa'
 
 import {MenuButton} from '../../shared/MenuButton'
@@ -18,6 +19,8 @@ export interface ToolbarButtonsProps {
   // Props for the MenuButton with multiple items
   saveLabel: string
   saveOnClick: () => void
+  importLabel: string
+  importOnClick: () => void
   discardLabel: string
   discardOnClick: () => void
   publishLabel: string
@@ -30,6 +33,8 @@ export const ToolbarButtons: React.FC<ToolbarButtonsProps> = props => {
     editButtonToggle,
     saveLabel,
     saveOnClick,
+    importLabel,
+    importOnClick,
     discardLabel,
     discardOnClick,
     publishLabel,
@@ -46,6 +51,11 @@ export const ToolbarButtons: React.FC<ToolbarButtonsProps> = props => {
       <MenuButton
         variant="outline"
         items={{
+          import: {
+            icon: FaUpload,
+            label: importLabel,
+            onClick: importOnClick
+          },
           save: {
             icon: FaDownload,
             label: saveLabel,
