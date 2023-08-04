@@ -350,6 +350,12 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
                   <Input
                     {...register('slug', {required: true})}
                     placeholder="slug"
+                    onBlur={e => {
+                      const slug = slugify(e.target.value, {lower: true})
+                      setValue('slug', slug, {
+                        shouldDirty: true
+                      })
+                    }}
                   />
                   <FormErrorMessage>
                     {errors.slug && errors.slug.message}
