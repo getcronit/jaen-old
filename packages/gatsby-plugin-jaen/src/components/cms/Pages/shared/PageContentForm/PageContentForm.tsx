@@ -21,7 +21,7 @@ import {
   Text,
   Textarea
 } from '@chakra-ui/react'
-import {JaenTemplate, useMediaModal} from '@snek-at/jaen'
+import {DuplicateSlugError, JaenTemplate, useMediaModal} from '@snek-at/jaen'
 import {useEffect, useState} from 'react'
 import {Controller, SubmitHandler, useForm} from 'react-hook-form'
 import {FaEdit, FaEye, FaImage, FaNewspaper} from 'react-icons/fa'
@@ -173,16 +173,11 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
     getValues,
     setValue,
     reset,
+    setError,
     control,
     formState: {errors, isSubmitting}
   } = useForm<FormValues>({
     defaultValues: props.values
-  })
-
-  const mediaModal = useMediaModal({
-    onSelect: (media: any) => {
-      setValue('image.src', media.url)
-    }
   })
 
   useEffect(() => {
@@ -211,7 +206,16 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
   const onSubmit: SubmitHandler<FormValues> = data => {
     console.log(data)
 
-    return props.onSubmit(data)
+    try {
+      return props.onSubmit(data)
+    } catch (e) {
+      if (e instanceof DuplicateSlugError) {
+        setError('slug', {
+          type: 'manual',
+          message: 'Slug is already in use'
+        })
+      }
+    }
   }
 
   const title = watch('title', '') // Get the value of the 'title' field
@@ -342,10 +346,15 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
                   {...register('title', {required: true})}
                   placeholder="Title"
                 />
-                <Input
-                  {...register('slug', {required: true})}
-                  placeholder="slug"
-                />
+                <Stack>
+                  <Input
+                    {...register('slug', {required: true})}
+                    placeholder="slug"
+                  />
+                  <FormErrorMessage>
+                    {errors.slug && errors.slug.message}
+                  </FormErrorMessage>
+                </Stack>
               </Grid>
               <FormHelperText>{texts.titleHelperText[mode]}</FormHelperText>
             </FormControl>

@@ -6,7 +6,8 @@ export {
 } from './contexts/authentication'
 export {
   CMSManagementProvider,
-  useCMSManagementContext
+  useCMSManagementContext,
+  DuplicateSlugError
 } from './contexts/cms-management'
 export {FieldHighlighterProvider} from './contexts/field-highlighter'
 export {

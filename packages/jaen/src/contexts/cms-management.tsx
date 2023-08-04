@@ -16,6 +16,14 @@ import {actions as siteActions} from '../redux/slices/site'
 import {JaenPage, JaenTemplate, SiteMetadata} from '../types'
 import {deepmergeArrayIdMerge} from '../utils/deepmerge'
 
+// Errors
+
+export class DuplicateSlugError extends Error {
+  constructor(slug: string) {
+    super(`Could not add page with slug ${slug} as it is not unique`)
+  }
+}
+
 // Define the type for the CMSManagementContext data
 interface CMSManagementContextData {
   templates: JaenTemplate[]
@@ -184,12 +192,37 @@ export const CMSManagementProvider = withRedux(
     )
 
     const addPage = (page: Partial<JaenPage>) => {
+      // check if slug is unique
+      const slug = page.slug || 'new-page'
+
+      const isSlugDuplicate = pages().some(page => page.slug === slug)
+
+      if (isSlugDuplicate) {
+        throw new DuplicateSlugError(slug)
+      }
+
       dispatch(pageActions.page_updateOrCreate(page))
 
       return store.getState().page.pages.lastAddedNodeId
     }
 
-    const updatePage = (pageId: string, updatedPage: Partial<JaenPage>) => {
+    const updatePage = (
+      pageId: string,
+      updatedPage: Partial<JaenPage>
+    ): void => {
+      // check if slug is unique when moving page
+      if (updatedPage.parent?.id) {
+        const slug = updatedPage.slug || 'new-page'
+
+        const isSlugDuplicate = pages(updatedPage.parent?.id).some(
+          page => page.slug === slug && page.id !== pageId
+        )
+
+        if (isSlugDuplicate) {
+          throw new DuplicateSlugError(slug)
+        }
+      }
+
       dispatch(
         pageActions.page_updateOrCreate({
           id: pageId,
@@ -210,7 +243,6 @@ export const CMSManagementProvider = withRedux(
         parentId?: string
       ): CMSManagementContextData['tree'] => {
         const children = pages(parentId)
-        console.log('children', children, parentId)
 
         return children.map(child => ({
           id: child.id,
