@@ -44,7 +44,7 @@ export const PasswordForm: React.FC<PasswordFormProps> = ({
   return (
     <form onSubmit={onFormSubmit}>
       <FieldGroup title="Password">
-        <Stack width="full" spacing="6">
+        <Stack width="full" spacing="6" maxW="2xl">
           <FormControl id="password">
             <FormLabel>Password</FormLabel>
             <Controller
@@ -92,7 +92,7 @@ export const PasswordForm: React.FC<PasswordFormProps> = ({
               characters including a number and a lowercase letter.
             </Text>
 
-            <HStack>
+            <HStack spacing="4">
               <Button isLoading={isSubmitting} type="submit" variant="outline">
                 Update password
               </Button>

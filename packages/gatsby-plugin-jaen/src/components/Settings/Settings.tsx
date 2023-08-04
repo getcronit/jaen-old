@@ -34,11 +34,22 @@ interface FormDataType {
     firstName?: string
     lastName?: string
   }
+  emails?: Array<{
+    id: string
+    emailAddress: string
+    isVerified?: boolean
+    isPrimary?: boolean
+  }>
   image?: string
 }
 
 export interface SettingsProps {
   data: FormDataType
+
+  onAccountFormSubmit: (data: AccountFormData) => Promise<void>
+  onEmailFormSubmit: (data: EmailFormData) => Promise<void>
+  onEmailRemove: (emailId: string) => Promise<void>
+  onPasswordFormSubmit: (data: PasswordFormData) => Promise<void>
 }
 
 export const Settings: React.FC<SettingsProps> = props => {
@@ -46,23 +57,28 @@ export const Settings: React.FC<SettingsProps> = props => {
     console.log('Account form data:', data)
     // Add logic to handle account form submission
 
-    await new Promise(resolve => setTimeout(resolve, 1000))
-
-    alert('Account form submitted')
+    await props.onAccountFormSubmit(data)
   }
 
   const handleEmailFormSubmit = async (data: EmailFormData) => {
     console.log('Email form data:', data)
     // Add logic to handle email form submission
 
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    await props.onEmailFormSubmit(data)
+  }
+
+  const handleEmailRemove = async (emailId: string) => {
+    console.log('Remove email:', emailId)
+    // Add logic to handle email removal
+
+    await props.onEmailRemove(emailId)
   }
 
   const handlePasswordFormSubmit = async (data: PasswordFormData) => {
     console.log('Password form data:', data)
     // Add logic to handle password form submission
 
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    await props.onPasswordFormSubmit(data)
   }
 
   return (
@@ -77,7 +93,11 @@ export const Settings: React.FC<SettingsProps> = props => {
           username: props.data.username
         }}
       />
-      <EmailForm onSubmit={handleEmailFormSubmit} />
+      <EmailForm
+        onSubmit={handleEmailFormSubmit}
+        onRemove={handleEmailRemove}
+        defaultValues={{emails: props.data.emails || []}}
+      />
       <PasswordForm
         onSubmit={handlePasswordFormSubmit}
         passwordResetPath="/password_reset"

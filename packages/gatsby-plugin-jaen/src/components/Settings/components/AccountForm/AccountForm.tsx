@@ -1,15 +1,14 @@
-import React from 'react'
 import {
   Button,
   ButtonGroup,
   FormControl,
   FormErrorMessage,
   FormLabel,
-  HStack,
   Input,
   Stack
 } from '@chakra-ui/react'
-import {useForm, Controller} from 'react-hook-form'
+import React from 'react'
+import {Controller, useForm} from 'react-hook-form'
 
 import {FieldGroup} from '../../../../components/shared/FieldGroup'
 import FormMediaChooser from '../../../../containers/form-media-chooser'
@@ -56,12 +55,7 @@ export const AccountForm: React.FC<AccountFormProps> = ({
           <Stack>
             <FormControl id="firstName" isInvalid={!!errors.firstName}>
               <FormLabel>First Name</FormLabel>
-              <Input
-                placeholder=""
-                {...register('firstName', {
-                  required: 'This field is required'
-                })}
-              />
+              <Input placeholder="" {...register('firstName', {})} />
               <FormErrorMessage>
                 {errors.firstName && errors.firstName.message}
               </FormErrorMessage>
@@ -69,12 +63,7 @@ export const AccountForm: React.FC<AccountFormProps> = ({
 
             <FormControl id="lastName" isInvalid={!!errors?.lastName}>
               <FormLabel>Last Name</FormLabel>
-              <Input
-                placeholder=""
-                {...register('lastName', {
-                  required: 'This field is required'
-                })}
-              />
+              <Input placeholder="" {...register('lastName', {})} />
               <FormErrorMessage>
                 {errors.lastName && errors.lastName.message}
               </FormErrorMessage>
