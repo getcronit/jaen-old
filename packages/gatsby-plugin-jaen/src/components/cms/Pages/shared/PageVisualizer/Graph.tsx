@@ -1,4 +1,4 @@
-import {useColorModeValue} from '@chakra-ui/react'
+import {getToken, Text, useColorModeValue, useToken} from '@chakra-ui/react'
 import {useEffect, useRef} from 'react'
 
 import {darkTheme, GraphCanvas, lightTheme, useSelection} from 'reagraph'
@@ -43,7 +43,77 @@ export const Graph: React.FC<{
     setSelections(selection ? [selection] : [])
   }, [selection])
 
-  const theme = useColorModeValue(lightTheme, darkTheme)
+  const [brand500] = useToken(
+    // the key within the theme, in this case `theme.colors`
+    'colors',
+    // the subkey(s), resolving to `theme.colors.red.100`
+    ['brand.500']
+    // a single fallback or fallback array matching the length of the previous arg
+  )
+
+  const theme = useColorModeValue(
+    {
+      ...lightTheme,
+      node: {
+        ...lightTheme.node,
+        activeFill: brand500,
+        label: {
+          ...lightTheme.node.label,
+          activeColor: brand500
+        }
+      },
+      ring: {
+        ...lightTheme.ring,
+        activeFill: brand500
+      },
+      edge: {
+        ...lightTheme.edge,
+        activeFill: brand500,
+        label: {
+          ...lightTheme.edge.label,
+          activeColor: brand500
+        }
+      },
+      arrow: {
+        ...lightTheme.arrow,
+        activeFill: brand500
+      },
+      cluster: {
+        ...lightTheme.cluster
+      }
+    },
+
+    {
+      ...darkTheme,
+      node: {
+        ...lightTheme.node,
+        activeFill: brand500,
+        label: {
+          ...lightTheme.node.label,
+          activeColor: brand500
+        }
+      },
+      ring: {
+        ...lightTheme.ring,
+        activeFill: brand500
+      },
+      edge: {
+        ...lightTheme.edge,
+        activeFill: brand500,
+        label: {
+          ...lightTheme.edge.label,
+          activeColor: brand500
+        }
+      },
+      arrow: {
+        ...lightTheme.arrow,
+        activeFill: brand500
+      },
+      cluster: {
+        ...lightTheme.cluster
+      }
+    }
+  )
 
   return (
     <GraphCanvas
