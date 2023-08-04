@@ -16,6 +16,7 @@ import React from 'react'
 import {useForm} from 'react-hook-form'
 import {FaTrash} from 'react-icons/fa'
 
+import {Link} from '../../../../components/shared/Link'
 import {FieldGroup} from '../../../../components/shared/FieldGroup'
 
 interface EmailData {
@@ -106,9 +107,12 @@ export const EmailForm: React.FC<EmailFormProps> = ({
                         <ListItem fontSize="sm" color="muted">
                           <HStack>
                             <Text>Unverified</Text>
-                            <Button variant="link">
+                            <Link
+                              onClick={() => {
+                                alert('Resend verification email')
+                              }}>
                               Resend verification email
-                            </Button>
+                            </Link>
                           </HStack>
                         </ListItem>
                       )}

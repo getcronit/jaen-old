@@ -96,7 +96,9 @@ export const PasswordForm: React.FC<PasswordFormProps> = ({
               <Button isLoading={isSubmitting} type="submit" variant="outline">
                 Update password
               </Button>
-              <Link to={passwordResetPath}>I forgot my password</Link>
+              <Link fontSize="sm" to={passwordResetPath}>
+                I forgot my password
+              </Link>
             </HStack>
           </Stack>
         </Stack>
