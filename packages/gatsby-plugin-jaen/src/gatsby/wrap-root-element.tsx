@@ -6,9 +6,8 @@ import {
 } from '@snek-at/jaen'
 import {GatsbyBrowser} from 'gatsby'
 import {lazy} from 'react'
-import {ChakraProvider} from '@chakra-ui/react'
+import {Button, ChakraProvider} from '@chakra-ui/react'
 
-import {JaenFrameToolbarProvider} from '../components/JaenFrame/contexts/jaen-frame-toolbar'
 import {theme} from '../theme/index'
 
 const JaenLogin = lazy(
@@ -37,7 +36,7 @@ export const wrapRootElement: GatsbyBrowser['wrapRootElement'] = (
             snekResourceId={snekResourceId}
             JaenLoginComponent={JaenLogin}>
             <MediaModalProvider MediaModalComponent={MediaModalComponent}>
-              <JaenFrameToolbarProvider>{element}</JaenFrameToolbarProvider>
+              {element}
             </MediaModalProvider>
           </AuthenticationProvider>
         </FieldHighlighterProvider>

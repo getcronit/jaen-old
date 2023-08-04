@@ -37,7 +37,12 @@ export const Dashboard: React.FC<DashboardProps> = props => {
       </Heading>
 
       <Stack spacing="4">
-        <SimpleGrid columns={2} spacing="4">
+        <SimpleGrid
+          columns={{
+            base: 1,
+            md: 2
+          }}
+          spacing="4">
           <Card>
             <CardHeader>
               <HStack>

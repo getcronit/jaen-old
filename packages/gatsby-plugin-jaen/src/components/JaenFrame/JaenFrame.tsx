@@ -1,6 +1,7 @@
-import {Box, Divider, Flex, HStack, Icon, Spacer} from '@chakra-ui/react'
+import {Badge, Box, ChakraProvider, HStack, Icon} from '@chakra-ui/react'
 import React from 'react'
 import {FaPlus} from 'react-icons/fa'
+import theme from '../../theme/theme'
 
 import {Link} from '../../components/shared/Link'
 import {JaenLogo} from '../shared/JaenLogo/JaenLogo'
@@ -14,7 +15,6 @@ import {
   DrawerRight,
   DrawerRightProps
 } from './components/DrawerRight/DrawerRight'
-import {JaenFrameToolbarContext} from './contexts/jaen-frame-toolbar'
 
 export interface JaenFrameProps {
   logo?: JSX.Element
@@ -28,6 +28,7 @@ export interface JaenFrameProps {
     user: {
       user: DrawerRightProps['user']
       navigationGroups: DrawerRightProps['navigationGroups']
+      isBadgeVisible?: boolean
     }
     addMenu: {
       items: MenuButtonProps['items']
@@ -39,17 +40,6 @@ export interface JaenFrameProps {
 }
 
 export const JaenFrame: React.FC<JaenFrameProps> = props => {
-  // const [toolbar, setToolbar] = useState<Toolbar | null>(null)
-
-  // const children = useMemo(
-  //   () => (
-  //     <ToolbarContext.Provider value={{setToolbar}}>
-  //       {props.children}
-  //     </ToolbarContext.Provider>
-  //   ),
-  //   [props.children]
-  // )
-
   return (
     <HStack
       id="coco"
@@ -67,115 +57,102 @@ export const JaenFrame: React.FC<JaenFrameProps> = props => {
       backdropBlur={8}
       justifyContent="space-between"
       zIndex="sticky">
-      <HStack spacing="5" h="full">
-        <DrawerLeft
-          navigationGroups={props.navigation.app.navigationGroups}
-          version={props.navigation.app.version}
-          logo={props.navigation.app.logo}
-        />
-        <Link
-          to="/"
-          maxW="12rem"
-          textDecoration="none"
-          sx={{
-            // before
-            _before: {
-              content: 'none'
-            }
+      <HStack spacing="5" w="full" h="full">
+        <HStack
+          spacing="4"
+          w={{
+            base: '24',
+            md: 'full'
           }}>
-          {props.logo || <JaenLogo h="full" w="auto" transform="scale(1.05)" />}
-        </Link>
-
-        <Breadcrumbs links={props.navigation.breadcrumbs.links} />
-
-        <Spacer />
-      </HStack>
-
-      <HStack spacing="5" h="full">
-        <JaenFrameToolbarContext.Consumer>
-          {({toolbar}) => (
-            <>
-              {toolbar?.components && toolbar?.components.length > 0 && (
-                <HStack spacing="5" h="full">
-                  {toolbar?.components?.map(
-                    (Component, index) => Component && <Component key={index} />
-                  )}
-                  <Divider orientation="vertical" />
-                </HStack>
-              )}
-            </>
-          )}
-        </JaenFrameToolbarContext.Consumer>
-
-        <MenuButton
-          leftIcon={<Icon as={FaPlus} color="brand.500" />}
-          variant="outline"
-          items={props.navigation.addMenu.items}></MenuButton>
-
-        <DrawerRight
-          user={props.navigation.user.user}
-          navigationGroups={props.navigation.user.navigationGroups}
-        />
-      </HStack>
-    </HStack>
-  )
-
-  return (
-    <Flex pos="relative" flexDirection="column">
-      <HStack
-        id="coco"
-        as="header"
-        bg="bg.subtle"
-        {...(!props.navigation.isStickyDisabled && {
-          pos: 'sticky',
-          top: '0',
-          zIndex: 'sticky'
-        })}
-        h="16"
-        p="16px"
-        borderBottom="1px"
-        borderColor="border.emphasized"
-        backdropBlur={8}
-        justifyContent="space-between"
-        zIndex="sticky">
-        <HStack spacing="5" h="full">
           <DrawerLeft
             navigationGroups={props.navigation.app.navigationGroups}
             version={props.navigation.app.version}
             logo={props.navigation.app.logo}
           />
-          <Box cursor="pointer" maxW="12rem">
-            {props.logo || (
-              <JaenLogo h="full" w="auto" transform="scale(1.05)" />
-            )}
-          </Box>
-          <Breadcrumbs links={props.navigation.breadcrumbs.links} />
 
-          <Spacer />
+          <Box
+            maxW="12rem"
+            display={{
+              base: 'none',
+              md: 'block'
+            }}>
+            <Link
+              to="/"
+              textDecoration="none"
+              sx={{
+                // before
+                _before: {
+                  content: 'none'
+                }
+              }}>
+              {props.logo || (
+                <JaenLogo h="full" w="auto" transform="scale(1.05)" />
+              )}
+            </Link>
+          </Box>
+
+          <Box
+            display={{
+              base: 'none',
+              md: 'block'
+            }}>
+            <Breadcrumbs links={props.navigation.breadcrumbs.links} />
+          </Box>
         </HStack>
 
-        <HStack spacing="5" h="full">
-          {toolbar?.components && toolbar?.components.length > 0 && (
-            <HStack spacing="5" h="full">
-              {toolbar?.components?.map(
-                (Component, index) => Component && <Component key={index} />
+        <Box mx="auto">
+          <Box
+            maxW="12rem"
+            display={{
+              base: 'block',
+              md: 'none'
+            }}>
+            <Link
+              to="/"
+              textDecoration="none"
+              sx={{
+                // before
+                _before: {
+                  content: 'none'
+                }
+              }}>
+              {props.logo || (
+                <JaenLogo h="full" w="auto" transform="scale(1.05)" />
               )}
-              <Divider orientation="vertical" />
-            </HStack>
-          )}
+            </Link>
+          </Box>
+        </Box>
 
-          <MenuButton
-            leftIcon={<Icon as={FaPlus} color="brand.500" />}
-            variant="outline"
-            items={props.navigation.addMenu.items}></MenuButton>
+        <HStack
+          spacing={4}
+          w={{
+            base: '24',
+            md: 'xs'
+          }}
+          h="full"
+          justifyContent="end">
+          <HStack
+            h="full"
+            spacing={4}
+            display={{
+              base: 'none',
+              md: 'flex'
+            }}>
+            <MenuButton
+              leftIcon={<Icon as={FaPlus} color="brand.500" />}
+              variant="outline"
+              items={props.navigation.addMenu.items}
+            />
+          </HStack>
 
           <DrawerRight
             user={props.navigation.user.user}
             navigationGroups={props.navigation.user.navigationGroups}
+            isBadgeVisible={props.navigation.user.isBadgeVisible}
           />
         </HStack>
       </HStack>
-    </Flex>
+    </HStack>
   )
 }
 

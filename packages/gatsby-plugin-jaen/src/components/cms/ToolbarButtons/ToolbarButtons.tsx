@@ -1,15 +1,9 @@
 import {ButtonGroup, Icon} from '@chakra-ui/react'
-import {
-  FaSitemap,
-  FaCaretDown,
-  FaDownload,
-  FaTrash,
-  FaGlobe,
-  FaUpload
-} from 'react-icons/fa'
 
+import {FaDownload, FaEdit, FaGlobe, FaTrash, FaUpload} from 'react-icons/fa'
+
+import {JaenLogo} from '../../../components/shared/JaenLogo'
 import {MenuButton} from '../../shared/MenuButton'
-import {EditButton} from './components/EditButton'
 
 export interface ToolbarButtonsProps {
   // Props for the EditButton
@@ -43,14 +37,15 @@ export const ToolbarButtons: React.FC<ToolbarButtonsProps> = props => {
 
   return (
     <ButtonGroup variant="outline">
-      <EditButton
-        isEditing={editButtonIsEditing}
-        onToggleEditing={editButtonToggle}
-      />
-
       <MenuButton
-        variant="outline"
+        borderColor={editButtonIsEditing ? 'pink.500' : undefined}
         items={{
+          edit: {
+            icon: FaEdit,
+            label: editButtonIsEditing ? 'Stop Editing' : 'Edit',
+            onClick: editButtonToggle
+          },
+
           import: {
             icon: FaUpload,
             label: importLabel,
@@ -73,8 +68,11 @@ export const ToolbarButtons: React.FC<ToolbarButtonsProps> = props => {
             label: publishLabel,
             onClick: publishOnClick
           }
-        }}>
-        Save
+        }}
+        leftIcon={
+          <Icon as={editButtonIsEditing ? FaEdit : JaenLogo} color="pink.500" />
+        }>
+        Jaen CMS
       </MenuButton>
     </ButtonGroup>
   )

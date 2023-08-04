@@ -31,7 +31,7 @@ export const FormMediaChooser: React.FC<FormMediaChooserProps> = props => {
 
   return (
     <Stack direction="row" spacing="6" align="center" width="full">
-      <Box boxSize={36} borderRadius="lg" bg="bg.subtle">
+      <Box boxSize={36} minW="36" borderRadius="lg" bg="bg.subtle">
         {props.value ? (
           <Image
             borderRadius="lg"
@@ -47,7 +47,7 @@ export const FormMediaChooser: React.FC<FormMediaChooserProps> = props => {
           </Center>
         )}
       </Box>
-      <Box>
+      <Stack>
         <HStack spacing="5">
           <Button
             isLoading={isLoading}
@@ -65,7 +65,7 @@ export const FormMediaChooser: React.FC<FormMediaChooserProps> = props => {
         <Text fontSize="sm" mt="3" color="muted">
           {props.description}
         </Text>
-      </Box>
+      </Stack>
     </Stack>
   )
 }

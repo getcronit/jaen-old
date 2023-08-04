@@ -1,10 +1,4 @@
-import {
-  ChakraProvider,
-  useColorMode,
-  ThemeProvider,
-  GlobalStyle
-} from '@chakra-ui/react'
-import {Button, Flex, useTheme} from '@chakra-ui/react'
+import {Button, Flex, GlobalStyle, ThemeProvider} from '@chakra-ui/react'
 import {
   PageConfig,
   PageProvider,
@@ -12,13 +6,11 @@ import {
   withAuthentication
 } from '@snek-at/jaen'
 import {GatsbyBrowser, navigate, Slice} from 'gatsby'
-import React, {useContext, useEffect, useMemo} from 'react'
+import React, {useMemo} from 'react'
 
 import userTheme from '../theme/theme'
 
 // Import other necessary components here
-import {JaenFrameToolbarContext} from '../components/JaenFrame/contexts/jaen-frame-toolbar'
-import CMSToolbarContainer from '../containers/cms-toolbar'
 
 interface PageContext {
   pageConfig?: PageConfig
@@ -64,19 +56,7 @@ const CustomPageElement: React.FC<CustomPageElementProps> = ({
     [props.pageContext?.pageConfig]
   )
 
-  const {setToolbar} = useContext(JaenFrameToolbarContext)
-
   const withoutJaenFrame = props.pageContext?.pageConfig?.withoutJaenFrame
-  const jaenPageId = props.pageContext?.jaenPageId
-
-  useEffect(() => {
-    if (!jaenPageId) return
-
-    setToolbar({
-      components: [CMSToolbarContainer],
-      origin: 'cms'
-    })
-  }, [jaenPageId, setToolbar])
 
   const AuthenticatedJaenFrame = useMemo(
     () =>
@@ -113,6 +93,7 @@ const CustomPageElement: React.FC<CustomPageElementProps> = ({
             : 'visible'
         }>
         <AuthenticatedJaenFrame />
+
         <AuthenticatedPage shouldUseJaenTheme={shouldUseJaenTheme}>
           {element}
         </AuthenticatedPage>

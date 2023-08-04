@@ -1,38 +1,52 @@
 import {
   PageConfig,
   useAuthenticationContext,
-  useMediaModal
+  useMediaModal,
+  useNotificationsContext
 } from '@snek-at/jaen'
 import {graphql, SliceComponentProps} from 'gatsby'
 import {useMemo} from 'react'
-import {FaImage, FaSitemap} from 'react-icons/fa'
+import {
+  FaEdit,
+  FaFileDownload,
+  FaFileUpload,
+  FaGlobe,
+  FaImage,
+  FaSitemap,
+  FaTrash
+} from 'react-icons/fa'
 
 import Logo from '../components/Logo'
 import {NavigationGroupsProps} from '../components/JaenFrame/components/NavigationGroups'
 import JaenFrame from '../components/JaenFrame/JaenFrame'
+import {CMSManagement, useCMSManagement} from '../connectors/cms-management'
 
-const Slice: React.FC<
-  SliceComponentProps<
-    {
-      allSitePage: {
-        nodes: Array<{
-          id: string
-          path: string
-          pageContext: {
-            pageConfig: PageConfig
-          }
-        }>
-      }
-    },
-    {},
-    {
-      jaenPageId: string
-      pageConfig: any
+type SliceProps = SliceComponentProps<
+  {
+    allSitePage: {
+      nodes: Array<{
+        id: string
+        path: string
+        pageContext: {
+          pageConfig: PageConfig
+        }
+      }>
     }
-  >
-> = props => {
+  },
+  {},
+  {
+    jaenPageId: string
+    pageConfig: any
+  }
+>
+
+const Slice: React.FC<SliceProps> = props => {
+  const manager = useCMSManagement()
+
   const authentication = useAuthenticationContext()
   const mediaModal = useMediaModal()
+
+  const {toast} = useNotificationsContext()
 
   const {navigationGroups} = useMemo(() => {
     const sortedNodes = props.data.allSitePage.nodes.sort((a, b) => {
@@ -46,7 +60,90 @@ const Slice: React.FC<
       user: NavigationGroupsProps['groups']
     } = {
       app: {},
-      user: {}
+      user: {
+        add: {
+          items: {
+            addPage: {
+              label: 'New page',
+              icon: FaSitemap,
+              path: `/cms/pages/new/#${btoa(props.jaenPageId)}`
+            },
+            addMedia: {
+              label: 'New media',
+              icon: FaImage,
+              onClick: () => {
+                mediaModal.toggleModal()
+              }
+            }
+          }
+        },
+        jaenCms: {
+          label: 'Jaen CMS',
+          items: {
+            edit: {
+              label: manager.isEditing ? 'Stop editing' : 'Start editing',
+              icon: FaEdit,
+              onClick: () => {
+                manager.setIsEditing(!manager.isEditing)
+              }
+            },
+            save: {
+              label: 'Save draft',
+              icon: FaFileDownload,
+              onClick: () => {
+                manager.draft.save()
+              }
+            },
+            import: {
+              label: 'Import draft',
+              icon: FaFileUpload,
+              onClick: async () => {
+                try {
+                  await manager.draft.import()
+
+                  toast({
+                    title: 'Imported',
+                    description: 'Your changes have been imported',
+                    status: 'success'
+                  })
+                } catch (e) {
+                  toast({
+                    title: 'Failed to import',
+                    description: 'Your changes could not be imported',
+                    status: 'error'
+                  })
+                }
+              }
+            },
+            discard: {
+              label: 'Discard changes',
+              icon: FaTrash,
+              onClick: () => {
+                manager.draft.discard()
+
+                toast({
+                  title: 'Discarded',
+                  description: 'Your changes have been discarded',
+                  status: 'info'
+                })
+              }
+            },
+            publish: {
+              label: 'Publish',
+              icon: FaGlobe,
+              onClick: () => {
+                manager.setIsPublishing(true)
+
+                toast({
+                  title: 'Publishing',
+                  description: 'Your changes are being published',
+                  status: 'info'
+                })
+              }
+            }
+          }
+        }
+      }
     }
 
     sortedNodes.forEach(node => {
@@ -73,7 +170,7 @@ const Slice: React.FC<
     })
 
     return {navigationGroups}
-  }, [props.data.allSitePage.nodes])
+  }, [props.data.allSitePage.nodes, manager])
 
   return (
     <JaenFrame
@@ -95,7 +192,8 @@ const Slice: React.FC<
             : {
                 username: 'Guest'
               },
-          navigationGroups: navigationGroups.user
+          navigationGroups: navigationGroups.user,
+          isBadgeVisible: manager.isEditing
         },
         addMenu: {
           items: {
@@ -124,7 +222,13 @@ const Slice: React.FC<
   )
 }
 
-export default Slice
+const JaenFrameSlice: React.FC<SliceProps> = props => (
+  <CMSManagement>
+    <Slice {...props} />
+  </CMSManagement>
+)
+
+export default JaenFrameSlice
 
 export const query = graphql`
   query {

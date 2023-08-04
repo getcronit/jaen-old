@@ -1,5 +1,6 @@
 import {
   Avatar,
+  AvatarBadge,
   Box,
   Drawer,
   DrawerBody,
@@ -31,11 +32,14 @@ export interface DrawerRightProps {
     lastName?: string
   }
   navigationGroups: NavigationGroupsProps['groups']
+
+  isBadgeVisible?: boolean
 }
 
 export const DrawerRight: React.FC<DrawerRightProps> = ({
   navigationGroups,
-  user
+  user,
+  isBadgeVisible
 }) => {
   const {isOpen, onClose, onToggle} = useDisclosure()
 
@@ -53,8 +57,13 @@ export const DrawerRight: React.FC<DrawerRightProps> = ({
         size="sm"
         cursor="pointer"
         src="https://avatars.githubusercontent.com/u/52858351?v=4"
-        onClick={onToggle}
-      />
+        onClick={onToggle}>
+        <AvatarBadge
+          boxSize="1.25em"
+          bg="pink.500"
+          visibility={isBadgeVisible ? 'visible' : 'hidden'}
+        />
+      </Avatar>
       <Drawer
         placement="right"
         size="xs"
