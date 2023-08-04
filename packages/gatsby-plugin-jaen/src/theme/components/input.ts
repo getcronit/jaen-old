@@ -12,6 +12,9 @@ const baseStyle = definePartsStyle({
     _placeholder: {
       opacity: 1,
       color: 'fg.subtle'
+    },
+    _placeholderShown: {
+      bg: 'bg.subtle'
     }
   }
 })

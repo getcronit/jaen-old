@@ -1,4 +1,11 @@
-import {AspectRatio, Image, Input, Skeleton, Stack} from '@chakra-ui/react'
+import {
+  AspectRatio,
+  Image,
+  Input,
+  Skeleton,
+  Stack,
+  Textarea
+} from '@chakra-ui/react'
 import {MouseEventHandler} from 'react'
 import {MediaNode} from '../../../../types'
 

@@ -8,6 +8,7 @@ import {
   Center,
   Skeleton
 } from '@chakra-ui/react'
+import {useState} from 'react'
 import {FaCloudUploadAlt} from 'react-icons/fa'
 
 export interface FormMediaChooserProps {
@@ -18,6 +19,16 @@ export interface FormMediaChooserProps {
 }
 
 export const FormMediaChooser: React.FC<FormMediaChooserProps> = props => {
+  const [isLoading, setIsLoading] = useState(false)
+
+  const onChoose = async () => {
+    setIsLoading(true)
+    try {
+      await props.onChoose()
+    } catch (e) {}
+    setIsLoading(false)
+  }
+
   return (
     <Stack direction="row" spacing="6" align="center" width="full">
       <Box boxSize={36} borderRadius="lg" bg="bg.subtle">
@@ -39,9 +50,10 @@ export const FormMediaChooser: React.FC<FormMediaChooserProps> = props => {
       <Box>
         <HStack spacing="5">
           <Button
+            isLoading={isLoading}
             variant="outline"
             leftIcon={<FaCloudUploadAlt />}
-            onClick={props.onChoose}>
+            onClick={onChoose}>
             Choose media
           </Button>
           {props.value && (

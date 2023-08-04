@@ -15,7 +15,7 @@ import {
   useToast,
   VStack
 } from '@chakra-ui/react'
-import React from 'react'
+import React, {useEffect} from 'react'
 import {Controller, useForm} from 'react-hook-form'
 
 import FormMediaChooser from '../../../containers/form-media-chooser'
@@ -63,9 +63,13 @@ export const Settings: React.FC<SettingsProps> = ({data, onUpdate}) => {
 
   const onSubmit = (values: FormDataType) => {
     onUpdate(values)
-
-    reset()
   }
+
+  useEffect(() => {
+    setDefaultValues(data)
+
+    reset(data)
+  }, [data])
 
   return (
     <Box id="coco">

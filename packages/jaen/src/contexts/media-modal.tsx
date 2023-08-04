@@ -1,18 +1,21 @@
 import React, {createContext, useContext, useEffect, useState} from 'react'
 import {v4 as uuidv4} from 'uuid' // Import uuid to generate unique IDs
+import {uploadFile} from '../utils/open-storage-gateway'
 
 // Define the context type
 type MediaModalContextType = {
   isOpen: boolean
   MediaModalComponent: React.LazyExoticComponent<any>
   toggleModal: (args?: {isSelector?: boolean; id?: string}) => void
+  togglFileSelector: () => Promise<any>
 }
 
 // Create the initial context with default values
 const MediaModalContext = createContext<MediaModalContextType>({
   isOpen: false,
   MediaModalComponent: undefined as any,
-  toggleModal: () => {}
+  toggleModal: () => {},
+  togglFileSelector: () => Promise.resolve()
 })
 
 export interface MediaModalProviderProps {
@@ -43,6 +46,61 @@ export const MediaModalProvider: React.FC<MediaModalProviderProps> = ({
     })
   }
 
+  const togglFileSelector = async () => {
+    // open file dialog for file selection
+    const fileInput = document.createElement('input')
+    fileInput.type = 'file'
+    fileInput.accept = 'image/*'
+
+    const uploadedData = await new Promise<ReturnType<typeof uploadFile>>(
+      (resolve, reject) => {
+        fileInput.addEventListener('change', () => {
+          const selectedFile = fileInput.files?.[0]
+          if (selectedFile) {
+            const mediaFile = uploadFile(selectedFile)
+
+            resolve(mediaFile) // Resolve the promise with the selected file object
+          } else {
+            reject(new Error('No file selected')) // Reject the promise if no file is selected
+          }
+        })
+
+        // In case the user cancels the file selection dialog
+        fileInput.addEventListener('cancel', () => {
+          reject(new Error('File selection canceled'))
+        })
+
+        // Trigger the file input dialog
+        fileInput.click()
+      }
+    )
+
+    const {data, fileUrl, fileThumbUrl} = uploadedData
+    const dimensions = await new Promise<{width: number; height: number}>(
+      resolve => {
+        const img = new Image()
+        img.onload = () => {
+          resolve({width: img.width, height: img.height})
+        }
+        img.src = fileUrl
+      }
+    )
+
+    const newMediaNode: any = {
+      id: data.file_unique_id,
+      createdAt: new Date().toISOString(),
+      modifiedAt: new Date().toISOString(),
+      description: data.file_name,
+      preview: fileThumbUrl ? {url: fileThumbUrl} : undefined,
+      url: fileUrl,
+      width: dimensions.width,
+      height: dimensions.height,
+      revisions: []
+    }
+
+    return newMediaNode
+  }
+
   const handleSelect = (mediaNode: any) => {
     const onSelectEvent = new CustomEvent('mediaNodeSelected', {
       detail: {
@@ -55,7 +113,12 @@ export const MediaModalProvider: React.FC<MediaModalProviderProps> = ({
 
   return (
     <MediaModalContext.Provider
-      value={{MediaModalComponent, isOpen: open.isOpen, toggleModal}}>
+      value={{
+        MediaModalComponent,
+        isOpen: open.isOpen,
+        toggleModal,
+        togglFileSelector
+      }}>
       {open.isOpen && (
         <React.Suspense>
           <MediaModalComponent
@@ -118,6 +181,13 @@ export const useMediaModal = (args?: UseMediaModalArgs) => {
         id: uniqueId,
         isSelector: !!args?.onSelect
       }),
-    isOpen: context.isOpen
+    isOpen: context.isOpen,
+    togglFileSelector: async () => {
+      const mediaFile = await context.togglFileSelector()
+
+      if (mediaFile) {
+        args?.onSelect?.(mediaFile)
+      }
+    }
   }
 }

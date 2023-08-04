@@ -120,6 +120,8 @@ export const AuthenticationProvider: React.FC<{
 
   const logout = useCallback(async () => {
     setIsAuthenticated(false)
+
+    setTokenPair(null)
   }, [setIsAuthenticated])
 
   const bootstrap = useCallback(async () => {

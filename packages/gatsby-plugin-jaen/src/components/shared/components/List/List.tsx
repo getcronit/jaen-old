@@ -29,7 +29,7 @@ export const List: React.FC<ListProps> = props => {
     [children]
   )
   return (
-    <Card bg="bg.subtle">
+    <Card variant="outline">
       <CardHeader>
         {label && (
           <Text noOfLines={1} pb="1">

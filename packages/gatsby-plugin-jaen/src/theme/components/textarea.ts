@@ -1,4 +1,14 @@
 import {mode, StyleFunctionProps, transparentize} from '@chakra-ui/theme-tools'
+import {defineStyle, defineStyleConfig} from '@chakra-ui/styled-system'
+import inputTheme from './input'
+
+const baseStyle = defineStyle({
+  ...inputTheme.baseStyle?.field,
+  paddingY: '2',
+  minHeight: '20',
+  lineHeight: 'short',
+  verticalAlign: 'top'
+})
 
 const variants = {
   outline: (props: StyleFunctionProps) => ({
@@ -16,6 +26,7 @@ const variants = {
   })
 }
 
-export default {
+export default defineStyleConfig({
+  baseStyle,
   variants
-}
+})

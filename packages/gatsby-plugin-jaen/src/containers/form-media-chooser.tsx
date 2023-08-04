@@ -1,4 +1,5 @@
 import {useMediaModal} from '@snek-at/jaen'
+import {useState} from 'react'
 
 import {MediaNode} from '../components/cms/Media/types'
 import {FormMediaChooser} from '../components/shared/FormMediaChooser'
@@ -8,6 +9,8 @@ export interface FormMediaChooserProps {
   onRemove: () => void
   description?: string
   value?: string
+
+  isDirect?: boolean
 }
 
 const FormMediaChooserContainer: React.FC<FormMediaChooserProps> = props => {
@@ -19,7 +22,9 @@ const FormMediaChooserContainer: React.FC<FormMediaChooserProps> = props => {
 
   return (
     <FormMediaChooser
-      onChoose={context.toggleModal}
+      onChoose={
+        props.isDirect ? context.togglFileSelector : context.toggleModal
+      }
       onRemove={props.onRemove}
       description={props.description}
       value={props.value}

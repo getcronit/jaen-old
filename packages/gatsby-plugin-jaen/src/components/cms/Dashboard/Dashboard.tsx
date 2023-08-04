@@ -38,7 +38,7 @@ export const Dashboard: React.FC<DashboardProps> = props => {
 
       <Stack spacing="4">
         <SimpleGrid columns={2} spacing="4">
-          <Card bg="bg.subtle">
+          <Card>
             <CardHeader>
               <HStack>
                 <Icon as={FaBullhorn} boxSize={6} color="brand.500" /> What is
@@ -56,7 +56,7 @@ export const Dashboard: React.FC<DashboardProps> = props => {
               </Text>
             </CardBody>
           </Card>
-          <Card bg="bg.subtle">
+          <Card>
             <CardHeader>
               <HStack>
                 <Icon as={FaRocket} boxSize={6} color="brand.500" />{' '}
