@@ -13,7 +13,8 @@ import {
   GlobalStyle,
   DarkMode,
   useColorMode,
-  Text
+  Text,
+  Box
 } from '@chakra-ui/react'
 import {graphql, HeadFC} from 'gatsby'
 import * as React from 'react'
@@ -162,10 +163,6 @@ const IndexPage: React.FC<PageProps> = () => {
     }
   })
 
-  React.useEffect(() => {
-    alert('IndexPage')
-  }, [])
-
   return (
     <>
       {/* <Text>{cm.colorMode}</Text> */}
@@ -186,8 +183,12 @@ const IndexPage: React.FC<PageProps> = () => {
 
           <button onClick={mediaSelector.toggleModal}>media</button>
 
-          <Field.Image name="image" />
-          <Field.Image name="image2" />
+          <Field.Image name="image" lightbox objectFit="contain" />
+          <Field.Image name="image2" objectFit="contain" />
+
+          <Box boxSize="xs">
+            <Field.Image name="image3" />
+          </Box>
 
           <Field.Text
             style={paragraphStyles}

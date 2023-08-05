@@ -22,7 +22,11 @@ export const colors = {
   black: {
     500: '#333333'
   },
-  brand: baseTheme.colors.red
+  brand: {
+    ...baseTheme.colors.red,
+    500: '#E3000F',
+    600: '#E3000F'
+  }
 }
 
 export const fonts = {

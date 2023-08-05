@@ -1,18 +1,13 @@
-import {Button, HStack} from '@chakra-ui/react'
-import {ChakraProvider} from '@chakra-ui/provider'
+import {HStack} from '@chakra-ui/react'
 import React, {
   createContext,
   forwardRef,
   useCallback,
   useContext,
-  useEffect,
   useRef
 } from 'react'
-import {createRoot} from 'react-dom/client'
-import {useLocation} from '@reach/router'
 
-import {useContentManagement} from '../hooks/use-content-management'
-import ReactDOM, {createPortal} from 'react-dom'
+import {createPortal} from 'react-dom'
 
 export const FIELD_HIGHLIGHTER_CLASSNAMES = {
   JAEN_HIGHLIGHT_FRAME: 'jaen-highlight-frame',

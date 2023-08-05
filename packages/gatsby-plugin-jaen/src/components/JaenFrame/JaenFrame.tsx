@@ -51,7 +51,7 @@ export const JaenFrame: React.FC<JaenFrameProps> = props => {
         zIndex: 'sticky'
       })}
       h="16"
-      p="16px"
+      px="16px"
       borderBottom="1px"
       borderColor="border.emphasized"
       backdropBlur={8}
@@ -59,6 +59,7 @@ export const JaenFrame: React.FC<JaenFrameProps> = props => {
       zIndex="sticky">
       <HStack spacing="5" w="full" h="full">
         <HStack
+          h="full"
           spacing="4"
           w={{
             base: '24',
@@ -71,6 +72,7 @@ export const JaenFrame: React.FC<JaenFrameProps> = props => {
           />
 
           <Box
+            h="full"
             maxW="12rem"
             display={{
               base: 'none',
@@ -85,9 +87,7 @@ export const JaenFrame: React.FC<JaenFrameProps> = props => {
                   content: 'none'
                 }
               }}>
-              {props.logo || (
-                <JaenLogo h="full" w="auto" transform="scale(1.05)" />
-              )}
+              {props.logo || <JaenLogo transform="scale(1.05)" />}
             </Link>
           </Box>
 
@@ -100,8 +100,9 @@ export const JaenFrame: React.FC<JaenFrameProps> = props => {
           </Box>
         </HStack>
 
-        <Box mx="auto">
+        <Box mx="auto" h="full">
           <Box
+            h="full"
             maxW="12rem"
             display={{
               base: 'block',

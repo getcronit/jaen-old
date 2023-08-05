@@ -1,14 +1,18 @@
 import {Box, Button, Center, IconButton, Text} from '@chakra-ui/react'
-import {GatsbyImage, getImage, IGatsbyImageData} from 'gatsby-plugin-image'
-import {CSSProperties, ReactEventHandler, useEffect, useState} from 'react'
-import {FaImage, FaTrash, FaTrashAlt} from 'react-icons/fa'
+import {GatsbyImage, getSrc} from 'gatsby-plugin-image'
+import {
+  CSSProperties,
+  forwardRef,
+  ReactEventHandler,
+  useEffect,
+  useState
+} from 'react'
+import {FaImage, FaTrashAlt} from 'react-icons/fa'
+import {PhotoProvider, PhotoView} from 'react-photo-view'
 import {connectField} from '../../connectors'
-import {useSectionBlockContext} from '../../contexts/block'
 import {useMediaModal} from '../../contexts/media-modal'
-import {PageProvider, usePageContext} from '../../contexts/page'
-import {useField} from '../../hooks/use-field'
-import {JaenPage, MediaNode} from '../../types'
-import {findSection} from '../../utils/page/section'
+import {PageProvider} from '../../contexts/page'
+import {JaenPage} from '../../types'
 import {HighlightTooltip} from '../components/HighlightTooltip'
 import {useImage} from './hooks/use-image'
 
@@ -113,33 +117,20 @@ export const ImageField = connectField<ImageFieldMediaId, ImageFieldProps>(
           />
         ]}>
         <PageProvider jaenPage={cmsMediaJaenPage}>
-          <Box
-            boxSize="full"
-            className="jaen-image-wrapper"
-            cursor={isLightbox ? 'zoom-in' : 'default'}>
-            {value ? (
-              <ImageComponent
-                mediaId={value}
-                fieldName={jaenField.name}
-                onShouldLoadPageData={async () => {
-                  const data = await fetch(
-                    '/page-data/cms/media/page-data.json'
-                  )
+          <ImageComponent
+            mediaId={value}
+            fieldName={jaenField.name}
+            onShouldLoadPageData={async () => {
+              const data = await fetch('/page-data/cms/media/page-data.json')
 
-                  const json = await data.json()
+              const json = await data.json()
 
-                  setCMSMediaJaenPage(json.result.data.jaenPage as JaenPage)
-                }}
-                imageProps={imageProps}
-              />
-            ) : (
-              <Center style={imageProps.style}>
-                <Text color="gray.600" fontSize="sm">
-                  No image
-                </Text>
-              </Center>
-            )}
-          </Box>
+              setCMSMediaJaenPage(json.result.data.jaenPage as JaenPage)
+            }}
+            imageProps={imageProps}
+            lightbox={isLightbox}
+            lightboxGroup={lightboxGroup}
+          />
         </PageProvider>
       </HighlightTooltip>
     )
@@ -149,15 +140,19 @@ export const ImageField = connectField<ImageFieldMediaId, ImageFieldProps>(
   }
 )
 
-const ImageComponent: React.FC<{
-  mediaId: ImageFieldMediaId
-  fieldName: string
-  onShouldLoadPageData: () => void
-  imageProps?: ImageProps
-}> = props => {
-  const image = useImage(props.mediaId, props.fieldName)
+const ImageComponent = forwardRef<
+  HTMLDivElement,
+  {
+    mediaId?: ImageFieldMediaId
+    fieldName: string
+    onShouldLoadPageData: () => void
+    imageProps?: ImageProps
 
-  console.log('liooooop')
+    lightbox?: boolean
+    lightboxGroup?: boolean
+  }
+>((props, ref) => {
+  const image = useImage(props.mediaId || '', props.fieldName)
 
   useEffect(() => {
     if (!image && props.mediaId) {
@@ -166,14 +161,53 @@ const ImageComponent: React.FC<{
   }, [image, props.mediaId])
 
   if (!image) {
-    return null
+    return (
+      <Center
+        ref={ref}
+        boxSize="full"
+        pos={'relative'}
+        overflow="hidden"
+        style={props.imageProps?.style}>
+        <Text color="gray.600" fontSize="sm">
+          No image
+        </Text>
+      </Center>
+    )
   }
 
-  return (
-    <GatsbyImage
-      image={image.image}
-      alt={image.description}
-      {...props.imageProps}
-    />
+  let element = (
+    <Box
+      ref={ref}
+      boxSize="full"
+      pos={'relative'}
+      overflow="hidden"
+      cursor={props.lightbox ? 'zoom-in' : 'default'}>
+      <GatsbyImage
+        image={image.image}
+        alt={image.description}
+        {...props.imageProps}
+        style={{
+          ...props.imageProps?.style,
+          width: '100%',
+          height: '100%'
+        }}
+      />
+    </Box>
   )
-}
+
+  if (props.lightbox) {
+    const src = getSrc(image.image)
+
+    element = <PhotoView src={src}>{element}</PhotoView>
+
+    if (!props.lightboxGroup) {
+      element = (
+        <PhotoProvider maskOpacity={0.8}>
+          <PhotoView src={src}>{element}</PhotoView>
+        </PhotoProvider>
+      )
+    }
+  }
+
+  return element
+})
