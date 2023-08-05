@@ -1,7 +1,6 @@
-import {useMediaModal} from '@snek-at/jaen'
+import {MediaNode, useMediaModal} from '@snek-at/jaen'
 import {useState} from 'react'
 
-import {MediaNode} from '../components/cms/Media/types'
 import {FormMediaChooser} from '../components/shared/FormMediaChooser'
 
 export interface FormMediaChooserProps {

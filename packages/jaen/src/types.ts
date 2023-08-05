@@ -34,6 +34,22 @@ export interface PageConfig {
   theme?: 'jaen'
 }
 
+export interface MediaNode {
+  id: string
+  fileUniqueId: string
+  createdAt: string
+  modifiedAt: string
+  preview?: {
+    url: string
+  }
+  url: string
+  description?: string
+  width: number
+  height: number
+  revisions?: Array<Omit<MediaNode, 'revisions'>>
+  jaenPageId?: string
+}
+
 export interface IWidget {
   nodes: Array<{
     name: string
@@ -106,8 +122,11 @@ export interface JaenPage {
   jaenFields: IJaenFields
   jaenFiles: Array<{
     id: string
-    childImageSharp: {
-      gatsbyImageData: IGatsbyImageData
+    description: string
+    node: {
+      childImageSharp: {
+        gatsbyImageData: IGatsbyImageData
+      }
     }
   }>
   parent: {
@@ -164,8 +183,11 @@ export interface IJaenBlock {
   jaenFields: IJaenFields
   jaenFiles: Array<{
     id: string
-    childImageSharp: {
-      gatsbyImageData: IGatsbyImageData
+    description: string
+    node: {
+      childImageSharp: {
+        gatsbyImageData: IGatsbyImageData
+      }
     }
   }>
 

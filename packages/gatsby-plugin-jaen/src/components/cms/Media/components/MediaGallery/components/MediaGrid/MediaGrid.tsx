@@ -1,7 +1,7 @@
 import {Box, SimpleGrid} from '@chakra-ui/react'
+import {MediaNode} from '@snek-at/jaen'
 import React from 'react'
 
-import {MediaNode} from '../../../../types'
 import {MediaItem} from '../MediaItem/MediaItem'
 
 const MemoedMediaItem = React.memo(MediaItem)

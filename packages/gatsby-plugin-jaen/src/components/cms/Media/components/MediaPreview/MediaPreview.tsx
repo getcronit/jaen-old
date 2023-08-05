@@ -16,6 +16,7 @@ import {
   Spacer,
   Text
 } from '@chakra-ui/react'
+import {MediaNode} from '@snek-at/jaen'
 import {useEffect} from 'react'
 import FilerobotImageEditor, {TABS} from 'react-filerobot-image-editor'
 import {
@@ -27,7 +28,7 @@ import {
 } from 'react-icons/fa'
 import {TransformComponent, TransformWrapper} from 'react-zoom-pan-pinch'
 
-import {MediaNode, MediaPreviewState} from '../../types'
+import {MediaPreviewState} from '../../types'
 
 export interface MediaPreviewProps {
   selectedMediaNode: MediaNode | null

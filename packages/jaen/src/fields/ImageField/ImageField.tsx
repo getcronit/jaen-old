@@ -1,21 +1,30 @@
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  IconButton,
-  Text,
-  Tooltip
-} from '@chakra-ui/react'
-import {useEffect, useMemo, useState} from 'react'
-import {FaEraser} from 'react-icons/fa'
-import {PhotoProvider, PhotoView} from 'react-photo-view'
-
-import {connectField} from '../../connectors/index'
-import {useNotificationsContext} from '../../contexts/notifications'
+import {Box, Button, Center, IconButton, Text} from '@chakra-ui/react'
+import {GatsbyImage, getImage, IGatsbyImageData} from 'gatsby-plugin-image'
+import {CSSProperties, ReactEventHandler, useEffect, useState} from 'react'
+import {FaImage, FaTrash, FaTrashAlt} from 'react-icons/fa'
+import {connectField} from '../../connectors'
+import {useSectionBlockContext} from '../../contexts/block'
+import {useMediaModal} from '../../contexts/media-modal'
+import {PageProvider, usePageContext} from '../../contexts/page'
+import {useField} from '../../hooks/use-field'
+import {JaenPage, MediaNode} from '../../types'
+import {findSection} from '../../utils/page/section'
 import {HighlightTooltip} from '../components/HighlightTooltip'
-import {DataImage} from './DataImage'
-import {ImageFieldValue, ImageProps} from './types'
-import {usePageImage} from './usePageImage'
+import {useImage} from './hooks/use-image'
+
+export interface ImageProps {
+  alt?: string
+  className?: string
+  style?: CSSProperties
+  imgClassName?: string
+  imgStyle?: CSSProperties
+  backgroundColor?: string
+  objectFit?: CSSProperties['objectFit']
+  objectPosition?: CSSProperties['objectPosition']
+  onLoad?: (props: {wasCached: boolean}) => void
+  onError?: ReactEventHandler<HTMLImageElement>
+  onStartLoad?: (props: {wasCached: boolean}) => void
+}
 
 export interface ImageFieldProps extends ImageProps {
   lightbox?: boolean
@@ -52,198 +61,86 @@ export interface ImageFieldProps extends ImageProps {
   overload?: boolean
 }
 
-export const ImageField = connectField<ImageFieldValue, ImageFieldProps>(
-  ({jaenField, defaultValue, lightbox, lightboxGroup, overload, ...props}) => {
-    const {toast, confirm} = useNotificationsContext()
+export type ImageFieldMediaId = string
 
-    // const handleImageChooseClick = (info: {src: string; alt?: string}) => {
-    //   jaenField.onUpdateValue({
-    //     ...jaenField.value,
-    //     internalImageUrl: info.src,
-    //     alt: info.alt
-    //   })
+export const ImageField = connectField<ImageFieldMediaId, ImageFieldProps>(
+  ({
+    jaenField,
+    lightbox,
+    lightboxGroup,
+    defaultValue,
+    overload,
+    ...imageProps
+  }) => {
+    const isLightbox = lightbox && !jaenField.isEditing
 
-    //   toast({
-    //     title: 'Image updated',
-    //     description: 'The image has been updated',
-    //     status: 'info'
-    //   })
-    // }
+    const value = jaenField.value || jaenField.staticValue
 
-    const handleImageClearClick = () => {
-      const updateWhenConfirmed = async () => {
-        const confirmed = await confirm(
-          'Are you sure you want to clear the image?'
-        )
-
-        if (confirmed) {
-          jaenField.onUpdateValue({
-            internalImageUrl: null
-          })
-
-          toast({
-            title: 'Image cleared',
-            description: 'The image has been cleared',
-            status: 'info'
-          })
-        }
+    const context = useMediaModal({
+      onSelect: media => {
+        jaenField.onUpdateValue(media.id)
       }
-
-      void updateWhenConfirmed()
-    }
-
-    // const handleImageAltSaveClick = (value: string) => {
-    //   toast({
-    //     title: 'Image description saved',
-    //     description: 'The image description has been saved',
-    //     status: 'info'
-    //   })
-
-    //   jaenField.onUpdateValue({
-    //     ...jaenField.value,
-    //     alt: value
-    //   })
-    // }
-
-    const value: ImageFieldValue = {
-      ...jaenField.staticValue,
-      ...jaenField.value
-    }
-
-    const [shouldOverload, setShouldOverload] = useState(false)
-
-    useEffect(() => {
-      if (!value.internalImageUrl && defaultValue) {
-        jaenField.onUpdateValue({
-          ...jaenField.value,
-          internalImageUrl: defaultValue
-        })
-      }
-    }, [value])
-
-    const gatsbyImage = usePageImage({
-      id: jaenField?.staticValue?.imageId as string,
-      byFieldName: jaenField.name
     })
 
-    const imageFieldProps = {
-      style: {
-        ...jaenField.style,
-        width: '100%',
-        height: '100%'
-      },
-      ...props,
-      alt: value.alt || props.alt || `${jaenField.name}-image`,
-      title: value.title
+    const handleRemove = () => {
+      jaenField.onUpdateValue(undefined)
     }
 
-    const imageElement = useMemo(() => {
-      const isLightbox = lightbox && !jaenField.isEditing
-
-      const renderAsDynamic =
-        jaenField.value?.internalImageUrl !== undefined || shouldOverload
-
-      const dataImage = (
-        <Box
-          boxSize="full"
-          className="jaen-image-wrapper"
-          cursor={isLightbox ? 'zoom-in' : 'default'}>
-          <DataImage
-            imageFieldProps={imageFieldProps}
-            internalImageUrl={value.internalImageUrl}
-            imageData={gatsbyImage}
-            alt={value.alt}
-            renderAsDynamic={renderAsDynamic}
-            onLoadingComplete={() => {
-              if (overload) {
-                setShouldOverload(true)
-              }
-            }}
-          />
-        </Box>
-      )
-
-      if (isLightbox) {
-        const photo = (
-          <PhotoView
-            src={
-              jaenField.value?.internalImageUrl ||
-              jaenField.staticValue?.internalImageUrl ||
-              undefined
-            }>
-            {dataImage}
-          </PhotoView>
-        )
-
-        if (lightboxGroup) {
-          return photo
-        }
-
-        return <PhotoProvider maskOpacity={0.8}>{photo}</PhotoProvider>
-      }
-
-      return dataImage
-    }, [
-      jaenField,
-      lightbox,
-      lightboxGroup,
-      imageFieldProps,
-      value,
-      gatsbyImage,
-      shouldOverload
-    ])
-
-    console.log('value 2', jaenField.name, value.internalImageUrl)
+    const [cmsMediaJaenPage, setCMSMediaJaenPage] = useState<
+      {id: string} & Partial<JaenPage>
+    >({
+      id: 'JaenPage /cms/media/'
+    })
 
     return (
       <HighlightTooltip
-        id={jaenField.id}
+        id={jaenField.id || jaenField.name}
+        isEditing={jaenField.isEditing}
+        boxSize="full"
+        minH="20"
         actions={[
           <Button
-            variant="field-highlighter-tooltip-text"
-            key={`jaen-highlight-tooltip-text-${jaenField.name}`}>
-            <Tooltip label={`ID: ${jaenField.id}`} placement="top-start">
-              <Text>Image</Text>
-            </Tooltip>
+            variant="field-highlighter-tooltip"
+            leftIcon={<FaImage />}
+            onClick={context.toggleModal}>
+            Image
           </Button>,
-          <ButtonGroup
-            key={`jaen-highlight-tooltip-buttons-${jaenField.name}`}
-            size="xs"
-            spacing="0.5">
-            {/* <ImageChooseButton onClick={handleImageChooseClick} />
+          <IconButton
+            variant="field-highlighter-tooltip"
+            aria-label="Remove"
+            icon={<FaTrashAlt />}
+            onClick={handleRemove}
+          />
+        ]}>
+        <PageProvider jaenPage={cmsMediaJaenPage}>
+          <Box
+            boxSize="full"
+            className="jaen-image-wrapper"
+            cursor={isLightbox ? 'zoom-in' : 'default'}>
+            {value ? (
+              <ImageComponent
+                mediaId={value}
+                fieldName={jaenField.name}
+                onShouldLoadPageData={async () => {
+                  const data = await fetch(
+                    '/page-data/cms/media/page-data.json'
+                  )
 
-            <ImageEditButton
-              src={value.internalImageUrl}
-              name={jaenField.name}
-              onUpdate={({src}) => {
-                jaenField.onUpdateValue({
-                  ...jaenField.value,
-                  internalImageUrl: src
-                })
-              }}
-            /> */}
+                  const json = await data.json()
 
-            <IconButton
-              color="brand.500"
-              variant="field-highlighter-tooltip"
-              icon={<FaEraser />}
-              aria-label="Clear content"
-              onClick={handleImageClearClick}
-            />
-
-            {/* <ImageAltSelector
-              value={value?.alt || ''}
-              onSave={handleImageAltSaveClick}
-            /> */}
-          </ButtonGroup>
-        ]}
-        isEditing={jaenField.isEditing}
-        boxSize="full">
-        {
-          // The box is needed because the highlight tooltip will not work if the image is the only child
-        }
-
-        {imageElement}
+                  setCMSMediaJaenPage(json.result.data.jaenPage as JaenPage)
+                }}
+                imageProps={imageProps}
+              />
+            ) : (
+              <Center style={imageProps.style}>
+                <Text color="gray.600" fontSize="sm">
+                  No image
+                </Text>
+              </Center>
+            )}
+          </Box>
+        </PageProvider>
       </HighlightTooltip>
     )
   },
@@ -251,3 +148,32 @@ export const ImageField = connectField<ImageFieldValue, ImageFieldProps>(
     fieldType: 'IMA:ImageField'
   }
 )
+
+const ImageComponent: React.FC<{
+  mediaId: ImageFieldMediaId
+  fieldName: string
+  onShouldLoadPageData: () => void
+  imageProps?: ImageProps
+}> = props => {
+  const image = useImage(props.mediaId, props.fieldName)
+
+  console.log('liooooop')
+
+  useEffect(() => {
+    if (!image && props.mediaId) {
+      props.onShouldLoadPageData()
+    }
+  }, [image, props.mediaId])
+
+  if (!image) {
+    return null
+  }
+
+  return (
+    <GatsbyImage
+      image={image.image}
+      alt={image.description}
+      {...props.imageProps}
+    />
+  )
+}

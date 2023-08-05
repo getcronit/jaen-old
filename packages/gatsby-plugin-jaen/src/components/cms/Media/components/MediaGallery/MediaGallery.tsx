@@ -18,14 +18,13 @@ import {
   Tag,
   TagCloseButton
 } from '@chakra-ui/react'
+import {MediaNode} from '@snek-at/jaen'
 import React, {useCallback, useEffect, useMemo, useState} from 'react'
 import {useDropzone} from 'react-dropzone'
 import {BsLayoutSidebarInset} from 'react-icons/bs'
 import {
   FaCheck,
-  FaDotCircle,
   FaDownload,
-  FaHandPointer,
   FaMinus,
   FaPlus,
   FaSearch,
@@ -33,11 +32,9 @@ import {
   FaTimes,
   FaTrash
 } from 'react-icons/fa'
-import {useLocation} from '@reach/router'
 
-import {MediaNode, MediaPreviewState} from '../../types'
+import {MediaPreviewState} from '../../types'
 import {MediaGrid} from './components/MediaGrid/MediaGrid'
-import {FaRadio} from 'react-icons/fa6'
 
 export interface MediaGalleryProps {
   mediaNodes: MediaNode[]

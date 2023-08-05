@@ -1,7 +1,8 @@
 import React, {useEffect, useMemo, useState} from 'react'
-import {uploadFile, useField} from '@snek-at/jaen'
+import {MediaNode, uploadFile, useField} from '@snek-at/jaen'
+import {v4 as uuidv4} from 'uuid'
+
 import {Media, MediaProps} from '../components/cms/Media/Media'
-import {MediaNode} from '../components/cms/Media/types'
 import {useCMSManagement, withCMSManagement} from '../connectors/cms-management'
 
 export interface MediaContainerProps {
@@ -41,7 +42,8 @@ const MediaContainer: React.FC<MediaContainerProps> = props => {
           )
 
           const newMediaNode: MediaNode = {
-            id: data.file_unique_id,
+            id: uuidv4(),
+            fileUniqueId: data.file_unique_id,
             createdAt: new Date().toISOString(),
             modifiedAt: new Date().toISOString(),
             description: data.file_name,
@@ -173,7 +175,9 @@ const MediaContainer: React.FC<MediaContainerProps> = props => {
     if (media.file) {
       try {
         // upload new file
-        const {fileUrl, fileThumbUrl} = await uploadFile(media.file)
+        const {fileUrl, fileThumbUrl, data} = await uploadFile(media.file)
+
+        updatedMedia.fileUniqueId = data.file_unique_id
 
         updatedMedia.modifiedAt = new Date().toISOString()
         updatedMedia.url = fileUrl

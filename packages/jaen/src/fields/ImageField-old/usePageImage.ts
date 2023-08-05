@@ -4,10 +4,15 @@ import {useSectionBlockContext} from '../../contexts/block'
 import {usePageContext} from '../../contexts/page'
 import {findSection} from '../../utils/page/section'
 
+export interface UsePageImageReturn {
+  image: IGatsbyImageData
+  description: string
+}
+
 export function usePageImage(options: {
   id: string
   byFieldName?: string
-}): IGatsbyImageData | undefined {
+}): UsePageImageReturn | undefined {
   const {id, byFieldName} = options
 
   const {jaenPage} = usePageContext()
@@ -39,8 +44,13 @@ export function usePageImage(options: {
     }
   }
 
-  if (file) {
-    return getImage(file.childImageSharp.gatsbyImageData)
+  const image = getImage(file.node.childImageSharp.gatsbyImageData)
+
+  if (image) {
+    return {
+      image,
+      description: file.description
+    }
   }
 
   return undefined

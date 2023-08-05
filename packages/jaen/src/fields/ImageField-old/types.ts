@@ -13,10 +13,3 @@ export interface ImageProps {
   onError?: ReactEventHandler<HTMLImageElement>
   onStartLoad?: (props: {wasCached: boolean}) => void
 }
-
-export interface ImageFieldValue {
-  title?: string
-  alt?: string
-  imageId?: string
-  internalImageUrl?: string | null
-}

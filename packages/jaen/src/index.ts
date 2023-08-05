@@ -17,7 +17,7 @@ export {
 export {usePageContext, PageProvider} from './contexts/page'
 export {Field} from './fields'
 export {useField} from './hooks/use-field'
-export {JaenPage, PageConfig, PageProps, JaenTemplate} from './types'
+export {JaenPage, PageConfig, PageProps, JaenTemplate, MediaNode} from './types'
 export {generatePageOriginPath} from './utils/path'
 export * from './utils/open-storage-gateway'
 

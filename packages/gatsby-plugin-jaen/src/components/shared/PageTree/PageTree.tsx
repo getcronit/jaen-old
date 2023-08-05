@@ -28,7 +28,11 @@ export const PageTree: React.FC<PageTreeProps> = ({tree}) => {
     <UncontrolledTreeEnvironment
       dataProvider={provider}
       getItemTitle={item => item.data}
-      viewState={{}}
+      viewState={{
+        'tree-1': {
+          expandedItems: ['root', 'JaenPage /']
+        }
+      }}
       renderTreeContainer={props => (
         <Box
           w="full"

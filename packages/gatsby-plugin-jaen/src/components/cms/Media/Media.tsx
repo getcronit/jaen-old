@@ -5,8 +5,10 @@ import {
   HStack,
   IconButton,
   Stack,
-  StackDivider
+  StackDivider,
+  Text
 } from '@chakra-ui/react'
+import {MediaNode} from '@snek-at/jaen'
 import React, {useEffect, useState} from 'react'
 
 import {BsLayoutSidebarInset} from 'react-icons/bs'
@@ -15,7 +17,7 @@ import {PageTree} from '../../shared/PageTree/PageTree'
 import {TreeNode} from '../Pages/shared/PageVisualizer'
 import {MediaGallery} from './components/MediaGallery/MediaGallery'
 import {MediaPreview} from './components/MediaPreview/MediaPreview'
-import {MediaNode, MediaPreviewState} from './types'
+import {MediaPreviewState} from './types'
 
 export interface MediaProps {
   mediaNodes: MediaNode[]
@@ -108,9 +110,9 @@ export const Media: React.FC<MediaProps> = ({
             <Heading size="xs">Media</Heading>
 
             <Stack>
-              <Button size="sm" variant="outline" onClick={() => {}}>
-                Upload
-              </Button>
+              <Text fontSize="sm" fontWeight="bold">
+                All media
+              </Text>
             </Stack>
           </Stack>
 

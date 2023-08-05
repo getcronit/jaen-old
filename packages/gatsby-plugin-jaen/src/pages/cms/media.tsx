@@ -1,5 +1,5 @@
 import {PageConfig} from '@snek-at/jaen'
-import {PageProps} from 'gatsby'
+import {graphql, PageProps} from 'gatsby'
 
 import {JaenPageLayout} from '../../components/JaenPageLayout/JaenPageLayout'
 import MediaContainer from '../../containers/media'
@@ -38,3 +38,9 @@ export const pageConfig: PageConfig = {
   },
   theme: 'jaen'
 }
+
+export const query = graphql`
+  query ($jaenPageId: String!) {
+    ...JaenPageQuery
+  }
+`

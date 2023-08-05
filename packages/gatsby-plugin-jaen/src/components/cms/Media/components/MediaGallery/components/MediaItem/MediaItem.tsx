@@ -6,8 +6,8 @@ import {
   Stack,
   Textarea
 } from '@chakra-ui/react'
+import {MediaNode} from '@snek-at/jaen'
 import {MouseEventHandler} from 'react'
-import {MediaNode} from '../../../../types'
 
 export interface MediaItemProps {
   node: MediaNode

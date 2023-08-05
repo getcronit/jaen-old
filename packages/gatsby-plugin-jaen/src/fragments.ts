@@ -56,12 +56,15 @@ export const fragments = graphql`
     jaenFields
     jaenFiles {
       id
-      childImageSharp {
-        gatsbyImageData(
-          placeholder: BLURRED
-          formats: [AUTO, WEBP, AVIF]
-          layout: FULL_WIDTH
-        )
+      description
+      node {
+        childImageSharp {
+          gatsbyImageData(
+            placeholder: BLURRED
+            formats: [AUTO, WEBP, AVIF]
+            layout: FULL_WIDTH
+          )
+        }
       }
     }
   }
@@ -90,12 +93,15 @@ export const fragments = graphql`
     }
     jaenFiles {
       id
-      childImageSharp {
-        gatsbyImageData(
-          placeholder: BLURRED
-          formats: [AUTO, WEBP, AVIF]
-          layout: FULL_WIDTH
-        )
+      description
+      node {
+        childImageSharp {
+          gatsbyImageData(
+            placeholder: BLURRED
+            formats: [AUTO, WEBP, AVIF]
+            layout: FULL_WIDTH
+          )
+        }
       }
     }
     sections {
@@ -157,12 +163,15 @@ export const fragments = graphql`
     jaenFields
     jaenFiles {
       id
-      childImageSharp {
-        gatsbyImageData(
-          placeholder: BLURRED
-          formats: [AUTO, WEBP, AVIF]
-          layout: FULL_WIDTH
-        )
+      description
+      node {
+        childImageSharp {
+          gatsbyImageData(
+            placeholder: BLURRED
+            formats: [AUTO, WEBP, AVIF]
+            layout: FULL_WIDTH
+          )
+        }
       }
     }
   }

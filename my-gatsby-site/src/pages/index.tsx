@@ -162,6 +162,10 @@ const IndexPage: React.FC<PageProps> = () => {
     }
   })
 
+  React.useEffect(() => {
+    alert('IndexPage')
+  }, [])
+
   return (
     <>
       {/* <Text>{cm.colorMode}</Text> */}
@@ -183,13 +187,14 @@ const IndexPage: React.FC<PageProps> = () => {
           <button onClick={mediaSelector.toggleModal}>media</button>
 
           <Field.Image name="image" />
-          <p style={paragraphStyles}>
-            <Field.Text
-              name="text"
-              defaultValue=" Edit <code style={codeStyles}>src/pages/index.tsx</code> to see this
+          <Field.Image name="image2" />
+
+          <Field.Text
+            style={paragraphStyles}
+            name="text"
+            defaultValue=" Edit <code style={codeStyles}>src/pages/index.tsx</code> to see this
         page update in real-time. 😎"
-            />
-          </p>
+          />
           <ul style={doclistStyles}>
             {docLinks.map(doc => (
               <li key={doc.url} style={docLinkStyle}>

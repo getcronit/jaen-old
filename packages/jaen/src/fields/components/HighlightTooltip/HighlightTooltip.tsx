@@ -1,10 +1,10 @@
 import {As, Box, BoxProps} from '@chakra-ui/react'
-import React, {forwardRef, useCallback, useMemo} from 'react'
+import React, {forwardRef, useCallback, useEffect, useMemo} from 'react'
 
 import {useHighlight} from '../../../contexts/field-highlighter'
 
 export interface HighlightTooltipProps extends Omit<BoxProps, 'children'> {
-  id?: string
+  id: string
   children?:
     | React.ReactNode
     | ((props: {
@@ -20,7 +20,7 @@ export interface HighlightTooltipProps extends Omit<BoxProps, 'children'> {
 export const HighlightTooltip = forwardRef<
   HTMLDivElement,
   HighlightTooltipProps
->(({actions, as, asAs, isEditing, children, ...props}, ref) => {
+>(({id, actions, as, asAs, isEditing, children, ...props}, ref) => {
   const {ref: highlightRef} = useHighlight({tooltipButtons: actions})
 
   const setRefs = useCallback(
@@ -33,9 +33,9 @@ export const HighlightTooltip = forwardRef<
         if (ref) ref.current = node
       }
 
-      highlightRef(node)
+      highlightRef(node, id)
     },
-    [ref, highlightRef]
+    [ref, highlightRef, id]
   )
 
   const Wrapper = as || Box
@@ -53,7 +53,7 @@ export const HighlightTooltip = forwardRef<
       <Wrapper
         {...props}
         as={asAs}
-        id={props.id}
+        id={id}
         _focus={{
           outline: 'none'
         }}>
@@ -67,7 +67,7 @@ export const HighlightTooltip = forwardRef<
       {...props}
       ref={setRefs}
       as={asAs}
-      id={props.id}
+      id={id}
       tabIndex={isEditing ? 1 : undefined}
       _focus={{
         outline: 'none'

@@ -191,13 +191,19 @@ export const createSchemaCustomization: GatsbyNode['onCreateWebpackConfig'] = ({
       childTemplates: [JaenTemplate!]! @link
     }
 
+    type MediaNode implements Node {
+      id: ID!
+      description: String!
+      node: File! @file
+    }
+
     type JaenPage implements Node {
       id: ID!
       slug: String!
       jaenPageMetadata: JaenPageMetadata!
       jaenFields: JSON
-      jaenFile: File @file
-      jaenFiles: [File] @link
+      jaenFile: MediaNode
+      jaenFiles: [MediaNode] @link
 
       sections: [JaenSection!]!
 
@@ -223,8 +229,8 @@ export const createSchemaCustomization: GatsbyNode['onCreateWebpackConfig'] = ({
       ptrPrev: String
       ptrNext: String
       jaenFields: JSON
-      jaenFiles: [File] @link
-      jaenFile: File @file
+      jaenFile: MediaNode
+      jaenFiles: [MediaNode] @link
 
       sections: [JaenSection!]!
     }
@@ -340,8 +346,6 @@ export const onCreatePage: GatsbyNode['onCreatePage'] = async ({
         context: {...page.context, jaenPageId, pageConfig}
       })
     }
-
-    console.log(store.getState().components.values())
   }
 }
 
@@ -486,8 +490,6 @@ export const onCreateNode: GatsbyNode['onCreateNode'] = async ({
     }
 
     // Create link to other templates
-
-    console.log('templateNode', templateNode)
 
     actions.createNode({
       ...templateNode,

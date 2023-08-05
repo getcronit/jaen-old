@@ -5,9 +5,8 @@ import {
   ModalContent,
   ModalOverlay
 } from '@chakra-ui/react'
-import {PageProvider, useMediaModal} from '@snek-at/jaen'
+import {MediaNode, PageProvider, useMediaModal} from '@snek-at/jaen'
 
-import {MediaNode} from '../components/cms/Media/types'
 import Media from './media'
 
 export interface MediaSelectorProps {

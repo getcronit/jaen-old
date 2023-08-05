@@ -1,4 +1,4 @@
-import {HStack} from '@chakra-ui/react'
+import {Button, HStack} from '@chakra-ui/react'
 import {ChakraProvider} from '@chakra-ui/provider'
 import React, {
   createContext,
@@ -9,8 +9,10 @@ import React, {
   useRef
 } from 'react'
 import {createRoot} from 'react-dom/client'
+import {useLocation} from '@reach/router'
 
 import {useContentManagement} from '../hooks/use-content-management'
+import ReactDOM, {createPortal} from 'react-dom'
 
 export const FIELD_HIGHLIGHTER_CLASSNAMES = {
   JAEN_HIGHLIGHT_FRAME: 'jaen-highlight-frame',
@@ -18,7 +20,11 @@ export const FIELD_HIGHLIGHTER_CLASSNAMES = {
 }
 
 export interface FieldHighlighterProviderContextValue {
-  ref: (ref: HTMLDivElement | null, actions: React.ReactNode[]) => void
+  ref: (
+    ref: HTMLDivElement | null,
+    id: string,
+    actions: React.ReactNode[]
+  ) => void
 }
 
 export const FieldHighlighterProviderContext =
@@ -62,14 +68,16 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
 export const FieldHighlighterProvider: React.FC<
   HighlightProviderProps
 > = props => {
-  const itemsRef = useRef<
-    Array<{
+  const itemsRef = useRef<{
+    [id: string]: {
       ref: HTMLDivElement | null
       tooltipButtons: React.ReactNode[]
-    }>
-  >([])
+    }
+  }>({})
 
   const tooltipHightRef = useRef<HTMLDivElement | null>(null)
+
+  let resizeObserver = useRef<ResizeObserver | null>(null)
 
   const setHighlight = (element: HTMLElement) => {
     const appRoot = document.getElementById('___gatsby')
@@ -113,9 +121,13 @@ export const FieldHighlighterProvider: React.FC<
 
     tooltipRoot.style.pointerEvents = 'none'
 
+    if (resizeObserver.current) {
+      resizeObserver.current.disconnect()
+    }
+
     // Positions
     // add a observer to the frameRoot to re-position it when the element moves or resizes
-    const observer = new ResizeObserver(entries => {
+    resizeObserver.current = new ResizeObserver(entries => {
       const entry = entries[0]
 
       if (!entry) return
@@ -134,24 +146,13 @@ export const FieldHighlighterProvider: React.FC<
       tooltipRoot.style.width = '100%'
     })
 
-    observer.observe(element)
+    resizeObserver.current.observe(element)
 
-    const item = itemsRef.current.find(item => item.ref === element)
+    const item = Object.values(itemsRef.current).find(
+      item => item.ref === element
+    )
 
-    if (item?.ref) {
-      const tooltipButtons = item?.tooltipButtons || []
-      const root = createRoot(tooltipRoot)
-
-      root.render(
-        <ChakraProvider
-          theme={props.theme}
-          cssVarsRoot="#coco"
-          disableEnvironment
-          disableGlobalStyle>
-          <Tooltip actions={tooltipButtons} ref={tooltipHightRef} />
-        </ChakraProvider>
-      )
-    }
+    spawnTooltip(item?.tooltipButtons)
   }
 
   const findClosestParentMatching = (
@@ -173,9 +174,8 @@ export const FieldHighlighterProvider: React.FC<
     return null
   }
 
-  const {isEditing} = useContentManagement()
-
   const mouseEnterHandler = useCallback((e: MouseEvent) => {
+    console.log('mouseEnterHandler')
     const element = e.target as HTMLElement
 
     element.focus({
@@ -183,10 +183,14 @@ export const FieldHighlighterProvider: React.FC<
     })
   }, [])
 
+  console.log('itemsRef.current.le', itemsRef.current.length)
+
   const mouseLeaveHandler = useCallback((e: MouseEvent) => {
     const relatedTarget = e.relatedTarget as HTMLElement
 
-    const nextItem = itemsRef.current.find(item => item.ref === relatedTarget)
+    const nextItem = Object.values(itemsRef.current).find(
+      item => item.ref === relatedTarget
+    )
 
     if (nextItem) {
       nextItem?.ref?.focus({
@@ -194,11 +198,11 @@ export const FieldHighlighterProvider: React.FC<
       })
     } else {
       const closestParent = findClosestParentMatching(relatedTarget, element =>
-        itemsRef.current.some(item => item.ref === element)
+        Object.values(itemsRef.current).some(item => item.ref === element)
       )
 
       if (closestParent) {
-        const closestItem = itemsRef.current.find(
+        const closestItem = Object.values(itemsRef.current).find(
           item => item.ref === closestParent.element
         )
 
@@ -229,6 +233,7 @@ export const FieldHighlighterProvider: React.FC<
   }, [])
 
   const blurHandler = useCallback((e: FocusEvent) => {
+    console.log('blurHandler')
     const highlightRoot = document.querySelector(
       `.${FIELD_HIGHLIGHTER_CLASSNAMES.JAEN_HIGHLIGHT_FRAME}`
     )
@@ -252,64 +257,69 @@ export const FieldHighlighterProvider: React.FC<
   }, [])
 
   const ref = useCallback(
-    (ref: HTMLDivElement | null, tooltipButtons: React.ReactNode[]) => {
+    (
+      ref: HTMLDivElement | null,
+      id: string,
+      tooltipButtons: React.ReactNode[]
+    ) => {
       if (ref) {
+        console.log('LENGTH', itemsRef.current)
+
+        if (itemsRef.current[id]) {
+          const oldRef = itemsRef.current[id]?.ref
+
+          if (oldRef) {
+            // remove old event listeners
+            oldRef.removeEventListener('mouseenter', mouseEnterHandler)
+            oldRef.removeEventListener('mouseleave', mouseLeaveHandler)
+            oldRef.removeEventListener('focus', focusHandler)
+            oldRef.removeEventListener('blur', blurHandler)
+          }
+        }
+
+        itemsRef.current[id] = {ref, tooltipButtons}
+
         ref.addEventListener('mouseenter', mouseEnterHandler)
         ref.addEventListener('mouseleave', mouseLeaveHandler)
         ref.addEventListener('focus', focusHandler)
         ref.addEventListener('blur', blurHandler)
-
-        const index = itemsRef.current.findIndex(item => {
-          return item.ref === ref
-        })
-
-        if (index === -1) {
-          itemsRef.current.push({ref, tooltipButtons})
-        }
-
-        // if tooltipButtons are different, update it
-        else if (itemsRef.current[index]?.tooltipButtons !== tooltipButtons) {
-          itemsRef.current[index] = {ref, tooltipButtons}
-        }
       }
     },
-    [itemsRef.current]
+    [
+      // itemsRef.current,
+      mouseEnterHandler,
+      mouseLeaveHandler,
+      focusHandler,
+      blurHandler
+    ]
   )
 
-  useEffect(() => {
-    for (const item of itemsRef.current) {
-      // append event listeners if not already appended
-      if (!item.ref) continue
+  const [portaledTooltip, setPortaledTooltip] = React.useState<JSX.Element>()
 
-      if (isEditing) {
-        item.ref.addEventListener('mouseenter', mouseEnterHandler)
-        item.ref.addEventListener('mouseleave', mouseLeaveHandler)
-        item.ref.addEventListener('focus', focusHandler)
-        item.ref.addEventListener('blur', blurHandler)
-      }
-    }
+  const spawnTooltip = useCallback((tooltipButtons: React.ReactNode[] = []) => {
+    const tooltipRoot = document.querySelector(
+      `.${FIELD_HIGHLIGHTER_CLASSNAMES.JAEN_HIGHLIGHT_TOOLTIP}`
+    )
+
+    if (!tooltipRoot) return
+
+    const portal = createPortal(
+      <Tooltip actions={tooltipButtons} ref={tooltipHightRef} />,
+      tooltipRoot
+    )
+
+    setPortaledTooltip(portal)
 
     return () => {
-      for (const item of itemsRef.current) {
-        if (!item.ref) continue
-
-        item.ref.removeEventListener('mouseenter', mouseEnterHandler)
-        item.ref.removeEventListener('mouseleave', mouseLeaveHandler)
-        item.ref.removeEventListener('focus', focusHandler)
-        item.ref.removeEventListener('blur', blurHandler)
-      }
+      setPortaledTooltip(undefined)
     }
-  }, [
-    isEditing,
-    itemsRef.current,
-    mouseEnterHandler,
-    mouseLeaveHandler,
-    focusHandler,
-    blurHandler
-  ])
+  }, [])
+
+  console.log('portaledTooltip', portaledTooltip)
 
   return (
     <FieldHighlighterProviderContext.Provider value={{ref}}>
+      {portaledTooltip}
       {props.children}
     </FieldHighlighterProviderContext.Provider>
   )
@@ -323,8 +333,9 @@ export const useHighlight = ({tooltipButtons}: UseHighlightProps) => {
   const {ref} = useContext(FieldHighlighterProviderContext)
 
   const refOnly = useCallback(
-    (theRef: HTMLDivElement | null) => {
-      ref(theRef, tooltipButtons)
+    (theRef: HTMLDivElement | null, id: string) => {
+      console.log('theRef', theRef)
+      ref(theRef, id, tooltipButtons)
     },
     [tooltipButtons, ref]
   )

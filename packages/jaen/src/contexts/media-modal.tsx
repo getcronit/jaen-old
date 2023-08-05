@@ -1,5 +1,6 @@
 import React, {createContext, useContext, useEffect, useState} from 'react'
 import {v4 as uuidv4} from 'uuid' // Import uuid to generate unique IDs
+import {MediaNode} from '../types'
 import {uploadFile} from '../utils/open-storage-gateway'
 
 // Define the context type
@@ -7,7 +8,7 @@ type MediaModalContextType = {
   isOpen: boolean
   MediaModalComponent: React.LazyExoticComponent<any>
   toggleModal: (args?: {isSelector?: boolean; id?: string}) => void
-  togglFileSelector: () => Promise<any>
+  togglFileSelector: () => Promise<MediaNode>
 }
 
 // Create the initial context with default values
@@ -15,7 +16,7 @@ const MediaModalContext = createContext<MediaModalContextType>({
   isOpen: false,
   MediaModalComponent: undefined as any,
   toggleModal: () => {},
-  togglFileSelector: () => Promise.resolve()
+  togglFileSelector: () => Promise.resolve({} as MediaNode)
 })
 
 export interface MediaModalProviderProps {
@@ -86,8 +87,9 @@ export const MediaModalProvider: React.FC<MediaModalProviderProps> = ({
       }
     )
 
-    const newMediaNode: any = {
-      id: data.file_unique_id,
+    const newMediaNode: MediaNode = {
+      id: uuidv4(),
+      fileUniqueId: data.file_unique_id,
       createdAt: new Date().toISOString(),
       modifiedAt: new Date().toISOString(),
       description: data.file_name,
@@ -101,7 +103,7 @@ export const MediaModalProvider: React.FC<MediaModalProviderProps> = ({
     return newMediaNode
   }
 
-  const handleSelect = (mediaNode: any) => {
+  const handleSelect = (mediaNode: MediaNode) => {
     const onSelectEvent = new CustomEvent('mediaNodeSelected', {
       detail: {
         mediaNode,
@@ -133,7 +135,7 @@ export const MediaModalProvider: React.FC<MediaModalProviderProps> = ({
 }
 
 export interface UseMediaModalArgs {
-  onSelect?: (mediaNode: any) => void
+  onSelect?: (mediaNode: MediaNode) => void
 }
 
 export const useMediaModal = (args?: UseMediaModalArgs) => {
