@@ -1,5 +1,5 @@
 import {Badge, Box, ChakraProvider, HStack, Icon} from '@chakra-ui/react'
-import React from 'react'
+import React, {useEffect, useRef} from 'react'
 import {FaPlus} from 'react-icons/fa'
 import theme from '../../theme/theme'
 
@@ -40,15 +40,51 @@ export interface JaenFrameProps {
 }
 
 export const JaenFrame: React.FC<JaenFrameProps> = props => {
+  // const headerRef = useRef<HTMLHeadingElement | null>(null)
+  // const prevScrollPosRef = useRef<number>(0)
+  // const visibleRef = useRef<boolean>(true)
+
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     const currentScrollPos = window.pageYOffset
+  //     const scrollThreshold = 200 // Threshold in pixels
+
+  //     if (
+  //       currentScrollPos > prevScrollPosRef.current &&
+  //       currentScrollPos > scrollThreshold
+  //     ) {
+  //       // Scrolling down and past the threshold
+  //       visibleRef.current = false
+  //     } else {
+  //       // Scrolling up or within the threshold
+  //       visibleRef.current = true
+  //     }
+
+  //     prevScrollPosRef.current = currentScrollPos
+
+  //     if (headerRef.current) {
+  //       headerRef.current.style.top = visibleRef.current ? '0' : '-100%'
+  //     }
+  //   }
+
+  //   window.addEventListener('scroll', handleScroll)
+
+  //   return () => {
+  //     window.removeEventListener('scroll', handleScroll)
+  //   }
+  // }, [])
+
   return (
     <HStack
+      // ref={headerRef}
       id="coco"
       as="header"
       bg="bg.subtle"
       {...(!props.navigation.isStickyDisabled && {
         pos: 'sticky',
         top: '0',
-        zIndex: 'sticky'
+        zIndex: 'sticky',
+        transition: 'top 0.3s'
       })}
       h="16"
       px="16px"

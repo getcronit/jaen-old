@@ -85,6 +85,14 @@ const Slice: React.FC<SliceProps> = props => {
               icon: FaEdit,
               onClick: () => {
                 manager.setIsEditing(!manager.isEditing)
+
+                toast({
+                  title: 'Edit mode',
+                  description: !manager.isEditing
+                    ? 'You can now edit the page'
+                    : 'You can no longer edit the page',
+                  status: !manager.isEditing ? 'success' : 'info'
+                })
               }
             },
             save: {
@@ -92,6 +100,12 @@ const Slice: React.FC<SliceProps> = props => {
               icon: FaFileDownload,
               onClick: () => {
                 manager.draft.save()
+
+                toast({
+                  title: 'Saved',
+                  description: 'Your changes have been saved',
+                  status: 'success'
+                })
               }
             },
             import: {
@@ -129,7 +143,10 @@ const Slice: React.FC<SliceProps> = props => {
               }
             },
             publish: {
-              label: 'Publish',
+              label: `Publish ${
+                manager.isPublishing ? 'in progress' : 'changes'
+              }`,
+              isLoading: manager.isPublishing,
               icon: FaGlobe,
               onClick: () => {
                 manager.setIsPublishing(true)

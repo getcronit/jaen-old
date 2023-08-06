@@ -4,6 +4,7 @@ import {
   Icon,
   List,
   ListItem,
+  Spinner,
   Stack,
   StackDivider,
   Text
@@ -15,6 +16,7 @@ interface NavigationItem {
   label: string
   onClick?: () => void
   path?: string
+  isLoading?: boolean
 }
 
 interface NavigationGroup {
@@ -48,12 +50,16 @@ export const NavigationGroups: React.FC<NavigationGroupsProps> = ({
                     <Link
                       as={Button}
                       leftIcon={
-                        <Icon
-                          as={value.icon}
-                          fontSize="lg"
-                          mr="2"
-                          color="brand.500"
-                        />
+                        value.isLoading ? (
+                          <Spinner mr="2" size="sm" />
+                        ) : (
+                          <Icon
+                            as={value.icon}
+                            fontSize="lg"
+                            mr="2"
+                            color="brand.500"
+                          />
+                        )
                       }
                       variant="ghost"
                       w="full"

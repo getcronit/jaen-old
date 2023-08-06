@@ -35,9 +35,7 @@ const MediaContainer: React.FC<MediaContainerProps> = props => {
   const manager = useCMSManagement()
 
   useEffect(() => {
-    if (field.value) {
-      setMediaNodes(field.value)
-    }
+    setMediaNodes(field.value || field.staticValue || {})
   }, [field.value])
 
   const [defaultSelected, setDefaultSelected] = useState<string | undefined>(
