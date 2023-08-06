@@ -16,6 +16,8 @@ export const generatePageOriginPath = (
   const parentId = node.parent?.id
   const parent = allNodes.find(n => n.id === parentId)
 
+  console.log('parent', allNodes, parentId)
+
   if (parent) {
     return generatePageOriginPath(
       allNodes,

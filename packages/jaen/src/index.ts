@@ -21,4 +21,5 @@ export {JaenPage, PageConfig, PageProps, JaenTemplate, MediaNode} from './types'
 export {generatePageOriginPath} from './utils/path'
 export * from './utils/open-storage-gateway'
 
+export {useDynamicPaths} from './hooks/use-dynamic-paths'
 export {useMediaModal, MediaModalProvider} from './contexts/media-modal'

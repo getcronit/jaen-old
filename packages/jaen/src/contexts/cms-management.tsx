@@ -140,6 +140,21 @@ export const CMSManagementProvider = withRedux(
         }
       }
 
+      for (const pageId of Object.keys(dict)) {
+        // filter out deleted pages
+        if (dict[pageId]?.isDeleted) {
+          delete dict[pageId]
+        }
+
+        // filter out deleted children
+        if (dict[pageId]?.children) {
+          dict[pageId] = {
+            ...dict[pageId],
+            children: dict[pageId]?.children?.filter(child => !child.deleted)
+          }
+        }
+      }
+
       return dict
     }, [dynamicPagesDict, staticPages])
 
@@ -210,6 +225,8 @@ export const CMSManagementProvider = withRedux(
       pageId: string,
       updatedPage: Partial<JaenPage>
     ): void => {
+      const page = pagesDict[pageId]
+
       // check if slug is unique when moving page
       if (updatedPage.parent?.id) {
         const slug = updatedPage.slug || 'new-page'
@@ -226,7 +243,8 @@ export const CMSManagementProvider = withRedux(
       dispatch(
         pageActions.page_updateOrCreate({
           id: pageId,
-          ...updatedPage
+          ...updatedPage,
+          fromId: page?.parent?.id
         })
       )
     }

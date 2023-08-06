@@ -1,14 +1,18 @@
-import {Button, Flex, GlobalStyle, ThemeProvider} from '@chakra-ui/react'
+import {Flex, GlobalStyle, ThemeProvider} from '@chakra-ui/react'
 import {
+  JaenPage,
   PageConfig,
   PageProvider,
   useAuthenticationContext,
   withAuthentication
 } from '@snek-at/jaen'
-import {GatsbyBrowser, navigate, Slice} from 'gatsby'
+import {withRedux} from '@snek-at/jaen/src/redux'
+import {GatsbyBrowser, navigate, PageProps, Slice} from 'gatsby'
 import React, {useMemo} from 'react'
 
 import userTheme from '../theme/theme'
+import {DynamicPageRenderer} from './DynamicPageRenderer'
+import {useJaenPagePaths} from './jaen-page-paths'
 
 // Import other necessary components here
 
@@ -18,15 +22,24 @@ interface PageContext {
 }
 
 interface CustomPageElementProps {
-  element: React.ReactNode
-  props: {pageContext?: PageContext}
+  pageProps: PageProps<
+    {
+      jaenPage?: JaenPage
+      allJaenPage?: {
+        nodes: Array<JaenPage>
+      }
+    },
+    PageContext
+  >
+
+  children: React.ReactNode
 }
 
 const CustomPageElement: React.FC<CustomPageElementProps> = ({
-  element,
-  props
+  children,
+  pageProps
 }) => {
-  const shouldUseJaenTheme = props.pageContext?.pageConfig?.theme === 'jaen'
+  const shouldUseJaenTheme = pageProps.pageContext?.pageConfig?.theme === 'jaen'
 
   const AuthenticatedPage = useMemo(
     () =>
@@ -46,17 +59,17 @@ const CustomPageElement: React.FC<CustomPageElementProps> = ({
 
           return <>{children}</>
         },
-        props.pageContext?.pageConfig,
+        pageProps.pageContext?.pageConfig,
         {
           onRedirectToLogin: () => {
             navigate('/login')
           }
         }
       ),
-    [props.pageContext?.pageConfig]
+    [pageProps.pageContext?.pageConfig]
   )
 
-  const withoutJaenFrame = props.pageContext?.pageConfig?.withoutJaenFrame
+  const withoutJaenFrame = pageProps.pageContext?.pageConfig?.withoutJaenFrame
 
   const AuthenticatedJaenFrame = useMemo(
     () =>
@@ -64,11 +77,11 @@ const CustomPageElement: React.FC<CustomPageElementProps> = ({
         () => (
           <Slice
             alias="jaen-frame"
-            jaenPageId={props.pageContext?.jaenPageId}
-            pageConfig={props.pageContext?.pageConfig as any}
+            jaenPageId={pageProps.pageContext?.jaenPageId}
+            pageConfig={pageProps.pageContext?.pageConfig as any}
           />
         ),
-        props.pageContext?.pageConfig,
+        pageProps.pageContext?.pageConfig,
         {
           forceAuth: true,
           onRedirectToLogin: () => {
@@ -76,7 +89,7 @@ const CustomPageElement: React.FC<CustomPageElementProps> = ({
           }
         }
       ),
-    [props.pageContext?.jaenPageId, props.pageContext?.pageConfig]
+    [pageProps.pageContext?.jaenPageId, pageProps.pageContext?.pageConfig]
   )
 
   const authentication = useAuthenticationContext()
@@ -87,7 +100,7 @@ const CustomPageElement: React.FC<CustomPageElementProps> = ({
         pos="relative"
         flexDirection="column"
         visibility={
-          props.pageContext?.pageConfig?.auth?.isRequired &&
+          pageProps.pageContext?.pageConfig?.auth?.isRequired &&
           !authentication.isAuthenticated
             ? 'hidden'
             : 'visible'
@@ -95,7 +108,7 @@ const CustomPageElement: React.FC<CustomPageElementProps> = ({
         <AuthenticatedJaenFrame />
 
         <AuthenticatedPage shouldUseJaenTheme={shouldUseJaenTheme}>
-          {element}
+          {children}
         </AuthenticatedPage>
       </Flex>
     )
@@ -103,25 +116,38 @@ const CustomPageElement: React.FC<CustomPageElementProps> = ({
 
   return (
     <AuthenticatedPage shouldUseJaenTheme={shouldUseJaenTheme}>
-      {element}
+      {children}
     </AuthenticatedPage>
   )
 }
+
+export interface WithJaenPageProviderProps {
+  pageProps: PageProps<
+    {
+      jaenPage?: JaenPage
+      allJaenPage?: {
+        nodes: Array<JaenPage>
+      }
+    },
+    PageContext
+  >
+}
+
+const withJaenPageProvider = <P extends WithJaenPageProviderProps>(
+  Component: React.ComponentType<P>
+): React.FC<P> => {
+  return props => {
+    return <DynamicPageRenderer {...props} Component={Component} />
+  }
+}
+
+const JaenPageElement = withJaenPageProvider(CustomPageElement)
 
 export const wrapPageElement: GatsbyBrowser['wrapPageElement'] = ({
   element,
   props
 }) => {
-  const jaenPage = {
-    id: props.pageContext.jaenPageId as string,
-    ...(props.data?.jaenPage || {})
-  }
-
-  console.log('context', props.pageContext)
-
-  return (
-    <PageProvider jaenPage={jaenPage}>
-      <CustomPageElement element={element} props={props} />
-    </PageProvider>
-  )
+  return <JaenPageElement pageProps={props}>{element}</JaenPageElement>
 }
+
+export interface UseTemplateReturn {}

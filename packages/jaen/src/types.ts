@@ -19,6 +19,7 @@ export interface PageConfig {
   withoutJaenFrameStickyHeader?: boolean
 
   menu?: {
+    label?: string
     group?: string
     groupLabel?: string
     order?: number
@@ -143,11 +144,6 @@ export interface JaenPage {
    */
   template: string | null
   childTemplates: string[]
-  /**
-   * Name of the component
-   * Used for page loading
-   */
-  componentName?: string
   deleted?: boolean
   excludedFromIndex?: boolean
 }

@@ -11,7 +11,7 @@ const Config: GatsbyConfig = {
   ]
 }
 
-const templateDir = `${process.cwd()}/src/templates`
+export const templateDir = `${process.cwd()}/src/templates`
 
 console.log(templateDir)
 

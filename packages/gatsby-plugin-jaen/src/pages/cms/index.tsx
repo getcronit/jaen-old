@@ -40,11 +40,12 @@ const Page: React.FC<PageProps> = props => {
 export default Page
 
 export const pageConfig: PageConfig = {
-  label: 'Dashboard',
+  label: 'Jaen Dashboard',
   icon: 'FaTachometerAlt',
   menu: {
     type: 'app',
     group: 'cms',
+    label: 'Dashboard',
     groupLabel: 'Jaen CMS',
     order: 100
   },

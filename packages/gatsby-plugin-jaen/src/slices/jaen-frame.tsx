@@ -180,7 +180,7 @@ const Slice: React.FC<SliceProps> = props => {
       }
 
       navigationGroups[groupType]![group]!.items[node.id] = {
-        label: config.label,
+        label: config.menu?.label || config.label,
         path: node.path,
         icon: config.icon ? require('react-icons/fa')[config.icon] : undefined
       }

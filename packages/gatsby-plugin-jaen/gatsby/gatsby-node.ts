@@ -7,6 +7,7 @@ import path from 'path'
 import {capitalizeLastPathElement} from './helper/capitalize-last-path-element'
 import {getJaenPageParentId} from './helper/get-jaen-page-parent-id'
 import {readPageConfig} from './helper/page-config-reader'
+import {templateDir} from './gatsby-config'
 
 export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] =
   async ({actions, loaders, stage, plugins}, pluginOptions) => {
@@ -40,6 +41,7 @@ export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] =
     actions.setWebpackConfig({
       plugins: [
         plugins.define({
+          __JAEN_SOURCE_TEMPLATES__: JSON.stringify(templateDir),
           __VERSION__: JSON.stringify(version)
         })
       ]
@@ -109,58 +111,15 @@ export const createSchemaCustomization: GatsbyNode['onCreateWebpackConfig'] = ({
           context: any,
           _info: any
         ) {
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-          const items = Array.from(
-            (await context.nodeModel.findAll({type: `JaenPage`})).entries
-          ) as any[]
+          const {entries, totalCount} = await context.nodeModel.findAll({
+            type: 'SitePage'
+          })
 
-          const originPath = generatePageOriginPath(
-            items.map((item: {id: any; slug: any; parent: any}) => ({
-              id: item.id,
-              slug: item.slug,
-              parent: item.parent ? {id: item.parent} : null
-            })),
-            {
-              id: source.id,
-              slug: source.slug,
-              parent: source.parent
-                ? {
-                    id: source.parent
-                  }
-                : null
+          for (const entry of entries) {
+            if (source.id === entry.context.jaenPageId) {
+              return entry.path
             }
-          )
-
-          return originPath
-        }
-      }
-    }
-  })
-
-  actions.createFieldExtension({
-    name: 'componentName',
-    args: {},
-    extend(_options: any, _prevFieldConfig: any) {
-      return {
-        args: {},
-        async resolve(source: Node, _args: any, context: any, _info: any) {
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-          const items = Array.from(
-            (await context.nodeModel.findAll({type: `SitePage`})).entries
-          ) as any[]
-
-          const page = items.find(
-            (item: {component: string; context: {jaenPageId: string}}) =>
-              item.context.jaenPageId === source.id
-          )
-
-          const sourcePages = 'src/pages'
-
-          const componentName = page?.component?.includes(sourcePages)
-            ? page.component.replace(`${sourcePages}/`, '')
-            : undefined
-
-          return componentName
+          }
         }
       }
     }
@@ -187,6 +146,7 @@ export const createSchemaCustomization: GatsbyNode['onCreateWebpackConfig'] = ({
     type JaenTemplate implements Node {
       id: ID!
       absolutePath: String!
+      relativePath: String!
       label: String!
       childTemplates: [JaenTemplate!]! @link
     }
@@ -211,9 +171,7 @@ export const createSchemaCustomization: GatsbyNode['onCreateWebpackConfig'] = ({
       childTemplates: [String!]!
 
       buildPath: String @buildPath
-      componentName: String @componentName
-      excludedFromIndex: Boolean
-      
+      excludedFromIndex: Boolean      
     }
 
     type JaenSection {
@@ -295,14 +253,17 @@ export const onCreatePage: GatsbyNode['onCreatePage'] = async ({
     if (!page.context?.skipJaenPage) {
       const jaenPageId = `JaenPage ${page.path}`
 
-      const slugifiedPath = slugify(page.path)
+      // const slugifiedPath = slugify(page.path)
+
+      const path = page.path.replace(/\/+$/, '') // Remove trailing slashes from the path
+      const lastPathElement = path.split('/').pop() // Extract the last element
 
       const existingNode = getNode(jaenPageId)
 
       if (!existingNode) {
         const jaenPage = {
           id: jaenPageId,
-          slug: slugifiedPath,
+          slug: lastPathElement,
           parent: getJaenPageParentId({
             parent: null,
             id: jaenPageId
@@ -479,12 +440,14 @@ export const onCreateNode: GatsbyNode['onCreateNode'] = async ({
   ) {
     const name = node.name as string
     const absolutePath = node.absolutePath as string
+    const relativePath = node.relativePath as string
 
     const pageConfig = readPageConfig(absolutePath)
 
     const templateNode = {
       id: `JaenTemplate ${name}`, // id must be unique across all nodes
       absolutePath: absolutePath,
+      relativePath: relativePath,
       label: pageConfig?.label || name,
       childTemplates: pageConfig?.childTemplates || []
     }

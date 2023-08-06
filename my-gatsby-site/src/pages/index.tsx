@@ -163,8 +163,19 @@ const IndexPage: React.FC<PageProps> = () => {
     }
   })
 
+  const testImport = async () => {
+    return await import(`${__JAEN_SOURCE_TEMPLATES__}/BlogPage`)
+  }
+
+  React.useEffect(() => {
+    testImport().then(res => {
+      console.log(res)
+    })
+  }, [])
+
   return (
     <>
+      <Text>{__JAEN_SOURCE_TEMPLATES__}</Text>
       {/* <Text>{cm.colorMode}</Text> */}
       <Button variant="outline">test outside</Button>
 
