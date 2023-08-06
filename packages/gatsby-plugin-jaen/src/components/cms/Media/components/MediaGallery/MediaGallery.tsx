@@ -24,6 +24,7 @@ import {useDropzone} from 'react-dropzone'
 import {BsLayoutSidebarInset} from 'react-icons/bs'
 import {
   FaCheck,
+  FaClone,
   FaDownload,
   FaMinus,
   FaPlus,
@@ -37,6 +38,9 @@ import {MediaPreviewState} from '../../types'
 import {MediaGrid} from './components/MediaGrid/MediaGrid'
 
 export interface MediaGalleryProps {
+  pageFilter?: string
+  removePageFilter: () => void
+
   mediaNodes: MediaNode[]
 
   selectedMediaNode: MediaNode | null
@@ -52,6 +56,7 @@ export interface MediaGalleryProps {
       }
     >
   ) => void
+  onClone: (id: string) => void
   onDownload: (id: string) => void
 
   isSidebarOpen: boolean
@@ -65,12 +70,15 @@ export interface MediaGalleryProps {
 }
 
 export const MediaGallery: React.FC<MediaGalleryProps> = ({
+  pageFilter,
+  removePageFilter,
   mediaNodes,
   selectedMediaNode,
   onSelectMediaNode,
   onUpload,
   onDelete,
   onUpdate,
+  onClone,
   onDownload,
   isSidebarOpen,
   onToggleSidebar,
@@ -89,8 +97,6 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
     // reset selected media node
     onSelectMediaNode(null)
   }
-
-  const [pageFilter, setPageFilter] = useState<string | null>('Home')
 
   const [mediaNodesLimit, setMediaNodesLimit] = useState<number>(30)
 
@@ -140,6 +146,14 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
     }
   }
 
+  const handleClone = () => {
+    if (selectedMediaNode) {
+      // call onClone callback
+
+      onClone(selectedMediaNode.id)
+    }
+  }
+
   const handleUpdate = (
     data: Partial<
       MediaNode & {
@@ -154,7 +168,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
     }
   }
 
-  console.log('nodes', mediaNodes)
+  console.log('nodes', mediaNodes, selectedMediaNode)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -303,7 +317,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
               {pageFilter}
               <TagCloseButton
                 onClick={() => {
-                  setPageFilter(null)
+                  removePageFilter()
                 }}
               />
             </Tag>
@@ -345,6 +359,12 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
             aria-label="Customize selected image"
             icon={<FaSlidersH />}
             onClick={handleEdit}
+          />
+
+          <IconButton
+            aria-label="Clone selected image"
+            icon={<FaClone />}
+            onClick={handleClone}
           />
 
           <IconButton

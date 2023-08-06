@@ -11,6 +11,8 @@ import Media from './media'
 
 export interface MediaSelectorProps {
   isSelector?: boolean
+  defaultSelected?: string
+  jaenPageId?: string
   onSelect: (mediaNode: MediaNode) => void
 }
 
@@ -33,7 +35,12 @@ const MediaModal: React.FC<MediaSelectorProps> = props => {
               id: 'JaenPage /cms/media/'
               // missing static data from page-data.json
             }}>
-            <Media isSelector={props.isSelector} onSelect={props.onSelect} />
+            <Media
+              isSelector={props.isSelector}
+              onSelect={props.onSelect}
+              defaultSelected={props.defaultSelected}
+              jaenPageId={props.jaenPageId}
+            />
           </PageProvider>
         </ModalBody>
       </ModalContent>

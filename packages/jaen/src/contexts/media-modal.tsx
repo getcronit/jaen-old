@@ -7,7 +7,12 @@ import {uploadFile} from '../utils/open-storage-gateway'
 type MediaModalContextType = {
   isOpen: boolean
   MediaModalComponent: React.LazyExoticComponent<any>
-  toggleModal: (args?: {isSelector?: boolean; id?: string}) => void
+  toggleModal: (args?: {
+    jaenPageId?: string
+    isSelector?: boolean
+    id?: string
+    defaultSelected?: string
+  }) => void
   togglFileSelector: () => Promise<MediaNode>
 }
 
@@ -33,17 +38,26 @@ export const MediaModalProvider: React.FC<MediaModalProviderProps> = ({
     isOpen: boolean
     isSelector: boolean
     id: string
+    defaultSelected?: string
+    jaenPageId?: string
   }>({
     isOpen: false,
     isSelector: false,
     id: 'default'
   })
 
-  const toggleModal = (args?: {isSelector?: boolean; id?: string}) => {
+  const toggleModal = (args?: {
+    isSelector?: boolean
+    id?: string
+    defaultSelected?: string
+    jaenPageId?: string
+  }) => {
     setOpen({
       isOpen: !open.isOpen,
       isSelector: !!args?.isSelector,
-      id: args?.id || 'default'
+      id: args?.id || 'default',
+      defaultSelected: args?.defaultSelected,
+      jaenPageId: args?.jaenPageId
     })
   }
 
@@ -97,7 +111,9 @@ export const MediaModalProvider: React.FC<MediaModalProviderProps> = ({
       url: fileUrl,
       width: dimensions.width,
       height: dimensions.height,
-      revisions: []
+      revisions: [],
+
+      jaenPageId: open.jaenPageId
     }
 
     return newMediaNode
@@ -126,6 +142,8 @@ export const MediaModalProvider: React.FC<MediaModalProviderProps> = ({
           <MediaModalComponent
             onSelect={handleSelect}
             isSelector={open.isSelector}
+            defaultSelected={open.defaultSelected}
+            jaenPageId={open.jaenPageId}
           />
         </React.Suspense>
       )}
@@ -135,6 +153,7 @@ export const MediaModalProvider: React.FC<MediaModalProviderProps> = ({
 }
 
 export interface UseMediaModalArgs {
+  jaenPageId?: string
   onSelect?: (mediaNode: MediaNode) => void
 }
 
@@ -178,10 +197,12 @@ export const useMediaModal = (args?: UseMediaModalArgs) => {
   }
 
   return {
-    toggleModal: () =>
+    toggleModal: (options?: {defaultSelected?: string}) =>
       context.toggleModal({
         id: uniqueId,
-        isSelector: !!args?.onSelect
+        isSelector: !!args?.onSelect,
+        defaultSelected: options?.defaultSelected,
+        jaenPageId: args?.jaenPageId
       }),
     isOpen: context.isOpen,
     togglFileSelector: async () => {

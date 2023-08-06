@@ -5,13 +5,15 @@ import {
   HStack,
   IconButton,
   Stack,
-  StackDivider,
+  Tag,
+  TagCloseButton,
   Text
 } from '@chakra-ui/react'
 import {MediaNode} from '@snek-at/jaen'
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useMemo, useState} from 'react'
 
 import {BsLayoutSidebarInset} from 'react-icons/bs'
+import {FaX} from 'react-icons/fa6'
 
 import {PageTree} from '../../shared/PageTree/PageTree'
 import {TreeNode} from '../Pages/shared/PageVisualizer'
@@ -34,10 +36,16 @@ export interface MediaProps {
       }
     >
   ) => void
+  onClone: (id: string) => void
   onDownload: (id: string) => void
 
   isSelector?: boolean
   onSelect?: (id: string) => void
+
+  // media node id
+  defaultSelected?: string
+
+  onJaenPageSelect: (id: string | null) => void
 }
 
 export const Media: React.FC<MediaProps> = ({
@@ -46,9 +54,12 @@ export const Media: React.FC<MediaProps> = ({
   onUpload,
   onDelete,
   onUpdate,
+  onClone,
   onDownload,
   isSelector,
-  onSelect
+  onSelect,
+  defaultSelected,
+  onJaenPageSelect
 }) => {
   const [isSidebarOpen, setSidebarOpen] = useState(false) // State variable for sidebar visibility
 
@@ -61,6 +72,14 @@ export const Media: React.FC<MediaProps> = ({
   const handlePreview = (state: MediaPreviewState) => {
     setPreview(state)
   }
+
+  const defaultSelectedMediaNode = useMemo(() => {
+    if (defaultSelected) {
+      return mediaNodes.find(node => node.id === defaultSelected) || null
+    }
+
+    return null
+  }, [defaultSelected, mediaNodes])
 
   const [selectedMediaNode, setSelectedMediaNode] = useState<MediaNode | null>(
     null
@@ -79,9 +98,41 @@ export const Media: React.FC<MediaProps> = ({
     }
   }, [mediaNodes])
 
-  const sortedMediaNodes = mediaNodes.sort((a, b) => {
+  const [filters, setFilters] = useState<{
+    page?: {
+      jaenPageId: string
+      label: string
+    }
+  }>({})
+
+  const removePageFilter = () => {
+    setFilters({
+      ...filters,
+      page: undefined
+    })
+
+    onJaenPageSelect(null)
+  }
+
+  const filteredMediaNodes = useMemo(() => {
+    if (filters.page) {
+      return mediaNodes.filter(node => {
+        return node.jaenPageId === filters.page?.jaenPageId
+      })
+    }
+
+    return mediaNodes
+  }, [filters, mediaNodes])
+
+  const sortedMediaNodes = filteredMediaNodes.sort((a, b) => {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   })
+
+  const handleClone = (id: string) => {
+    onClone(id)
+
+    setSelectedMediaNode(null)
+  }
 
   return (
     <Flex id="coco" pos="relative" minH="calc(100dvh - 4rem - 3rem)">
@@ -107,29 +158,37 @@ export const Media: React.FC<MediaProps> = ({
         </HStack>
         <Stack px="4" py="1" ml="2">
           <Stack>
-            <Heading size="xs">Media</Heading>
-
-            <Stack>
-              <Text fontSize="sm" fontWeight="bold">
-                All media
-              </Text>
-            </Stack>
-          </Stack>
-
-          <Stack>
             <Heading size="xs">Pages</Heading>
-            <PageTree tree={tree} onSelected={() => {}} />
+
+            <PageTree
+              tree={tree}
+              defaultSelected={filters.page?.jaenPageId}
+              onSelected={(id, node) => {
+                setFilters({
+                  ...filters,
+                  page: {
+                    jaenPageId: id,
+                    label: node.data
+                  }
+                })
+
+                onJaenPageSelect(id)
+              }}
+            />
           </Stack>
         </Stack>
       </Stack>
 
       <MediaGallery
+        pageFilter={filters.page?.label}
+        removePageFilter={removePageFilter}
         mediaNodes={sortedMediaNodes}
-        selectedMediaNode={selectedMediaNode}
+        selectedMediaNode={selectedMediaNode || defaultSelectedMediaNode}
         onSelectMediaNode={setSelectedMediaNode}
         onUpload={onUpload}
         onDelete={onDelete}
         onUpdate={onUpdate}
+        onClone={handleClone}
         onDownload={onDownload}
         isSidebarOpen={isSidebarOpen}
         onToggleSidebar={toggleSidebar}
@@ -142,11 +201,12 @@ export const Media: React.FC<MediaProps> = ({
       <MediaPreview
         mediaNodes={sortedMediaNodes}
         isPreview={isPreview}
-        selectedMediaNode={selectedMediaNode}
+        selectedMediaNode={selectedMediaNode || defaultSelectedMediaNode}
         onSelectMediaNode={setSelectedMediaNode}
         onPreview={handlePreview}
         onDelete={onDelete}
         onUpdate={onUpdate}
+        onClone={handleClone}
         onDownload={onDownload}
       />
     </Flex>

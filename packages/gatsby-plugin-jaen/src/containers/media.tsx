@@ -7,10 +7,24 @@ import {useCMSManagement, withCMSManagement} from '../connectors/cms-management'
 
 export interface MediaContainerProps {
   isSelector?: boolean
+  defaultSelected?: string
+  jaenPageId?: string
   onSelect?: (mediaNode: MediaNode) => void
 }
 
 const MediaContainer: React.FC<MediaContainerProps> = props => {
+  const [jaenPageId, setJaenPageId] = useState<string | undefined>(
+    props.jaenPageId
+  )
+
+  useEffect(() => {
+    setJaenPageId(props.jaenPageId)
+  }, [props.jaenPageId])
+
+  const onJaenPageSelect = (id: string | null) => {
+    setJaenPageId(id || undefined)
+  }
+
   const field = useField<{
     [id: string]: MediaNode
   }>('media_nodes', 'IMA:MEDIA_NODES')
@@ -25,6 +39,14 @@ const MediaContainer: React.FC<MediaContainerProps> = props => {
       setMediaNodes(field.value)
     }
   }, [field.value])
+
+  const [defaultSelected, setDefaultSelected] = useState<string | undefined>(
+    props.defaultSelected
+  )
+
+  useEffect(() => {
+    setDefaultSelected(props.defaultSelected)
+  }, [props.defaultSelected])
 
   const onUpload = async (files: File[]) => {
     try {
@@ -51,7 +73,9 @@ const MediaContainer: React.FC<MediaContainerProps> = props => {
             url: fileUrl,
             width: dimensions.width,
             height: dimensions.height,
-            revisions: []
+            revisions: [],
+
+            jaenPageId
           }
 
           return newMediaNode
@@ -99,6 +123,28 @@ const MediaContainer: React.FC<MediaContainerProps> = props => {
       })
     } catch (error) {
       return
+    }
+  }
+
+  const onClone = (mediaId: string) => {
+    // Clone media
+    const mediaToClone = mediaNodes[mediaId]
+
+    if (mediaToClone) {
+      const clonedMedia = {
+        ...mediaToClone,
+        id: uuidv4(),
+        createdAt: new Date().toISOString(),
+        modifiedAt: new Date().toISOString(),
+        revisions: []
+      }
+
+      field.write({
+        ...mediaNodes,
+        [clonedMedia.id]: clonedMedia
+      })
+
+      setDefaultSelected(clonedMedia.id)
     }
   }
 
@@ -214,21 +260,30 @@ const MediaContainer: React.FC<MediaContainerProps> = props => {
     }
   }
 
-  const mediaNodesValues = useMemo(
-    () => Object.values(mediaNodes),
-    [mediaNodes]
-  )
+  const mediaNodesValues = useMemo(() => {
+    const values = Object.values(mediaNodes)
+
+    // if selector and jaenPageId is set, filter mediaNodes by jaenPageId
+    if (props.isSelector && jaenPageId) {
+      return values.filter(mediaNode => mediaNode.jaenPageId === jaenPageId)
+    }
+
+    return values
+  }, [mediaNodes, jaenPageId])
 
   return (
     <Media
       isSelector={props.isSelector}
+      defaultSelected={defaultSelected}
       tree={manager.tree}
       mediaNodes={mediaNodesValues}
       onUpload={onUpload}
+      onClone={onClone}
       onDownload={onDownload}
       onDelete={onDelete}
       onUpdate={onUpdate}
       onSelect={onSelect}
+      onJaenPageSelect={onJaenPageSelect}
     />
   )
 }

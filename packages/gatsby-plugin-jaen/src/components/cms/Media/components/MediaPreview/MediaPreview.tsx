@@ -22,6 +22,7 @@ import FilerobotImageEditor, {TABS} from 'react-filerobot-image-editor'
 import {
   FaArrowLeft,
   FaArrowRight,
+  FaClone,
   FaDownload,
   FaSlidersH,
   FaTrash
@@ -46,6 +47,7 @@ export interface MediaPreviewProps {
       }
     >
   ) => void
+  onClone: (id: string) => void
   onDownload: (id: string) => void
 }
 
@@ -57,6 +59,7 @@ export const MediaPreview: React.FC<MediaPreviewProps> = ({
   onPreview,
   onDelete,
   onUpdate,
+  onClone,
   onDownload
 }) => {
   const handleDownload = () => {
@@ -83,6 +86,14 @@ export const MediaPreview: React.FC<MediaPreviewProps> = ({
       // call onEdit callback
 
       onPreview('EDIT')
+    }
+  }
+
+  const handleClone = () => {
+    if (selectedMediaNode) {
+      // call onClone callback
+
+      onClone(selectedMediaNode.id)
     }
   }
 
@@ -178,6 +189,12 @@ export const MediaPreview: React.FC<MediaPreviewProps> = ({
                 aria-label="Customize selected image"
                 icon={<FaSlidersH />}
                 onClick={handleEdit}
+              />
+
+              <IconButton
+                aria-label="Clone selected image"
+                icon={<FaClone />}
+                onClick={handleClone}
               />
 
               <IconButton

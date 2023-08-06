@@ -7,11 +7,15 @@ import {
   useEffect,
   useState
 } from 'react'
-import {FaImage, FaTrashAlt} from 'react-icons/fa'
+import {FaImage, FaSlidersH, FaTrashAlt} from 'react-icons/fa'
 import {PhotoProvider, PhotoView} from 'react-photo-view'
 import {connectField} from '../../connectors'
 import {useMediaModal} from '../../contexts/media-modal'
-import {PageProvider} from '../../contexts/page'
+import {
+  PageProvider,
+  useJaenPageIndex,
+  usePageContext
+} from '../../contexts/page'
 import {JaenPage} from '../../types'
 import {HighlightTooltip} from '../components/HighlightTooltip'
 import {useImage} from './hooks/use-image'
@@ -78,9 +82,12 @@ export const ImageField = connectField<ImageFieldMediaId, ImageFieldProps>(
   }) => {
     const isLightbox = lightbox && !jaenField.isEditing
 
-    const value = jaenField.value || jaenField.staticValue
+    const mediaId = jaenField.value || jaenField.staticValue
+
+    const {jaenPage} = usePageContext()
 
     const context = useMediaModal({
+      jaenPageId: jaenPage.id,
       onSelect: media => {
         jaenField.onUpdateValue(media.id)
       }
@@ -106,9 +113,12 @@ export const ImageField = connectField<ImageFieldMediaId, ImageFieldProps>(
           <Button
             variant="field-highlighter-tooltip"
             leftIcon={<FaImage />}
-            onClick={context.toggleModal}>
+            onClick={() => {
+              context.toggleModal({defaultSelected: mediaId})
+            }}>
             Image
           </Button>,
+
           <IconButton
             variant="field-highlighter-tooltip"
             aria-label="Remove"
@@ -118,7 +128,7 @@ export const ImageField = connectField<ImageFieldMediaId, ImageFieldProps>(
         ]}>
         <PageProvider jaenPage={cmsMediaJaenPage}>
           <ImageComponent
-            mediaId={value}
+            mediaId={mediaId}
             fieldName={jaenField.name}
             onShouldLoadPageData={async () => {
               const data = await fetch('/page-data/cms/media/page-data.json')
