@@ -35,6 +35,7 @@ export const pageConfig: PageConfig = {
   label: 'Login',
   withoutJaenFrame: true,
   layout: {
-    name: 'jaen'
+    name: 'jaen',
+    type: 'full'
   }
 }

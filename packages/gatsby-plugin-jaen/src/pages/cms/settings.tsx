@@ -58,7 +58,6 @@ export const pageConfig: PageConfig = {
     isRequired: true
   },
   layout: {
-    name: 'jaen',
-    width: 'full'
+    name: 'jaen'
   }
 }

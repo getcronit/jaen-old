@@ -35,7 +35,7 @@ export interface PageConfig {
   layout?: {
     name: 'jaen'
     // default: 'content'
-    width?: 'form' | 'content' | 'full'
+    type?: 'content' | 'form' | 'full'
   }
 }
 

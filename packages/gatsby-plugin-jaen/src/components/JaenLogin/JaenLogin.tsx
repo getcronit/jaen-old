@@ -15,6 +15,8 @@ import {
   Heading,
   HStack,
   Input,
+  Modal,
+  ModalContent,
   Stack,
   Text
 } from '@chakra-ui/react'
@@ -79,18 +81,8 @@ export const JaenLogin: React.FC<JaenLoginProps> = props => {
     }
   }
 
-  return (
-    <Box
-      id="coco"
-      overflow="auto"
-      zIndex={props.isModal ? 'modal' : undefined}
-      pos="fixed"
-      top="0"
-      left="0"
-      h="100dvh"
-      w="full"
-      bg="bg.translucent"
-      backdropFilter="blur(8px) saturate(180%) contrast(46%) brightness(120%)">
+  const content = (
+    <Box id="coco" minH="100dvh" bg="bg.translucent">
       <Container
         maxW="lg"
         py={{base: '12', md: '24'}}
@@ -189,13 +181,13 @@ export const JaenLogin: React.FC<JaenLoginProps> = props => {
                     Sign in
                   </Button>
                   {/* <HStack>
-                <Divider />
-                <Text textStyle="sm" whiteSpace="nowrap" color="fg.muted">
-                  powered by
-                </Text>
-                <Divider />
-                <OAuthButtonGroup />
-              </HStack> */}
+            <Divider />
+            <Text textStyle="sm" whiteSpace="nowrap" color="fg.muted">
+              powered by
+            </Text>
+            <Divider />
+            <OAuthButtonGroup />
+          </HStack> */}
                 </Stack>
               </Stack>
             </Box>
@@ -206,6 +198,25 @@ export const JaenLogin: React.FC<JaenLoginProps> = props => {
       </Container>
     </Box>
   )
+
+  if (props.isModal) {
+    return (
+      <Modal
+        size="full"
+        isOpen={true}
+        onClose={() => {
+          props.onGoBack?.()
+        }}>
+        <ModalContent
+          bg="transparent"
+          backdropFilter="blur(8px) saturate(180%) contrast(46%) brightness(120%)">
+          {content}
+        </ModalContent>
+      </Modal>
+    )
+  }
+
+  return content
 }
 
 export default JaenLogin
