@@ -203,9 +203,13 @@ export const createSchemaCustomization: GatsbyNode['onCreateWebpackConfig'] = ({
       title: String!
       description: String
       image: String
-      canonical: String
-      datePublished: String
-      isBlogPost: Boolean
+      blogPost: JaenPageMetadataBlogPost
+    }
+
+    type JaenPageMetadataBlogPost {
+      date: String
+      author: String
+      category: String
     }
 
     type JaenSiteMetadata {

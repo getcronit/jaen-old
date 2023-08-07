@@ -43,11 +43,13 @@ export const fragments = graphql`
     excludedFromIndex
     jaenPageMetadata {
       title
-      isBlogPost
       image
       description
-      datePublished
-      canonical
+      blogPost {
+        date
+        author
+        category
+      }
     }
   }
 
@@ -85,11 +87,13 @@ export const fragments = graphql`
     }
     jaenPageMetadata {
       title
-      isBlogPost
       image
       description
-      datePublished
-      canonical
+      blogPost {
+        date
+        author
+        category
+      }
     }
     jaenFiles {
       id

@@ -83,10 +83,9 @@ const PagesNew: React.FC = () => {
             excludedFromIndex: data.isExcludedFromIndex,
             jaenPageMetadata: {
               title: data.title,
-              image: data.image?.useImage ? data.image.src : undefined,
+              image: data.image?.src,
               description: data.description,
-              isBlogPost: data.blogPost?.isBlogPost,
-              datePublished: data.blogPost?.date
+              blogPost: data.blogPost
             }
           })
 
@@ -135,6 +134,6 @@ export const pageConfig: PageConfig = {
   },
   layout: {
     name: 'jaen',
-    width: 'form'
+    type: 'form'
   }
 }

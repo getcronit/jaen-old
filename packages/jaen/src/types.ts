@@ -139,11 +139,14 @@ export interface JaenPage {
   modifiedAt: string
   jaenPageMetadata: Partial<{
     title: string
-    isBlogPost: boolean
     image: string
     description: string
-    datePublished: string
-    canonical: string
+
+    blogPost?: {
+      date?: string
+      author?: string
+      category?: string
+    }
   }>
   jaenFields: IJaenFields
   jaenFiles: Array<{

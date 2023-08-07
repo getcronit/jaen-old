@@ -48,7 +48,7 @@ const PagesPage: React.FC = () => {
         description: p.jaenPageMetadata.description || 'No description',
         createdAt: p.createdAt,
         modifiedAt: p.modifiedAt
-        // author: 'Nico Schett'
+        // author: p.jaenPageMetadata.blogPost?.author
       }
     })
   }, [currentPage.id, manager.pages])
@@ -164,15 +164,15 @@ const PagesPage: React.FC = () => {
         values: {
           title: currentPage.jaenPageMetadata?.title || 'No title',
           image: {
-            useImage: !!currentPage.jaenPageMetadata?.image,
-            src: currentPage.jaenPageMetadata?.image || ''
+            src: currentPage.jaenPageMetadata?.image
           },
           slug: currentPage.slug,
           template: currentPage.template,
           description:
             currentPage.jaenPageMetadata.description || 'No description',
           parent: currentPage.parent?.id,
-          isExcludedFromIndex: currentPage.excludedFromIndex
+          isExcludedFromIndex: currentPage.excludedFromIndex,
+          blogPost: currentPage.jaenPageMetadata.blogPost
         },
         parentPages,
         onSubmit: data => {
@@ -185,10 +185,9 @@ const PagesPage: React.FC = () => {
             excludedFromIndex: data.isExcludedFromIndex,
             jaenPageMetadata: {
               title: data.title,
-              image: data.image?.useImage ? data.image.src : undefined,
+              image: data.image?.src,
               description: data.description,
-              isBlogPost: data.blogPost?.isBlogPost,
-              datePublished: data.blogPost?.date
+              blogPost: data.blogPost
             }
           })
 

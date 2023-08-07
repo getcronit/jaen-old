@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   ButtonGroup,
-  Center,
   Checkbox,
   FormControl,
   FormErrorMessage,
@@ -21,9 +20,9 @@ import {
   Text,
   Textarea
 } from '@chakra-ui/react'
-import {DuplicateSlugError, JaenTemplate, useMediaModal} from '@snek-at/jaen'
+import {DuplicateSlugError, JaenTemplate} from '@snek-at/jaen'
 import {useEffect, useState} from 'react'
-import {Controller, SubmitHandler, useForm} from 'react-hook-form'
+import {Controller, set, SubmitHandler, useForm} from 'react-hook-form'
 import {FaEdit, FaEye, FaImage, FaNewspaper} from 'react-icons/fa'
 import {FaEyeLowVision} from 'react-icons/fa6'
 import slugify from 'slugify'
@@ -34,48 +33,48 @@ import {ChooseButton, ChooseButtonProps} from '../ChooseButton/ChooseButton'
 
 const texts = {
   heading: {
-    create: 'Create a new page',
-    edit: 'Edit page'
+    create: 'Create a New Page',
+    edit: 'Edit the Page'
   },
   lead: {
     create:
-      'A page is a collection of fields or blocks that is rendered on a specific URL.',
-    edit: 'Edit the fields of your page. Used for SEO and social media.'
+      'A page represents an arrangement of fields or blocks that are presented on a specific URL.',
+    edit: 'Edit the page. Enhance SEO and social media presence.'
   },
   template: {
-    create: 'Select a template for your new page',
-    edit: 'The template that is used for your page'
+    create: 'Select a Template for the New Page',
+    edit: 'The template used for the page'
   },
   templateHelperText: {
     create:
-      'This template will be used for your new page, based on the parent page.',
-    edit: 'If you want to change the template, create a new page and copy the content over.'
+      'This template will be applied to the new page, based on the parent page.',
+    edit: 'If you wish to modify the template, create a new page and transfer the content.'
   },
   title: {
-    create: 'Enter a title for your new page',
-    edit: 'The title of your page'
+    create: 'Enter a Title for the New Page',
+    edit: 'The title of the page'
   },
   titleHelperText: {
     create:
-      'The title of your new page. The slug will be automatically generated based on the title.',
-    edit: 'The title of your page.'
+      'The title of the new page. The URL slug will be automatically generated from the title.',
+    edit: 'The title of the page.'
   },
   description: {
-    create: 'Enter a description for your new page',
-    edit: 'The description of your page'
+    create: 'Provide a Description for the New Page',
+    edit: 'The description of the page'
   },
   descriptionHelperText: {
     create:
-      'The description will be used in search engines and social media. It should be 160-165 characters long.',
-    edit: 'The description will be used in search engines and social media. It should be 160-165 characters long.'
+      'The description will be utilized by search engines and social media. Aim for 160-165 characters.',
+    edit: 'The description will be utilized by search engines and social media. Aim for 160-165 characters.'
   },
   parent: {
-    create: 'Select a parent page',
-    edit: 'The parent page of your page'
+    create: 'Select a Parent Page',
+    edit: 'The parent page of the page'
   },
   parentHelperText: {
-    create: 'This is the parent page of your new page.',
-    edit: 'You can move your page to another suitable parent page.'
+    create: 'This serves as the parent page of the new page.',
+    edit: 'You have the option to relocate the page to a more suitable parent page.'
   },
   image: {
     create: 'Image',
@@ -83,49 +82,50 @@ const texts = {
   },
   imageHelperText: {
     create:
-      'Add an image to your page. When not set, the image of the parent page or site will be used.',
-    edit: 'The image of your page. When not set, the image of the parent page or site will be used.'
+      'Include an image on the page. If left unset, the image of the parent page or site will be utilized.',
+    edit: 'The image of the page. If left unset, the image of the parent page or site will be utilized.'
   },
   post: {
-    create: 'Post',
+    create: 'Mark as a Post',
     edit: 'Post'
   },
   postHelperText: {
-    create: 'Mark this page as a post to add a date and author field.',
-    edit: 'Mark this page as a post to add a date and author field.'
+    create:
+      'Designate this page as a post to incorporate a date and author field.',
+    edit: 'Designate this page as a post to incorporate a date and author field.'
   },
   postDate: {
-    create: 'Enter a date for your new page',
-    edit: 'The date of your page'
+    create: 'Enter a Date for the New Page',
+    edit: 'The publication date of the page'
   },
   postDateHelperText: {
-    create: 'The date will be used to sort your posts.',
-    edit: 'The date will be used to sort your posts.'
+    create: 'The date will be employed for post sorting.',
+    edit: 'The date will be employed for post sorting.'
   },
   postAuthor: {
-    create: 'Enter an author for your new page',
-    edit: 'The author of your page'
+    create: 'Enter an Author for the New Page',
+    edit: 'The author of the page'
   },
   postAuthorHelperText: {
-    create: 'This will be used to display the author of the post.',
-    edit: 'This will be used to display the author of the post.'
+    create: 'This will be displayed as the author of the post.',
+    edit: 'This will be displayed as the author of the post.'
   },
   postCategory: {
-    create: 'Enter a category for your new page',
-    edit: 'The category of your page'
+    create: 'Enter a Category for the New Page',
+    edit: 'The category of the page'
   },
   postCategoryHelperText: {
-    create: 'The category will be used to sort your posts.',
-    edit: 'The category will be used to sort your posts.'
+    create: 'The category will be used for post classification.',
+    edit: 'The category will be used for post classification.'
   },
   excludeFromIndex: {
-    create: 'Exclude from index',
-    edit: 'Exclude from index'
+    create: 'Exclude from Index',
+    edit: 'Exclude from Index'
   },
   excludeFromIndexHelperText: {
     create:
-      'Exclude this page from all index fields (e.g. places where pages are listed)',
-    edit: 'Exclude this page from all index fields (e.g. places where pages are listed)'
+      'Exclude this page from all index fields (e.g., locations where pages are listed).',
+    edit: 'Exclude this page from all index fields (e.g., locations where pages are listed).'
   }
 }
 
@@ -136,13 +136,11 @@ interface FormValues {
   parent: string
   template: string | null
   blogPost?: {
-    isBlogPost?: boolean
     date?: string
     author?: string
     category?: string
   }
   image?: {
-    useImage?: boolean
     src?: string
   }
   isExcludedFromIndex?: boolean
@@ -170,7 +168,6 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
     handleSubmit,
     watch,
     register,
-    getValues,
     setValue,
     reset,
     setError,
@@ -232,9 +229,27 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
 
   const parent = watch('parent', '') // Get the value of the 'parent' field
 
-  const jaenTemplate = props.parentPages[props.values?.parent]?.templates[
-    props.values?.template || ''
-  ] as JaenTemplate
+  const jaenTemplate = props.values?.parent
+    ? (props.parentPages[props.values.parent]?.templates[
+        props.values?.template || ''
+      ] as JaenTemplate)
+    : null
+
+  const [isBlogPostInUse, setIsBlogPostInUse] = useState<boolean>(
+    !!props.values?.blogPost
+  )
+
+  const [isImageInUse, setIsImageInUse] = useState<boolean>(
+    !!props.values?.image?.src
+  )
+
+  useEffect(() => {
+    setIsBlogPostInUse(!!props.values?.blogPost)
+  }, [props.values?.blogPost])
+
+  useEffect(() => {
+    setIsImageInUse(!!props.values?.image?.src)
+  }, [props.values?.image?.src])
 
   if (mode === 'edit' && isEditFormLocked) {
     return (
@@ -242,15 +257,13 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
         <Stack>
           <HStack justifyContent="space-between">
             <HStack>
-              {props.values?.template && (
-                <Tag colorScheme="brand" variant="solid" w="fit-content">
-                  {jaenTemplate.label}
-                </Tag>
-              )}
-
               <Heading as="h2" size="sm">
                 {props.values?.title || 'Page'}
               </Heading>
+
+              <Text fontSize="sm" color="fg.muted">
+                {jaenTemplate?.label}
+              </Text>
             </HStack>
 
             <ButtonGroup variant="outline">
@@ -272,6 +285,85 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
           <Text fontSize="sm" color="fg.muted" maxW="70%">
             {props.values?.description}
           </Text>
+        </Stack>
+
+        <Stack spacing="4" divider={<StackDivider />}>
+          {isImageInUse && (
+            <Stack spacing="4">
+              <HStack>
+                <Icon as={FaImage} color="brand.500" />
+                <Text fontWeight="semibold">{texts.image[mode]}</Text>
+              </HStack>
+
+              <Image
+                boxSize={36}
+                minW="36"
+                borderRadius="lg"
+                bg="bg.subtle"
+                src={props.values?.image?.src}
+                fallback={<Skeleton borderRadius="lg" boxSize="100%" />}
+              />
+            </Stack>
+          )}
+
+          {isBlogPostInUse && (
+            <Stack spacing="4">
+              <HStack>
+                <Icon as={FaNewspaper} color="brand.500" />
+                <Text fontWeight="semibold">{texts.post[mode]}</Text>
+              </HStack>
+
+              <Stack spacing="4">
+                <Stack>
+                  <FormLabel as="legend">{texts.postDate[mode]}</FormLabel>
+
+                  <Input
+                    variant="unstyled"
+                    type="datetime-local"
+                    defaultValue={props.values?.blogPost?.date}
+                    isReadOnly
+                  />
+                </Stack>
+
+                <Stack>
+                  <FormLabel as="legend">{texts.postAuthor[mode]}</FormLabel>
+                  <Input
+                    variant="unstyled"
+                    defaultValue={props.values?.blogPost?.author}
+                    isReadOnly
+                  />
+                </Stack>
+
+                <Stack>
+                  {props.values?.blogPost?.category && (
+                    <>
+                      <FormLabel as="legend">
+                        {texts.postCategory[mode]}
+                      </FormLabel>
+
+                      <Input
+                        defaultValue={props.values?.blogPost?.category}
+                        isReadOnly
+                      />
+                    </>
+                  )}
+                </Stack>
+              </Stack>
+            </Stack>
+          )}
+
+          {props.values?.isExcludedFromIndex && (
+            <Stack spacing="4">
+              <HStack>
+                <Icon as={FaEyeLowVision} color="brand.500" />
+                <Text fontWeight="semibold">
+                  {texts.excludeFromIndex[mode]}
+                </Text>
+              </HStack>
+
+              <Tag w="fit-content">Yes</Tag>
+            </Stack>
+          )}
         </Stack>
       </Stack>
     )
@@ -404,7 +496,7 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
               />
             ) : (
               <Button variant="outline" bgColor="bg.subtle" isDisabled>
-                {jaenTemplate.label} (cannot be changed)
+                {jaenTemplate?.label}
               </Button>
             )}
             <FormHelperText>{texts.templateHelperText[mode]}</FormHelperText>
@@ -418,9 +510,14 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
         <FormControl as="fieldset">
           <Stack spacing="4">
             <Checkbox
-              {...register('image.useImage', {
-                required: false
-              })}>
+              isChecked={isImageInUse}
+              onChange={e => {
+                setIsImageInUse(e.target.checked)
+
+                if (!e.target.checked) {
+                  setValue('image.src', undefined)
+                }
+              }}>
               <HStack>
                 <Icon as={FaImage} color="brand.500" />
                 <Stack spacing="0.5">
@@ -435,7 +532,7 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
             <Box
               display={
                 // If the checkbox is checked, display the fields
-                watch('image.useImage') ? 'flex' : 'none'
+                isImageInUse ? 'flex' : 'none'
               }>
               <Controller // Controller is used to integrate external inputs into the react-hook-form
                 control={control}
@@ -468,9 +565,14 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
           isInvalid={!!errors.blogPost?.date || !!errors.blogPost?.author}>
           <Stack spacing="4">
             <Checkbox
-              {...register('blogPost.isBlogPost', {
-                required: false
-              })}>
+              isChecked={isBlogPostInUse}
+              onChange={e => {
+                setIsBlogPostInUse(e.target.checked)
+
+                if (!e.target.checked) {
+                  setValue('blogPost', undefined)
+                }
+              }}>
               <HStack>
                 <Icon as={FaNewspaper} color="brand.500" />
                 <Stack spacing="0.5">
@@ -486,25 +588,25 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
               spacing="4"
               display={
                 // If the checkbox is checked, display the fields
-                watch('blogPost.isBlogPost') ? 'flex' : 'none'
+                isBlogPostInUse ? 'flex' : 'none'
               }>
               <FormControl
                 as="fieldset"
                 isInvalid={!!errors.blogPost?.date}
-                isRequired={getValues('blogPost.isBlogPost')}
-                isDisabled={!getValues('blogPost.isBlogPost')}>
+                isRequired={isBlogPostInUse}
+                isDisabled={!isBlogPostInUse}>
                 <FormLabel as="legend">{texts.postDate[mode]}</FormLabel>
                 <Input
                   {...register('blogPost.date', {
                     validate: value => {
-                      if (!value && getValues('blogPost.isBlogPost')) {
+                      if (!value && isBlogPostInUse) {
                         return 'Date is required for blog posts'
                       }
 
                       return true
                     }
                   })}
-                  type="date"
+                  type="datetime-local"
                 />
                 <FormHelperText>
                   {texts.postDateHelperText[mode]}
@@ -514,13 +616,13 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
               <FormControl
                 as="fieldset"
                 isInvalid={!!errors.blogPost?.author}
-                isRequired={getValues('blogPost.isBlogPost')}
-                isDisabled={!getValues('blogPost.isBlogPost')}>
+                isRequired={isBlogPostInUse}
+                isDisabled={!isBlogPostInUse}>
                 <FormLabel as="legend">{texts.postAuthor[mode]}</FormLabel>
                 <Input
                   {...register('blogPost.author', {
                     validate: value => {
-                      if (!value && getValues('blogPost.isBlogPost')) {
+                      if (!value && isBlogPostInUse) {
                         return 'Author is required for blog posts'
                       }
 
@@ -537,7 +639,7 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
               <FormControl
                 as="fieldset"
                 isInvalid={!!errors.blogPost?.category}
-                isDisabled={!getValues('blogPost.isBlogPost')}>
+                isDisabled={!isBlogPostInUse}>
                 <FormLabel as="legend">{texts.postCategory[mode]}</FormLabel>
                 <Input
                   {...register('blogPost.category')}

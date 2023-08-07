@@ -21,7 +21,7 @@ export default {
             description: 'Jaen Page 1 description',
             image: 'https://via.placeholder.com/300x200',
             canonical: 'https://jaen.com/jaen-page-1',
-            datePublished: '2020-01-01',
+            publishedAt: '2020-01-01',
             isBlogPost: false
           },
           jaenFields: {

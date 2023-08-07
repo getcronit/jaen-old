@@ -92,7 +92,7 @@ export const Pages: React.FC<PagesProps> = props => {
             <Tr>
               <Th>Title</Th>
               <Th>Description</Th>
-              <Th>Author</Th>
+              {/* <Th>Author</Th> */}
               <Th>Date</Th>
             </Tr>
           </Thead>
@@ -103,7 +103,7 @@ export const Pages: React.FC<PagesProps> = props => {
                   <Link to={`#${btoa(page.id)}`}>{page.title}</Link>
                 </Td>
                 <Td>{page.description}</Td>
-                <Td>{page.author ? <Link>By {page.author}</Link> : `-`}</Td>
+                {/* <Td>{page.author ? <Link>By {page.author}</Link> : `-`}</Td> */}
                 <Td whiteSpace="break-spaces">
                   {page.createdAt || page.modifiedAt
                     ? page.modifiedAt && page.modifiedAt !== page.createdAt
