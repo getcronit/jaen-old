@@ -287,84 +287,88 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
           </Text>
         </Stack>
 
-        <Stack spacing="4" divider={<StackDivider />}>
-          {isImageInUse && (
-            <Stack spacing="4">
-              <HStack>
-                <Icon as={FaImage} color="brand.500" />
-                <Text fontWeight="semibold">{texts.image[mode]}</Text>
-              </HStack>
-
-              <Image
-                boxSize={36}
-                minW="36"
-                borderRadius="lg"
-                bg="bg.subtle"
-                src={props.values?.image?.src}
-                fallback={<Skeleton borderRadius="lg" boxSize="100%" />}
-              />
-            </Stack>
-          )}
-
-          {isBlogPostInUse && (
-            <Stack spacing="4">
-              <HStack>
-                <Icon as={FaNewspaper} color="brand.500" />
-                <Text fontWeight="semibold">{texts.post[mode]}</Text>
-              </HStack>
-
+        {(isImageInUse ||
+          isBlogPostInUse ||
+          props.values?.isExcludedFromIndex) && (
+          <Stack spacing="4" divider={<StackDivider />}>
+            {isImageInUse && (
               <Stack spacing="4">
-                <Stack>
-                  <FormLabel as="legend">{texts.postDate[mode]}</FormLabel>
+                <HStack>
+                  <Icon as={FaImage} color="brand.500" />
+                  <Text fontWeight="semibold">{texts.image[mode]}</Text>
+                </HStack>
 
-                  <Input
-                    variant="unstyled"
-                    type="datetime-local"
-                    defaultValue={props.values?.blogPost?.date}
-                    isReadOnly
-                  />
-                </Stack>
+                <Image
+                  boxSize={36}
+                  minW="36"
+                  borderRadius="lg"
+                  bg="bg.subtle"
+                  src={props.values?.image?.src}
+                  fallback={<Skeleton borderRadius="lg" boxSize="100%" />}
+                />
+              </Stack>
+            )}
 
-                <Stack>
-                  <FormLabel as="legend">{texts.postAuthor[mode]}</FormLabel>
-                  <Input
-                    variant="unstyled"
-                    defaultValue={props.values?.blogPost?.author}
-                    isReadOnly
-                  />
-                </Stack>
+            {isBlogPostInUse && (
+              <Stack spacing="4">
+                <HStack>
+                  <Icon as={FaNewspaper} color="brand.500" />
+                  <Text fontWeight="semibold">{texts.post[mode]}</Text>
+                </HStack>
 
-                <Stack>
-                  {props.values?.blogPost?.category && (
-                    <>
-                      <FormLabel as="legend">
-                        {texts.postCategory[mode]}
-                      </FormLabel>
+                <Stack spacing="4">
+                  <Stack>
+                    <FormLabel as="legend">{texts.postDate[mode]}</FormLabel>
 
-                      <Input
-                        defaultValue={props.values?.blogPost?.category}
-                        isReadOnly
-                      />
-                    </>
-                  )}
+                    <Input
+                      variant="unstyled"
+                      type="datetime-local"
+                      defaultValue={props.values?.blogPost?.date}
+                      isReadOnly
+                    />
+                  </Stack>
+
+                  <Stack>
+                    <FormLabel as="legend">{texts.postAuthor[mode]}</FormLabel>
+                    <Input
+                      variant="unstyled"
+                      defaultValue={props.values?.blogPost?.author}
+                      isReadOnly
+                    />
+                  </Stack>
+
+                  <Stack>
+                    {props.values?.blogPost?.category && (
+                      <>
+                        <FormLabel as="legend">
+                          {texts.postCategory[mode]}
+                        </FormLabel>
+
+                        <Input
+                          defaultValue={props.values?.blogPost?.category}
+                          isReadOnly
+                        />
+                      </>
+                    )}
+                  </Stack>
                 </Stack>
               </Stack>
-            </Stack>
-          )}
+            )}
 
-          {props.values?.isExcludedFromIndex && (
-            <Stack spacing="4">
-              <HStack>
-                <Icon as={FaEyeLowVision} color="brand.500" />
-                <Text fontWeight="semibold">
-                  {texts.excludeFromIndex[mode]}
-                </Text>
-              </HStack>
+            {props.values?.isExcludedFromIndex && (
+              <Stack spacing="4">
+                <HStack>
+                  <Icon as={FaEyeLowVision} color="brand.500" />
+                  <Text fontWeight="semibold">
+                    {texts.excludeFromIndex[mode]}
+                  </Text>
+                </HStack>
 
-              <Tag w="fit-content">Yes</Tag>
-            </Stack>
-          )}
-        </Stack>
+                <Tag w="fit-content">Yes</Tag>
+              </Stack>
+            )}
+          </Stack>
+        )}
       </Stack>
     )
   }
