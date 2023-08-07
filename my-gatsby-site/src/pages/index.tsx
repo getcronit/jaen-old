@@ -180,7 +180,7 @@ const IndexPage: React.FC<PageProps> = () => {
       <Button variant="outline">test outside</Button>
 
       <LightMode>
-        <Button variant="outline">test</Button>
+        <Button variant="outline">test 2</Button>
         <main style={pageStyles}>
           <h1 style={headingStyles}>
             Congratulations

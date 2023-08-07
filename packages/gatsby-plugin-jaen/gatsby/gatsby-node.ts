@@ -267,8 +267,7 @@ export const onCreatePage: GatsbyNode['onCreatePage'] = async (
           }),
           children: [],
           jaenPageMetadata: {
-            title: pageConfig?.label || capitalizeLastPathElement(page.path),
-            datePublished: new Date(page.updatedAt).toISOString()
+            title: pageConfig?.label || capitalizeLastPathElement(page.path)
           },
           jaenFields: null,
           jaenFiles: [],

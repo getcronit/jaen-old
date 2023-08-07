@@ -45,11 +45,14 @@ const pagesSlice = createSlice({
 
       const parentId = parent?.id || null
 
+      const modifiedAt = new Date().toISOString()
+
       // Check if the page is being updated or created
       if (id) {
         // Update the page
         let toBeAddedData = {
           id,
+          modifiedAt,
           ...(slug && {slug}),
           ...(jaenFields !== undefined && {jaenFields}),
           jaenPageMetadata,
@@ -85,6 +88,7 @@ const pagesSlice = createSlice({
 
           state.nodes[fromId] = {
             ...state.nodes[fromId],
+            modifiedAt,
             children: newChildren
           }
         }
@@ -99,6 +103,8 @@ const pagesSlice = createSlice({
 
         // Create the page
         state.nodes[id] = {
+          createdAt: modifiedAt,
+          modifiedAt,
           slug,
           jaenFields: jaenFields || null,
           jaenPageMetadata: jaenPageMetadata || {
@@ -116,6 +122,7 @@ const pagesSlice = createSlice({
       // Add the page to the new parents' children
       if (parentId) {
         state.nodes[parentId] = {
+          modifiedAt,
           ...state.nodes[parentId],
           children: state.nodes[parentId]?.children
             ? [...(state.nodes[parentId]?.children || []), {id}]
@@ -360,10 +367,13 @@ const pagesSlice = createSlice({
       const {pageId, section, fieldType, fieldName, value, props} =
         action.payload
 
+      const modifiedAt = new Date().toISOString()
+
       // find the page
       // Create the page if not found
       state.nodes[pageId] = {
         ...state.nodes[pageId],
+        modifiedAt,
         children: state.nodes[pageId]?.children || []
       }
 

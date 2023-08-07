@@ -7,6 +7,7 @@ import {
   Table,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr
@@ -30,8 +31,8 @@ export interface PagesProps {
     id: string
     title: string
     description: string
-    publishedDate: string
-    lastModifiedDate?: string
+    createdAt: string
+    modifiedAt: string
     author?: string
   }>
   tree: Array<TreeNode>
@@ -102,31 +103,28 @@ export const Pages: React.FC<PagesProps> = props => {
                   <Link to={`#${btoa(page.id)}`}>{page.title}</Link>
                 </Td>
                 <Td>{page.description}</Td>
-                <Td>
-                  {page.author ? (
-                    <Link>By {page.author}</Link>
-                  ) : (
-                    `System generated`
-                  )}
-                </Td>
+                <Td>{page.author ? <Link>By {page.author}</Link> : `-`}</Td>
                 <Td whiteSpace="break-spaces">
-                  {page.lastModifiedDate
-                    ? `Last modified ${new Date(
-                        page.lastModifiedDate
-                      ).toLocaleDateString('en-US')} at ${new Date(
-                        page.lastModifiedDate
-                      ).toLocaleTimeString('en-US', {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      })}`
-                    : `Published ${new Date(
-                        page.publishedDate
-                      ).toLocaleDateString('en-US')} at ${new Date(
-                        page.publishedDate
-                      ).toLocaleTimeString('en-US', {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      })}`}
+                  {page.createdAt || page.modifiedAt
+                    ? page.modifiedAt && page.modifiedAt !== page.createdAt
+                      ? `Last modified ${new Date(
+                          page.modifiedAt
+                        ).toLocaleDateString('en-US')} at ${new Date(
+                          page.modifiedAt
+                        ).toLocaleTimeString('en-US', {
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}`
+                      : `Created ${new Date(page.createdAt).toLocaleDateString(
+                          'en-US'
+                        )} at ${new Date(page.createdAt).toLocaleTimeString(
+                          'en-US',
+                          {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          }
+                        )}`
+                    : '-'}
                 </Td>
               </Tr>
             ))}

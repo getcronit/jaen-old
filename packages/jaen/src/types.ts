@@ -135,6 +135,8 @@ export interface JaenPage {
   id: string
   slug: string
   buildPath?: string
+  createdAt: string
+  modifiedAt: string
   jaenPageMetadata: Partial<{
     title: string
     isBlogPost: boolean

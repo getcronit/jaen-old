@@ -46,7 +46,8 @@ const PagesPage: React.FC = () => {
         id: p.id,
         title: p.jaenPageMetadata.title || 'No title',
         description: p.jaenPageMetadata.description || 'No description',
-        publishedDate: p.jaenPageMetadata.datePublished || ''
+        createdAt: p.createdAt,
+        modifiedAt: p.modifiedAt
         // author: 'Nico Schett'
       }
     })
