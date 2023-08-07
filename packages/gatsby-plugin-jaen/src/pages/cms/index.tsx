@@ -38,7 +38,7 @@ const Page: React.FC<PageProps> = props => {
 export default Page
 
 export const pageConfig: PageConfig = {
-  label: 'Jaen Dashboard',
+  label: 'Jaen CMS',
   icon: 'FaTachometerAlt',
   menu: {
     type: 'app',
