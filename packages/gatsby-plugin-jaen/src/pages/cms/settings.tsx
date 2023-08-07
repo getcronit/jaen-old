@@ -10,19 +10,17 @@ const SettingsPage: React.FC<PageProps> = () => {
   const {toast} = useNotificationsContext()
 
   return (
-    <JaenPageLayout>
-      <Settings
-        data={{siteMetadata: manager.siteMetadata}}
-        onUpdate={({siteMetadata}: FormDataType) => {
-          manager.updateSiteMetadata(siteMetadata || {})
+    <Settings
+      data={{siteMetadata: manager.siteMetadata}}
+      onUpdate={({siteMetadata}: FormDataType) => {
+        manager.updateSiteMetadata(siteMetadata || {})
 
-          toast({
-            title: 'Settings updated',
-            status: 'success'
-          })
-        }}
-      />
-    </JaenPageLayout>
+        toast({
+          title: 'Settings updated',
+          status: 'success'
+        })
+      }}
+    />
   )
 }
 
@@ -59,5 +57,8 @@ export const pageConfig: PageConfig = {
   auth: {
     isRequired: true
   },
-  theme: 'jaen'
+  layout: {
+    name: 'jaen',
+    width: 'full'
+  }
 }

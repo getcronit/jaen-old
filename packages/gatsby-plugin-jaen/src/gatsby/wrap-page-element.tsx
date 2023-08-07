@@ -13,6 +13,7 @@ import React, {useMemo} from 'react'
 import userTheme from '../theme/theme'
 import {DynamicPageRenderer} from './DynamicPageRenderer'
 import {useJaenPagePaths} from './jaen-page-paths'
+import Layout from './Layout'
 
 // Import other necessary components here
 
@@ -39,25 +40,13 @@ const CustomPageElement: React.FC<CustomPageElementProps> = ({
   children,
   pageProps
 }) => {
-  const shouldUseJaenTheme = pageProps.pageContext?.pageConfig?.theme === 'jaen'
-
   const AuthenticatedPage = useMemo(
     () =>
       withAuthentication<{
-        shouldUseJaenTheme: boolean
         children: React.ReactNode
       }>(
-        ({shouldUseJaenTheme, children}) => {
-          if (!shouldUseJaenTheme) {
-            return (
-              <ThemeProvider theme={userTheme}>
-                <GlobalStyle />
-                {children}
-              </ThemeProvider>
-            )
-          }
-
-          return <>{children}</>
+        ({children}) => {
+          return <Layout pageProps={pageProps}>{children}</Layout>
         },
         pageProps.pageContext?.pageConfig,
         {
@@ -107,18 +96,12 @@ const CustomPageElement: React.FC<CustomPageElementProps> = ({
         }>
         <AuthenticatedJaenFrame />
 
-        <AuthenticatedPage shouldUseJaenTheme={shouldUseJaenTheme}>
-          {children}
-        </AuthenticatedPage>
+        <AuthenticatedPage>{children}</AuthenticatedPage>
       </Flex>
     )
   }
 
-  return (
-    <AuthenticatedPage shouldUseJaenTheme={shouldUseJaenTheme}>
-      {children}
-    </AuthenticatedPage>
-  )
+  return <AuthenticatedPage>{children}</AuthenticatedPage>
 }
 
 export interface WithJaenPageProviderProps {
@@ -143,10 +126,12 @@ const withJaenPageProvider = <P extends WithJaenPageProviderProps>(
 
 const JaenPageElement = withJaenPageProvider(CustomPageElement)
 
-export const wrapPageElement: GatsbyBrowser['wrapPageElement'] = ({
-  element,
-  props
-}) => {
+export const wrapPageElement: GatsbyBrowser['wrapPageElement'] = (
+  {element, props},
+  plugins
+) => {
+  console.log('wrapPageElement', props, plugins)
+
   return <JaenPageElement pageProps={props}>{element}</JaenPageElement>
 }
 

@@ -67,41 +67,39 @@ const PagesNew: React.FC = () => {
   }, [location.hash, parentPages])
 
   return (
-    <JaenPageLayout layout="form">
-      <New
-        form={{
-          values: {
-            parent: defaultParentPageId
-          },
-          parentPages,
-          onSubmit: data => {
-            const addedPageId = manager.addPage({
-              slug: data.slug,
-              template: data.template,
-              parent: {
-                id: data.parent
-              },
-              excludedFromIndex: data.isExcludedFromIndex,
-              jaenPageMetadata: {
-                title: data.title,
-                image: data.image?.useImage ? data.image.src : undefined,
-                description: data.description,
-                isBlogPost: data.blogPost?.isBlogPost,
-                datePublished: data.blogPost?.date
-              }
-            })
+    <New
+      form={{
+        values: {
+          parent: defaultParentPageId
+        },
+        parentPages,
+        onSubmit: data => {
+          const addedPageId = manager.addPage({
+            slug: data.slug,
+            template: data.template,
+            parent: {
+              id: data.parent
+            },
+            excludedFromIndex: data.isExcludedFromIndex,
+            jaenPageMetadata: {
+              title: data.title,
+              image: data.image?.useImage ? data.image.src : undefined,
+              description: data.description,
+              isBlogPost: data.blogPost?.isBlogPost,
+              datePublished: data.blogPost?.date
+            }
+          })
 
-            toast({
-              title: 'Page created',
-              description: `Page ${data.title} has been created`,
-              status: 'success'
-            })
+          toast({
+            title: 'Page created',
+            description: `Page ${data.title} has been created`,
+            status: 'success'
+          })
 
-            navigate(`/cms/pages/#${btoa(addedPageId)}`)
-          }
-        }}
-      />
-    </JaenPageLayout>
+          navigate(`/cms/pages/#${btoa(addedPageId)}`)
+        }
+      }}
+    />
   )
 }
 
@@ -135,5 +133,8 @@ export const pageConfig: PageConfig = {
   auth: {
     isRequired: true
   },
-  theme: 'jaen'
+  layout: {
+    name: 'jaen',
+    width: 'form'
+  }
 }

@@ -236,13 +236,10 @@ export const createSchemaCustomization: GatsbyNode['onCreateWebpackConfig'] = ({
 }
 
 // fn to add a specifc context to the pages created by the theme
-export const onCreatePage: GatsbyNode['onCreatePage'] = async ({
-  page,
-  actions,
-  getNode,
-  createContentDigest,
-  store
-}) => {
+export const onCreatePage: GatsbyNode['onCreatePage'] = async (
+  {page, actions, getNode, createContentDigest, store},
+  plugin
+) => {
   const {createPage, deletePage, createNode} = actions
 
   const pageConfig = readPageConfig(page.component)
@@ -299,13 +296,16 @@ export const onCreatePage: GatsbyNode['onCreatePage'] = async ({
             child: pageNode
           })
         }
-      }
 
-      deletePage(page)
-      createPage({
-        ...page,
-        context: {...page.context, jaenPageId, pageConfig}
-      })
+        deletePage(page)
+
+        // create page without
+
+        createPage({
+          ...page,
+          context: {...page.context, jaenPageId, pageConfig}
+        })
+      }
     }
   }
 }

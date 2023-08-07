@@ -34,5 +34,7 @@ export default LoginPage
 export const pageConfig: PageConfig = {
   label: 'Login',
   withoutJaenFrame: true,
-  theme: 'jaen'
+  layout: {
+    name: 'jaen'
+  }
 }

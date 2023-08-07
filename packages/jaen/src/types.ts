@@ -32,7 +32,30 @@ export interface PageConfig {
     permissions?: string[]
   }
 
-  theme?: 'jaen'
+  layout?: {
+    name: 'jaen'
+    // default: 'content'
+    width?: 'form' | 'content' | 'full'
+  }
+}
+
+interface PageContext {
+  pageConfig?: PageConfig
+  jaenPageId?: string
+}
+
+export interface LayoutProps {
+  pageProps: PageProps<
+    {
+      jaenPage?: JaenPage
+      allJaenPage?: {
+        nodes: Array<JaenPage>
+      }
+    },
+    PageContext
+  >
+
+  children: React.ReactNode
 }
 
 export interface MediaNode {

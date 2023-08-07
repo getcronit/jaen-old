@@ -156,56 +156,54 @@ const PagesPage: React.FC = () => {
   }, [manager, currentPage])
 
   return (
-    <JaenPageLayout>
-      <Pages
-        pageId={currentPage.id}
-        form={{
-          disableSlug: !currentPage.template,
-          values: {
-            title: currentPage.jaenPageMetadata?.title || 'No title',
-            image: {
-              useImage: !!currentPage.jaenPageMetadata?.image,
-              src: currentPage.jaenPageMetadata?.image || ''
+    <Pages
+      pageId={currentPage.id}
+      form={{
+        disableSlug: !currentPage.template,
+        values: {
+          title: currentPage.jaenPageMetadata?.title || 'No title',
+          image: {
+            useImage: !!currentPage.jaenPageMetadata?.image,
+            src: currentPage.jaenPageMetadata?.image || ''
+          },
+          slug: currentPage.slug,
+          template: currentPage.template,
+          description:
+            currentPage.jaenPageMetadata.description || 'No description',
+          parent: currentPage.parent?.id,
+          isExcludedFromIndex: currentPage.excludedFromIndex
+        },
+        parentPages,
+        onSubmit: data => {
+          manager.updatePage(currentPage.id, {
+            slug: data.slug,
+            template: data.template,
+            parent: {
+              id: data.parent
             },
-            slug: currentPage.slug,
-            template: currentPage.template,
-            description:
-              currentPage.jaenPageMetadata.description || 'No description',
-            parent: currentPage.parent?.id,
-            isExcludedFromIndex: currentPage.excludedFromIndex
-          },
-          parentPages,
-          onSubmit: data => {
-            manager.updatePage(currentPage.id, {
-              slug: data.slug,
-              template: data.template,
-              parent: {
-                id: data.parent
-              },
-              excludedFromIndex: data.isExcludedFromIndex,
-              jaenPageMetadata: {
-                title: data.title,
-                image: data.image?.useImage ? data.image.src : undefined,
-                description: data.description,
-                isBlogPost: data.blogPost?.isBlogPost,
-                datePublished: data.blogPost?.date
-              }
-            })
+            excludedFromIndex: data.isExcludedFromIndex,
+            jaenPageMetadata: {
+              title: data.title,
+              image: data.image?.useImage ? data.image.src : undefined,
+              description: data.description,
+              isBlogPost: data.blogPost?.isBlogPost,
+              datePublished: data.blogPost?.date
+            }
+          })
 
-            toast({
-              title: 'Page updated',
-              description: `Page ${data.title} has been updated`,
-              status: 'success'
-            })
-          },
-          path: manager.pagePath(currentPage.id)
-        }}
-        children={children}
-        tree={manager.tree}
-        onTreeSelect={handleTreeSelect}
-        disableNewButton={manager.templatesForPage(currentPage.id).length === 0}
-      />
-    </JaenPageLayout>
+          toast({
+            title: 'Page updated',
+            description: `Page ${data.title} has been updated`,
+            status: 'success'
+          })
+        },
+        path: manager.pagePath(currentPage.id)
+      }}
+      children={children}
+      tree={manager.tree}
+      onTreeSelect={handleTreeSelect}
+      disableNewButton={manager.templatesForPage(currentPage.id).length === 0}
+    />
   )
 }
 
@@ -242,5 +240,7 @@ export const pageConfig: PageConfig = {
   auth: {
     isRequired: true
   },
-  theme: 'jaen'
+  layout: {
+    name: 'jaen'
+  }
 }

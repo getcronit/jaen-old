@@ -1,0 +1,16 @@
+import {LayoutProps} from '@snek-at/jaen'
+import {Box, Heading} from '@chakra-ui/react'
+
+const Layout: React.FC<LayoutProps> = ({children, pageProps}) => {
+  return (
+    <Box>
+      <Box as="header" bg="gray.800" color="white" p="4">
+        <Heading as="h1">My Site</Heading>
+      </Box>
+
+      {children}
+    </Box>
+  )
+}
+
+export default Layout

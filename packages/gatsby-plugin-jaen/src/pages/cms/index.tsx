@@ -15,17 +15,15 @@ const DashboardPage: React.FC<PageProps> = () => {
     authentication.user?.details?.firstName || authentication.user?.username
 
   return (
-    <JaenPageLayout>
-      <Dashboard
-        user={user}
-        isPublishing={manager.isPublishing}
-        migrations={[
-          {
-            createdAt: '2021-08-01T00:00:00.000Z'
-          }
-        ]}
-      />
-    </JaenPageLayout>
+    <Dashboard
+      user={user}
+      isPublishing={manager.isPublishing}
+      migrations={[
+        {
+          createdAt: '2021-08-01T00:00:00.000Z'
+        }
+      ]}
+    />
   )
 }
 
@@ -59,5 +57,7 @@ export const pageConfig: PageConfig = {
   auth: {
     isRequired: true
   },
-  theme: 'jaen'
+  layout: {
+    name: 'jaen'
+  }
 }

@@ -5,11 +5,7 @@ import {JaenPageLayout} from '../../components/JaenPageLayout/JaenPageLayout'
 import MediaContainer from '../../containers/media'
 
 const MediaPage: React.FC<PageProps> = () => {
-  return (
-    <JaenPageLayout layout="full">
-      <MediaContainer />
-    </JaenPageLayout>
-  )
+  return <MediaContainer />
 }
 
 export default MediaPage
@@ -36,7 +32,10 @@ export const pageConfig: PageConfig = {
   auth: {
     isRequired: true
   },
-  theme: 'jaen'
+  layout: {
+    name: 'jaen',
+    width: 'full'
+  }
 }
 
 export const query = graphql`

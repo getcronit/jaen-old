@@ -13,7 +13,7 @@ export const JaenPageLayout: React.FC<JaenPageLayoutProps> = ({
 }) => {
   return (
     <Box
-      id="#coco"
+      id="coco"
       bgColor="bg.surface"
       pt={layout === 'full' ? '0' : '4rem'}
       minH="calc(100dvh - 4rem)">
