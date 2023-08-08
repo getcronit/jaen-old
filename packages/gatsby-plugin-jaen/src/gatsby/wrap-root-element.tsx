@@ -1,3 +1,4 @@
+import {ChakraProvider} from '@chakra-ui/react'
 import {
   AuthenticationProvider,
   FieldHighlighterProvider,
@@ -6,8 +7,8 @@ import {
 } from '@snek-at/jaen'
 import {GatsbyBrowser} from 'gatsby'
 import {lazy} from 'react'
-import {Button, ChakraProvider} from '@chakra-ui/react'
 
+import {SiteMetadataProvider} from '../connectors/site-metadata'
 import {theme} from '../theme/index'
 
 const JaenLogin = lazy(
@@ -32,13 +33,15 @@ export const wrapRootElement: GatsbyBrowser['wrapRootElement'] = (
     <ChakraProvider theme={theme} cssVarsRoot="#coco">
       <NotificationsProvider>
         <FieldHighlighterProvider theme={theme}>
-          <AuthenticationProvider
-            snekResourceId={snekResourceId}
-            JaenLoginComponent={JaenLogin}>
-            <MediaModalProvider MediaModalComponent={MediaModalComponent}>
-              {element}
-            </MediaModalProvider>
-          </AuthenticationProvider>
+          <SiteMetadataProvider>
+            <AuthenticationProvider
+              snekResourceId={snekResourceId}
+              JaenLoginComponent={JaenLogin}>
+              <MediaModalProvider MediaModalComponent={MediaModalComponent}>
+                {element}
+              </MediaModalProvider>
+            </AuthenticationProvider>
+          </SiteMetadataProvider>
         </FieldHighlighterProvider>
       </NotificationsProvider>
     </ChakraProvider>

@@ -239,7 +239,7 @@ export type PageProps<
     jaenPage: JaenPage | null
     allJaenPage?: {nodes: Array<Partial<JaenPage>>}
   },
-  PageContextType & {jaenPageId: string}
+  PageContextType & PageContext
 >
 
 export interface IFormProps<Values> {

@@ -40,3 +40,5 @@ export const pageConfig: PageConfig = {
     type: 'full'
   }
 }
+
+export {Head} from '@snek-at/jaen'

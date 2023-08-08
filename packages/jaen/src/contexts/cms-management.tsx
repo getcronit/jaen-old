@@ -15,6 +15,7 @@ import {actions as siteActions} from '../redux/slices/site'
 
 import {JaenPage, JaenTemplate, SiteMetadata} from '../types'
 import {deepmergeArrayIdMerge} from '../utils/deepmerge'
+import {useSiteMetadataContext} from './site-metadata'
 
 // Errors
 
@@ -101,7 +102,7 @@ export const CMSManagementProvider = withRedux(
   ({staticPages, children, templates}: CMSManagementProviderProps) => {
     const dispatch = useAppDispatch()
 
-    const siteMetadata = useAppSelector(state => state.site.siteMetadata)
+    const siteMetadata = useSiteMetadataContext()
 
     const updateSiteMetadata = useCallback(
       (siteMetadata: Partial<SiteMetadata>) => {
@@ -166,8 +167,6 @@ export const CMSManagementProvider = withRedux(
         }))
 
         if (parentId) {
-          console.log('pagesDict', pagesDict)
-
           return valuesWithIds.filter(
             page => page.parent?.id === parentId
           ) as JaenPage[]
@@ -418,6 +417,7 @@ export const CMSManagementProvider = withRedux(
 
     const discardDraft = useCallback(() => {
       dispatch(pageActions.discardAllChanges())
+      dispatch(siteActions.discardAllChanges())
 
       // reset status
       setIsEditing(false)

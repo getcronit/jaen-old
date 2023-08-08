@@ -23,7 +23,8 @@ export {
   PageProps,
   JaenTemplate,
   MediaNode,
-  LayoutProps
+  LayoutProps,
+  SiteMetadata
 } from './types'
 export {generatePageOriginPath} from './utils/path'
 export * from './utils/open-storage-gateway'
@@ -32,3 +33,10 @@ export {useDynamicPaths} from './hooks/use-dynamic-paths'
 export {useMediaModal, MediaModalProvider} from './contexts/media-modal'
 
 export {withRedux} from './redux'
+
+export {
+  SiteMetadataProvider,
+  useSiteMetadataContext
+} from './contexts/site-metadata'
+
+export {Head} from './Head'

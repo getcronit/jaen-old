@@ -137,3 +137,5 @@ export const pageConfig: PageConfig = {
     type: 'form'
   }
 }
+
+export {Head} from '@snek-at/jaen'

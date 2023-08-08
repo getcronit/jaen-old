@@ -1,10 +1,10 @@
 import {
-  connectPage,
   Field,
   PageConfig,
   PageProps,
   useAuthenticationContext,
-  useMediaModal
+  useMediaModal,
+  useSiteMetadataContext
 } from '@snek-at/jaen'
 import {
   LightMode,
@@ -157,6 +157,8 @@ const links = [
 const IndexPage: React.FC<PageProps> = () => {
   const authentication = useAuthenticationContext()
 
+  const siteMetadata = useSiteMetadataContext()
+
   const mediaSelector = useMediaModal({
     onSelect: mediaNode => {
       alert('media selected: ' + mediaNode.url)
@@ -176,6 +178,7 @@ const IndexPage: React.FC<PageProps> = () => {
   return (
     <>
       <Text>{__JAEN_SOURCE_TEMPLATES__}</Text>
+      <Text>{JSON.stringify(siteMetadata)}</Text>
       {/* <Text>{cm.colorMode}</Text> */}
       <Button variant="outline">test outside</Button>
 
@@ -271,3 +274,5 @@ export const query = graphql`
     }
   }
 `
+
+export {Head} from '@snek-at/jaen'

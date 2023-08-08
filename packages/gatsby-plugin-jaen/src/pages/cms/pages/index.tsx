@@ -242,3 +242,5 @@ export const pageConfig: PageConfig = {
     name: 'jaen'
   }
 }
+
+export {Head} from '@snek-at/jaen'

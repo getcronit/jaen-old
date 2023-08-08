@@ -18,6 +18,9 @@ const siteSlice = createSlice({
         ...state.siteMetadata,
         ...action.payload
       }
+    },
+    discardAllChanges: state => {
+      state.siteMetadata = {}
     }
   }
 })

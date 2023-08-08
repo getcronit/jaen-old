@@ -2,7 +2,6 @@ import {PageProps} from 'gatsby'
 import {PageConfig, useNotificationsContext} from '@snek-at/jaen'
 
 import {FormDataType, Settings} from '../../components/cms/Settings/Settings'
-import {JaenPageLayout} from '../../components/JaenPageLayout/JaenPageLayout'
 import {CMSManagement, useCMSManagement} from '../../connectors/cms-management'
 
 const SettingsPage: React.FC<PageProps> = () => {
@@ -61,3 +60,5 @@ export const pageConfig: PageConfig = {
     name: 'jaen'
   }
 }
+
+export {Head} from '@snek-at/jaen'

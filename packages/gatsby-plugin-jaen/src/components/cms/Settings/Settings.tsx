@@ -12,7 +12,6 @@ import {
   Stack,
   StackDivider,
   Textarea,
-  useToast,
   VStack
 } from '@chakra-ui/react'
 import React, {useEffect} from 'react'
@@ -46,16 +45,13 @@ export interface SettingsProps {
 export const Settings: React.FC<SettingsProps> = ({data, onUpdate}) => {
   const [defaultValues, setDefaultValues] = React.useState(data)
 
-  // React.useEffect(() => {
-  //   reset(data)
-  // }, [data])
-
   const {
     register,
     reset,
     handleSubmit,
     setValue,
     control,
+    getValues,
     formState: {errors, isSubmitting, isDirty}
   } = useForm<FormDataType>({
     defaultValues
@@ -68,8 +64,14 @@ export const Settings: React.FC<SettingsProps> = ({data, onUpdate}) => {
   useEffect(() => {
     setDefaultValues(data)
 
-    reset(data)
+    reset({
+      siteMetadata: Object.keys(data.siteMetadata || {}).length
+        ? data.siteMetadata
+        : null
+    })
   }, [data])
+
+  console.log('values', getValues())
 
   return (
     <Box id="coco">
