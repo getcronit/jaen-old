@@ -220,6 +220,7 @@ export const pageConfig: PageConfig = {
   icon: 'FaSitemap',
 
   menu: {
+    label: 'Pages',
     type: 'app',
     group: 'cms',
     order: 200
