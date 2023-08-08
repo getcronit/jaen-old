@@ -29,24 +29,22 @@ import {JaenFullLogo} from '../shared/JaenLogo/JaenLogo'
 import {Link} from '../shared/Link/Link'
 import {PasswordField} from './components/PasswordField'
 
-export interface JaenLoginProps {
-  onSignIn: (values: FormData) => Promise<void>
+export interface SignupProps {
+  onSignUp: (values: FormData) => Promise<void>
   goBackPath?: string
   onGoBack?: () => void
-  forgotPasswordPath?: string
-  onForgotPassword?: () => void
-  signUpPath?: string
-  onSignUp?: () => void
-  isModal?: boolean
+  signInPath?: string
+  onSignIn?: () => void
 }
 
 interface FormData {
-  login: string
+  firstName: string
+  lastName: string
+  email: string
   password: string
-  logMeOut: boolean
 }
 
-export const JaenLogin: React.FC<JaenLoginProps> = props => {
+export const Signup: React.FC<SignupProps> = props => {
   const {
     handleSubmit,
     register,
@@ -71,11 +69,11 @@ export const JaenLogin: React.FC<JaenLoginProps> = props => {
     console.log(data)
 
     try {
-      await props.onSignIn(data)
+      await props.onSignUp(data)
     } catch (e) {
       setAlert({
         status: 'error',
-        message: 'Unable to sign in',
+        message: `Unable to sign up.`,
         description: e.message
       })
     }
@@ -102,12 +100,12 @@ export const JaenLogin: React.FC<JaenLoginProps> = props => {
 
             <Stack spacing={{base: '2', md: '3'}} textAlign="center">
               <Heading size={{base: 'xs', md: 'sm'}}>
-                Log in to your account
+                Create your account
               </Heading>
               <Text color="fg.muted">
-                Don&apos;t have an account?{' '}
-                <Link to={props.signUpPath} onClick={props.onSignUp}>
-                  Sign up
+                Already a user?{' '}
+                <Link to={props.signInPath} onClick={props.onSignIn}>
+                  Login
                 </Link>
               </Text>
             </Stack>
@@ -130,7 +128,7 @@ export const JaenLogin: React.FC<JaenLoginProps> = props => {
             </Alert>
           )}
 
-          <form onSubmit={handleSubmit(onSubmit) as any} autoComplete="off">
+          <form onSubmit={handleSubmit(onSubmit) as any}>
             <Box
               py={{base: '0', sm: '8'}}
               px={{base: '4', sm: '10'}}
@@ -144,45 +142,74 @@ export const JaenLogin: React.FC<JaenLoginProps> = props => {
                   </Box>
                 </HStack>
                 <Stack spacing="5">
+                  <Stack
+                    spacing="4"
+                    direction={{
+                      base: 'column',
+                      md: 'row'
+                    }}>
+                    <FormControl
+                      id="login_form_first_name"
+                      isRequired
+                      isInvalid={!!errors.firstName}>
+                      <FormLabel htmlFor="firstName">First name</FormLabel>
+                      <Input
+                        id="firstName"
+                        {...register('firstName', {
+                          required: true
+                        })}
+                      />
+                      <FormErrorMessage>
+                        {errors.firstName && 'First name is required'}
+                      </FormErrorMessage>
+                    </FormControl>
+                    <FormControl
+                      id="login_form_last_name"
+                      isRequired
+                      isInvalid={!!errors.lastName}>
+                      <FormLabel htmlFor="lastName">Last name</FormLabel>
+                      <Input
+                        id="lastName"
+                        {...register('lastName', {
+                          required: true
+                        })}
+                      />
+                      <FormErrorMessage>
+                        {errors.lastName && 'Last name is required'}
+                      </FormErrorMessage>
+                    </FormControl>
+                  </Stack>
+
                   <FormControl
-                    id="login_form_login"
+                    id="login_form_email"
                     isRequired
-                    isInvalid={!!errors.login}>
-                    <FormLabel htmlFor="login">
-                      Username or email address
-                    </FormLabel>
+                    isInvalid={!!errors.email}>
+                    <FormLabel htmlFor="email">Email</FormLabel>
                     <Input
-                      id="login"
-                      {...register('login', {required: true})}
+                      id="email"
+                      {...register('email', {
+                        required: true
+                      })}
                     />
                     <FormErrorMessage>
-                      {errors.login && 'Username or email address'}
+                      {errors.email && 'Email is required'}
                     </FormErrorMessage>
                   </FormControl>
+
                   <PasswordField
                     {...register('password', {required: true})}
                     isRequired
                     isInvalid={!!errors.password?.message}
                   />
                 </Stack>
-                <HStack justify="space-between">
-                  <Checkbox id="logMeOutAfterwards" {...register('logMeOut')}>
-                    Log me out after
-                  </Checkbox>
-                  <Link
-                    size="sm"
-                    to={props.forgotPasswordPath}
-                    onClick={props.onForgotPassword}>
-                    Forgot password?
-                  </Link>
-                </HStack>
+
                 <Stack spacing="6">
                   <Button
                     type="submit"
                     variant="primary"
                     size="lg"
                     isLoading={isSubmitting}>
-                    Sign in
+                    Sign up
                   </Button>
                   {/* <HStack>
             <Divider />
@@ -203,24 +230,7 @@ export const JaenLogin: React.FC<JaenLoginProps> = props => {
     </Box>
   )
 
-  if (props.isModal) {
-    return (
-      <Modal
-        size="full"
-        isOpen={true}
-        onClose={() => {
-          props.onGoBack?.()
-        }}>
-        <ModalContent
-          bg="transparent"
-          backdropFilter="blur(8px) saturate(180%) contrast(46%) brightness(120%)">
-          {content}
-        </ModalContent>
-      </Modal>
-    )
-  }
-
   return content
 }
 
-export default JaenLogin
+export default Signup
