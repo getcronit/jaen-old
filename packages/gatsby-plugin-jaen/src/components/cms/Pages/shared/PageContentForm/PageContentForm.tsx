@@ -287,7 +287,7 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
           </Text>
         </Stack>
 
-        {(isImageInUse ||
+        {/* {(isImageInUse ||
           isBlogPostInUse ||
           props.values?.isExcludedFromIndex) && (
           <Stack spacing="4" divider={<StackDivider />}>
@@ -368,7 +368,7 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
               </Stack>
             )}
           </Stack>
-        )}
+        )} */}
       </Stack>
     )
   }
