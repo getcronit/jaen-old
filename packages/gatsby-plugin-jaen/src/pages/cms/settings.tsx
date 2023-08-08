@@ -34,9 +34,10 @@ const Page: React.FC<PageProps> = props => {
 export default Page
 
 export const pageConfig: PageConfig = {
-  label: 'Settings',
+  label: 'Jaen CMS | Settings',
   icon: 'FaCog',
   menu: {
+    label: 'Settings',
     type: 'app',
     group: 'cms',
     order: 400

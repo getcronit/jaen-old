@@ -216,7 +216,7 @@ const Page: React.FC<PageProps> = () => {
 export default Page
 
 export const pageConfig: PageConfig = {
-  label: 'Pages',
+  label: 'Jaen CMS | Pages',
   icon: 'FaSitemap',
 
   menu: {

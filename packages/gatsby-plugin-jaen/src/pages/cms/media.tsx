@@ -1,7 +1,6 @@
 import {PageConfig} from '@snek-at/jaen'
 import {graphql, PageProps} from 'gatsby'
 
-import {JaenPageLayout} from '../../components/JaenPageLayout/JaenPageLayout'
 import MediaContainer from '../../containers/media'
 
 const MediaPage: React.FC<PageProps> = () => {
@@ -11,9 +10,10 @@ const MediaPage: React.FC<PageProps> = () => {
 export default MediaPage
 
 export const pageConfig: PageConfig = {
-  label: 'Media',
+  label: 'Jaen CMS | Media',
   icon: 'FaImage',
   menu: {
+    label: 'Media',
     type: 'app',
     group: 'cms',
     order: 300

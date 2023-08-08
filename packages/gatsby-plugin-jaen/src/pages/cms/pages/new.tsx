@@ -113,7 +113,7 @@ const Page: React.FC<PageProps> = () => {
 export default Page
 
 export const pageConfig: PageConfig = {
-  label: 'New',
+  label: 'New page',
   breadcrumbs: [
     {
       label: 'CMS',
