@@ -122,10 +122,10 @@ const withJaenPageProvider = <P extends WithJaenPageProviderProps>(
 
 const JaenPageElement = withJaenPageProvider(CustomPageElement)
 
-export const wrapPageElement: GatsbyBrowser['wrapPageElement'] = (
-  {element, props},
-  plugins
-) => {
+export const wrapPageElement: GatsbyBrowser['wrapPageElement'] = ({
+  element,
+  props
+}) => {
   return <JaenPageElement pageProps={props}>{element}</JaenPageElement>
 }
 
