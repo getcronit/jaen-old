@@ -1,1 +1,1 @@
-export {EmailForm, EmailFormProps} from './EmailForm'
+export {EmailForm, type EmailFormProps} from './EmailForm'

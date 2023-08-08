@@ -1,1 +1,1 @@
-export {Dashboard, DashboardProps} from './Dashboard'
+export {Dashboard, type DashboardProps} from './Dashboard'

@@ -1,1 +1,1 @@
-export {Settings, SettingsProps} from './Settings'
+export {Settings, type SettingsProps} from './Settings'

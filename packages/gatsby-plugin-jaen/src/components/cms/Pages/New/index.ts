@@ -1,1 +1,1 @@
-export {New, NewProps} from './New'
+export {New, type NewProps} from './New'

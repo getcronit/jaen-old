@@ -1,13 +1,12 @@
-import {JaenPage, PageConfig} from '@snek-at/jaen'
-import {generatePageOriginPath} from '@snek-at/jaen/src/utils/path'
+import {JaenPage} from '@snek-at/jaen'
 import {GatsbyNode, Node} from 'gatsby'
-import slugify from 'slugify'
 import path from 'path'
 
+import {templateDir} from './gatsby-config'
 import {capitalizeLastPathElement} from './helper/capitalize-last-path-element'
 import {getJaenPageParentId} from './helper/get-jaen-page-parent-id'
 import {readPageConfig} from './helper/page-config-reader'
-import {templateDir} from './gatsby-config'
+import {generatePageOriginPath} from './helper/path'
 
 export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] =
   async ({actions, loaders, stage, plugins}, pluginOptions) => {

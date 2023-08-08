@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react'
+import React, {useCallback} from 'react'
 
 import {TuneSelectorProps} from '../components/TuneSelectorButton'
 import {useField} from '../hooks/use-field'

@@ -3,18 +3,31 @@
   "version": "3.0.0",
   "type": "module",
   "source": "src/index.ts",
-  "main": "./src/index.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.module.js",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.module.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "types": "./dist/index.d.ts",
   "license": "MIT",
   "scripts": {
-    "build": "rimraf dist && microbundle src/index.ts --format cjs,esm --no-compress"
+    "build": "rimraf dist && microbundle src/index.ts --format cjs,esm"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.8.0",
     "@reduxjs/toolkit": "^1.9.5",
     "@snek-functions/origin": "^0.3.0",
     "deepmerge": "^4.3.1",
+    "form-data": "^4.0.0",
     "gatsby-plugin-image": "^3.11.0",
+    "isomorphic-dompurify": "^1.8.0",
     "react-icons": "^4.10.1",
+    "react-photo-view": "^1.2.3",
     "react-redux": "^8.1.1",
     "redux": "^4.2.1",
     "uuid": "^9.0.0"

@@ -1,1 +1,1 @@
-export {FieldGroup, FieldGroupProps} from './FieldGroup'
+export {FieldGroup, type FieldGroupProps} from './FieldGroup'

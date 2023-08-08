@@ -1,1 +1,1 @@
-export {NavigationGroups, NavigationGroupsProps} from './NavigationGroups'
+export {NavigationGroups, type NavigationGroupsProps} from './NavigationGroups'

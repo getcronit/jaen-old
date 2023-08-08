@@ -1,1 +1,1 @@
-export {AccountForm, AccountFormProps} from './AccountForm'
+export {AccountForm, type AccountFormProps} from './AccountForm'

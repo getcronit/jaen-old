@@ -1,7 +1,6 @@
-import {JaenPage, PageProvider, useDynamicPaths} from '@snek-at/jaen'
-import {withRedux} from '@snek-at/jaen/src/redux'
-
+import {JaenPage, PageProvider, useDynamicPaths, withRedux} from '@snek-at/jaen'
 import {PageProps} from 'gatsby'
+
 import React, {lazy, useMemo} from 'react'
 import {useJaenPagePaths} from './jaen-page-paths'
 

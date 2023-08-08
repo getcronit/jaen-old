@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react'
-import {store, useAppSelector} from '../redux'
+import {useAppSelector} from '../redux'
 import {JaenPage} from '../types'
 import {generatePageOriginPath} from '../utils/path'
 

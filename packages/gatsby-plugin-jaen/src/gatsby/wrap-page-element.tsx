@@ -1,18 +1,14 @@
-import {Flex, GlobalStyle, ThemeProvider} from '@chakra-ui/react'
+import {Flex} from '@chakra-ui/react'
 import {
   JaenPage,
   PageConfig,
-  PageProvider,
   useAuthenticationContext,
   withAuthentication
 } from '@snek-at/jaen'
-import {withRedux} from '@snek-at/jaen/src/redux'
 import {GatsbyBrowser, navigate, PageProps, Slice} from 'gatsby'
 import React, {useMemo} from 'react'
 
-import userTheme from '../theme/theme'
 import {DynamicPageRenderer} from './DynamicPageRenderer'
-import {useJaenPagePaths} from './jaen-page-paths'
 import Layout from './Layout'
 
 // Import other necessary components here

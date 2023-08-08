@@ -7,15 +7,12 @@ import {
   useEffect,
   useState
 } from 'react'
-import {FaImage, FaSlidersH, FaTrashAlt} from 'react-icons/fa'
+import {FaImage, FaTrashAlt} from 'react-icons/fa'
 import {PhotoProvider, PhotoView} from 'react-photo-view'
+
 import {connectField} from '../../connectors'
 import {useMediaModal} from '../../contexts/media-modal'
-import {
-  PageProvider,
-  useJaenPageIndex,
-  usePageContext
-} from '../../contexts/page'
+import {PageProvider, usePageContext} from '../../contexts/page'
 import {JaenPage} from '../../types'
 import {HighlightTooltip} from '../components/HighlightTooltip'
 import {useImage} from './hooks/use-image'

@@ -1,1 +1,1 @@
-export {PageBreadcrumb, PageBreadcrumbProps} from './PageBreadcrumb'
+export {PageBreadcrumb, type PageBreadcrumbProps} from './PageBreadcrumb'

@@ -1,1 +1,1 @@
-export {JaenPageLayout, JaenPageLayoutProps} from './JaenPageLayout'
+export {JaenPageLayout, type JaenPageLayoutProps} from './JaenPageLayout'

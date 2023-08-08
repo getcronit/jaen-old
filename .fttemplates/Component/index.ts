@@ -1,1 +1,1 @@
-export {[FTName], [FTName]Props} from './[FTName].js'
+export {[FTName], type [FTName]Props} from './[FTName]'

@@ -1,1 +1,1 @@
-export {PasswordForm, PasswordFormProps} from './PasswordForm'
+export {PasswordForm, type PasswordFormProps} from './PasswordForm'

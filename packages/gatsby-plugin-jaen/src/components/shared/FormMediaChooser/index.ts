@@ -1,1 +1,1 @@
-export {FormMediaChooser, FormMediaChooserProps} from './FormMediaChooser'
+export {FormMediaChooser, type FormMediaChooserProps} from './FormMediaChooser'

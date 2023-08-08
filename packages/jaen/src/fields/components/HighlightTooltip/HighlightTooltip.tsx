@@ -1,5 +1,5 @@
 import {As, Box, BoxProps} from '@chakra-ui/react'
-import React, {forwardRef, useCallback, useEffect, useMemo} from 'react'
+import React, {forwardRef, useCallback, useMemo} from 'react'
 
 import {useHighlight} from '../../../contexts/field-highlighter'
 
