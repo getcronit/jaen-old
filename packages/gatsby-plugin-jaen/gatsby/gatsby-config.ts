@@ -13,8 +13,6 @@ const Config: GatsbyConfig = {
 
 export const templateDir = `${process.cwd()}/src/templates`
 
-console.log(templateDir)
-
 if (fs.existsSync(templateDir)) {
   Config.plugins?.push({
     resolve: `gatsby-source-filesystem`,

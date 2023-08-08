@@ -21,8 +21,6 @@ const SignupPage: React.FC<PageProps> = () => {
       signInPath="/login"
       goBackPath="/"
       onSignUp={async data => {
-        console.log(data)
-
         alert(
           'Sorry, registration is currently disabled. Please try again later.'
         )

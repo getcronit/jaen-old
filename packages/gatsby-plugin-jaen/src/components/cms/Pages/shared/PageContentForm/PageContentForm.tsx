@@ -201,8 +201,6 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
   }
 
   const onSubmit: SubmitHandler<FormValues> = data => {
-    console.log(data)
-
     try {
       return props.onSubmit(data)
     } catch (e) {

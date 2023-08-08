@@ -168,8 +168,6 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
     }
   }
 
-  console.log('nodes', mediaNodes, selectedMediaNode)
-
   useEffect(() => {
     const handleScroll = () => {
       const lastMediaItem = document.getElementById('last-media-item') // Add an ID to the last media item in the list
@@ -250,8 +248,6 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
   //   //   `${window.location.pathname}?${searchParams.toString()}`
   //   // )
   // }, [dropzone.isFileDialogActive])
-
-  console.log('MediaGallery.tsx')
 
   return (
     <Box w="full">

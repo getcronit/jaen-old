@@ -126,8 +126,6 @@ export const wrapPageElement: GatsbyBrowser['wrapPageElement'] = (
   {element, props},
   plugins
 ) => {
-  console.log('wrapPageElement', props, plugins)
-
   return <JaenPageElement pageProps={props}>{element}</JaenPageElement>
 }
 

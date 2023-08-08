@@ -116,8 +116,6 @@ export const readPageConfig = (filePath: string): PageConfig | undefined => {
     return undefined
   }
 
-  console.log(configObject)
-
   let childTemplates = (configObject as any).childTemplates || []
 
   // Prepend `JaenTemplate` to child templates if not already present

@@ -39,8 +39,6 @@ const PagesPage: React.FC = () => {
   const children = useMemo(() => {
     const pages = manager.pages(currentPage.id)
 
-    console.log('Child pages', pages, currentPage.id)
-
     return pages.map(p => {
       return {
         id: p.id,

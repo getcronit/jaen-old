@@ -240,8 +240,6 @@ export const MediaPreview: React.FC<MediaPreviewProps> = ({
               source={selectedMediaNode?.url}
               closeAfterSave
               onSave={async (editedImageObject, designState) => {
-                console.log('saved', editedImageObject, designState)
-
                 editedImageObject.imageCanvas?.toBlob(blob => {
                   if (blob) {
                     const newFile = new File(
