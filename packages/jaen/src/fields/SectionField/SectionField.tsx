@@ -122,9 +122,10 @@ export const SectionField = withRedux(
       ptrPrev: string | null,
       ptrNext: string | null
     ) => {
-      const shouldDelete = await confirm(
-        `Are you sure you want to remove this block from the ${label} section?`
-      )
+      const shouldDelete = await confirm({
+        title: 'Delete block',
+        message: `Are you sure you want to remove this block from the ${label} section?`
+      })
 
       if (shouldDelete) {
         onSectionDelete(id, ptrPrev, ptrNext)

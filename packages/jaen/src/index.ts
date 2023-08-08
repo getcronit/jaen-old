@@ -39,4 +39,9 @@ export {
   useSiteMetadataContext
 } from './contexts/site-metadata'
 
+export {
+  JaenUpdateModalProvider,
+  useJaenUpdateModalContext
+} from './contexts/jaen-update-modal'
+
 export {Head} from './Head'

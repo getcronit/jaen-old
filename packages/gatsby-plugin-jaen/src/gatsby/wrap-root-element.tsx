@@ -3,7 +3,8 @@ import {
   AuthenticationProvider,
   FieldHighlighterProvider,
   MediaModalProvider,
-  NotificationsProvider
+  NotificationsProvider,
+  JaenUpdateModalProvider
 } from '@snek-at/jaen'
 import {GatsbyBrowser} from 'gatsby'
 import {lazy} from 'react'
@@ -32,17 +33,19 @@ export const wrapRootElement: GatsbyBrowser['wrapRootElement'] = (
   return (
     <ChakraProvider theme={theme} cssVarsRoot="#coco">
       <NotificationsProvider>
-        <FieldHighlighterProvider theme={theme}>
-          <SiteMetadataProvider>
-            <AuthenticationProvider
-              snekResourceId={snekResourceId}
-              JaenLoginComponent={JaenLogin}>
-              <MediaModalProvider MediaModalComponent={MediaModalComponent}>
-                {element}
-              </MediaModalProvider>
-            </AuthenticationProvider>
-          </SiteMetadataProvider>
-        </FieldHighlighterProvider>
+        <JaenUpdateModalProvider>
+          <FieldHighlighterProvider theme={theme}>
+            <SiteMetadataProvider>
+              <AuthenticationProvider
+                snekResourceId={snekResourceId}
+                JaenLoginComponent={JaenLogin}>
+                <MediaModalProvider MediaModalComponent={MediaModalComponent}>
+                  {element}
+                </MediaModalProvider>
+              </AuthenticationProvider>
+            </SiteMetadataProvider>
+          </FieldHighlighterProvider>
+        </JaenUpdateModalProvider>
       </NotificationsProvider>
     </ChakraProvider>
   )

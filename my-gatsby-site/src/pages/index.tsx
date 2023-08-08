@@ -3,7 +3,9 @@ import {
   PageConfig,
   PageProps,
   useAuthenticationContext,
+  useJaenUpdateModalContext,
   useMediaModal,
+  useNotificationsContext,
   useSiteMetadataContext
 } from '@snek-at/jaen'
 import {
@@ -18,6 +20,8 @@ import {
 } from '@chakra-ui/react'
 import {graphql, HeadFC} from 'gatsby'
 import * as React from 'react'
+
+import {FaCogs} from 'react-icons/fa'
 
 const pageStyles = {
   color: '#232129',
@@ -168,12 +172,6 @@ const IndexPage: React.FC<PageProps> = () => {
   const testImport = async () => {
     return await import(`${__JAEN_SOURCE_TEMPLATES__}/BlogPage`)
   }
-
-  React.useEffect(() => {
-    testImport().then(res => {
-      console.log(res)
-    })
-  }, [])
 
   return (
     <>

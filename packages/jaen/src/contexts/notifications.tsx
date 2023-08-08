@@ -1,12 +1,14 @@
 import {
-  Box,
+  As,
   Button,
   CreateToastFnReturn,
+  Icon,
   Input,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
+  ModalHeader,
   ModalOverlay,
   Stack,
   Text,
@@ -27,10 +29,23 @@ enum ModalType {
   Prompt
 }
 
+interface OpenerFn {
+  (
+    args: {
+      icon?: As
+      title: string
+      message: string
+      confirmText?: string
+      cancelText?: string
+    },
+    defaultValue?: string
+  ): Promise<any>
+}
+
 export interface Notifications {
-  alert: (message: string) => Promise<any>
-  confirm: (message: string) => Promise<any>
-  prompt: (message: string, defaultValue?: string) => Promise<any>
+  alert: OpenerFn
+  confirm: OpenerFn
+  prompt: OpenerFn
   toast: CreateToastFnReturn
 }
 
@@ -69,8 +84,12 @@ export const NotificationsProvider = ({children}: {children: ReactNode}) => {
 
   const createOpener = useCallback(
     (type: ModalType) =>
-      async (message: string, defaultValue = '') =>
+      async (...props: Parameters<OpenerFn>) =>
         await new Promise(resolve => {
+          console.log('Props', props)
+
+          const [args, defaultValue] = props
+
           const handleClose = (e?: AnyEvent) => {
             e?.preventDefault()
             setModal(null)
@@ -97,28 +116,45 @@ export const NotificationsProvider = ({children}: {children: ReactNode}) => {
               onClose={handleClose}
               initialFocusRef={type === ModalType.Prompt ? input : ok}>
               <ModalOverlay />
-              <Box>
-                <ModalContent>
-                  <ModalBody mt={5}>
-                    <Stack spacing={5}>
-                      <Text>{message}</Text>
-                      {type === ModalType.Prompt && (
-                        <Input ref={input} defaultValue={defaultValue} />
-                      )}
-                    </Stack>
-                  </ModalBody>
-                  <ModalFooter>
-                    {type !== ModalType.Alert && (
-                      <Button mr={3} variant="ghost" onClick={handleCancel}>
-                        Cancel
-                      </Button>
+              <ModalContent
+                containerProps={{
+                  id: 'coco'
+                }}
+                overflow="hidden">
+                <ModalHeader>
+                  <Stack direction="row" alignItems="center">
+                    {args.icon && (
+                      <Icon
+                        as={args.icon}
+                        bg="brand.100"
+                        color="brand.500"
+                        borderRadius="full"
+                        boxSize="10"
+                        p="2"
+                      />
                     )}
-                    <Button onClick={handleOK} ref={ok}>
-                      OK
+                    <Text>{args.title}</Text>
+                  </Stack>
+                </ModalHeader>
+                <ModalBody mt="0" mb={2}>
+                  <Stack spacing={5}>
+                    <Text>{args.message}</Text>
+                    {type === ModalType.Prompt && (
+                      <Input ref={input} defaultValue={defaultValue} />
+                    )}
+                  </Stack>
+                </ModalBody>
+                <ModalFooter bg="bg.subtle" py="3">
+                  {type !== ModalType.Alert && (
+                    <Button mr={3} variant="outline" onClick={handleCancel}>
+                      {args.cancelText || 'Cancel'}
                     </Button>
-                  </ModalFooter>
-                </ModalContent>
-              </Box>
+                  )}
+                  <Button onClick={handleOK} ref={ok}>
+                    {args.confirmText || 'OK'}
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
             </Modal>
           )
         }),
