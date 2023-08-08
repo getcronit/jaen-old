@@ -170,15 +170,12 @@ export const FieldHighlighterProvider: React.FC<
   }
 
   const mouseEnterHandler = useCallback((e: MouseEvent) => {
-    console.log('mouseEnterHandler')
     const element = e.target as HTMLElement
 
     element.focus({
       preventScroll: true
     })
   }, [])
-
-  console.log('itemsRef.current.le', itemsRef.current.length)
 
   const mouseLeaveHandler = useCallback((e: MouseEvent) => {
     const relatedTarget = e.relatedTarget as HTMLElement
@@ -228,7 +225,6 @@ export const FieldHighlighterProvider: React.FC<
   }, [])
 
   const blurHandler = useCallback((e: FocusEvent) => {
-    console.log('blurHandler')
     const highlightRoot = document.querySelector(
       `.${FIELD_HIGHLIGHTER_CLASSNAMES.JAEN_HIGHLIGHT_FRAME}`
     )
@@ -258,8 +254,6 @@ export const FieldHighlighterProvider: React.FC<
       tooltipButtons: React.ReactNode[]
     ) => {
       if (ref) {
-        console.log('LENGTH', itemsRef.current)
-
         if (itemsRef.current[id]) {
           const oldRef = itemsRef.current[id]?.ref
 
@@ -310,8 +304,6 @@ export const FieldHighlighterProvider: React.FC<
     }
   }, [])
 
-  console.log('portaledTooltip', portaledTooltip)
-
   return (
     <FieldHighlighterProviderContext.Provider value={{ref}}>
       {portaledTooltip}
@@ -329,7 +321,6 @@ export const useHighlight = ({tooltipButtons}: UseHighlightProps) => {
 
   const refOnly = useCallback(
     (theRef: HTMLDivElement | null, id: string) => {
-      console.log('theRef', theRef)
       ref(theRef, id, tooltipButtons)
     },
     [tooltipButtons, ref]

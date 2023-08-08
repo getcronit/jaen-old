@@ -8,7 +8,6 @@ export const rehypeUnwrapImages: Plugin<[]> = () => {
   }
 
   function visitor(node: Element, index: number, parent: Element | undefined) {
-    console.log('visitor', node.tagName, parent?.tagName, index)
     if (node.tagName === 'img' && parent && parent.tagName === 'p') {
       parent.tagName = 'div'
     }

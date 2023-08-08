@@ -51,8 +51,6 @@ export const Signup: React.FC<SignupProps> = props => {
     formState: {errors, isSubmitting}
   } = useForm<FormData>()
 
-  console.log(errors)
-
   const [alert, setAlert] = useState<{
     status: 'error' | 'success' | 'info'
     message: string | JSX.Element
@@ -65,8 +63,6 @@ export const Signup: React.FC<SignupProps> = props => {
 
   const onSubmit: SubmitHandler<FormData> = async (data: FormData, e) => {
     e?.preventDefault()
-
-    console.log(data)
 
     try {
       await props.onSignUp(data)

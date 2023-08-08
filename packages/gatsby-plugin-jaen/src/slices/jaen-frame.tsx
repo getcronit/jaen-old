@@ -2,11 +2,14 @@ import {
   PageConfig,
   useAuthenticationContext,
   useMediaModal,
-  useNotificationsContext
+  useNotificationsContext,
+  useJaenUpdateModalContext
 } from '@snek-at/jaen'
 import {graphql, SliceComponentProps} from 'gatsby'
 import {useMemo} from 'react'
 import {
+  FaCircle,
+  FaCogs,
   FaEdit,
   FaFileDownload,
   FaFileUpload,
@@ -20,6 +23,7 @@ import Logo from '../components/Logo'
 import {NavigationGroupsProps} from '../components/JaenFrame/components/NavigationGroups'
 import JaenFrame from '../components/JaenFrame/JaenFrame'
 import {CMSManagement, useCMSManagement} from '../connectors/cms-management'
+import {Box, Icon} from '@chakra-ui/react'
 
 type SliceProps = SliceComponentProps<
   {
@@ -48,6 +52,10 @@ const Slice: React.FC<SliceProps> = props => {
 
   const {toast} = useNotificationsContext()
 
+  const jaenUpdate = useJaenUpdateModalContext()
+
+  const isBadgeVisible = manager.isEditing || jaenUpdate.isUpdateAvailable
+
   const {navigationGroups} = useMemo(() => {
     const sortedNodes = props.data.allSitePage.nodes.sort((a, b) => {
       const aOrder = a.pageContext.pageConfig?.menu?.order || 0
@@ -61,6 +69,23 @@ const Slice: React.FC<SliceProps> = props => {
     } = {
       app: {},
       user: {
+        ...(jaenUpdate.isUpdateAvailable
+          ? {
+              important: {
+                items: {
+                  updateAvailable: {
+                    label: 'Jaen Update available',
+                    icon: () => (
+                      <Icon as={FaCogs} color="pink.500" fontSize="lg" mr="2" />
+                    ),
+                    onClick: () => {
+                      jaenUpdate.toggleModal()
+                    }
+                  }
+                }
+              }
+            }
+          : {}),
         add: {
           items: {
             addPage: {
@@ -210,7 +235,7 @@ const Slice: React.FC<SliceProps> = props => {
                 username: 'Guest'
               },
           navigationGroups: navigationGroups.user,
-          isBadgeVisible: manager.isEditing
+          isBadgeVisible
         },
         addMenu: {
           items: {

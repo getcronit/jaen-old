@@ -151,8 +151,6 @@ export const SectionField = withRedux(
       ])
     }
 
-    console.log('section', section)
-
     return (
       <HighlightTooltip
         id={name}

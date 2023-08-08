@@ -19,7 +19,6 @@ export const useDynamicPaths = () => {
   >({})
 
   useEffect(() => {
-    console.log('pages', pages)
     const newPaths: Record<
       string,
       {
@@ -32,8 +31,6 @@ export const useDynamicPaths = () => {
       ...page,
       id
     }))
-
-    console.log('pagesValues', pagesValuesWithId)
 
     for (const page of pagesValuesWithId) {
       const path = generatePageOriginPath(pagesValuesWithId, page)

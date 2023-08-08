@@ -1,5 +1,5 @@
 import {Box, Flex, Icon, IconButton, IconButtonProps} from '@chakra-ui/react'
-import {useEffect, useState} from 'react'
+import {useState} from 'react'
 import {FaBars} from 'react-icons/fa'
 
 import {TuneSelector, TuneSelectorProps} from './components/TuneSelector'
@@ -21,10 +21,6 @@ export const TuneSelectorButton: React.FC<TuneSelectorButtonProps> = ({
   const toggleOpen = () => {
     setIsOpen(!isOpen)
   }
-
-  useEffect(() => {
-    console.log('TuneSelectorButton')
-  }, [])
 
   return (
     <Flex pos="relative">

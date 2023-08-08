@@ -99,8 +99,6 @@ export const PageTree: React.FC<PageTreeProps> = ({
         )
       }}
       canDropAt={(items, target) => {
-        console.log(items, target)
-
         return true
       }}
       onFocusItem={item => setFocusedItem(item.index)}

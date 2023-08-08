@@ -28,7 +28,7 @@ export interface JaenFrameProps {
     user: {
       user: DrawerRightProps['user']
       navigationGroups: DrawerRightProps['navigationGroups']
-      isBadgeVisible?: boolean
+      isBadgeVisible: DrawerRightProps['isBadgeVisible']
     }
     addMenu: {
       items: MenuButtonProps['items']

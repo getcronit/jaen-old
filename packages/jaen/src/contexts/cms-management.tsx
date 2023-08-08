@@ -198,8 +198,6 @@ export const CMSManagementProvider = withRedux(
           throw new Error(`Could not find page with id ${pageId}`)
         }
 
-        console.log('found', found)
-
         return found
       },
       [pages]
@@ -308,8 +306,6 @@ export const CMSManagementProvider = withRedux(
         if (!page) {
           throw new Error(`Could not find page with id ${pageId}`)
         }
-
-        console.log('page', page)
 
         if (page.template) {
           return (

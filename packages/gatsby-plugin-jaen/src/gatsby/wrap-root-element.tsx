@@ -1,4 +1,4 @@
-import {ChakraProvider} from '@chakra-ui/react'
+import {ChakraProvider, Toast} from '@chakra-ui/react'
 import {
   AuthenticationProvider,
   FieldHighlighterProvider,

@@ -5,12 +5,12 @@ import {useJaenUpdate} from '../hooks/use-jaen-update'
 import {useNotificationsContext} from './notifications'
 
 type JaenUpdateModalContextType = {
-  isUpdate: boolean
+  isUpdateAvailable: boolean
   toggleModal: () => void
 }
 
 const JaenUpdateModalContext = createContext<JaenUpdateModalContextType>({
-  isUpdate: false,
+  isUpdateAvailable: false,
   toggleModal: () => {}
 })
 
@@ -42,7 +42,7 @@ export const JaenUpdateModalProvider: React.FC<
   return (
     <JaenUpdateModalContext.Provider
       value={{
-        isUpdate: jaenUpdate.isJaenUpdate,
+        isUpdateAvailable: jaenUpdate.isJaenUpdate,
         toggleModal
       }}>
       {children}

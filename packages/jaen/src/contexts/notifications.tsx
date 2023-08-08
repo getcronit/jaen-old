@@ -86,8 +86,6 @@ export const NotificationsProvider = ({children}: {children: ReactNode}) => {
     (type: ModalType) =>
       async (...props: Parameters<OpenerFn>) =>
         await new Promise(resolve => {
-          console.log('Props', props)
-
           const [args, defaultValue] = props
 
           const handleClose = (e?: AnyEvent) => {

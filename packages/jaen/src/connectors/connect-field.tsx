@@ -64,7 +64,6 @@ export const connectField = <IValue, P = {}>(
     isDisabled,
     ...rest
   }) => {
-    console.log('Rest', rest, tunes)
     const field = useField<IValue>(name, options.fieldType)
 
     if (!id) {
@@ -149,8 +148,6 @@ export const connectField = <IValue, P = {}>(
       },
       [field.props?.activeTunes, register]
     )
-
-    console.log('Field props', field)
 
     return (
       <Component
