@@ -115,6 +115,9 @@ export const FieldHighlighterProvider: React.FC<
     tooltipRoot.style.top = `3.5rem`
 
     tooltipRoot.style.pointerEvents = 'none'
+    tooltipRoot.style.zIndex = '999'
+
+    tooltipRoot.tabIndex = -1
 
     if (resizeObserver.current) {
       resizeObserver.current.disconnect()
@@ -233,6 +236,7 @@ export const FieldHighlighterProvider: React.FC<
 
     // Check if the blur event is caused by a click on the tooltip
     // check if tooltip ref contains relatedTarget
+
     if (tooltipHightRef.current?.contains(e.relatedTarget as Node)) {
       return
     }
@@ -240,7 +244,12 @@ export const FieldHighlighterProvider: React.FC<
     const element = e.currentTarget as HTMLElement
 
     // Do not remove the highlight if the new focus is on a child of the original element
-    if (element.contains(e.relatedTarget as Node)) {
+    if (element?.contains(e.relatedTarget as Node)) {
+      return
+    }
+
+    // check if relatedTarget is the the highlight tooltip
+    if (highlightRoot.contains(e.relatedTarget as Node)) {
       return
     }
 
