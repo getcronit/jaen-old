@@ -45,6 +45,13 @@ export const PasswordForm: React.FC<PasswordFormProps> = ({
     <form onSubmit={onFormSubmit}>
       <FieldGroup title="Password">
         <Stack width="full" spacing="6" maxW="2xl">
+          <Input
+            type="email"
+            name="email"
+            autoComplete="email"
+            display="none"
+          />
+
           <FormControl id="password">
             <FormLabel>Password</FormLabel>
             <Controller
