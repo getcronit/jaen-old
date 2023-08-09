@@ -167,9 +167,9 @@ export const NotificationsProvider = ({children}: {children: ReactNode}) => {
         prompt: createOpener(ModalType.Prompt),
         toast
       }}>
-      {children}
-
       {modal}
+
+      {children}
     </Context.Provider>
   )
 }

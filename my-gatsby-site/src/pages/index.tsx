@@ -251,7 +251,7 @@ const IndexPage: React.FC<PageProps> = () => {
 export default IndexPage
 
 export const pageConfig: PageConfig = {
-  label: 'Home Page',
+  label: 'Home Page 2',
   icon: 'FaHome',
   childTemplates: ['BlogPage'],
   menu: {

@@ -173,14 +173,8 @@ const Slice: React.FC<SliceProps> = props => {
               }`,
               isLoading: manager.isPublishing,
               icon: FaGlobe,
-              onClick: () => {
-                manager.setIsPublishing(true)
-
-                toast({
-                  title: 'Publishing',
-                  description: 'Your changes are being published',
-                  status: 'info'
-                })
+              onClick: async () => {
+                manager.draft.publish()
               }
             }
           }

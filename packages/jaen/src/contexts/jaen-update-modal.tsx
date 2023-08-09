@@ -1,4 +1,4 @@
-import React, {createContext} from 'react'
+import React, {createContext, useEffect} from 'react'
 import {FaCogs} from 'react-icons/fa'
 
 import {useJaenUpdate} from '../hooks/use-jaen-update'
@@ -38,6 +38,12 @@ export const JaenUpdateModalProvider: React.FC<
       jaenUpdate.updateToLatest()
     }
   }
+
+  useEffect(() => {
+    if (jaenUpdate.isJaenUpdate) {
+      toggleModal()
+    }
+  }, [])
 
   return (
     <JaenUpdateModalContext.Provider

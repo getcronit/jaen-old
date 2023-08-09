@@ -41,7 +41,8 @@ export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] =
       plugins: [
         plugins.define({
           __JAEN_SOURCE_TEMPLATES__: JSON.stringify(templateDir),
-          __VERSION__: JSON.stringify(version)
+          __VERSION__: JSON.stringify(version),
+          __SNEK_RESOURCE_ID__: JSON.stringify(snekResourceId)
         })
       ]
     })

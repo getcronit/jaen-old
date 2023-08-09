@@ -4,6 +4,7 @@ import {createContext, ReactNode, useCallback, useContext, useMemo} from 'react'
 
 import {
   resetState,
+  RootState,
   store,
   useAppDispatch,
   useAppSelector,
@@ -16,6 +17,10 @@ import {actions as siteActions} from '../redux/slices/site'
 import {JaenPage, JaenTemplate, SiteMetadata} from '../types'
 import {deepmergeArrayIdMerge} from '../utils/deepmerge'
 import {useSiteMetadataContext} from './site-metadata'
+import {uploadFile} from '../utils/open-storage-gateway'
+import {useNotificationsContext} from './notifications'
+import {FaRocket} from 'react-icons/fa'
+import {sq} from '@snek-functions/origin'
 
 // Errors
 
@@ -101,6 +106,8 @@ interface CMSManagementProviderProps {
 export const CMSManagementProvider = withRedux(
   ({staticPages, children, templates}: CMSManagementProviderProps) => {
     const dispatch = useAppDispatch()
+
+    const notification = useNotificationsContext()
 
     const siteMetadata = useSiteMetadataContext()
 
@@ -420,10 +427,75 @@ export const CMSManagementProvider = withRedux(
       setIsPublishing(false)
     }, [setIsEditing, setIsPublishing])
 
-    const publishDraft = useCallback(() => {
-      // Implement the logic to publish the draft state in the Redux store
-      // For example, you can apply the draft changes to the actual page state
-      // dispatch(draftActions.publishDraft(pageId));
+    const publishDraft = useCallback(async () => {
+      try {
+        const message = await notification.prompt(
+          {
+            icon: FaRocket,
+            title: 'Publishing',
+            message: 'Enter a message for the publish commit',
+            confirmText: 'Publish',
+            cancelText: 'Cancel'
+          },
+          `Update ${Object.values(dynamicPagesDict).length} pages`
+        )
+
+        if (message) {
+          const state = store.getState() as RootState
+
+          const migrationData = {
+            message,
+            pages: state.page.pages.nodes,
+            site: state.site
+          }
+
+          const uploadedMigration = await uploadFile(
+            migrationData,
+            `migrations-${Date.now()}.json`
+          )
+
+          if (uploadedMigration) {
+            const [_, errors] = await sq.mutate(m =>
+              m.jaenPublish({
+                // @ts-expect-error
+                resourceId: __SNEK_RESOURCE_ID__ + 'nop',
+                migrationURL: uploadedMigration.fileUrl
+              })
+            )
+
+            if (errors) {
+              console.error(errors)
+              notification.toast({
+                status: 'error',
+                title: 'Migration',
+                description: 'An error occurred during migration publishing'
+              })
+            } else {
+              notification.toast({
+                status: 'success',
+                title: 'Migration',
+                description: 'Migration published successfully'
+              })
+
+              // set publishing status
+              setIsPublishing(true)
+            }
+          } else {
+            notification.toast({
+              status: 'error',
+              title: 'Migration',
+              description: 'Migration file could not be uploaded'
+            })
+          }
+        }
+      } catch (error) {
+        console.error('An error occurred:', error)
+        notification.toast({
+          status: 'error',
+          title: 'Error',
+          description: 'An unexpected error occurred'
+        })
+      }
     }, [])
 
     return (

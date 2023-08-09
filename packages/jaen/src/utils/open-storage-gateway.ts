@@ -52,7 +52,7 @@ export const uploadFile = async (
 
   const data = await resp.json()
   const fileUrl = `${STORAGE_URL}/${data.file_id}`
-  const fileThumbUrl = data.thumb.file_id
+  const fileThumbUrl = data.thumb?.file_id
     ? `${STORAGE_URL}/${data.thumb.file_id}`
     : undefined
 
@@ -107,7 +107,7 @@ export const uploadFileFromNode = async (options: {
         res.on('end', () => {
           const data = JSON.parse(responseData)
           const fileUrl = `${STORAGE_URL}/${data.file_id}`
-          const fileThumbUrl = data.thumb.file_id
+          const fileThumbUrl = data.thumb?.file_id
             ? `${STORAGE_URL}/${data.thumb.file_id}`
             : undefined
 

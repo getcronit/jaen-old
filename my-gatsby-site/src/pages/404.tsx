@@ -26,6 +26,10 @@ const codeStyles = {
 }
 
 const NotFoundPage: React.FC<PageProps> = () => {
+  React.useEffect(() => {
+    alert('404')
+  }, [])
+
   return (
     <LightMode>
       <GlobalStyle />
@@ -51,7 +55,7 @@ const NotFoundPage: React.FC<PageProps> = () => {
 
 export default NotFoundPage
 
-export const Head: HeadFC = () => <title>Not found</title>
+export {Head} from '@snek-at/jaen'
 
 export const pageConfig: PageConfig = {
   label: 'Oops! Page not found'

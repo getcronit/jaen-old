@@ -30,6 +30,10 @@ export const wrapRootElement: GatsbyBrowser['wrapRootElement'] = (
     throw new Error('snekResourceId is not defined')
   }
 
+  if (element.type.name === '' || element.type.name === 'Head') {
+    return <SiteMetadataProvider>{element}</SiteMetadataProvider>
+  }
+
   return (
     <ChakraProvider theme={theme} cssVarsRoot="#coco">
       <NotificationsProvider>
