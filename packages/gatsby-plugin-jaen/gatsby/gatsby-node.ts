@@ -126,20 +126,19 @@ export const createSchemaCustomization: GatsbyNode['onCreateWebpackConfig'] = ({
   })
 
   actions.createTypes(`
-    type JaenWidget {
-      name: String!
-      data: JSON
+    type JaenData implements Node {
+      patches: [JaenDataPatch!]!
+      site: JaenSite
+      pages: JSON
     }
 
-    type RemoteFileMigration {
+    type JaenDataPatch {
       createdAt: Date!
-      fileUrl: String!
+      title: String!
+      url: String!
     }
 
-    type JaenInternal implements Node {
-      finderUrl: String
-      widgets: [JaenWidget!]!
-      migrationHistory: [RemoteFileMigration!]!
+    type JaenSite {
       siteMetadata: JaenSiteMetadata
     }
 
@@ -279,6 +278,8 @@ export const onCreatePage: GatsbyNode['onCreatePage'] = async (
           template: null,
           childTemplates: pageConfig?.childTemplates || []
         }
+
+        console.log('creating node', jaenPage.id)
 
         await createNode({
           ...jaenPage,

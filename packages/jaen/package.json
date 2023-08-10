@@ -1,6 +1,7 @@
 {
   "name": "@snek-at/jaen",
   "version": "3.0.0",
+  "description": "The Webapps framework for creating scalable and dynamic applications with ease.",
   "type": "module",
   "source": "src/index.ts",
   "main": "./dist/index.cjs",

@@ -4,22 +4,17 @@ import fs from 'fs'
 const Config: GatsbyConfig = {
   jsxRuntime: 'automatic',
   jsxImportSource: '@emotion/react',
-  plugins: [
-    `gatsby-plugin-image`,
-    `gatsby-plugin-sharp`,
-    `gatsby-transformer-sharp`,
-    `gatsby-source-jaen`
-  ]
+  plugins: []
 }
 
-export const templateDir = `${process.cwd()}/src/templates`
+export const pagesDir = `${process.cwd()}/src/pages`
 
-if (fs.existsSync(templateDir)) {
+if (fs.existsSync(pagesDir)) {
   Config.plugins?.push({
     resolve: `gatsby-source-filesystem`,
     options: {
-      name: `templates`,
-      path: templateDir
+      name: `pages`,
+      path: pagesDir
     }
   })
 }

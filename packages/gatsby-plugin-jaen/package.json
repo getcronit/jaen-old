@@ -53,7 +53,8 @@
     "unist-util-visit": "^5.0.0",
     "use-debounce": "^9.0.4",
     "vfile-message": "^4.0.2",
-    "vfile-statistics": "^3.0.0"
+    "vfile-statistics": "^3.0.0",
+    "gatsby-source-jaen": "^3.0.0"
   },
   "devDependencies": {
     "@types/mdast": "^4.0.0",

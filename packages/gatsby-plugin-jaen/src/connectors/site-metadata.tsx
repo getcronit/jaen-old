@@ -11,22 +11,26 @@ export interface SiteMetadataProps {
 export const SiteMetadataProvider: React.FC<SiteMetadataProps> = ({
   children
 }) => {
-  const {jaenInternal} = useStaticQuery<{
-    jaenInternal?: {
-      siteMetadata: SiteMetadata
+  const {jaenData} = useStaticQuery<{
+    jaenData?: {
+      site?: {
+        siteMetadata: SiteMetadata
+      }
     }
   }>(graphql`
     query {
-      jaenInternal {
-        siteMetadata {
-          ...JaenSiteMetadataData
+      jaenData {
+        site {
+          siteMetadata {
+            ...JaenSiteMetadataData
+          }
         }
       }
     }
   `)
 
   return (
-    <JaenSiteMetadataProvider siteMetadata={jaenInternal?.siteMetadata || {}}>
+    <JaenSiteMetadataProvider siteMetadata={jaenData?.site?.siteMetadata || {}}>
       {children}
     </JaenSiteMetadataProvider>
   )

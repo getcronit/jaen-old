@@ -445,8 +445,13 @@ export const CMSManagementProvider = withRedux(
 
           const migrationData = {
             message,
-            pages: state.page.pages.nodes,
-            site: state.site
+            data: {
+              pages: Object.entries(dynamicPagesDict).map(([id, page]) => ({
+                id,
+                ...page
+              })),
+              site: state.site
+            }
           }
 
           const uploadedMigration = await uploadFile(

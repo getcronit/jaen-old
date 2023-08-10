@@ -24,7 +24,8 @@ export {
   JaenTemplate,
   MediaNode,
   LayoutProps,
-  SiteMetadata
+  SiteMetadata,
+  ISite as JaenSite
 } from './types'
 export {generatePageOriginPath} from './utils/path'
 export * from './utils/open-storage-gateway'
