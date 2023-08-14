@@ -239,7 +239,7 @@ export const createSchemaCustomization: GatsbyNode['onCreateWebpackConfig'] = ({
 }
 
 // fn to add a specifc context to the pages created by the theme
-export const onCreatePage: GatsbyNode['onCreatePage'] = async (
+/* export const onCreatePage: GatsbyNode['onCreatePage'] = async (
   {page, actions, getNode, createContentDigest, store},
   plugin
 ) => {
@@ -312,106 +312,10 @@ export const onCreatePage: GatsbyNode['onCreatePage'] = async (
       }
     }
   }
-}
+} */
 
-export const createPages: GatsbyNode['createPages'] = async ({
-  graphql,
-  getNode,
-  reporter,
-  actions
-}) => {
-  const {createPage, createNodeField, createSlice} = actions
-
-  const createJaenPages = async () => {
-    interface QueryData {
-      allTemplate: {
-        nodes: Array<{
-          name: string
-          absolutePath: string
-        }>
-      }
-      allJaenPage: {
-        nodes: Array<
-          JaenPage & {
-            template: string
-          }
-        >
-      }
-    }
-
-    const result = await graphql<QueryData>(`
-      query {
-        allJaenPage {
-          nodes {
-            id
-            slug
-            parent {
-              id
-            }
-            template
-            jaenPageMetadata {
-              title
-            }
-            jaenFields
-          }
-        }
-      }
-    `)
-
-    if (result.errors || !result.data) {
-      reporter.panicOnBuild(
-        `Error while running GraphQL query. ${result.errors}`
-      )
-
-      return
-    }
-
-    const {allTemplate, allJaenPage} = result.data
-
-    for (const node of allJaenPage.nodes) {
-      const pagePath = generatePageOriginPath(allJaenPage.nodes, node)
-
-      const pureNode = getNode(node.id)
-
-      if (pureNode) {
-        createNodeField({
-          node: pureNode,
-          name: 'path',
-          value: pagePath
-        })
-      }
-
-      if (node.template) {
-        if (!pagePath) {
-          reporter.panicOnBuild(
-            `Error while generating path for page ${node.id}`
-          )
-          return
-        }
-
-        const template = allTemplate.nodes.find(
-          template => template.name === node.template
-        )
-
-        if (!template) {
-          reporter.panicOnBuild(`Template ${node.template} not found`)
-          return
-        }
-
-        createPage({
-          path: pagePath,
-          component: template.absolutePath,
-          context: {
-            jaenPageId: node.id
-          }
-        })
-      }
-    }
-  }
-
-  await createJaenPages()
-
-  // Create JaenFrame slice
+export const createPages: GatsbyNode['createPages'] = async ({actions}) => {
+  const {createSlice} = actions
 
   createSlice({
     id: `jaen-frame`,

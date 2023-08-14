@@ -1,6 +1,6 @@
 {
   "name": "gatsby-source-jaen",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "description": "Source plugin for pulling data into Gatsby from Jaen",
   "dependencies": {
     "deepmerge": "^4.2.2"

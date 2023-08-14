@@ -1,8 +1,14 @@
 import {JaenPage, JaenSite} from '@snek-at/jaen'
-import {SourceNodesArgs} from 'gatsby'
+import {SourceNodesArgs, Node} from 'gatsby'
 import fs from 'fs/promises' // Import the fs module for asynchronous file operations
 
 import {fetchMergeData} from '../utils/fetch-and-merge'
+
+export type JaenData = {
+  pages?: JaenPage
+  site?: JaenSite
+  patches?: any
+}
 
 export const sourceNodes = async (args: SourceNodesArgs) => {
   const {actions, createNodeId, createContentDigest, reporter} = args

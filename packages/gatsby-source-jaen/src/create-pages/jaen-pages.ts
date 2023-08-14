@@ -5,30 +5,17 @@ import {getJaenPageParentId} from '../utils/get-jaen-page-parent-id'
 export const createPages = async (args: CreatePagesArgs) => {
   const {actions, graphql, reporter, getNode} = args
 
-  const {createPage} = actions
-
   reporter.info('Creating pages...')
 
   const {data, errors} = await graphql<{
-    jaenData: {
-      pages: Partial<JaenPage>[]
-    }
-    allSitePage: {
-      nodes: {
-        id: string
-        pageContext: object
-      }[]
+    allJaenPage: {
+      nodes: Array<JaenPage>
     }
   }>(`
-    query {
-      jaenData {
-        pages
-      }
-
-      allSitePage {
+    query CreateJaenPages {
+      allJaenPage {
         nodes {
-          id
-          pageContext
+          ...JaenPageData
         }
       }
     }
@@ -41,18 +28,19 @@ export const createPages = async (args: CreatePagesArgs) => {
 
   console.log(data)
 
-  for (const page of data?.jaenData?.pages || []) {
-    if (!page.id) {
-      reporter.warn(`Page ${page.title} has no id. Skipping...`)
-      continue
-    }
+  if (!data) {
+    reporter.panic('Data is not defined')
 
-    const pathOrUUID = page.id.split('JaenPage ')[1]
+    return
+  }
 
-    if (!pathOrUUID) {
-      reporter.warn(`Page ${page.title} has no path or uuid. Skipping...`)
-      continue
-    }
+  for (const page of data.allJaenPage.nodes) {
+    actions.createPage({})
+
+    // Component from JaenPage
+
+    // If page already exisits delete it and update jaenPageId and pageConfig
+    // OR Get pageConfig from jaenPage and update the jaenPageId and pageConfig
 
     // const path = pathOrUUID.replace(/\/+$/, '') // Remove trailing slashes from the path
     // const lastPathElement = path.split('/').pop() || path

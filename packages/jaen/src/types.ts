@@ -134,7 +134,7 @@ export type IJaenFields = Record<
 export interface JaenPage {
   id: string
   slug: string
-  buildPath?: string
+  path?: string
   createdAt: string
   modifiedAt: string
   jaenPageMetadata: Partial<{
