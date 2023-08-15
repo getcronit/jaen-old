@@ -5,7 +5,7 @@ import fs from 'fs/promises' // Import the fs module for asynchronous file opera
 import {fetchMergeData} from '../utils/fetch-and-merge'
 
 export type JaenData = {
-  pages?: JaenPage
+  pages?: JaenPage[]
   site?: JaenSite
   patches?: any
 }

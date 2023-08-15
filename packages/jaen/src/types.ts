@@ -172,6 +172,12 @@ export interface JaenPage {
    */
   template: string | null
   childTemplates: string[]
+  /**
+   * Path to the component to render.
+   *
+   * When `component` is null, the `template` is used to determine the component to render.
+   */
+  component: string | null
   deleted?: boolean
   excludedFromIndex?: boolean
 }

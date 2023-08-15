@@ -1,13 +1,16 @@
-import {JaenPage, JaenSite} from '@snek-at/jaen'
-import {SourceNodesArgs, Node} from 'gatsby'
-import fs from 'fs/promises' // Import the fs module for asynchronous file operations
+import {Node, SourceNodesArgs} from 'gatsby'
 
-import {fetchMergeData} from '../utils/fetch-and-merge'
 import {JaenData} from './jaen-data'
 
 export const sourceNodes = async (args: SourceNodesArgs) => {
-  const {actions, createNodeId, createContentDigest, reporter, getNodesByType} =
-    args
+  const {
+    actions,
+    createNodeId,
+    createContentDigest,
+    reporter,
+    getNodesByType,
+    getNode
+  } = args
   const {createNode} = actions
 
   const jaenDataNodes = getNodesByType('JaenData')
@@ -25,11 +28,33 @@ export const sourceNodes = async (args: SourceNodesArgs) => {
 
   const jaenData = jaenDataNodes[0] as Node & JaenData
 
-  console.log('JaenData', jaenData)
+  const jaenPages = jaenData.pages || []
 
-  // Read pages
+  for (const page of jaenPages) {
+    const pageNode = {
+      internal: {
+        type: 'JaenPage',
+        contentDigest: createContentDigest(page)
+      },
+      ...page,
+      parent: page.parent?.id,
+      children: page.children?.map(child => child.id) || []
+    }
 
-  // Merge with jaenData pages
+    await createNode(pageNode)
 
-  // Create jaenPages
+    const parentPageNode = pageNode.parent ? getNode(pageNode.parent) : null
+
+    if (pageNode && parentPageNode) {
+      console.log(
+        `Creating parent-child link between`,
+        pageNode.id,
+        parentPageNode.id
+      )
+      actions.createParentChildLink({
+        parent: parentPageNode,
+        child: pageNode
+      })
+    }
+  }
 }

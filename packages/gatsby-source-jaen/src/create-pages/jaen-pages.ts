@@ -1,67 +1,67 @@
 import {JaenPage} from '@snek-at/jaen'
-import {CreatePagesArgs} from 'gatsby'
+import {CreatePagesArgs, Node} from 'gatsby'
 import {getJaenPageParentId} from '../utils/get-jaen-page-parent-id'
 
 export const createPages = async (args: CreatePagesArgs) => {
-  const {actions, graphql, reporter, getNode} = args
+  const {actions, graphql, reporter, getNode, getNodesByType} = args
 
   reporter.info('Creating pages...')
 
-  const {data, errors} = await graphql<{
-    allJaenPage: {
-      nodes: Array<JaenPage>
+  const result = await graphql<{
+    allTemplate: {
+      nodes: Array<{
+        id: string
+        absolutePath: string
+        relativePath: string
+      }>
     }
   }>(`
-    query CreateJaenPages {
-      allJaenPage {
+    query {
+      allJaenTemplate {
         nodes {
-          ...JaenPageData
+          id
+          absolutePath
+          relativePath
         }
       }
     }
   `)
 
-  if (errors) {
-    reporter.panicOnBuild('Error while running GraphQL query.')
-    return
-  }
-
-  console.log(data)
-
-  if (!data) {
-    reporter.panic('Data is not defined')
+  if (result.errors || !result.data) {
+    reporter.panicOnBuild(`Error while running GraphQL query. ${result.errors}`)
 
     return
   }
 
-  for (const page of data.allJaenPage.nodes) {
-    actions.createPage({})
+  const {allTemplate} = result.data
 
-    // Component from JaenPage
+  const allJaenPageNodes = getNodesByType('JaenPage') as Array<Node & JaenPage>
 
-    // If page already exisits delete it and update jaenPageId and pageConfig
-    // OR Get pageConfig from jaenPage and update the jaenPageId and pageConfig
+  for (const node of allJaenPageNodes) {
+    const pagePath = '/'
 
-    // const path = pathOrUUID.replace(/\/+$/, '') // Remove trailing slashes from the path
-    // const lastPathElement = path.split('/').pop() || path
+    if (node.template) {
+      if (!pagePath) {
+        reporter.panicOnBuild(`Error while generating path for page ${node.id}`)
+        return
+      }
 
-    // const preparedPage = {
-    //   ...page,
-    //   slug: page.slug || lastPathElement,
-    //   parent: getJaenPageParentId({
-    //     parent: page.parent?.id ? {id: page.parent.id} : null,
-    //     id: page.id
-    //   }),
-    //   children: [],
-    //   jaenPageMetadata: {
-    //     title:
-    //   }
-    // }
+      const template = allTemplate.nodes.find(
+        template => template.id === node.template
+      )
 
-    // check if node already exists
+      if (!template) {
+        reporter.panicOnBuild(`Template ${node.template} not found`)
+        return
+      }
 
-    const node = getNode(page.id)
-
-    console.log(`Node ${page.id}`, node)
+      actions.createPage({
+        path: pagePath,
+        component: template.absolutePath,
+        context: {
+          jaenPageId: node.id
+        }
+      })
+    }
   }
 }
