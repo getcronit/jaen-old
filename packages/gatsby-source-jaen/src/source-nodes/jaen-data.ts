@@ -54,7 +54,7 @@ export const sourceNodes = async (args: SourceNodesArgs) => {
     createNode(jaenDataNode)
 
     // Log a success message using the reporter
-    reporter.success('Nodes sourced and created successfully!')
+    reporter.info('Nodes sourced and created successfully!')
   } catch (error) {
     // Log an error message using the reporter
     reporter.panic('Error sourcing nodes:', error)
