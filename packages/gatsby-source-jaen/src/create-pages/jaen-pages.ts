@@ -1,18 +1,28 @@
-import {JaenPage} from '@snek-at/jaen'
-import {CreatePagesArgs, Node} from 'gatsby'
-import {getJaenPageParentId} from '../utils/get-jaen-page-parent-id'
+import {CreatePagesArgs} from 'gatsby'
+import {onCreatePage} from '../on-create-page/jaen-page'
+import {generatePageOriginPath} from '../utils/path'
 
 export const createPages = async (args: CreatePagesArgs) => {
-  const {actions, graphql, reporter, getNode, getNodesByType} = args
+  const {actions, graphql, reporter} = args
 
   reporter.info('Creating pages...')
 
   const result = await graphql<{
-    allTemplate: {
+    allJaenTemplate: {
       nodes: Array<{
         id: string
         absolutePath: string
         relativePath: string
+      }>
+    }
+    allJaenPage: {
+      nodes: Array<{
+        id: string
+        template: string | null
+        slug: string
+        parent: {
+          id: string
+        } | null
       }>
     }
   }>(`
@@ -24,8 +34,20 @@ export const createPages = async (args: CreatePagesArgs) => {
           relativePath
         }
       }
+      allJaenPage {
+        nodes {
+          id
+          template
+          slug
+          parent {
+            id
+          }
+        }
+      }
     }
   `)
+
+  console.log('RESULT aaa', result)
 
   if (result.errors || !result.data) {
     reporter.panicOnBuild(`Error while running GraphQL query. ${result.errors}`)
@@ -33,34 +55,55 @@ export const createPages = async (args: CreatePagesArgs) => {
     return
   }
 
-  const {allTemplate} = result.data
+  const {allJaenTemplate, allJaenPage} = result.data
 
-  const allJaenPageNodes = getNodesByType('JaenPage') as Array<Node & JaenPage>
+  console.log('RESULTS', result.data)
 
-  for (const node of allJaenPageNodes) {
-    const pagePath = '/'
+  console.log(
+    'allJaenPageNodes',
+    allJaenPage.nodes.map(node => node.id)
+  )
+
+  for (const node of allJaenPage.nodes) {
+    const pagePath = generatePageOriginPath(allJaenPage.nodes, node)
+
+    console.log('Creating pagEEEEEEEe', node.id, node.template)
 
     if (node.template) {
+      console.log('WTFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF')
       if (!pagePath) {
         reporter.panicOnBuild(`Error while generating path for page ${node.id}`)
         return
       }
 
-      const template = allTemplate.nodes.find(
+      const jaenTemplate = allJaenTemplate.nodes.find(
         template => template.id === node.template
       )
 
-      if (!template) {
+      console.log('jaenTemplate', jaenTemplate)
+
+      if (!jaenTemplate) {
         reporter.panicOnBuild(`Template ${node.template} not found`)
         return
       }
 
-      actions.createPage({
+      const page = {
         path: pagePath,
-        component: template.absolutePath,
-        context: {
-          jaenPageId: node.id
-        }
+        component: jaenTemplate.absolutePath,
+        context: {}
+      }
+
+      console.log('Before creating page', page)
+
+      actions.createPage(page)
+
+      // manually call onCreatePage for the page
+
+      console.log('Creating Template', page.path)
+
+      onCreatePage({
+        ...args,
+        page
       })
     }
   }

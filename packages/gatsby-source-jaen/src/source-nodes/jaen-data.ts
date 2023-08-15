@@ -11,7 +11,7 @@ export type JaenData = {
 }
 
 export const sourceNodes = async (args: SourceNodesArgs) => {
-  const {actions, createNodeId, createContentDigest, reporter} = args
+  const {actions, createNodeId, createContentDigest, reporter, cache} = args
   const {createNode} = actions
 
   // Log a message using the reporter
@@ -51,7 +51,7 @@ export const sourceNodes = async (args: SourceNodesArgs) => {
     }
 
     // 4. Create JaenData node using createNode action
-    createNode(jaenDataNode)
+    await createNode(jaenDataNode)
 
     // Log a success message using the reporter
     reporter.info('Nodes sourced and created successfully!')

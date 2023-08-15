@@ -1,5 +1,6 @@
+import {JaenPage} from '@snek-at/jaen'
 import {PageConfig} from '@snek-at/jaen'
-import {CreatePageArgs} from 'gatsby'
+import {CreatePageArgs, Node} from 'gatsby'
 import {getJaenPageParentId} from '../utils/get-jaen-page-parent-id'
 
 import {readPageConfig} from '../utils/page-config-reader'
@@ -7,8 +8,11 @@ import {readPageConfig} from '../utils/page-config-reader'
 export const onCreatePage = async ({
   actions,
   page,
-  getNodesByType
+  getNodesByType,
+  createContentDigest
 }: CreatePageArgs) => {
+  console.log('ON CREATE PAGE', page.path)
+
   let jaenPageId = page.context?.jaenPageId as string | undefined
   let pageConfig = page.context?.pageConfig as PageConfig | undefined
 
@@ -31,7 +35,7 @@ export const onCreatePage = async ({
   // Check if there is a JaenPage node with the same id
   // If there is, delete the Node and create a new one with the props, else create a new one
 
-  const jaenPageNodes = getNodesByType('JaenPage')
+  const jaenPageNodes = getNodesByType('JaenPage') as Array<Node & JaenPage>
 
   // Find the JaenPage node with the same id
   const jaenPageNode = jaenPageNodes.find(node => node.id === jaenPageId)
@@ -49,7 +53,8 @@ export const onCreatePage = async ({
     jaenPageMetadata: {
       title:
         pageConfig?.label ||
-        lastPathElement.charAt(0).toUpperCase() + lastPathElement.slice(1)
+        lastPathElement.charAt(0).toUpperCase() + lastPathElement.slice(1),
+      ...jaenPageNode?.jaenPageMetadata
     },
     jaenFields: null,
     jaenFiles: [],
@@ -65,10 +70,18 @@ export const onCreatePage = async ({
     ...newJaenPageNode,
     internal: {
       type: 'JaenPage',
-      contentDigest: 'JaenPage',
+      contentDigest: createContentDigest(newJaenPageNode),
       content: JSON.stringify(newJaenPageNode)
     }
   }
+
+  console.log(
+    'Creating JaenPage node',
+    node.id,
+    node.jaenPageMetadata,
+    jaenPageNode.id,
+    jaenPageNode.jaenPageMetadata
+  )
 
   await actions.createNode(node)
 }

@@ -292,16 +292,18 @@ export const CMSManagementProvider = withRedux(
           throw new Error(`Could not find page with id ${pageId}`)
         }
 
+        if (page.slug === 'root') return '/'
+
         const path = [page.slug]
 
         let parent = pagesDict[page.parent?.id || '']
 
-        while (parent) {
+        while (parent && parent.slug !== 'root') {
           path.unshift(parent.slug)
           parent = pagesDict[parent.parent?.id || '']
         }
 
-        return path.join('/') || '/'
+        return '/' + path.join('/')
       },
       [pagesDict]
     )

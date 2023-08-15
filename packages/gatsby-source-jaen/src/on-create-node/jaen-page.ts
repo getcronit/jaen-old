@@ -9,15 +9,15 @@ export const onCreateNode = async ({
     const parentPageNode = node.parent ? getNode(node.parent) : null
 
     if (node && parentPageNode) {
-      console.log(
-        `onCreateNode Creating parent-child link between`,
-        node.id,
-        parentPageNode.id
-      )
-      actions.createParentChildLink({
-        parent: parentPageNode,
-        child: node
-      })
+      // console.log(
+      //   `onCreateNode Creating parent-child link between`,
+      //   node.id,
+      //   parentPageNode.id
+      // )
+      // actions.createParentChildLink({
+      //   parent: parentPageNode,
+      //   child: node
+      // })
     }
   }
 }
