@@ -21,11 +21,11 @@ function getMaybeParentJaenPageId(jaenPageId: string) {
   return `JaenPage /${parentPath}/`
 }
 export function getJaenPageParentId(page: {
-  parent: {id: string} | null
+  parentPage: {id: string} | null
   id: string
 }) {
-  if (page.parent) {
-    return page.parent.id
+  if (page.parentPage) {
+    return page.parentPage.id
   }
 
   // Extract the maybeParentJaenPageId using the getMaybeParentJaenPageId function

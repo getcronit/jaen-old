@@ -71,7 +71,7 @@ export interface UsePageIndexProps {
 export const useJaenPageIndex = (
   props?: UsePageIndexProps
 ): {
-  children: Array<{id: string} & Partial<JaenPage>>
+  childPages: Array<{id: string} & Partial<JaenPage>>
   withJaenPage: (childId: string, children: React.ReactNode) => React.ReactNode
 } => {
   const {jaenPage, jaenPages} = usePageContext()
@@ -112,12 +112,12 @@ export const useJaenPageIndex = (
 
   const staticChildren = useMemo(() => {
     const jaenPagesChildren: Array<{id: string} & Partial<JaenPage>> =
-      jaenPages?.find(page => page.id === id)?.children || []
+      jaenPages?.find(page => page.id === id)?.childPages || []
 
     let children: Array<{id: string} & Partial<JaenPage>> = []
 
     if (jaenPage.id === id) {
-      children = jaenPage.children || []
+      children = jaenPage.childPages || []
     }
 
     const mergedChildren = [...children, ...jaenPagesChildren]
@@ -128,12 +128,12 @@ export const useJaenPageIndex = (
     )
 
     return uniqueChildren
-  }, [jaenPage, jaenPage.children, jaenPages, id])
+  }, [jaenPage, jaenPage.childPages, jaenPages, id])
 
   const [dynamicChildrenIds, setDynamicChildrenIds] = useState(() => {
     const state = store.getState() as IJaenState
 
-    return state.page.pages.nodes[id]?.children
+    return state.page.pages.nodes[id]?.childPages
   })
 
   useEffect(() => {
@@ -142,7 +142,7 @@ export const useJaenPageIndex = (
 
       const page = state.page.pages.nodes[id]
       if (page) {
-        const onlyNotDeleted = page.children?.filter(c => !c.deleted)
+        const onlyNotDeleted = page.childPages?.filter(c => !c.deleted)
 
         setDynamicChildrenIds(onlyNotDeleted)
       }
@@ -170,7 +170,7 @@ export const useJaenPageIndex = (
   }, [dynamicChildrenIds])
 
   // merge children with staticChildren by id
-  const children = useMemo(() => {
+  const childPages = useMemo(() => {
     // This is a double check for deleted pages just in case
     let mergedChildren = [...staticChildren, ...dynamicChildren].filter(
       c => !c.excludedFromIndex && !c.deleted
@@ -192,7 +192,7 @@ export const useJaenPageIndex = (
   }, [staticChildren, dynamicChildren, props])
 
   return {
-    children,
+    childPages,
     withJaenPage: (childId: string, children: React.ReactNode) => {
       const jaenPage = staticChildren?.find(c => c.id === childId)
 

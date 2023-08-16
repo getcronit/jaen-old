@@ -22,8 +22,8 @@ export const createSchemaCustomization = async ({
       
       pageConfig: JSON
 
-      parentPage: JaenPage @link
-      childPages: [JaenPage!]! @link
+      parentPage: JaenPage @link      
+      childPages: [JaenPage!]! @childPages
     }
 
     type MediaNode implements Node {
@@ -80,7 +80,7 @@ export const createSchemaCustomization = async ({
         async resolve(
           source: Node & {
             slug: string
-            parent: string | null
+            parentPage: string | null
           },
           _args: any,
           context: any,
@@ -140,6 +140,38 @@ export const createSchemaCustomization = async ({
           })
 
           return node
+        }
+      }
+    }
+  })
+
+  actions.createFieldExtension({
+    name: 'childPages',
+    args: {},
+    extend(_options: any, _prevFieldConfig: any) {
+      return {
+        args: {},
+        async resolve(
+          source: Node & {
+            slug: string
+            parentPage: string | null
+          },
+          _args: any,
+          context: any,
+          _info: any
+        ) {
+          const {entries} = await context.nodeModel.findAll({
+            type: 'JaenPage',
+            query: {
+              filter: {
+                parentPage: {
+                  eq: source.id
+                }
+              }
+            }
+          })
+
+          return entries
         }
       }
     }

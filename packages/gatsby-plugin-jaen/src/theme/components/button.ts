@@ -352,12 +352,16 @@ const variants = {
   }),
 
   outline: defineStyle(props => {
+    let {colorScheme} = props
+
+    if (colorScheme === 'brand') colorScheme = 'gray'
+
     return {
       ...theme.components.Button?.variants?.outline(props),
       borderRadius: 'lg',
       color: vars.color.reference,
       borderColor: 'border.emphasized',
-      [vars.color.variable]: `colors.gray.700`,
+      [vars.color.variable]: `colors.${colorScheme}.700`,
       '> svg': {
         color: 'fg.muted'
       },

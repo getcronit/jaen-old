@@ -68,7 +68,7 @@ const texts = {
       'The description will be utilized by search engines and social media. Aim for 160-165 characters.',
     edit: 'The description will be utilized by search engines and social media. Aim for 160-165 characters.'
   },
-  parent: {
+  parentPage: {
     create: 'Select a Parent Page',
     edit: 'The parent page of the page'
   },
@@ -133,7 +133,7 @@ interface FormValues {
   title: string
   slug: string
   description: string
-  parent: string
+  parentPage: string
   template: string | null
   blogPost?: {
     date?: string
@@ -227,8 +227,8 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
 
   const parent = watch('parent', '') // Get the value of the 'parent' field
 
-  const jaenTemplate = props.values?.parent
-    ? (props.parentPages[props.values.parent]?.templates[
+  const jaenTemplate = props.values?.parentPage
+    ? (props.parentPages[props.values.parentPage]?.templates[
         props.values?.template || ''
       ] as JaenTemplate)
     : null
@@ -389,9 +389,9 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
           </Text>
         </Stack>
 
-        {(mode === 'edit' ? props.values?.parent : true) && (
-          <FormControl as="fieldset" isInvalid={!!errors.parent} isRequired>
-            <FormLabel as="legend">{texts.parent[mode]}</FormLabel>
+        {(mode === 'edit' ? props.values?.parentPage : true) && (
+          <FormControl as="fieldset" isInvalid={!!errors.parentPage} isRequired>
+            <FormLabel as="legend">{texts.parentPage[mode]}</FormLabel>
 
             <Controller
               control={control}
@@ -412,7 +412,7 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
 
             <FormHelperText>{texts.parentHelperText[mode]}</FormHelperText>
             <FormErrorMessage>
-              {errors.parent && 'Parent is required'}
+              {errors.parentPage && 'Parent is required'}
             </FormErrorMessage>
           </FormControl>
         )}

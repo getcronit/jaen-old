@@ -6,7 +6,7 @@ export const onCreateNode = async ({
   getNode
 }: CreateNodeArgs) => {
   // if (node.internal.type === 'JaenPage') {
-  //   const parentPageNode = node.parent ? getNode(node.parent) : null
+  //   const parentPageNode = node.parentPage ? getNode(node.parentPage) : null
   //   if (node && parentPageNode) {
   //     // console.log(
   //     //   `onCreateNode Creating parent-child link between`,
@@ -14,7 +14,7 @@ export const onCreateNode = async ({
   //     //   parentPageNode.id
   //     // )
   //     // actions.createParentChildLink({
-  //     //   parent: parentPageNode,
+  //     //   parentPage: parentPageNode,
   //     //   child: node
   //     // })
   //   }

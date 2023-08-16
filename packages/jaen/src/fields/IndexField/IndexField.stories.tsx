@@ -8,7 +8,7 @@ import {IndexField} from './IndexField.js'
 const JaenPage = {
   id: `JaenPage jaen-page-2`,
   slug: 'jaen-page-1',
-  parent: null,
+  parentPage: null,
   children: [
     {
       id: `JaenPage jaen-page-3`,
@@ -47,7 +47,7 @@ export default {
         jaenPage: {
           id: `JaenPage jaen-page-1`,
           slug: 'jaen-page-1',
-          parent: null,
+          parentPage: null,
           children: [JaenPage],
           jaenPageMetadata: {
             title: 'Jaen Page 1',

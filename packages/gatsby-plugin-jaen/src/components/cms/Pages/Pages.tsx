@@ -2,6 +2,8 @@ import {
   Button,
   Heading,
   HStack,
+  List,
+  ListItem,
   Stack,
   StackDivider,
   Table,
@@ -12,7 +14,7 @@ import {
   Thead,
   Tr
 } from '@chakra-ui/react'
-import {FaPlus} from 'react-icons/fa'
+import {FaPlus, FaTrash} from 'react-icons/fa'
 
 import React from 'react'
 import {Link} from '../../shared/Link'
@@ -21,8 +23,9 @@ import {
   PageContentForm,
   PageContentFormProps
 } from './shared/PageContentForm/PageContentForm'
-import {TreeNode} from './shared/PageVisualizer'
-import {PageVisualizer} from './shared/PageVisualizer/PageVisualizer'
+import {TreeNode} from './components/PageVisualizer'
+import {PageVisualizer} from './components/PageVisualizer/PageVisualizer'
+import {DangerZone, DangerZoneProps} from './components/DangerZone'
 
 export interface PagesProps {
   pageId: string
@@ -38,6 +41,8 @@ export interface PagesProps {
   tree: Array<TreeNode>
   onTreeSelect?: (id: string) => void
   disableNewButton?: boolean
+
+  dangerZoneActions?: DangerZoneProps['actions']
 }
 
 export const Pages: React.FC<PagesProps> = props => {
@@ -130,6 +135,14 @@ export const Pages: React.FC<PagesProps> = props => {
             ))}
           </Tbody>
         </Table>
+      </Stack>
+
+      <Stack spacing="4" divider={<StackDivider />}>
+        <Heading as="h2" size="sm">
+          Danger zone
+        </Heading>
+
+        <DangerZone actions={props.dangerZoneActions || []} />
       </Stack>
     </Stack>
   )

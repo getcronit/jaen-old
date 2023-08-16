@@ -35,8 +35,8 @@ export const sourceNodes = async (args: SourceNodesArgs) => {
     console.log(merged)
 
     const data = {
-      pages: merged.data.pages || [],
-      site: merged.data.site || {},
+      pages: merged.data?.pages || [],
+      site: merged.data?.site || {},
       patches: jsonData || []
     }
 

@@ -134,36 +134,59 @@ export const CMSManagementProvider = withRedux(
     const dynamicPagesDict = useAppSelector(state => state.page.pages.nodes)
 
     const pagesDict = useMemo(() => {
-      let dict = {...dynamicPagesDict}
-
-      for (const staticPage of staticPages) {
-        if (dict[staticPage.id]) {
-          // merge
-          dict[staticPage.id] = deepmerge(staticPage, dict[staticPage.id]!, {
-            arrayMerge: deepmergeArrayIdMerge
-          })
-        } else {
-          // add
-          dict[staticPage.id] = staticPage
-        }
+      const mergePages = (
+        target: Partial<JaenPage>,
+        source: Partial<JaenPage>
+      ) => {
+        return deepmerge(target, source, {
+          arrayMerge: deepmergeArrayIdMerge
+        })
       }
 
-      for (const pageId of Object.keys(dict)) {
-        // filter out deleted pages
-        if (dict[pageId]?.isDeleted) {
-          delete dict[pageId]
-        }
+      const filterDeletedPages = (pageDict: {
+        [x: string]: Partial<JaenPage>
+      }) => {
+        const cleanDict: {[x: string]: Partial<JaenPage>} = {}
 
-        // filter out deleted children
-        if (dict[pageId]?.children) {
-          dict[pageId] = {
-            ...dict[pageId],
-            children: dict[pageId]?.children?.filter(child => !child.deleted)
+        for (const [pageId, page] of Object.entries(pageDict)) {
+          if (!page.deleted) {
+            cleanDict[pageId] = {...page}
+
+            if (page.childPages) {
+              const validChildren = page.childPages.filter(
+                (child: {id: string | number}) => {
+                  return !pageDict[child.id]?.deleted
+                }
+              )
+              cleanDict[pageId]!.childPages = validChildren
+            }
           }
         }
+
+        return cleanDict
       }
 
-      return dict
+      const createPagesDictionary = (
+        dynamicPagesDict: Record<string, Partial<JaenPage>>,
+        staticPages: JaenPage[]
+      ) => {
+        const combinedPagesDict = {...dynamicPagesDict}
+
+        for (const staticPage of staticPages) {
+          if (combinedPagesDict[staticPage.id]) {
+            combinedPagesDict[staticPage.id] = mergePages(
+              staticPage,
+              combinedPagesDict[staticPage.id] || {}
+            )
+          } else {
+            combinedPagesDict[staticPage.id] = staticPage
+          }
+        }
+
+        return filterDeletedPages(combinedPagesDict)
+      }
+
+      return createPagesDictionary(dynamicPagesDict, staticPages)
     }, [dynamicPagesDict, staticPages])
 
     const pages = useCallback(
@@ -175,7 +198,7 @@ export const CMSManagementProvider = withRedux(
 
         if (parentId) {
           return valuesWithIds.filter(
-            page => page.parent?.id === parentId
+            page => page.parentPage?.id === parentId
           ) as JaenPage[]
         }
         // If no parentId is provided, return all pages
@@ -232,10 +255,10 @@ export const CMSManagementProvider = withRedux(
       const page = pagesDict[pageId]
 
       // check if slug is unique when moving page
-      if (updatedPage.parent?.id) {
+      if (updatedPage.parentPage?.id) {
         const slug = updatedPage.slug || 'new-page'
 
-        const isSlugDuplicate = pages(updatedPage.parent?.id).some(
+        const isSlugDuplicate = pages(updatedPage.parentPage?.id).some(
           page => page.slug === slug && page.id !== pageId
         )
 
@@ -248,13 +271,30 @@ export const CMSManagementProvider = withRedux(
         pageActions.page_updateOrCreate({
           id: pageId,
           ...updatedPage,
-          fromId: page?.parent?.id
+          fromId: page?.parentPage?.id
         })
       )
     }
 
     const removePage = (pageId: string) => {
-      dispatch(pageActions.page_markForDeletion(pageId))
+      // delete page and all children
+      const deletePage = (pageId: string) => {
+        const page = pagesDict[pageId]
+
+        if (!page) {
+          throw new Error(`Could not find page with id ${pageId}`)
+        }
+
+        dispatch(pageActions.page_markForDeletion(pageId))
+
+        if (page.childPages) {
+          for (const child of page.childPages) {
+            deletePage(child.id)
+          }
+        }
+      }
+
+      deletePage(pageId)
     }
 
     const tree = useMemo(() => {
@@ -296,11 +336,11 @@ export const CMSManagementProvider = withRedux(
 
         const path = [page.slug]
 
-        let parent = pagesDict[page.parent?.id || '']
+        let parent = pagesDict[page.parentPage?.id || '']
 
         while (parent && parent.slug !== 'root') {
           path.unshift(parent.slug)
-          parent = pagesDict[parent.parent?.id || '']
+          parent = pagesDict[parent.parentPage?.id || '']
         }
 
         return '/' + path.join('/')

@@ -1,5 +1,7 @@
 import {CreatePagesArgs} from 'gatsby'
+import {onCreateNode} from '../on-create-node/jaen-page'
 import {onCreatePage} from '../on-create-page/jaen-page'
+import {readPageConfig} from '../utils/page-config-reader'
 import {generatePageOriginPath} from '../utils/path'
 
 export const createPages = async (args: CreatePagesArgs) => {
@@ -20,7 +22,7 @@ export const createPages = async (args: CreatePagesArgs) => {
         id: string
         template: string | null
         slug: string
-        parent: {
+        parentPage: {
           id: string
         } | null
       }>
@@ -84,17 +86,25 @@ export const createPages = async (args: CreatePagesArgs) => {
 
       console.log('Create page jaenTemplate', jaenTemplate)
 
+      const pageConfig = readPageConfig(jaenTemplate.absolutePath)
+
       const page = {
         path: pagePath,
         component: jaenTemplate.absolutePath,
         context: {
-          jaenPageId: node.id
+          jaenPageId: node.id,
+          pageConfig
         }
       }
 
       console.log('Create pages', page, pagePath)
 
       actions.createPage(page)
+
+      await onCreatePage({
+        page,
+        ...args
+      })
     }
   }
 }

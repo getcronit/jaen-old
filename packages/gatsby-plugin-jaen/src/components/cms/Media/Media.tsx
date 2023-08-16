@@ -16,7 +16,7 @@ import {BsLayoutSidebarInset} from 'react-icons/bs'
 import {FaX} from 'react-icons/fa6'
 
 import {PageTree} from '../../shared/PageTree/PageTree'
-import {TreeNode} from '../Pages/shared/PageVisualizer'
+import {TreeNode} from '../Pages/components/PageVisualizer'
 import {MediaGallery} from './components/MediaGallery/MediaGallery'
 import {MediaPreview} from './components/MediaPreview/MediaPreview'
 import {MediaPreviewState} from './types'

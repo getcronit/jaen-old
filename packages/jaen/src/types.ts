@@ -158,10 +158,10 @@ export interface JaenPage {
       }
     }
   }>
-  parent: {
+  parentPage: {
     id: string
   } | null
-  children: Array<{id: string} & Partial<JaenPage>>
+  childPages: Array<{id: string} & Partial<JaenPage>>
   sections: IJaenSection[]
   [customFieldName: string]: any
 

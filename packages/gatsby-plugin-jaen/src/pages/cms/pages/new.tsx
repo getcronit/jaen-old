@@ -4,7 +4,6 @@ import {navigate, PageProps} from 'gatsby'
 import {useEffect, useMemo, useState} from 'react'
 
 import {New} from '../../../components/cms/Pages/New'
-import {JaenPageLayout} from '../../../components/JaenPageLayout/JaenPageLayout'
 import {
   CMSManagement,
   useCMSManagement
@@ -70,15 +69,15 @@ const PagesNew: React.FC = () => {
     <New
       form={{
         values: {
-          parent: defaultParentPageId
+          parentPage: defaultParentPageId
         },
         parentPages,
         onSubmit: data => {
           const addedPageId = manager.addPage({
             slug: data.slug,
             template: data.template,
-            parent: {
-              id: data.parent
+            parentPage: {
+              id: data.parentPage
             },
             excludedFromIndex: data.isExcludedFromIndex,
             jaenPageMetadata: {

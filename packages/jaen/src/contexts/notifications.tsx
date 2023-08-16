@@ -37,6 +37,7 @@ interface OpenerFn {
       message: string
       confirmText?: string
       cancelText?: string
+      placeholder?: string
     },
     defaultValue?: string
   ): Promise<any>
@@ -108,17 +109,11 @@ export const NotificationsProvider = ({children}: {children: ReactNode}) => {
             else resolve(true)
           }
 
-          setModal(
-            <Modal
-              isOpen={true}
-              onClose={handleClose}
-              initialFocusRef={type === ModalType.Prompt ? input : ok}>
-              <ModalOverlay />
-              <ModalContent
-                containerProps={{
-                  id: 'coco'
-                }}
-                overflow="hidden">
+          const Content = () => {
+            const [inputValue, setInputValue] = useState(defaultValue || '')
+
+            return (
+              <>
                 <ModalHeader>
                   <Stack direction="row" alignItems="center">
                     {args.icon && (
@@ -138,7 +133,13 @@ export const NotificationsProvider = ({children}: {children: ReactNode}) => {
                   <Stack spacing={5}>
                     <Text>{args.message}</Text>
                     {type === ModalType.Prompt && (
-                      <Input ref={input} defaultValue={defaultValue} />
+                      <Input
+                        ref={input}
+                        placeholder={args.placeholder}
+                        defaultValue={defaultValue}
+                        onChange={e => setInputValue(e.target.value)}
+                        value={inputValue}
+                      />
                     )}
                   </Stack>
                 </ModalBody>
@@ -148,10 +149,29 @@ export const NotificationsProvider = ({children}: {children: ReactNode}) => {
                       {args.cancelText || 'Cancel'}
                     </Button>
                   )}
-                  <Button onClick={handleOK} ref={ok}>
+                  <Button
+                    onClick={handleOK}
+                    ref={ok}
+                    isDisabled={type === ModalType.Prompt && inputValue === ''}>
                     {args.confirmText || 'OK'}
                   </Button>
                 </ModalFooter>
+              </>
+            )
+          }
+
+          setModal(
+            <Modal
+              isOpen={true}
+              onClose={handleClose}
+              initialFocusRef={type === ModalType.Prompt ? input : ok}>
+              <ModalOverlay />
+              <ModalContent
+                containerProps={{
+                  id: 'coco'
+                }}
+                overflow="hidden">
+                <Content />
               </ModalContent>
             </Modal>
           )

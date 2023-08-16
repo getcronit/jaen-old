@@ -3,7 +3,7 @@ import {JaenPage} from '@snek-at/jaen'
 interface PageNode {
   id: string
   slug: string
-  parent: {
+  parentPage: {
     id: string
   } | null
 }
@@ -13,7 +13,7 @@ export const generatePageOriginPath = (
   node: PageNode,
   path = node.id === 'JaenPage /' ? '/' : `/${node.slug}`
 ): string | undefined => {
-  const parentId = node.parent?.id
+  const parentId = node.parentPage?.id
   const parent = allNodes.find(n => n.id === parentId)
 
   if (parent) {
@@ -45,8 +45,8 @@ export const generatePagePaths = (allNodes: JaenPage[], pageId: string) => {
     const lookupPath = (node: JaenPage, pathPrefix = '/') => {
       paths[pathPrefix] = node.id
 
-      if (node.children.length > 0) {
-        for (const {id} of node.children) {
+      if (node.childPages.length > 0) {
+        for (const {id} of node.childPages) {
           const child = allNodes.find(n => n.id === id)
 
           if (child) {

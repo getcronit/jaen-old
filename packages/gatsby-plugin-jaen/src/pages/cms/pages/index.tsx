@@ -1,22 +1,27 @@
-import {navigate, PageProps} from 'gatsby'
 import {useLocation} from '@reach/router'
+import {navigate, PageProps} from 'gatsby'
 
+import {PageConfig, useNotificationsContext} from '@snek-at/jaen'
+import {useCallback, useEffect, useMemo, useState} from 'react'
+import {FaArrowRight, FaEdit, FaTrash} from 'react-icons/fa'
 import {Pages} from '../../../components/cms/Pages/Pages'
-import {JaenPageLayout} from '../../../components/JaenPageLayout/JaenPageLayout'
 import {
   CMSManagement,
   useCMSManagement
 } from '../../../connectors/cms-management'
-import {useCallback, useEffect, useMemo, useState} from 'react'
-import {PageConfig, useNotificationsContext} from '@snek-at/jaen'
 
 const PagesPage: React.FC = () => {
-  const {toast} = useNotificationsContext()
+  const {toast, prompt, confirm} = useNotificationsContext()
   const manager = useCMSManagement()
 
   const [currentPageId, setCurrentPageId] = useState<string | undefined>(
     undefined
   )
+
+  useEffect(() => {
+    // scroll to top
+    window.scrollTo(0, 0)
+  }, [currentPageId])
 
   const currentPage = manager.usePage(currentPageId)
 
@@ -65,15 +70,15 @@ const PagesPage: React.FC = () => {
   )
 
   // const parentPages = useMemo(() => {
-  //   if (!currentPage.parent?.id) return {}
+  //   if (!currentPage.parentPage?.id) return {}
 
-  //   const parentPage = manager.page(currentPage.parent.id)
+  //   const parentPage = manager.page(currentPage.parentPage.id)
 
   //   return {
-  //     [currentPage.parent.id]: {
+  //     [currentPage.parentPage.id]: {
   //       label: parentPage.jaenPageMetadata?.title || parentPage.slug,
   //       templates: manager
-  //         .templatesForPage(currentPage.parent.id)
+  //         .templatesForPage(currentPage.parentPage.id)
   //         .reduce((acc, template) => {
   //           acc[template.id] = {
   //             label: template.label
@@ -83,7 +88,7 @@ const PagesPage: React.FC = () => {
   //         }, {} as {[key: string]: {label: string}})
   //     }
   //   }
-  // }, [currentPage.parent?.id, manager])
+  // }, [currentPage.parentPage?.id, manager])
 
   const parentPages = useMemo(() => {
     const pages = manager.pages()
@@ -98,7 +103,7 @@ const PagesPage: React.FC = () => {
 
       if (!page) return
 
-      for (const child of page.children) {
+      for (const child of page.childPages) {
         blacklist.push(child.id)
         recursiveBlacklist(child.id)
       }
@@ -168,7 +173,7 @@ const PagesPage: React.FC = () => {
           template: currentPage.template,
           description:
             currentPage.jaenPageMetadata.description || 'No description',
-          parent: currentPage.parent?.id,
+          parentPage: currentPage.parentPage?.id,
           isExcludedFromIndex: currentPage.excludedFromIndex,
           blogPost: currentPage.jaenPageMetadata.blogPost
         },
@@ -177,8 +182,8 @@ const PagesPage: React.FC = () => {
           manager.updatePage(currentPage.id, {
             slug: data.slug,
             template: data.template,
-            parent: {
-              id: data.parent
+            parentPage: {
+              id: data.parentPage
             },
             excludedFromIndex: data.isExcludedFromIndex,
             jaenPageMetadata: {
@@ -201,6 +206,71 @@ const PagesPage: React.FC = () => {
       tree={manager.tree}
       onTreeSelect={handleTreeSelect}
       disableNewButton={manager.templatesForPage(currentPage.id).length === 0}
+      dangerZoneActions={[
+        {
+          title: 'Move page',
+          description: 'This will move the page and all its subpages.',
+          buttonText: 'Move page',
+          icon: FaArrowRight,
+          onClick: () => {},
+          isDisabled: !currentPage.template
+        },
+        {
+          title: 'Update slug',
+          description:
+            'This will rename the slug and thus affects the path of the page and all its subpages.',
+          buttonText: 'Rename slug',
+          icon: FaEdit,
+          onClick: async () => {
+            const slug = await prompt({
+              title: 'Rename slug',
+              message: 'Please enter a new slug. This will affect the path.',
+              confirmText: 'Rename',
+              cancelText: 'Cancel',
+              placeholder: currentPage.slug
+            })
+
+            if (slug) {
+              manager.updatePage(currentPage.id, {
+                slug
+              })
+
+              toast({
+                title: 'Slug updated',
+                description: `Slug has been updated to ${slug}`,
+                status: 'success'
+              })
+            }
+          },
+          isDisabled: !currentPage.template
+        },
+        {
+          title: 'Delete this page',
+          description: 'This will delete the page and all its subpages.',
+          buttonText: 'Delete page',
+          icon: FaTrash,
+          onClick: async () => {
+            const ok = await confirm({
+              title: 'Delete page',
+              message:
+                'Are you sure you want to delete this page and all its subpages?'
+            })
+
+            if (ok) {
+              manager.removePage(currentPage.id)
+
+              toast({
+                title: 'Page deleted',
+                description: `Page ${currentPage.slug} has been deleted`,
+                status: 'success'
+              })
+            }
+
+            setCurrentPageId(currentPage.parentPage?.id)
+          },
+          isDisabled: !currentPage.template
+        }
+      ]}
     />
   )
 }

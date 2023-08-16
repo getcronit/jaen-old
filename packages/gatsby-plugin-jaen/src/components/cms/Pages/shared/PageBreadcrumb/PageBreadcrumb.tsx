@@ -1,7 +1,7 @@
 import {Breadcrumb, BreadcrumbItem, BreadcrumbLink} from '@chakra-ui/react'
 import {useEffect, useState} from 'react'
 
-import {TreeNode} from '../PageVisualizer'
+import {TreeNode} from '../../components/PageVisualizer'
 import {Link} from '../../../../shared/Link'
 
 export interface PageBreadcrumbProps {

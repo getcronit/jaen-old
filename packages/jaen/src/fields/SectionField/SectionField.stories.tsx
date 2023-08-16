@@ -18,7 +18,7 @@ export default {
         jaenPage: {
           id: `JaenPage jaen-page-1`,
           slug: 'jaen-page-1',
-          parent: null,
+          parentPage: null,
           children: [],
           jaenPageMetadata: {
             title: 'Jaen Page 1',

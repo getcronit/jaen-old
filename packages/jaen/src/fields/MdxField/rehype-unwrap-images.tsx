@@ -7,7 +7,11 @@ export const rehypeUnwrapImages: Plugin<[]> = () => {
     visit(tree, 'element', visitor)
   }
 
-  function visitor(node: Element, index: number, parent: Element | undefined) {
+  function visitor(
+    node: Element,
+    index: number,
+    parentPage: Element | undefined
+  ) {
     if (node.tagName === 'img' && parent && parent.tagName === 'p') {
       parent.tagName = 'div'
     }

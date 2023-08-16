@@ -36,14 +36,14 @@ const pagesSlice = createSlice({
         slug,
         jaenFields,
         jaenPageMetadata,
-        parent,
-        children,
+        parentPage,
+        childPages,
         template,
         excludedFromIndex,
         fromId
       } = action.payload
 
-      const parentId = parent?.id || null
+      const parentPageId = parentPage?.id || null
 
       const modifiedAt = new Date().toISOString()
 
@@ -56,8 +56,8 @@ const pagesSlice = createSlice({
           ...(slug && {slug}),
           ...(jaenFields !== undefined && {jaenFields}),
           jaenPageMetadata,
-          ...(parent !== undefined && {parent}),
-          ...(children && {children}),
+          ...(parentPage !== undefined && {parentPage}),
+          ...(childPages && {childPages}),
           ...(excludedFromIndex !== undefined && {excludedFromIndex})
         }
 
@@ -73,13 +73,13 @@ const pagesSlice = createSlice({
           } as JaenPage['jaenPageMetadata']
         }
 
-        // If `fromId` then remove the page from the fromPage children
-        if (fromId && (parentId || parentId === null)) {
+        // If `fromId` then remove the page from the fromPage childPages
+        if (fromId && (parentPageId || parentPageId === null)) {
           // Update the from page
           // If the fromIndex is not found, add the fromPage to the state and set the from index
 
-          const newChildren = [
-            ...(state.nodes[fromId]?.children || []).filter(e => e.id !== id),
+          const newchildPages = [
+            ...(state.nodes[fromId]?.childPages || []).filter(e => e.id !== id),
             {
               id,
               deleted: true
@@ -89,7 +89,7 @@ const pagesSlice = createSlice({
           state.nodes[fromId] = {
             ...state.nodes[fromId],
             modifiedAt,
-            children: newChildren
+            childPages: newchildPages
           }
         }
       } else {
@@ -110,8 +110,8 @@ const pagesSlice = createSlice({
           jaenPageMetadata: jaenPageMetadata || {
             title: 'New Page'
           },
-          parent: parent || null,
-          children: children || [],
+          parentPage: parentPage || null,
+          childPages: childPages || [],
           template,
           excludedFromIndex
         }
@@ -119,13 +119,13 @@ const pagesSlice = createSlice({
         state.lastAddedNodeId = id
       }
 
-      // Add the page to the new parents' children
-      if (parentId) {
-        state.nodes[parentId] = {
+      // Add the page to the new parentPages' childPages
+      if (parentPageId) {
+        state.nodes[parentPageId] = {
           modifiedAt,
-          ...state.nodes[parentId],
-          children: state.nodes[parentId]?.children
-            ? [...(state.nodes[parentId]?.children || []), {id}]
+          ...state.nodes[parentPageId],
+          childPages: state.nodes[parentPageId]?.childPages
+            ? [...(state.nodes[parentPageId]?.childPages || []), {id}]
             : [{id}]
         }
       }
@@ -138,7 +138,7 @@ const pagesSlice = createSlice({
       state.nodes[id] = {
         ...state.nodes[id],
         deleted: true,
-        children: state.nodes[id]?.children || []
+        childPages: state.nodes[id]?.childPages || []
       }
 
       return state
@@ -159,7 +159,7 @@ const pagesSlice = createSlice({
       // Create the page if not found
       state.nodes[pageId] = {
         ...state.nodes[pageId],
-        children: state.nodes[pageId]?.children || []
+        childPages: state.nodes[pageId]?.childPages || []
       }
 
       const page = state.nodes[pageId] as JaenPage
@@ -191,7 +191,7 @@ const pagesSlice = createSlice({
       // Create the page if not found
       state.nodes[pageId] = {
         ...state.nodes[pageId],
-        children: state.nodes[pageId]?.children || []
+        childPages: state.nodes[pageId]?.childPages || []
       }
 
       const page = state.nodes[pageId] as JaenPage
@@ -227,7 +227,7 @@ const pagesSlice = createSlice({
       // Create the page if not found
       state.nodes[pageId] = {
         ...state.nodes[pageId],
-        children: state.nodes[pageId]?.children || []
+        childPages: state.nodes[pageId]?.childPages || []
       }
 
       const page = state.nodes[pageId] as JaenPage
@@ -259,7 +259,7 @@ const pagesSlice = createSlice({
       // Create the page if not found
       state.nodes[pageId] = {
         ...state.nodes[pageId],
-        children: state.nodes[pageId]?.children || []
+        childPages: state.nodes[pageId]?.childPages || []
       }
 
       const page = state.nodes[pageId] as JaenPage
@@ -311,7 +311,7 @@ const pagesSlice = createSlice({
       // Create the page if not found
       state.nodes[pageId] = {
         ...state.nodes[pageId],
-        children: state.nodes[pageId]?.children || [],
+        childPages: state.nodes[pageId]?.childPages || [],
         sections: state.nodes[pageId]?.sections || []
       }
 
@@ -374,7 +374,7 @@ const pagesSlice = createSlice({
       state.nodes[pageId] = {
         ...state.nodes[pageId],
         modifiedAt,
-        children: state.nodes[pageId]?.children || []
+        childPages: state.nodes[pageId]?.childPages || []
       }
 
       const page = state.nodes[pageId] as JaenPage

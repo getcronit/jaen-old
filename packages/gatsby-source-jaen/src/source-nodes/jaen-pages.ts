@@ -1,4 +1,5 @@
 import {Node, SourceNodesArgs} from 'gatsby'
+import {onCreatePage} from '../on-create-page/jaen-page'
 
 import {JaenData} from './jaen-data'
 
@@ -47,16 +48,19 @@ export const sourceNodes = async (args: SourceNodesArgs) => {
     const pageWithSlug = {
       ...page,
       slug,
-      parent: page.id !== 'JaenPage /' ? 'JaenPage /' : null,
-      children: page.children?.map(child => child.id) || []
+      childTemplates: [],
+      parentPage: page.parentPage?.id,
+      childPages: page.childPages?.map(child => child.id) || undefined
     }
 
     console.log(pageWithSlug)
 
     const pageNode = {
       ...pageWithSlug,
-      // parent: pageWithSlug.parent?.id,
+      // parentPage: pageWithSlug.parentPage?.id,
       // children: pageWithSlug.children?.map(child => child.id) || [],
+      parent: null,
+      children: [],
       internal: {
         type: 'JaenPage',
         content: JSON.stringify(pageWithSlug),
@@ -65,19 +69,5 @@ export const sourceNodes = async (args: SourceNodesArgs) => {
     }
 
     await createNode(pageNode)
-
-    const parentPageNode = pageNode.parent ? getNode(pageNode.parent) : null
-
-    if (pageNode && parentPageNode) {
-      console.log(
-        `Creating parent-child link between`,
-        pageNode.id,
-        parentPageNode.id
-      )
-      actions.createParentChildLink({
-        parent: parentPageNode,
-        child: pageNode
-      })
-    }
   }
 }
