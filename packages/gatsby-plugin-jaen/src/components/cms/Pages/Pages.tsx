@@ -7,6 +7,7 @@ import {
   Table,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr
@@ -130,6 +131,19 @@ export const Pages: React.FC<PagesProps> = props => {
                 </Td>
               </Tr>
             ))}
+
+            {props.children.length === 0 && (
+              <Tr>
+                <Td colSpan={4}>
+                  <HStack>
+                    <Text>This page doesn&apos;t have any subpages yet. </Text>
+                    <Link to={`./new/#${btoa(props.pageId)}`}>
+                      Create a new page
+                    </Link>
+                  </HStack>
+                </Td>
+              </Tr>
+            )}
           </Tbody>
         </Table>
       </Stack>

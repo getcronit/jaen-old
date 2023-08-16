@@ -57,6 +57,8 @@ const PagesNew: React.FC = () => {
     try {
       const pageId = atob(location.hash.replace('#', ''))
 
+      window.scrollTo(0, 0)
+
       if (parentPages[pageId]) {
         setDefaultParentPageId(pageId)
       }
