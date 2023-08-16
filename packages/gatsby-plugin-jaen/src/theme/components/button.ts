@@ -361,12 +361,12 @@ const variants = {
       borderRadius: 'lg',
       color: vars.color.reference,
       borderColor: 'border.emphasized',
-      [vars.color.variable]: `colors.${colorScheme}.700`,
+      [vars.color.variable]: `colors.${colorScheme}.600`,
       '> svg': {
         color: 'fg.muted'
       },
       _dark: {
-        [vars.color.variable]: `colors.gray.200`
+        [vars.color.variable]: `colors.${colorScheme}.200`
       }
     }
   }),

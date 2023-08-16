@@ -54,8 +54,12 @@ export const DynamicPageRenderer: React.FC<DynamicPageRendererProps> =
           <React.Suspense fallback={<div>Loading...</div>}>
             <Component
               {...props}
-              pageContext={{
-                jaenPageId: dynamic.jaenPageId
+              pageProps={{
+                ...props.pageProps,
+                pageContext: {
+                  ...props.pageProps.pageContext,
+                  jaenPageId: dynamic.jaenPageId
+                }
               }}>
               <dynamic.Component
                 {...{

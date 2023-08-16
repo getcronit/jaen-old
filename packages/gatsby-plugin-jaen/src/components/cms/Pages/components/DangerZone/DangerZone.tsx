@@ -1,4 +1,12 @@
-import {Button, HStack, List, ListItem, Stack, Text} from '@chakra-ui/react'
+import {
+  Button,
+  HStack,
+  List,
+  ListItem,
+  Stack,
+  Text,
+  useColorModeValue
+} from '@chakra-ui/react'
 import {FC} from 'react'
 import {IconType} from 'react-icons/lib'
 
@@ -18,13 +26,15 @@ export interface DangerZoneProps {
 }
 
 export const DangerZone: FC<DangerZoneProps> = ({actions}) => {
+  const borderColor = useColorModeValue('red.500', 'red.200')
+
   return (
     <List
       spacing="4"
       p="4"
       border="2px"
       borderRadius="md"
-      borderColor="red.300">
+      borderColor={borderColor}>
       {actions.map((action, index) => (
         <ListItem key={index}>
           <HStack justifyContent="space-between">
