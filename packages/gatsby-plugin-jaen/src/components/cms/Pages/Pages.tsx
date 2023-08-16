@@ -2,30 +2,27 @@ import {
   Button,
   Heading,
   HStack,
-  List,
-  ListItem,
   Stack,
   StackDivider,
   Table,
   Tbody,
   Td,
-  Text,
   Th,
   Thead,
   Tr
 } from '@chakra-ui/react'
-import {FaPlus, FaTrash} from 'react-icons/fa'
+import {FaPlus} from 'react-icons/fa'
 
 import React from 'react'
 import {Link} from '../../shared/Link'
+import {DangerZone, DangerZoneProps} from './components/DangerZone'
+import {TreeNode} from './components/PageVisualizer'
+import {PageVisualizer} from './components/PageVisualizer/PageVisualizer'
 import {PageBreadcrumb} from './shared/PageBreadcrumb'
 import {
   PageContentForm,
   PageContentFormProps
 } from './shared/PageContentForm/PageContentForm'
-import {TreeNode} from './components/PageVisualizer'
-import {PageVisualizer} from './components/PageVisualizer/PageVisualizer'
-import {DangerZone, DangerZoneProps} from './components/DangerZone'
 
 export interface PagesProps {
   pageId: string

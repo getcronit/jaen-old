@@ -163,7 +163,8 @@ const PagesPage: React.FC = () => {
     <Pages
       pageId={currentPage.id}
       form={{
-        disableSlug: !currentPage.template,
+        // Always disable slug because the slug can only be changed in the danger zone
+        disableSlug: true,
         values: {
           title: currentPage.jaenPageMetadata?.title || 'No title',
           image: {

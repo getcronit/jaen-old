@@ -225,7 +225,7 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
     setValue('slug', slug) // Set the value of the 'slug' field using setValue from react-hook-form
   }, [mode, title, setValue])
 
-  const parent = watch('parent', '') // Get the value of the 'parent' field
+  const parentPage = watch('parentPage', '') // Get the value of the 'parent' field
 
   const jaenTemplate = props.values?.parentPage
     ? (props.parentPages[props.values.parentPage]?.templates[
@@ -395,7 +395,7 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
 
             <Controller
               control={control}
-              name="parent"
+              name="parentPage"
               rules={{
                 required: true
               }}
@@ -489,9 +489,9 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
                 render={({field}) => {
                   return (
                     <ChooseButton
-                      isDisabled={!props.parentPages[parent]?.templates}
+                      isDisabled={!props.parentPages[parentPage]?.templates}
                       onChange={field.onChange}
-                      items={props.parentPages[parent]?.templates || {}}
+                      items={props.parentPages[parentPage]?.templates || {}}
                     />
                   )
                 }}

@@ -58,5 +58,6 @@ export default NotFoundPage
 export {Head} from '@snek-at/jaen'
 
 export const pageConfig: PageConfig = {
-  label: 'Oops! Page not found'
+  label: 'Oops! Page not found',
+  childTemplates: ['BlogPage']
 }

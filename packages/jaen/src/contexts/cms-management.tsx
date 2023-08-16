@@ -343,7 +343,7 @@ export const CMSManagementProvider = withRedux(
           parent = pagesDict[parent.parentPage?.id || '']
         }
 
-        return '/' + path.join('/')
+        return path.join('/')
       },
       [pagesDict]
     )
