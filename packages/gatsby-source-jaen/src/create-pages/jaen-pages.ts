@@ -67,10 +67,7 @@ export const createPages = async (args: CreatePagesArgs) => {
   for (const node of allJaenPage.nodes) {
     const pagePath = generatePageOriginPath(allJaenPage.nodes, node)
 
-    console.log('Creating pagEEEEEEEe', node.id, node.template)
-
     if (node.template) {
-      console.log('WTFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF')
       if (!pagePath) {
         reporter.panicOnBuild(`Error while generating path for page ${node.id}`)
         return
@@ -80,31 +77,24 @@ export const createPages = async (args: CreatePagesArgs) => {
         template => template.id === node.template
       )
 
-      console.log('jaenTemplate', jaenTemplate)
-
       if (!jaenTemplate) {
         reporter.panicOnBuild(`Template ${node.template} not found`)
         return
       }
 
+      console.log('Create page jaenTemplate', jaenTemplate)
+
       const page = {
         path: pagePath,
         component: jaenTemplate.absolutePath,
-        context: {}
+        context: {
+          jaenPageId: node.id
+        }
       }
 
-      console.log('Before creating page', page)
+      console.log('Create pages', page, pagePath)
 
       actions.createPage(page)
-
-      // manually call onCreatePage for the page
-
-      console.log('Creating Template', page.path)
-
-      onCreatePage({
-        ...args,
-        page
-      })
     }
   }
 }

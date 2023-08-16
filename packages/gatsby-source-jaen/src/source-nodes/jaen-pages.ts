@@ -30,6 +30,8 @@ export const sourceNodes = async (args: SourceNodesArgs) => {
 
   const jaenPages = jaenData.pages || []
 
+  console.log('JaenData', jaenData)
+
   for (const page of jaenPages) {
     let slug = page.slug
     if (!slug) {
@@ -39,45 +41,43 @@ export const sourceNodes = async (args: SourceNodesArgs) => {
 
       const lastPathElement = path.split('/').pop() || 'root'
 
-      console.log(
-        "Couldn't find slug for page",
-        page.id,
-        'using',
-        lastPathElement
-      )
-
       slug = lastPathElement
     }
 
-    console.log('Creating page node', page, slug)
-    const pageNode = {
-      internal: {
-        type: 'JaenPage',
-        content: JSON.stringify(page),
-        contentDigest: createContentDigest(page)
-      },
+    const pageWithSlug = {
       ...page,
       slug,
-      parent: page.parent?.id,
+      parent: page.id !== 'JaenPage /' ? 'JaenPage /' : null,
       children: page.children?.map(child => child.id) || []
+    }
+
+    console.log(pageWithSlug)
+
+    const pageNode = {
+      ...pageWithSlug,
+      // parent: pageWithSlug.parent?.id,
+      // children: pageWithSlug.children?.map(child => child.id) || [],
+      internal: {
+        type: 'JaenPage',
+        content: JSON.stringify(pageWithSlug),
+        contentDigest: createContentDigest(pageWithSlug)
+      }
     }
 
     await createNode(pageNode)
 
-    console.log('Created page node', pageNode.id)
-
     const parentPageNode = pageNode.parent ? getNode(pageNode.parent) : null
 
     if (pageNode && parentPageNode) {
-      // console.log(
-      //   `Creating parent-child link between`,
-      //   pageNode.id,
-      //   parentPageNode.id
-      // )
-      // actions.createParentChildLink({
-      //   parent: parentPageNode,
-      //   child: pageNode
-      // })
+      console.log(
+        `Creating parent-child link between`,
+        pageNode.id,
+        parentPageNode.id
+      )
+      actions.createParentChildLink({
+        parent: parentPageNode,
+        child: pageNode
+      })
     }
   }
 }

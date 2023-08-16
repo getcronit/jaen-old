@@ -21,6 +21,9 @@ export const createSchemaCustomization = async ({
       excludedFromIndex: Boolean
       
       pageConfig: JSON
+
+      parentPage: JaenPage @link
+      childPages: [JaenPage!]! @link
     }
 
     type MediaNode implements Node {

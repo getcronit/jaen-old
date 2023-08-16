@@ -4,7 +4,10 @@ import fs from 'fs'
 const Config: GatsbyConfig = {
   jsxRuntime: 'automatic',
   jsxImportSource: '@emotion/react',
-  plugins: []
+  plugins: [],
+  flags: {
+    DETECT_NODE_MUTATIONS: true
+  }
 }
 
 export const pagesDir = `${process.cwd()}/src/pages`
