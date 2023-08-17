@@ -1,8 +1,9 @@
 import {JaenPage, JaenSite} from '@snek-at/jaen'
-import {SourceNodesArgs, Node} from 'gatsby'
-import fs from 'fs/promises' // Import the fs module for asynchronous file operations
-import {fetchWithCache} from '../utils/fetch-with-cache'
 import deepmerge from 'deepmerge'
+import fs from 'fs/promises' // Import the fs module for asynchronous file operations
+import {SourceNodesArgs} from 'gatsby'
+
+import {fetchWithCache} from '../utils/fetch-with-cache'
 
 export type JaenData = {
   pages?: JaenPage[]
@@ -35,12 +36,13 @@ export const sourceNodes = async (args: SourceNodesArgs) => {
       }
 
       const response = await fetchWithCache<{
+        createdAt: Date
         message: string
         data: JaenData
       }>(link, {cache})
 
       jaenData.patches.push({
-        createdAt: new Date(),
+        createdAt: response.createdAt || new Date(),
         title: response.message,
         url: link
       })

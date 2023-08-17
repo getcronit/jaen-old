@@ -487,6 +487,7 @@ export const CMSManagementProvider = withRedux(
 
           const migrationData = {
             message,
+            createdAt: new Date().toISOString(),
             data: {
               pages: Object.entries(dynamicPagesDict).map(([id, page]) => ({
                 id,
