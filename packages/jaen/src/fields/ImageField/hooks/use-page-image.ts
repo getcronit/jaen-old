@@ -19,7 +19,6 @@ export const usePageImage = (id: string): UsePageImageReturn | undefined => {
   const file = jaenPage?.mediaNodes?.find(node => node.id === id)
 
   if (file) {
-    console.log('file', file)
     const image = getImage(file.node.childImageSharp.gatsbyImageData)
 
     // If a valid file is found, generate the IGatsbyImageData object using Gatsby's 'getImage' function.

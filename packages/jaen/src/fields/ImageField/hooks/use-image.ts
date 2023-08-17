@@ -18,15 +18,11 @@ export const useImage = (
   // Get the statically-defined image from the current page context or section context.
   const staticImage = usePageImage(mediaId)
 
-  console.log('staticImage', mediaId, staticImage)
-
   // Get the dynamic image data from the 'media_nodes' field of the page context.
   const field = useField<{[id: string]: MediaNode}>(
     'media_nodes',
     'IMA:MEDIA_NODES'
   )
-
-  console.log(field)
 
   const [image, setImage] = useState<UsePageImageReturn | undefined>(
     staticImage

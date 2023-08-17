@@ -79,8 +79,6 @@ export const ImageField = connectField<ImageFieldMediaId, ImageFieldProps>(
       mediaId = jaenField.staticValue
     }
 
-    console.log('mediaId', mediaId)
-
     const {jaenPage} = usePageContext()
 
     const context = useMediaModal({
