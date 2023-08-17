@@ -157,8 +157,6 @@ export const createSchemaCustomization = async ({
             }
           })
 
-          console.log(entries)
-
           return entries
         }
       }

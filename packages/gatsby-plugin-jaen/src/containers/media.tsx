@@ -25,18 +25,12 @@ const MediaContainer: React.FC<MediaContainerProps> = props => {
     setJaenPageId(id || undefined)
   }
 
-  const jaenPage = usePageContext()
-
-  console.log('mediaNodes jaenPage', jaenPage)
-
   const field = useField<{
     [id: string]: MediaNode
   }>('media_nodes', 'IMA:MEDIA_NODES')
   const [mediaNodes, setMediaNodes] = useState<{
     [id: string]: MediaNode
   }>(field.staticValue || {})
-
-  console.log('mediaNodes', mediaNodes, field)
 
   const manager = useCMSManagement()
 
@@ -266,8 +260,6 @@ const MediaContainer: React.FC<MediaContainerProps> = props => {
 
   const mediaNodesValues = useMemo(() => {
     const values = Object.values(mediaNodes)
-
-    console.log('values', values)
 
     // if selector and jaenPageId is set, filter mediaNodes by jaenPageId
     if (props.isSelector && jaenPageId) {
