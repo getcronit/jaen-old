@@ -9,6 +9,7 @@ import {
   CMSManagement,
   useCMSManagement
 } from '../../../connectors/cms-management'
+import {set} from 'react-hook-form'
 
 const PagesPage: React.FC = () => {
   const {toast, prompt, confirm} = useNotificationsContext()
@@ -23,8 +24,6 @@ const PagesPage: React.FC = () => {
     window.scrollTo(0, 0)
   }, [currentPageId])
 
-  const currentPage = manager.usePage(currentPageId)
-
   const location = useLocation()
 
   useEffect(() => {
@@ -33,9 +32,19 @@ const PagesPage: React.FC = () => {
 
       setCurrentPageId(pageId || undefined)
     } catch (e) {
-      console.error(e)
+      setCurrentPageId(undefined)
     }
   }, [location.hash])
+
+  const currentPage = useMemo(() => {
+    try {
+      return manager.page(currentPageId)
+    } catch {
+      // Clear location hash if page is not found
+
+      return manager.page()
+    }
+  }, [currentPageId, manager.page])
 
   // useEffect(() => {
   //  // check if location is

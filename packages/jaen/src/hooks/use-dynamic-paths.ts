@@ -12,6 +12,7 @@ export type DynamicPathNode = {
   } | null
   template: string | null
   buildPath: string | null
+  deleted?: boolean
 }
 
 export const useDynamicPaths = (args: {
@@ -44,6 +45,7 @@ export const useDynamicPaths = (args: {
       {
         jaenPageId: string
         jaenTemplateId: string
+        isDeleted?: boolean
       }
     >
   >({})
@@ -54,6 +56,7 @@ export const useDynamicPaths = (args: {
       {
         jaenPageId: string
         jaenTemplateId: string
+        isDeleted?: boolean
       }
     > = {}
 
@@ -67,10 +70,17 @@ export const useDynamicPaths = (args: {
 
       const path = generatePageOriginPath(pagesValues, pageWithId)
 
-      if (path && path !== pageWithId.buildPath && pageWithId.template) {
+      console.log(path, pageWithId.buildPath, pageWithId.template)
+
+      if (
+        path &&
+        (path !== pageWithId.buildPath || pageWithId.deleted) &&
+        pageWithId.template
+      ) {
         newPaths[path] = {
           jaenPageId: pageWithId.id,
-          jaenTemplateId: pageWithId.template
+          jaenTemplateId: pageWithId.template,
+          isDeleted: pageWithId.deleted
         }
       }
     }
@@ -80,6 +90,8 @@ export const useDynamicPaths = (args: {
       setPaths(newPaths)
     }
   }, [pages])
+
+  console.log(paths)
 
   return paths
 }

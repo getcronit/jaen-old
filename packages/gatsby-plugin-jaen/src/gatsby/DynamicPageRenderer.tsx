@@ -50,6 +50,14 @@ export const DynamicPageRenderer: React.FC<DynamicPageRendererProps> =
       }
     }, [dynamicJaenPage])
 
+    if (dynamicJaenPage?.isDeleted) {
+      return (
+        <Component {...props}>
+          <div>Page not found</div>
+        </Component>
+      )
+    }
+
     if (dynamic) {
       return (
         <PageProvider jaenPage={{id: dynamic.jaenPageId}}>
