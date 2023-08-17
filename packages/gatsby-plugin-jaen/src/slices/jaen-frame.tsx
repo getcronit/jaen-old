@@ -219,6 +219,24 @@ const Slice: React.FC<SliceProps> = props => {
 
   useEffect(() => {
     if (authentication.user?.isAdmin) {
+      extendMenu('user', {
+        group: 'add',
+        items: {
+          addPage: {
+            label: 'New page',
+            icon: FaSitemap,
+            path: `/cms/pages/new/#${btoa(props.jaenPageId)}`
+          },
+          addMedia: {
+            label: 'New media',
+            icon: FaImage,
+            onClick: () => {
+              mediaModal.toggleModal()
+            }
+          }
+        }
+      })
+
       // Add jaenCMS user menu
       extendMenu('user', {
         group: 'jaenCMS',
@@ -294,24 +312,6 @@ const Slice: React.FC<SliceProps> = props => {
             icon: FaGlobe,
             onClick: async () => {
               manager.draft.publish()
-            }
-          }
-        }
-      })
-
-      extendMenu('user', {
-        group: 'add',
-        items: {
-          addPage: {
-            label: 'New page',
-            icon: FaSitemap,
-            path: `/cms/pages/new/#${btoa(props.jaenPageId)}`
-          },
-          addMedia: {
-            label: 'New media',
-            icon: FaImage,
-            onClick: () => {
-              mediaModal.toggleModal()
             }
           }
         }
