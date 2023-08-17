@@ -24,6 +24,10 @@ export const sourceNodes = async (args: SourceNodesArgs) => {
 
   const jaenSite = jaenData.site
 
+  if (!jaenSite) {
+    return
+  }
+
   createNode({
     id: createNodeId('JaenSite'),
     internal: {

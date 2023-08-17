@@ -29,19 +29,6 @@ export const fragments = graphql`
   fragment JaenPageChildrenData on JaenPage {
     ...JaenPageDataStructure
     jaenFields
-    jaenFiles {
-      id
-      description
-      node {
-        childImageSharp {
-          gatsbyImageData(
-            placeholder: BLURRED
-            formats: [AUTO, WEBP, AVIF]
-            layout: FULL_WIDTH
-          )
-        }
-      }
-    }
   }
 
   fragment JaenPageData on JaenPage {
@@ -68,7 +55,8 @@ export const fragments = graphql`
         category
       }
     }
-    jaenFiles {
+
+    mediaNodes {
       id
       description
       node {
@@ -81,6 +69,7 @@ export const fragments = graphql`
         }
       }
     }
+
     sections {
       ...JaenSectionRecursive
     }
@@ -138,18 +127,5 @@ export const fragments = graphql`
     ptrPrev
     ptrNext
     jaenFields
-    jaenFiles {
-      id
-      description
-      node {
-        childImageSharp {
-          gatsbyImageData(
-            placeholder: BLURRED
-            formats: [AUTO, WEBP, AVIF]
-            layout: FULL_WIDTH
-          )
-        }
-      }
-    }
   }
 `

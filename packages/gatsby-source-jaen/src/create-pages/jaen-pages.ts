@@ -1,5 +1,5 @@
 import {CreatePagesArgs} from 'gatsby'
-import {onCreateNode} from '../on-create-node/jaen-page'
+
 import {onCreatePage} from '../on-create-page/jaen-page'
 import {readPageConfig} from '../utils/page-config-reader'
 import {generatePageOriginPath} from '../utils/path'
@@ -41,15 +41,13 @@ export const createPages = async (args: CreatePagesArgs) => {
           id
           template
           slug
-          parent {
+          parentPage {
             id
           }
         }
       }
     }
   `)
-
-  console.log('RESULT aaa', result)
 
   if (result.errors || !result.data) {
     reporter.panicOnBuild(`Error while running GraphQL query. ${result.errors}`)
@@ -58,13 +56,6 @@ export const createPages = async (args: CreatePagesArgs) => {
   }
 
   const {allJaenTemplate, allJaenPage} = result.data
-
-  console.log('RESULTS', result.data)
-
-  console.log(
-    'allJaenPageNodes',
-    allJaenPage.nodes.map(node => node.id)
-  )
 
   for (const node of allJaenPage.nodes) {
     const pagePath = generatePageOriginPath(allJaenPage.nodes, node)
@@ -84,8 +75,6 @@ export const createPages = async (args: CreatePagesArgs) => {
         return
       }
 
-      console.log('Create page jaenTemplate', jaenTemplate)
-
       const pageConfig = readPageConfig(jaenTemplate.absolutePath)
 
       const page = {
@@ -96,8 +85,6 @@ export const createPages = async (args: CreatePagesArgs) => {
           pageConfig
         }
       }
-
-      console.log('Create pages', page, pagePath)
 
       actions.createPage(page)
 

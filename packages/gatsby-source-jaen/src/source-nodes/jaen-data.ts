@@ -1,8 +1,8 @@
 import {JaenPage, JaenSite} from '@snek-at/jaen'
 import {SourceNodesArgs, Node} from 'gatsby'
 import fs from 'fs/promises' // Import the fs module for asynchronous file operations
-
-import {fetchMergeData} from '../utils/fetch-and-merge'
+import {fetchWithCache} from '../utils/fetch-with-cache'
+import deepmerge from 'deepmerge'
 
 export type JaenData = {
   pages?: JaenPage[]
@@ -18,26 +18,36 @@ export const sourceNodes = async (args: SourceNodesArgs) => {
   reporter.info('Fetching and sourcing nodes...')
 
   try {
-    // 1. Read data from ./jaen-data/data.json using fs
-    const jsonDataBuffer = await fs.readFile(
-      `${process.cwd()}/jaen-data/patches.json`
-    )
-    const jsonData = JSON.parse(jsonDataBuffer.toString())
+    // 1. Read data from ./jaen-data/patches.txt
+    const buffer = await fs.readFile(`${process.cwd()}/jaen-data/patches.txt`)
 
-    // 2. Fetch and merge additional data using fetchMergeData function
-    const merged = await fetchMergeData<{
-      data: {
-        pages?: JaenPage[]
-        site?: JaenSite
+    // 2. Parse data from ./jaen-data/patches.txt (1 link per line)
+    const data = buffer.toString().split('\n')
+
+    let jaenData = {
+      patches: []
+    } as JaenData
+
+    for (const link of data) {
+      // skip empty lines
+      if (link === '') {
+        continue
       }
-    }>(jsonData)
 
-    console.log(merged)
+      const response = await fetchWithCache<{
+        message: string
+        data: JaenData
+      }>(link, {cache})
 
-    const data = {
-      pages: merged.data?.pages || [],
-      site: merged.data?.site || {},
-      patches: jsonData || []
+      jaenData.patches.push({
+        createdAt: new Date(),
+        title: response.message,
+        url: link
+      })
+
+      if (response) {
+        jaenData = deepmerge(jaenData, response.data)
+      }
     }
 
     // 3. Create JaenData node
@@ -45,9 +55,9 @@ export const sourceNodes = async (args: SourceNodesArgs) => {
       id: createNodeId('JaenData'),
       internal: {
         type: 'JaenData',
-        contentDigest: createContentDigest(data)
+        contentDigest: createContentDigest(jaenData)
       },
-      ...data
+      ...jaenData
     }
 
     // 4. Create JaenData node using createNode action

@@ -5,7 +5,8 @@ import {
   ModalContent,
   ModalOverlay
 } from '@chakra-ui/react'
-import {MediaNode, PageProvider, useMediaModal} from '@snek-at/jaen'
+import {JaenPage, MediaNode, PageProvider, useMediaModal} from '@snek-at/jaen'
+import {useEffect, useState} from 'react'
 
 import Media from './media'
 
@@ -19,6 +20,29 @@ export interface MediaSelectorProps {
 const MediaModal: React.FC<MediaSelectorProps> = props => {
   const context = useMediaModal()
 
+  const [jaenPage, setJaenPage] = useState<
+    {
+      id: string
+    } & Partial<JaenPage>
+  >({
+    id: 'JaenPage /cms/media/'
+  })
+
+  useEffect(() => {
+    const fn = async () => {
+      // load jaenPage
+      const data = await fetch('/page-data/cms/media/page-data.json')
+
+      const json = await data.json()
+
+      setJaenPage(json.result.data.jaenPage as JaenPage)
+    }
+
+    if (context.isOpen) {
+      fn()
+    }
+  }, [context.isOpen])
+
   return (
     <Modal isOpen={context.isOpen} onClose={context.toggleModal}>
       <ModalOverlay />
@@ -30,11 +54,7 @@ const MediaModal: React.FC<MediaSelectorProps> = props => {
         {/* <ModalHeader>Modal Title</ModalHeader> */}
         <ModalCloseButton />
         <ModalBody p="1">
-          <PageProvider
-            jaenPage={{
-              id: 'JaenPage /cms/media/'
-              // missing static data from page-data.json
-            }}>
+          <PageProvider jaenPage={jaenPage}>
             <Media
               isSelector={props.isSelector}
               onSelect={props.onSelect}

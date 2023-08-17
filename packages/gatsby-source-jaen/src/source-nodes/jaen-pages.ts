@@ -1,17 +1,11 @@
+import {MediaNode} from '@snek-at/jaen'
 import {Node, SourceNodesArgs} from 'gatsby'
-import {onCreatePage} from '../on-create-page/jaen-page'
+import {createRemoteFileNode} from 'gatsby-source-filesystem'
 
 import {JaenData} from './jaen-data'
 
 export const sourceNodes = async (args: SourceNodesArgs) => {
-  const {
-    actions,
-    createNodeId,
-    createContentDigest,
-    reporter,
-    getNodesByType,
-    getNode
-  } = args
+  const {actions, createContentDigest, getNodesByType} = args
   const {createNode} = actions
 
   const jaenDataNodes = getNodesByType('JaenData')
@@ -31,9 +25,45 @@ export const sourceNodes = async (args: SourceNodesArgs) => {
 
   const jaenPages = jaenData.pages || []
 
-  console.log('JaenData', jaenData)
-
   for (const page of jaenPages) {
+    // const page = await processPage({
+    //   page: dataPage
+    // })
+
+    if (page.id === 'JaenPage /cms/media/') {
+      // Process media and create nodes
+
+      const nodes: {
+        [mediaId: string]: MediaNode
+      } = page.jaenFields?.['IMA:MEDIA_NODES']?.['media_nodes']?.value || {}
+
+      for (const [mediaId, node] of Object.entries(nodes)) {
+        const fileNode = await createRemoteFileNode({
+          url: node.url,
+          parentNodeId: node.id,
+          createNode,
+          ...args
+        })
+
+        const data = {
+          id: mediaId,
+          jaenPageId: node.jaenPageId,
+          description: node.description,
+          node: fileNode.id
+        }
+
+        const mediaNode = {
+          ...data,
+          internal: {
+            type: 'MediaNode',
+            contentDigest: createContentDigest(data)
+          }
+        }
+
+        await createNode(mediaNode)
+      }
+    }
+
     let slug = page.slug
     if (!slug) {
       // when no slug is defined, extract the slug form the id (JaenPage /foo/)
@@ -52,8 +82,6 @@ export const sourceNodes = async (args: SourceNodesArgs) => {
       parentPage: page.parentPage?.id,
       childPages: page.childPages?.map(child => child.id) || undefined
     }
-
-    console.log(pageWithSlug)
 
     const pageNode = {
       ...pageWithSlug,

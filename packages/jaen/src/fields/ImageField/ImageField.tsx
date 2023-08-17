@@ -1,19 +1,13 @@
 import {Box, Button, Center, IconButton, Text} from '@chakra-ui/react'
 import {GatsbyImage, getSrc} from 'gatsby-plugin-image'
-import {
-  CSSProperties,
-  forwardRef,
-  ReactEventHandler,
-  useEffect,
-  useState
-} from 'react'
+import {CSSProperties, forwardRef, ReactEventHandler} from 'react'
 import {FaImage, FaTrashAlt} from 'react-icons/fa'
 import {PhotoProvider, PhotoView} from 'react-photo-view'
 
 import {connectField} from '../../connectors'
 import {useMediaModal} from '../../contexts/media-modal'
+import {useNotificationsContext} from '../../contexts/notifications'
 import {PageProvider, usePageContext} from '../../contexts/page'
-import {JaenPage} from '../../types'
 import {HighlightTooltip} from '../components/HighlightTooltip'
 import {useImage} from './hooks/use-image'
 
@@ -79,7 +73,13 @@ export const ImageField = connectField<ImageFieldMediaId, ImageFieldProps>(
   }) => {
     const isLightbox = lightbox && !jaenField.isEditing
 
-    const mediaId = jaenField.value || jaenField.staticValue
+    let mediaId = jaenField.value
+
+    if (mediaId === undefined) {
+      mediaId = jaenField.staticValue
+    }
+
+    console.log('mediaId', mediaId)
 
     const {jaenPage} = usePageContext()
 
@@ -90,22 +90,24 @@ export const ImageField = connectField<ImageFieldMediaId, ImageFieldProps>(
       }
     })
 
-    const handleRemove = () => {
-      jaenField.onUpdateValue(undefined)
-    }
+    const {confirm} = useNotificationsContext()
 
-    const [cmsMediaJaenPage, setCMSMediaJaenPage] = useState<
-      {id: string} & Partial<JaenPage>
-    >({
-      id: 'JaenPage /cms/media/'
-    })
+    const handleRemove = async () => {
+      const ok = await confirm({
+        title: 'Remove Image',
+        message: 'Are you sure you want to remove this image?'
+      })
+
+      if (ok) {
+        jaenField.onUpdateValue(null as any)
+      }
+    }
 
     return (
       <HighlightTooltip
         id={jaenField.id || jaenField.name}
         isEditing={jaenField.isEditing}
         boxSize="full"
-        minH="20"
         actions={[
           <Button
             variant="field-highlighter-tooltip"
@@ -123,17 +125,14 @@ export const ImageField = connectField<ImageFieldMediaId, ImageFieldProps>(
             onClick={handleRemove}
           />
         ]}>
-        <PageProvider jaenPage={cmsMediaJaenPage}>
+        <PageProvider
+          jaenPage={{
+            id: 'JaenPage /cms/media/',
+            mediaNodes: jaenPage.mediaNodes || []
+          }}>
           <ImageComponent
             mediaId={mediaId}
             fieldName={jaenField.name}
-            onShouldLoadPageData={async () => {
-              const data = await fetch('/page-data/cms/media/page-data.json')
-
-              const json = await data.json()
-
-              setCMSMediaJaenPage(json.result.data.jaenPage as JaenPage)
-            }}
             imageProps={imageProps}
             lightbox={isLightbox}
             lightboxGroup={lightboxGroup}
@@ -152,20 +151,13 @@ const ImageComponent = forwardRef<
   {
     mediaId?: ImageFieldMediaId
     fieldName: string
-    onShouldLoadPageData: () => void
     imageProps?: ImageProps
 
     lightbox?: boolean
     lightboxGroup?: boolean
   }
 >((props, ref) => {
-  const image = useImage(props.mediaId || '', props.fieldName)
-
-  useEffect(() => {
-    if (!image && props.mediaId) {
-      props.onShouldLoadPageData()
-    }
-  }, [image, props.mediaId])
+  const image = useImage(props.mediaId || '')
 
   if (!image) {
     return (

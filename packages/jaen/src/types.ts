@@ -149,7 +149,7 @@ export interface JaenPage {
     }
   }>
   jaenFields: IJaenFields
-  jaenFiles: Array<{
+  mediaNodes: Array<{
     id: string
     description: string
     node: {
@@ -211,15 +211,6 @@ export interface IJaenBlock {
   ptrPrev: string | null
   ptrNext: string | null
   jaenFields: IJaenFields
-  jaenFiles: Array<{
-    id: string
-    description: string
-    node: {
-      childImageSharp: {
-        gatsbyImageData: IGatsbyImageData
-      }
-    }
-  }>
 
   sections?: IJaenSection[]
 

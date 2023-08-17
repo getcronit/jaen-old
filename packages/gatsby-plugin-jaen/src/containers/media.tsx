@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from 'react'
-import {MediaNode, uploadFile, useField} from '@snek-at/jaen'
+import {MediaNode, uploadFile, useField, usePageContext} from '@snek-at/jaen'
 import {v4 as uuidv4} from 'uuid'
 
 import {Media, MediaProps} from '../components/cms/Media/Media'
@@ -25,6 +25,10 @@ const MediaContainer: React.FC<MediaContainerProps> = props => {
     setJaenPageId(id || undefined)
   }
 
+  const jaenPage = usePageContext()
+
+  console.log('mediaNodes jaenPage', jaenPage)
+
   const field = useField<{
     [id: string]: MediaNode
   }>('media_nodes', 'IMA:MEDIA_NODES')
@@ -32,11 +36,13 @@ const MediaContainer: React.FC<MediaContainerProps> = props => {
     [id: string]: MediaNode
   }>(field.staticValue || {})
 
+  console.log('mediaNodes', mediaNodes, field)
+
   const manager = useCMSManagement()
 
   useEffect(() => {
     setMediaNodes(field.value || field.staticValue || {})
-  }, [field.value])
+  }, [field.value, field.staticValue])
 
   const [defaultSelected, setDefaultSelected] = useState<string | undefined>(
     props.defaultSelected
@@ -260,6 +266,8 @@ const MediaContainer: React.FC<MediaContainerProps> = props => {
 
   const mediaNodesValues = useMemo(() => {
     const values = Object.values(mediaNodes)
+
+    console.log('values', values)
 
     // if selector and jaenPageId is set, filter mediaNodes by jaenPageId
     if (props.isSelector && jaenPageId) {
