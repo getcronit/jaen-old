@@ -1,4 +1,4 @@
-import {getToken, Text, useColorModeValue, useToken} from '@chakra-ui/react'
+import {useColorModeValue, useToken} from '@chakra-ui/react'
 import {useEffect, useRef} from 'react'
 
 import {darkTheme, GraphCanvas, lightTheme, useSelection} from 'reagraph'
@@ -26,6 +26,7 @@ export const Graph: React.FC<{
     edges: data.edges,
     pathHoverType: 'out',
     pathSelectionType: 'out',
+    focusOnSelect: true,
     onSelection: selections => {
       const selection = selections[0]
 
@@ -71,6 +72,7 @@ export const Graph: React.FC<{
         activeFill: brand500,
         label: {
           ...lightTheme.edge.label,
+          stroke: lightTheme.canvas.background,
           activeColor: brand500
         }
       },
@@ -86,38 +88,39 @@ export const Graph: React.FC<{
     {
       ...darkTheme,
       node: {
-        ...lightTheme.node,
+        ...darkTheme.node,
         activeFill: brand500,
         label: {
-          ...lightTheme.node.label,
+          ...darkTheme.node.label,
+          stroke: darkTheme.canvas.background,
           activeColor: brand500
         }
       },
       ring: {
-        ...lightTheme.ring,
+        ...darkTheme.ring,
         activeFill: brand500
       },
       edge: {
-        ...lightTheme.edge,
+        ...darkTheme.edge,
         activeFill: brand500,
         label: {
-          ...lightTheme.edge.label,
+          ...darkTheme.edge.label,
           activeColor: brand500
         }
       },
       arrow: {
-        ...lightTheme.arrow,
+        ...darkTheme.arrow,
         activeFill: brand500
       },
       cluster: {
-        ...lightTheme.cluster
+        ...darkTheme.cluster
       }
     }
   )
 
   return (
     <GraphCanvas
-      key={theme === lightTheme ? 'light' : 'dark'}
+      key={theme.canvas.background}
       ref={graphRef}
       theme={theme}
       nodes={data.nodes}

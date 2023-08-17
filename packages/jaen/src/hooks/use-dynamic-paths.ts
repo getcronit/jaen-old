@@ -1,4 +1,5 @@
-import {useEffect, useState} from 'react'
+import deepmerge from 'deepmerge'
+import {useEffect, useMemo, useState} from 'react'
 
 import {useAppSelector} from '../redux'
 import {generatePageOriginPath} from '../utils/path'
@@ -10,6 +11,7 @@ export type DynamicPathNode = {
     id: string
   } | null
   template: string | null
+  buildPath: string | null
 }
 
 export const useDynamicPaths = (args: {
@@ -19,13 +21,22 @@ export const useDynamicPaths = (args: {
     [key: string]: DynamicPathNode
   }
 
-  const pages = [
-    ...args.staticPages,
-    ...Object.entries(dynamicPages).map(([id, page]) => ({
-      ...page,
-      id
-    }))
-  ]
+  const pages = useMemo(() => {
+    const newPages: Record<string, DynamicPathNode> = {}
+
+    for (const page of args.staticPages) {
+      newPages[page.id] = page
+    }
+
+    for (const [id, page] of Object.entries(dynamicPages)) {
+      newPages[id] = deepmerge(newPages[id] || {}, page)
+
+      // set id if not set
+      newPages[id]!.id = id
+    }
+
+    return newPages
+  }, [dynamicPages, args.staticPages])
 
   const [paths, setPaths] = useState<
     Record<
@@ -46,13 +57,20 @@ export const useDynamicPaths = (args: {
       }
     > = {}
 
-    for (const page of pages) {
-      const path = generatePageOriginPath(pages, page)
+    const pagesValues = Object.values(pages)
 
-      if (path && page.template) {
+    for (const [pageId, page] of Object.entries(pages)) {
+      const pageWithId = {
+        ...page,
+        id: pageId
+      }
+
+      const path = generatePageOriginPath(pagesValues, pageWithId)
+
+      if (path && path !== pageWithId.buildPath && pageWithId.template) {
         newPaths[path] = {
-          jaenPageId: page.id,
-          jaenTemplateId: page.template
+          jaenPageId: pageWithId.id,
+          jaenTemplateId: pageWithId.template
         }
       }
     }

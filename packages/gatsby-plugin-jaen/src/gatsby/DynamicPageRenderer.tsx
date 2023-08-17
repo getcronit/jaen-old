@@ -27,8 +27,6 @@ export const DynamicPageRenderer: React.FC<DynamicPageRendererProps> =
       staticPages: allJaenPagePaths.allJaenPage.nodes
     }) // Replace this with the actual hook you're using
 
-    console.log('paths', paths)
-
     const pathWithTrailingSlash = props.pageProps.location.pathname.endsWith(
       '/'
     )
