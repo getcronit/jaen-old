@@ -1,4 +1,4 @@
-import {ChakraProvider, Toast} from '@chakra-ui/react'
+import {ChakraProvider} from '@chakra-ui/react'
 import {
   AuthenticationProvider,
   FieldHighlighterProvider,
@@ -11,6 +11,7 @@ import {lazy} from 'react'
 
 import {SiteMetadataProvider} from '../connectors/site-metadata'
 import {theme} from '../theme/index'
+import {JaenFrameMenuProvider} from '../contexts/jaen-frame-menu'
 
 const JaenLogin = lazy(
   async () => await import('../components/JaenLogin/JaenLogin')
@@ -43,9 +44,11 @@ export const wrapRootElement: GatsbyBrowser['wrapRootElement'] = (
               <AuthenticationProvider
                 snekResourceId={snekResourceId}
                 JaenLoginComponent={JaenLogin}>
-                <MediaModalProvider MediaModalComponent={MediaModalComponent}>
-                  {element}
-                </MediaModalProvider>
+                <JaenFrameMenuProvider>
+                  <MediaModalProvider MediaModalComponent={MediaModalComponent}>
+                    {element}
+                  </MediaModalProvider>
+                </JaenFrameMenuProvider>
               </AuthenticationProvider>
             </SiteMetadataProvider>
           </FieldHighlighterProvider>

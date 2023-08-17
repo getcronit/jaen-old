@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react'
 import {Link} from '../../../shared/Link/Link'
 
-interface NavigationItem {
+export interface NavigationItem {
   icon: As
   label: string
   onClick?: () => void
@@ -19,7 +19,7 @@ interface NavigationItem {
   isLoading?: boolean
 }
 
-interface NavigationGroup {
+export interface NavigationGroup {
   label?: string
   items: Record<string, NavigationItem>
 }

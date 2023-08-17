@@ -1,4 +1,8 @@
-import {PageConfig, useAuthenticationContext} from '@snek-at/jaen'
+import {
+  PageConfig,
+  useAuthenticationContext,
+  useNotificationsContext
+} from '@snek-at/jaen'
 import {PageProps} from 'gatsby'
 import React from 'react'
 
@@ -6,6 +10,8 @@ import {Settings} from '../components/Settings'
 
 const SettingsPage: React.FC<PageProps> = () => {
   const authentication = useAuthenticationContext()
+
+  const {toast} = useNotificationsContext()
 
   return (
     <Settings
@@ -15,16 +21,68 @@ const SettingsPage: React.FC<PageProps> = () => {
         emails: authentication.user?.emails
       }}
       onAccountFormSubmit={async data => {
-        await authentication.updateDetails(data)
+        try {
+          await authentication.updateDetails(data)
+
+          toast({
+            title: 'Account updated',
+            status: 'success'
+          })
+        } catch (e) {
+          toast({
+            title: 'Error',
+            description: e.message,
+            status: 'error'
+          })
+        }
       }}
       onEmailFormSubmit={async data => {
-        await authentication.addEmail(data.emailAddress)
+        try {
+          await authentication.addEmail(data.emailAddress)
+
+          toast({
+            title: 'Email added',
+            status: 'success'
+          })
+        } catch (e) {
+          toast({
+            title: 'Error',
+            description: e.message,
+            status: 'error'
+          })
+        }
       }}
       onEmailRemove={async emailId => {
-        await authentication.removeEmail(emailId)
+        try {
+          await authentication.removeEmail(emailId)
+
+          toast({
+            title: 'Email removed',
+            status: 'success'
+          })
+        } catch (e) {
+          toast({
+            title: 'Error',
+            description: e.message,
+            status: 'error'
+          })
+        }
       }}
       onPasswordFormSubmit={async data => {
-        // await authentication.updatePassword(data)
+        try {
+          await authentication.updatePassword(data.password)
+
+          toast({
+            title: 'Password updated',
+            status: 'success'
+          })
+        } catch (e) {
+          toast({
+            title: 'Error',
+            description: e.message,
+            status: 'error'
+          })
+        }
       }}
     />
   )

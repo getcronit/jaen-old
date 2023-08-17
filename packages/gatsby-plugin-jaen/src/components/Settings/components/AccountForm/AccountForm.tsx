@@ -70,15 +70,16 @@ export const AccountForm: React.FC<AccountFormProps> = ({
             </FormControl>
           </Stack>
 
-          <FormControl id="username" isInvalid={!!errors.username}>
+          <FormControl id="username" isInvalid={!!errors.username} isDisabled>
             <FormLabel>Username</FormLabel>
             <Input
+              isDisabled
               maxW="xs"
-              placeholder=""
               {...register('username', {
                 required: 'This field is required'
               })}
               autoComplete="false"
+              color="fg.muted"
             />
             <FormErrorMessage>
               {errors.username && errors.username.message}

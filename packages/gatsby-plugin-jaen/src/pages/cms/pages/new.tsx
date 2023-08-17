@@ -131,7 +131,7 @@ export const pageConfig: PageConfig = {
   ],
   withoutJaenFrameStickyHeader: true,
   auth: {
-    isRequired: true
+    isAdminRequired: true
   },
   layout: {
     name: 'jaen',

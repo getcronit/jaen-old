@@ -14,6 +14,7 @@ interface SnekUser {
   id: string
   primaryEmail: string
   username: string
+  isAdmin: boolean
   details?: {
     firstName?: string
     lastName?: string
@@ -111,6 +112,7 @@ export const AuthenticationProvider: React.FC<{
             username: u.username,
             primaryEmail: u.primaryEmailAddress,
             id: u.id,
+            isAdmin: u.isAdmin,
             details: {
               firstName: u.details?.firstName ?? undefined,
               lastName: u.details?.lastName ?? undefined
@@ -157,6 +159,7 @@ export const AuthenticationProvider: React.FC<{
     }
 
     setIsLoading(true)
+
     const [me, errors] = await sq.query(q => {
       const user = q.userMe
 
@@ -164,6 +167,7 @@ export const AuthenticationProvider: React.FC<{
         id: user.id,
         primaryEmail: user.primaryEmailAddress,
         username: user.username,
+        isAdmin: user.isAdmin,
         details: {
           firstName: user.details?.firstName ?? undefined,
           lastName: user.details?.lastName ?? undefined
@@ -232,6 +236,8 @@ export const AuthenticationProvider: React.FC<{
               details: updatedUser.details
             } as AutenticationContext['user'])
         )
+      } else {
+        throw new Error(errors?.[0]?.message ?? 'Failed to update details')
       }
     },
     [user]
@@ -271,6 +277,8 @@ export const AuthenticationProvider: React.FC<{
             ]
           } as AutenticationContext['user'])
       )
+    } else {
+      throw new Error(errors?.[0]?.message ?? 'Failed to add email')
     }
   }, [])
 
@@ -294,6 +302,8 @@ export const AuthenticationProvider: React.FC<{
             emails: prevUser?.emails?.filter(e => e.id !== emailId)
           } as AutenticationContext['user'])
       )
+    } else {
+      throw new Error(errors?.[0]?.message ?? 'Failed to remove email')
     }
   }, [])
 
@@ -315,8 +325,8 @@ export const AuthenticationProvider: React.FC<{
 
       const isSuccess = !!updatedUser && !errors
 
-      if (isSuccess) {
-        alert('Password updated successfully')
+      if (!isSuccess) {
+        throw new Error(errors?.[0]?.message ?? 'Failed to update password')
       }
     },
     [user]
@@ -393,14 +403,18 @@ export const withAuthentication = <P extends {}>(
   }
 ): React.FC<P> => {
   const WithAuthentication: React.FC<P> = props => {
-    const {isAuthenticated, isLoading} = useAuthenticationContext()
+    const {isAuthenticated, user, isLoading} = useAuthenticationContext()
 
-    if (pageConfig?.auth?.isRequired) {
+    if (pageConfig?.auth?.isRequired || pageConfig?.auth?.isAdminRequired) {
       if (isLoading) {
         return null
       }
 
-      if (!isAuthenticated) {
+      const shouldRedirect =
+        !isAuthenticated ||
+        (pageConfig?.auth?.isAdminRequired && !user?.isAdmin)
+
+      if (shouldRedirect) {
         if (options?.onRedirectToLogin) {
           options.onRedirectToLogin()
         }

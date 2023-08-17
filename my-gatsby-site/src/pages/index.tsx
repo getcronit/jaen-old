@@ -8,6 +8,8 @@ import {
   useNotificationsContext,
   useSiteMetadataContext
 } from '@snek-at/jaen'
+import {useJaenFrameMenuContext} from 'gatsby-plugin-jaen'
+
 import {
   LightMode,
   ChakraProvider,
@@ -172,6 +174,20 @@ const IndexPage: React.FC<PageProps> = () => {
   const testImport = async () => {
     return await import(`${__JAEN_SOURCE_TEMPLATES__}/BlogPage`)
   }
+
+  const jaenFrame = useJaenFrameMenuContext()
+
+  React.useEffect(() => {
+    jaenFrame.extendAddMenu({
+      test: {
+        label: 'New post',
+        icon: FaCogs,
+        onClick: () => {
+          alert('test')
+        }
+      }
+    })
+  }, [])
 
   return (
     <>

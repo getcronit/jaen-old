@@ -14,7 +14,7 @@ import {
 import {FaCaretDown} from 'react-icons/fa'
 import {Link} from '../Link/Link'
 
-interface MenuItem {
+export interface MenuItem {
   icon?: As
   label: string
   path?: string

@@ -7,7 +7,8 @@ import {
   Text,
   Button,
   ButtonGroup,
-  HStack
+  HStack,
+  FormErrorMessage
 } from '@chakra-ui/react'
 import {useForm, Controller} from 'react-hook-form'
 
@@ -31,7 +32,7 @@ export const PasswordForm: React.FC<PasswordFormProps> = ({
   const {
     handleSubmit,
     control,
-    formState: {isSubmitting},
+    formState: {isSubmitting, errors},
     watch
   } = useForm<PasswordFormData>()
 
@@ -69,7 +70,9 @@ export const PasswordForm: React.FC<PasswordFormProps> = ({
             />
           </FormControl>
 
-          <FormControl id="confirmPassword">
+          <FormControl
+            id="confirmPassword"
+            isInvalid={!!errors.confirmPassword}>
             <FormLabel>Confirm Password</FormLabel>
             <Controller
               control={control}
@@ -88,6 +91,10 @@ export const PasswordForm: React.FC<PasswordFormProps> = ({
                 />
               )}
             />
+
+            <FormErrorMessage>
+              {errors.confirmPassword && errors.confirmPassword.message}
+            </FormErrorMessage>
           </FormControl>
 
           {
