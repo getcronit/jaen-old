@@ -42,7 +42,7 @@ export const sourceNodes = async (args: SourceNodesArgs) => {
       }>(link, {cache})
 
       jaenData.patches.push({
-        createdAt: response.createdAt || new Date(),
+        createdAt: response.createdAt || new Date().toISOString(),
         title: response.message,
         url: link
       })

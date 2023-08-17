@@ -18,8 +18,10 @@ import {List, ListItem} from '../../shared/components/List'
 export interface DashboardProps {
   user?: string
   isPublishing?: boolean
-  migrations: Array<{
+  patches: Array<{
     createdAt: string
+    url: string
+    title: string
   }>
 }
 
@@ -108,14 +110,14 @@ export const Dashboard: React.FC<DashboardProps> = props => {
           />
         )}
 
-        {props.migrations.map((m, i) => (
+        {props.patches.map((m, i) => (
           <ListItem
             key={i}
-            title="Published site"
+            title={m.title}
             subTitle={`Published on ${new Date(m.createdAt).toLocaleString()}`}
             circleColor="green.500"
             icon={<Icon as={FaRocket} boxSize="6" />}
-            isLastItem={i === props.migrations.length - 1}
+            isLastItem={i === props.patches.length - 1}
           />
         ))}
       </List>

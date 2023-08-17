@@ -1,5 +1,5 @@
 import {PageConfig, useAuthenticationContext} from '@snek-at/jaen'
-import {PageProps} from 'gatsby'
+import {graphql, PageProps, useStaticQuery} from 'gatsby'
 
 import {CMSManagement, useCMSManagement} from '../../connectors/cms-management'
 import {Dashboard} from '../../components/cms/Dashboard'
@@ -11,6 +11,28 @@ const DashboardPage: React.FC<PageProps> = () => {
 
   const manager = useCMSManagement()
 
+  const {
+    jaenData: {patches}
+  } = useStaticQuery<{
+    jaenData: {
+      patches: Array<{
+        createdAt: string
+        url: string
+        title: string
+      }>
+    }
+  }>(graphql`
+    query {
+      jaenData {
+        patches {
+          createdAt
+          url
+          title
+        }
+      }
+    }
+  `)
+
   const user =
     authentication.user?.details?.firstName || authentication.user?.username
 
@@ -18,11 +40,7 @@ const DashboardPage: React.FC<PageProps> = () => {
     <Dashboard
       user={user}
       isPublishing={manager.isPublishing}
-      migrations={[
-        {
-          createdAt: '2021-08-01T00:00:00.000Z'
-        }
-      ]}
+      patches={patches}
     />
   )
 }
