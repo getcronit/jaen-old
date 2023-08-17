@@ -70,8 +70,6 @@ export const useDynamicPaths = (args: {
 
       const path = generatePageOriginPath(pagesValues, pageWithId)
 
-      console.log(path, pageWithId.buildPath, pageWithId.template)
-
       if (
         path &&
         (path !== pageWithId.buildPath || pageWithId.deleted) &&
@@ -90,8 +88,6 @@ export const useDynamicPaths = (args: {
       setPaths(newPaths)
     }
   }, [pages])
-
-  console.log(paths)
 
   return paths
 }
