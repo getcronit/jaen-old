@@ -78,7 +78,6 @@ export const sourceNodes = async (args: SourceNodesArgs) => {
     const pageWithSlug = {
       ...page,
       slug,
-      childTemplates: [],
       parentPage: page.parentPage?.id,
       childPages: page.childPages?.map(child => child.id) || undefined
     }

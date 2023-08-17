@@ -23,7 +23,11 @@ export const DynamicPageRenderer: React.FC<DynamicPageRendererProps> =
   withRedux(({Component, ...props}) => {
     const allJaenPagePaths = useJaenPagePaths() // Replace this with the actual hook you're using
 
-    const paths = useDynamicPaths() // Replace this with the actual hook you're using
+    const paths = useDynamicPaths({
+      staticPages: allJaenPagePaths.allJaenPage.nodes
+    }) // Replace this with the actual hook you're using
+
+    console.log('paths', paths)
 
     const pathWithTrailingSlash = props.pageProps.location.pathname.endsWith(
       '/'

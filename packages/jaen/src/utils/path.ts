@@ -1,6 +1,6 @@
 import {JaenPage} from '../types'
 
-interface PageNode {
+export interface PageNode {
   id: string
   slug: string
   parentPage: {

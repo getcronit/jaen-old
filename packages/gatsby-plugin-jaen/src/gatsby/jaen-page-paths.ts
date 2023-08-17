@@ -5,7 +5,12 @@ export const useJaenPagePaths = () => {
     allJaenPage: {
       nodes: Array<{
         id: string
+        parentPage: {
+          id: string
+        }
+        slug: string
         buildPath: string
+        template: string | null
       }>
     }
     allJaenTemplate: {
@@ -20,7 +25,12 @@ export const useJaenPagePaths = () => {
       allJaenPage {
         nodes {
           id
+          slug
+          parentPage {
+            id
+          }
           buildPath
+          template
         }
       }
       allJaenTemplate {

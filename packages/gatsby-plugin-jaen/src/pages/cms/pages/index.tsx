@@ -201,7 +201,8 @@ const PagesPage: React.FC = () => {
             status: 'success'
           })
         },
-        path: manager.pagePath(currentPage.id)
+        path: manager.pagePath(currentPage.id),
+        jaenTemplates: manager.templates
       }}
       children={children}
       tree={manager.tree}

@@ -4,7 +4,6 @@ import {v4 as uuidv4} from 'uuid'
 import {JaenPage, SectionType} from '../../types'
 import {deepRemoveUndefinedProperties} from '../../utils/deep-remove-undefined-properties'
 import {findSection, insertSectionIntoTree} from '../../utils/page/section'
-import {generatePagePaths} from '../../utils/path'
 import {IPageState} from '../types'
 
 export const pageInitialState: IPageState = {
@@ -432,63 +431,12 @@ const pagesSlice = createSlice({
   }
 })
 
-const routingSlice = createSlice({
-  name: 'routing',
-  initialState: pageInitialState.routing,
-  reducers: {
-    updateDynamicPaths(
-      state,
-      action: PayloadAction<{
-        jaenPageTree: JaenPage[]
-        pageId: string
-        create?: boolean
-      }>
-    ) {
-      const {jaenPageTree, pageId, create} = action.payload
-
-      const dynamicIds = Object.fromEntries(
-        Object.entries(state.dynamicPaths).map(([k, v]) => [v.pageId, k])
-      )
-
-      const node = jaenPageTree.find(node => node.id === pageId)
-
-      const paths = generatePagePaths(jaenPageTree, pageId)
-
-      for (const path in paths) {
-        const pageId = paths[path]
-
-        if (pageId) {
-          if (pageId in dynamicIds) {
-            const oldPath = dynamicIds[pageId]
-
-            if (oldPath) {
-              delete state.dynamicPaths[oldPath]
-            }
-          }
-
-          if (create && node?.template) {
-            state.dynamicPaths[path] = {
-              pageId,
-              templateName: node.template
-            }
-          }
-        }
-      }
-    },
-    discardDynamicPaths(state) {
-      state.dynamicPaths = {}
-    }
-  }
-})
-
 export const actions = {
-  ...pagesSlice.actions,
-  ...routingSlice.actions
+  ...pagesSlice.actions
 }
 
 export const reducers = {
-  pages: pagesSlice.reducer,
-  routing: routingSlice.reducer
+  pages: pagesSlice.reducer
 }
 
 export default combineReducers(reducers)

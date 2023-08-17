@@ -1,12 +1,31 @@
 import {useEffect, useState} from 'react'
+
 import {useAppSelector} from '../redux'
-import {JaenPage} from '../types'
 import {generatePageOriginPath} from '../utils/path'
 
-export const useDynamicPaths = () => {
-  const pages = useAppSelector(state => state.page.pages.nodes) as {
-    [key: string]: JaenPage
+export type DynamicPathNode = {
+  id: string
+  slug: string
+  parentPage: {
+    id: string
+  } | null
+  template: string | null
+}
+
+export const useDynamicPaths = (args: {
+  staticPages: Array<DynamicPathNode>
+}) => {
+  const dynamicPages = useAppSelector(state => state.page.pages.nodes) as {
+    [key: string]: DynamicPathNode
   }
+
+  const pages = [
+    ...args.staticPages,
+    ...Object.entries(dynamicPages).map(([id, page]) => ({
+      ...page,
+      id
+    }))
+  ]
 
   const [paths, setPaths] = useState<
     Record<
@@ -27,13 +46,8 @@ export const useDynamicPaths = () => {
       }
     > = {}
 
-    const pagesValuesWithId = Object.entries(pages).map(([id, page]) => ({
-      ...page,
-      id
-    }))
-
-    for (const page of pagesValuesWithId) {
-      const path = generatePageOriginPath(pagesValuesWithId, page)
+    for (const page of pages) {
+      const path = generatePageOriginPath(pages, page)
 
       if (path && page.template) {
         newPaths[path] = {

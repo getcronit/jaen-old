@@ -153,6 +153,7 @@ export interface PageContentFormProps {
       templates: ChooseButtonProps['items']
     }
   }
+  jaenTemplates?: JaenTemplate[]
   onSubmit: (data: FormValues) => void
   path?: string
   values?: Partial<FormValues>
@@ -227,11 +228,11 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
 
   const parentPage = watch('parentPage', '') // Get the value of the 'parent' field
 
-  const jaenTemplate = props.values?.parentPage
-    ? (props.parentPages[props.values.parentPage]?.templates[
-        props.values?.template || ''
-      ] as JaenTemplate)
-    : null
+  const template = watch('template', '') // Get the value of the 'template' field
+
+  const jaenTemplate = props.jaenTemplates?.find(
+    jaenTemplate => jaenTemplate.id === template
+  )
 
   const [isBlogPostInUse, setIsBlogPostInUse] = useState<boolean>(
     !!props.values?.blogPost
@@ -389,7 +390,7 @@ export const PageContentForm: React.FC<PageContentFormProps> = ({
           </Text>
         </Stack>
 
-        {(mode === 'edit' ? props.values?.parentPage : true) && (
+        {mode == 'create' && (
           <FormControl as="fieldset" isInvalid={!!errors.parentPage} isRequired>
             <FormLabel as="legend">{texts.parentPage[mode]}</FormLabel>
 
