@@ -1,7 +1,6 @@
-import {Badge, Box, ChakraProvider, HStack, Icon} from '@chakra-ui/react'
-import React, {useEffect, useRef} from 'react'
+import {Box, HStack, Icon} from '@chakra-ui/react'
+import React from 'react'
 import {FaPlus} from 'react-icons/fa'
-import theme from '../../theme/theme'
 
 import {Link} from '../../components/shared/Link'
 import {JaenLogo} from '../shared/JaenLogo/JaenLogo'

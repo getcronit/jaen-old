@@ -384,7 +384,8 @@ const Slice: React.FC<SliceProps> = props => {
             ? {
                 username: authentication.user?.username,
                 firstName: authentication.user.details?.firstName,
-                lastName: authentication.user.details?.lastName
+                lastName: authentication.user.details?.lastName,
+                avatarURL: authentication.user.details?.avatarURL
               }
             : {
                 username: 'Guest'

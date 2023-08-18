@@ -3689,10 +3689,10 @@
     escape-string-regexp "^2.0.0"
     lodash.deburr "^4.1.0"
 
-"@snek-functions/origin@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@snek-functions/origin/-/origin-0.3.0.tgz#736f1a7586220413dec9fac38967a99ad4ac2985"
-  integrity sha512-ZKAqYBNKtYyURHFshlLe3rThNPYb6F4VojmVIkTo/pdiQ0M6LW6JLKYnxfTjLYRkVHPiZp9PDrX9tspoHAzPNw==
+"@snek-functions/origin@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@snek-functions/origin/-/origin-0.4.0.tgz#40d1bc6c8756592b5ebcc23c811fbbe69faecd28"
+  integrity sha512-59FJ0DwfQ1pju2ZWeXqy71UNRvoUnioKolVoYUqVVHmfwaK8/5TehEBKm5tjlfog5OiEB3sz9BOGBpe6WxPoeQ==
   dependencies:
     snek-query "*"
 
@@ -8953,6 +8953,11 @@ import-from@^3.0.0:
   integrity sha512-CiuXOFFSzkU5x/CR0+z7T91Iht4CXgfCxVOFRhh2Zyhg5wOpWvvDLQUsWl+gcN+QscYBjez8hDCt85O7RLDttQ==
   dependencies:
     resolve-from "^5.0.0"
+
+imtool@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/imtool/-/imtool-1.2.1.tgz#d579296c97e4caaf39fdc94b911cd980a1179ec5"
+  integrity sha512-zvjGP9GmWPymXpu3O/3oKLIPj69bxJgk86LSlShd9xta3rEuqdjNGI8TbgeEvmyncYE01kfiA8gd3ACptBch4g==
 
 imurmurhash@^0.1.4:
   version "0.1.4"

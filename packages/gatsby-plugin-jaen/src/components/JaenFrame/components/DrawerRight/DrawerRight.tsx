@@ -30,6 +30,7 @@ export interface DrawerRightProps {
     username: string
     firstName?: string
     lastName?: string
+    avatarURL?: string
   }
   navigationGroups: NavigationGroupsProps['groups']
 
@@ -56,7 +57,7 @@ export const DrawerRight: React.FC<DrawerRightProps> = ({
         m="0"
         size="sm"
         cursor="pointer"
-        src="https://avatars.githubusercontent.com/u/52858351?v=4"
+        src={user.avatarURL}
         onClick={onToggle}>
         <AvatarBadge
           boxSize="1.25em"
@@ -78,10 +79,7 @@ export const DrawerRight: React.FC<DrawerRightProps> = ({
               <HStack justifyContent="space-between">
                 <Stack>
                   <HStack>
-                    <Avatar
-                      size="sm"
-                      src="https://avatars.githubusercontent.com/u/52858351?v=4"
-                    />
+                    <Avatar size="sm" src={user.avatarURL} />
                     <Stack spacing="0.5">
                       <Text fontSize="sm" fontWeight="bold" lineHeight="none">
                         {user.username}

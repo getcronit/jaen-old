@@ -7,8 +7,6 @@ export interface FormMediaChooserProps {
   onRemove: () => void
   description?: string
   value?: string
-
-  isDirect?: boolean
 }
 
 const FormMediaChooserContainer: React.FC<FormMediaChooserProps> = props => {
@@ -20,9 +18,7 @@ const FormMediaChooserContainer: React.FC<FormMediaChooserProps> = props => {
 
   return (
     <FormMediaChooser
-      onChoose={
-        props.isDirect ? context.togglFileSelector : context.toggleModal
-      }
+      onChoose={context.toggleModal}
       onRemove={props.onRemove}
       description={props.description}
       value={props.value}

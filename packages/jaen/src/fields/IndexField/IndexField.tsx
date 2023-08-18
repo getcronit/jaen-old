@@ -36,7 +36,7 @@ export interface IndexFieldProps {
 
 export const IndexField: React.FC<IndexFieldProps> = withRedux(
   ({name, renderPage, ...rest}: IndexFieldProps) => {
-    const {children, withJaenPage} = useJaenPageIndex(rest)
+    const {childPages, withJaenPage} = useJaenPageIndex(rest)
     return (
       <HighlightTooltip
         id={name}
@@ -49,7 +49,7 @@ export const IndexField: React.FC<IndexFieldProps> = withRedux(
             </Text>
           </Button>
         ]}>
-        {children.map(page => withJaenPage(page.id, renderPage(page)))}
+        {childPages.map(page => withJaenPage(page.id, renderPage(page)))}
       </HighlightTooltip>
     )
   }

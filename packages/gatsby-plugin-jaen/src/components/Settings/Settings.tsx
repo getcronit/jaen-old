@@ -33,6 +33,7 @@ interface FormDataType {
   details?: {
     firstName?: string
     lastName?: string
+    avatarURL?: string
   }
   emails?: Array<{
     id: string
@@ -90,6 +91,7 @@ export const Settings: React.FC<SettingsProps> = props => {
         defaultValues={{
           firstName: props.data.details?.firstName,
           lastName: props.data.details?.lastName,
+          avatarURL: props.data.details?.avatarURL,
           username: props.data.username
         }}
       />

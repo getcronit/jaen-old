@@ -11,17 +11,21 @@ import React from 'react'
 import {Controller, useForm} from 'react-hook-form'
 
 import {FieldGroup} from '../../../../components/shared/FieldGroup'
-import FormMediaChooser from '../../../../containers/form-media-chooser'
+import {FormImageChooser} from '../../../../components/shared/FormImageChooser'
 
 export interface AccountFormData {
   firstName: string
   lastName: string
   username: string
-  image: string
+  avatarURL: string
 }
 
 export interface AccountFormProps {
-  onSubmit: (data: AccountFormData) => Promise<void>
+  onSubmit: (
+    data: AccountFormData & {
+      avatarFile: File | null
+    }
+  ) => Promise<void>
   defaultValues?: Partial<AccountFormData>
 }
 
@@ -40,10 +44,15 @@ export const AccountForm: React.FC<AccountFormProps> = ({
     defaultValues
   })
 
+  const [avatarFile, setAvatarFile] = React.useState<File | null>(null)
+
   const onFormSubmit = handleSubmit(async data => {
     // promise to wait for image upload
 
-    await onSubmit(data)
+    await onSubmit({
+      ...data,
+      avatarFile
+    })
 
     reset(data)
   })
@@ -91,23 +100,22 @@ export const AccountForm: React.FC<AccountFormProps> = ({
 
             <Controller
               control={control}
-              name="image"
+              name="avatarURL"
               render={({field: {value}}) => {
                 return (
-                  <FormMediaChooser
+                  <FormImageChooser
                     value={value}
-                    onChoose={media => {
-                      setValue('image', media.url, {
+                    onChoose={file => {
+                      setAvatarFile(file)
+                      setValue('avatarURL', URL.createObjectURL(file), {
                         shouldDirty: true
                       })
                     }}
                     onRemove={() => {
-                      setValue('image', '', {
-                        shouldDirty: true
-                      })
+                      setAvatarFile(null)
+                      setValue('avatarURL', defaultValues?.avatarURL || '')
                     }}
                     description="Upload a profile picture to make your account easier to recognize."
-                    isDirect
                   />
                 )
               }}

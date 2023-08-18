@@ -6,6 +6,7 @@ import React, {
   useMemo,
   useState
 } from 'react'
+import {fromImage} from 'imtool'
 
 import {setTokenPair, getTokenPair, sq} from '@snek-functions/origin'
 import {PageConfig} from '../types'
@@ -18,6 +19,7 @@ interface SnekUser {
   details?: {
     firstName?: string
     lastName?: string
+    avatarURL?: string
   }
   emails?: Array<{
     id: string
@@ -115,7 +117,8 @@ export const AuthenticationProvider: React.FC<{
             isAdmin: u.isAdmin,
             details: {
               firstName: u.details?.firstName ?? undefined,
-              lastName: u.details?.lastName ?? undefined
+              lastName: u.details?.lastName ?? undefined,
+              avatarURL: u.details?.avatarURL ?? undefined
             },
             emails: u.emails?.map(e => ({
               id: e.id,
@@ -170,7 +173,8 @@ export const AuthenticationProvider: React.FC<{
         isAdmin: user.isAdmin,
         details: {
           firstName: user.details?.firstName ?? undefined,
-          lastName: user.details?.lastName ?? undefined
+          lastName: user.details?.lastName ?? undefined,
+          avatarURL: user.details?.avatarURL ?? undefined
         },
         emails: user.emails?.map(e => ({
           id: e.id,
@@ -202,8 +206,20 @@ export const AuthenticationProvider: React.FC<{
   }, [isAuthenticated])
 
   const updateDetails = useCallback(
-    async (details: {firstName?: string; lastName?: string}) => {
+    async (details: {
+      firstName?: string
+      lastName?: string
+      avatarFile?: File
+    }) => {
       if (!user) return
+
+      let avatarBase64: string | undefined
+
+      if (details.avatarFile) {
+        const tool = await fromImage(details.avatarFile)
+
+        avatarBase64 = await tool.thumbnail(250, true).toDataURL()
+      }
 
       // Assuming you have a function to update user details from your backend, e.g., updateUserDetails
       const [updatedUser, errors] = await sq.mutate(m => {
@@ -212,7 +228,8 @@ export const AuthenticationProvider: React.FC<{
           values: {
             details: {
               firstName: details.firstName,
-              lastName: details.lastName
+              lastName: details.lastName,
+              avatarFile: details.avatarFile ? avatarBase64 : ''
             }
           }
         })
@@ -221,7 +238,8 @@ export const AuthenticationProvider: React.FC<{
           ...user,
           details: {
             firstName: updateUser.details?.firstName ?? undefined,
-            lastName: updateUser.details?.lastName ?? undefined
+            lastName: updateUser.details?.lastName ?? undefined,
+            avatarURL: updateUser.details?.avatarURL ?? undefined
           }
         }
       })
