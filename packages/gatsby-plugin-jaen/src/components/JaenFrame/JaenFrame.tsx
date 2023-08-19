@@ -1,5 +1,5 @@
 import {Box, HStack, Icon} from '@chakra-ui/react'
-import React from 'react'
+import React, {useEffect} from 'react'
 import {FaPlus} from 'react-icons/fa'
 
 import {Link} from '../../components/shared/Link'
@@ -38,7 +38,7 @@ export interface JaenFrameProps {
   }
 }
 
-export const JaenFrame: React.FC<JaenFrameProps> = props => {
+export const JaenFrame: React.FC<JaenFrameProps> = React.memo(props => {
   // const headerRef = useRef<HTMLHeadingElement | null>(null)
   // const prevScrollPosRef = useRef<number>(0)
   // const visibleRef = useRef<boolean>(true)
@@ -190,6 +190,6 @@ export const JaenFrame: React.FC<JaenFrameProps> = props => {
       </HStack>
     </HStack>
   )
-}
+})
 
 export default JaenFrame
