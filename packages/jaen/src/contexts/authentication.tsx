@@ -46,6 +46,8 @@ export interface AutenticationContext {
   addEmail: (emailAddress: string) => Promise<void>
   removeEmail: (emailId: string) => Promise<void>
 
+  emailConfirmationResend: (emailId: string) => Promise<void>
+
   updatePassword: (password: string) => Promise<void>
 }
 
@@ -59,6 +61,7 @@ export const AuthenticationContext = createContext<AutenticationContext>({
   updateDetails: () => Promise.resolve(),
   addEmail: () => Promise.resolve(),
   removeEmail: () => Promise.resolve(),
+  emailConfirmationResend: () => Promise.resolve(),
   updatePassword: () => Promise.resolve()
 })
 
@@ -123,7 +126,7 @@ export const AuthenticationProvider: React.FC<{
             emails: u.emails?.map(e => ({
               id: e.id,
               emailAddress: e.emailAddress,
-              isVerified: false,
+              isVerified: e.isVerified,
               isPrimary: e.isPrimary
             }))
           },
@@ -179,7 +182,7 @@ export const AuthenticationProvider: React.FC<{
         emails: user.emails?.map(e => ({
           id: e.id,
           emailAddress: e.emailAddress,
-          isVerified: e.isPrimary ? true : false,
+          isVerified: e.isVerified,
           isPrimary: e.isPrimary
         }))
       }
@@ -272,7 +275,7 @@ export const AuthenticationProvider: React.FC<{
       return {
         id: addEmail.id,
         emailAddress: addEmail.emailAddress,
-        isVerified: false,
+        isVerified: addEmail.isVerified,
         isPrimary: addEmail.isPrimary
       }
     })
@@ -289,7 +292,7 @@ export const AuthenticationProvider: React.FC<{
               {
                 id: newEmail.id,
                 emailAddress: newEmail.emailAddress,
-                isVerified: false,
+                isVerified: newEmail.isVerified,
                 isPrimary: newEmail.isPrimary
               }
             ]
@@ -322,6 +325,25 @@ export const AuthenticationProvider: React.FC<{
       )
     } else {
       throw new Error(errors?.[0]?.message ?? 'Failed to remove email')
+    }
+  }, [])
+
+  const emailConfirmationResend = useCallback(async (emailId: string) => {
+    // Assuming you have a function to resend a confirmation email from your backend, e.g., resendConfirmationEmail
+    const [resendEmail, errors] = await sq.mutate(m => {
+      const resendEmail = m.userEmailConfirmationResend({
+        emailId: emailId
+      })
+
+      return resendEmail
+    })
+
+    const isSuccess = !!resendEmail && !errors
+
+    if (!isSuccess) {
+      throw new Error(
+        errors?.[0]?.message ?? 'Failed to resend confirmation email'
+      )
     }
   }, [])
 
@@ -361,6 +383,7 @@ export const AuthenticationProvider: React.FC<{
       updateDetails,
       addEmail,
       removeEmail,
+      emailConfirmationResend,
       updatePassword
     }
   }, [
@@ -373,6 +396,7 @@ export const AuthenticationProvider: React.FC<{
     updateDetails,
     addEmail,
     removeEmail,
+    emailConfirmationResend,
     updatePassword
   ])
 

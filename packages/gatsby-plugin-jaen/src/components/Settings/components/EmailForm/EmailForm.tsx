@@ -33,6 +33,7 @@ export interface EmailFormData {
 export interface EmailFormProps {
   onSubmit: (email: EmailFormData) => Promise<void>
   onRemove: (emailId: string) => Promise<void>
+  onResendVerification: (emailId: string) => Promise<void>
   defaultValues?: {
     emails: EmailData[]
   }
@@ -41,6 +42,7 @@ export interface EmailFormProps {
 export const EmailForm: React.FC<EmailFormProps> = ({
   onSubmit,
   onRemove,
+  onResendVerification,
   defaultValues
 }) => {
   const {
@@ -64,62 +66,64 @@ export const EmailForm: React.FC<EmailFormProps> = ({
         <Card maxW="full">
           <CardBody>
             <Stack divider={<StackDivider />} spacing="4">
-              {defaultValues?.emails.map(email => {
-                return (
-                  <Stack key={email.id}>
-                    <HStack justify="space-between">
-                      <HStack>
-                        <Text fontSize="sm" fontWeight="bold">
-                          {email.emailAddress}
-                        </Text>
-                        -{' '}
-                        <Text>
-                          {email.isPrimary && (
-                            <>
-                              -{'  '}
-                              <Text fontSize="sm" as="span" color="green.500">
-                                Primary
-                              </Text>
-                            </>
-                          )}
-                        </Text>
+              {defaultValues?.emails
+                .sort((a, b) => Number(b.isPrimary) - Number(a.isPrimary))
+                .map(email => {
+                  return (
+                    <Stack key={email.id}>
+                      <HStack justify="space-between">
+                        <HStack>
+                          <Text fontSize="sm" fontWeight="bold">
+                            {email.emailAddress}
+                          </Text>
+                          -{' '}
+                          <Text>
+                            {email.isPrimary && (
+                              <>
+                                -{'  '}
+                                <Text fontSize="sm" as="span" color="green.500">
+                                  Primary
+                                </Text>
+                              </>
+                            )}
+                          </Text>
+                        </HStack>
+                        <IconButton
+                          size="xs"
+                          aria-label="Delete email address"
+                          variant="ghost"
+                          color="red.500"
+                          visibility={email.isPrimary ? 'hidden' : 'visible'}
+                          icon={<FaTrash />}
+                          onClick={() => onRemove(email.id)}
+                        />
                       </HStack>
-                      <IconButton
-                        size="xs"
-                        aria-label="Delete email address"
-                        variant="ghost"
-                        color="red.500"
-                        visibility={email.isPrimary ? 'hidden' : 'visible'}
-                        icon={<FaTrash />}
-                        onClick={() => onRemove(email.id)}
-                      />
-                    </HStack>
 
-                    <UnorderedList>
-                      {email.isPrimary && (
-                        <ListItem fontSize="sm" color="muted">
-                          Primary email addresses are used for account-related
-                          communications (e.g. password resets).
-                        </ListItem>
-                      )}
+                      <UnorderedList>
+                        {email.isPrimary && (
+                          <ListItem fontSize="sm" color="muted">
+                            Primary email addresses are used for account-related
+                            communications (e.g. password resets).
+                          </ListItem>
+                        )}
 
-                      {!email.isVerified && (
-                        <ListItem fontSize="sm" color="muted">
-                          <HStack>
-                            <Text>Unverified</Text>
-                            <Link
-                              onClick={() => {
-                                alert('Resend verification email')
-                              }}>
-                              Resend verification email
-                            </Link>
-                          </HStack>
-                        </ListItem>
-                      )}
-                    </UnorderedList>
-                  </Stack>
-                )
-              })}
+                        {!email.isVerified && (
+                          <ListItem fontSize="sm" color="muted">
+                            <HStack>
+                              <Text>Unverified</Text>
+                              <Link
+                                onClick={() => {
+                                  onResendVerification(email.id)
+                                }}>
+                                Resend verification email
+                              </Link>
+                            </HStack>
+                          </ListItem>
+                        )}
+                      </UnorderedList>
+                    </Stack>
+                  )
+                })}
             </Stack>
           </CardBody>
         </Card>

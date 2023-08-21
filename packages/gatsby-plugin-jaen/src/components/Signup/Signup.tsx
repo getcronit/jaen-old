@@ -76,11 +76,8 @@ export const Signup: React.FC<SignupProps> = props => {
   }
 
   const content = (
-    <Box id="coco" minH="100dvh" bg="bg.translucent">
-      <Container
-        maxW="lg"
-        py={{base: '12', md: '24'}}
-        px={{base: '0', sm: '8'}}>
+    <Box id="coco" minH="100dvh">
+      <Container maxW="lg" py={{base: '6', md: '12'}} px={{base: '0', sm: '8'}}>
         <Stack spacing="8">
           <Stack spacing="6">
             <HStack justify="center">
@@ -110,7 +107,7 @@ export const Signup: React.FC<SignupProps> = props => {
           {alert && (
             <Alert status={alert.status}>
               <AlertIcon />
-              <Box>
+              <Box w="full">
                 <AlertTitle>{alert.message}</AlertTitle>
                 <AlertDescription>{alert.description}</AlertDescription>
               </Box>

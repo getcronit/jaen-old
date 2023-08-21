@@ -37,7 +37,7 @@ export const pageConfig: PageConfig = {
   },
   layout: {
     name: 'jaen',
-    type: 'full'
+    type: 'form'
   }
 }
 

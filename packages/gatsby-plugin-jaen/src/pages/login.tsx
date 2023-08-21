@@ -36,7 +36,7 @@ export const pageConfig: PageConfig = {
   withoutJaenFrame: true,
   layout: {
     name: 'jaen',
-    type: 'full'
+    type: 'form'
   }
 }
 

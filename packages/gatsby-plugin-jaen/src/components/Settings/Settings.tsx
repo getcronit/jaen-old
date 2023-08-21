@@ -50,6 +50,7 @@ export interface SettingsProps {
   onAccountFormSubmit: (data: AccountFormData) => Promise<void>
   onEmailFormSubmit: (data: EmailFormData) => Promise<void>
   onEmailRemove: (emailId: string) => Promise<void>
+  onEmailConfirmationResend: (emailId: string) => Promise<void>
   onPasswordFormSubmit: (data: PasswordFormData) => Promise<void>
 }
 
@@ -75,6 +76,13 @@ export const Settings: React.FC<SettingsProps> = props => {
     await props.onEmailRemove(emailId)
   }
 
+  const handleEmailConfirmationResend = async (emailId: string) => {
+    console.log('Resend email confirmation:', emailId)
+    // Add logic to handle email confirmation resend
+
+    await props.onEmailConfirmationResend(emailId)
+  }
+
   const handlePasswordFormSubmit = async (data: PasswordFormData) => {
     console.log('Password form data:', data)
     // Add logic to handle password form submission
@@ -98,6 +106,7 @@ export const Settings: React.FC<SettingsProps> = props => {
       <EmailForm
         onSubmit={handleEmailFormSubmit}
         onRemove={handleEmailRemove}
+        onResendVerification={handleEmailConfirmationResend}
         defaultValues={{emails: props.data.emails || []}}
       />
       <PasswordForm

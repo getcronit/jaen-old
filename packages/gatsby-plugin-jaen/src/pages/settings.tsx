@@ -84,6 +84,22 @@ const SettingsPage: React.FC<PageProps> = () => {
           })
         }
       }}
+      onEmailConfirmationResend={async emailId => {
+        try {
+          await authentication.emailConfirmationResend(emailId)
+
+          toast({
+            title: 'Verification email sent',
+            status: 'success'
+          })
+        } catch (e) {
+          toast({
+            title: 'Error',
+            description: e.message,
+            status: 'error'
+          })
+        }
+      }}
     />
   )
 }
