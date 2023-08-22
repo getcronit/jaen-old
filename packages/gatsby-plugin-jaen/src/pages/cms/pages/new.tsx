@@ -1,5 +1,5 @@
 import {useLocation} from '@reach/router'
-import {PageConfig, useNotificationsContext} from '@snek-at/jaen'
+import {PageConfig, useNotificationsContext} from 'jaen'
 import {navigate, PageProps} from 'gatsby'
 import {useEffect, useMemo, useState} from 'react'
 
@@ -139,4 +139,4 @@ export const pageConfig: PageConfig = {
   }
 }
 
-export {Head} from '@snek-at/jaen'
+export {Head} from 'jaen'

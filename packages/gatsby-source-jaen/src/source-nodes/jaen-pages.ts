@@ -1,4 +1,4 @@
-import {MediaNode} from '@snek-at/jaen'
+import {MediaNode} from 'jaen'
 import {Node, SourceNodesArgs} from 'gatsby'
 import {createRemoteFileNode} from 'gatsby-source-filesystem'
 

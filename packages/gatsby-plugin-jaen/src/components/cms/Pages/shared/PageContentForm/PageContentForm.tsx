@@ -20,7 +20,7 @@ import {
   Text,
   Textarea
 } from '@chakra-ui/react'
-import {DuplicateSlugError, JaenTemplate} from '@snek-at/jaen'
+import {DuplicateSlugError, JaenTemplate} from 'jaen'
 import {useEffect, useState} from 'react'
 import {Controller, set, SubmitHandler, useForm} from 'react-hook-form'
 import {FaEdit, FaEye, FaImage, FaNewspaper} from 'react-icons/fa'

@@ -5,7 +5,7 @@ import traverse, {NodePath} from '@babel/traverse'
 import * as t from '@babel/types'
 import ts from 'typescript'
 
-import {PageConfig} from '@snek-at/jaen'
+import {PageConfig} from 'jaen'
 
 function readFileContent(filePath: string): string {
   return fs.readFileSync(filePath, 'utf-8')

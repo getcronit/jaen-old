@@ -4,7 +4,7 @@ import {
   useJaenUpdateModalContext,
   useMediaModal,
   useNotificationsContext
-} from '@snek-at/jaen'
+} from 'jaen'
 import {graphql, SliceComponentProps} from 'gatsby'
 import {useEffect} from 'react'
 import {
@@ -207,7 +207,7 @@ const Slice: React.FC<SliceProps> = props => {
         }
       })
     })
-  }, [authentication.user, props.data.allSitePage.nodes])
+  }, [authentication.user, props.data.allSitePage.nodes, manager.isEditing])
 
   return (
     <JaenFrame

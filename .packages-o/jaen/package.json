@@ -1,5 +1,5 @@
 {
-  "name": "@snek-at/jaen",
+  "name": "jaen",
   "version": "0.0.108",
   "source": "src/index.ts",
   "main": "./dist/index.js",

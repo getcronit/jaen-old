@@ -1,4 +1,4 @@
-import {PageConfig} from '@snek-at/jaen'
+import {PageConfig} from 'jaen'
 import {graphql, PageProps} from 'gatsby'
 
 import MediaContainer from '../../containers/media'
@@ -44,4 +44,4 @@ export const query = graphql`
   }
 `
 
-export {Head} from '@snek-at/jaen'
+export {Head} from 'jaen'

@@ -1,5 +1,5 @@
 {
-  "name": "jaen",
+  "name": "root",
   "private": true,
   "version": "1.0.0",
   "repository": "https://github.com/snek-at/jaen",
@@ -9,7 +9,7 @@
     "lint:fix": "yarn eslint packages/jaen/src/ --fix",
     "prettier:fix": "yarn prettier packages/jaen/src/ --write",
     "format": "yarn prettier:fix && yarn lint:fix",
-    "build": "yarn workspace jaen-utils build && yarn workspace gatsby-plugin-jaen build && yarn workspace @snek-at/jaen build"
+    "build": "yarn workspace jaen-utils build && yarn workspace gatsby-plugin-jaen build && yarn workspace jaen build"
   },
   "workspaces": [
     "packages/jaen",

@@ -1,5 +1,5 @@
 import {Box, Text} from '@chakra-ui/react'
-import {PageConfig, PageProps} from '@snek-at/jaen'
+import {PageConfig, PageProps} from 'jaen'
 import {useEffect, useRef, useState} from 'react'
 
 const Page: React.FC<PageProps> = ({data, location}) => {
@@ -51,4 +51,4 @@ export const pageConfig: PageConfig = {
 
 export default Page
 
-export {Head} from '@snek-at/jaen'
+export {Head} from 'jaen'

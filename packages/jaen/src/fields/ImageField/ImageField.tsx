@@ -34,7 +34,7 @@ export interface ImageFieldProps extends ImageProps {
    * @example
    * ```tsx
    *
-   * import {Field, PhotoProvider} from '@snek-at/jaen'
+   * import {Field, PhotoProvider} from 'jaen'
    *
    * <PhotoProvider maskOpacity={0.8}>
    *  <Field.Image ... lightboxGroup />
@@ -50,7 +50,7 @@ export interface ImageFieldProps extends ImageProps {
    *
    * @example
    * ```tsx
-   * import {Field} from '@snek-at/jaen'
+   * import {Field} from 'jaen'
    *
    * <Field.Image ... overload defaultValue="https://i.giphy.com/media/duzpaTbCUy9Vu/giphy.webp" />
    * ```

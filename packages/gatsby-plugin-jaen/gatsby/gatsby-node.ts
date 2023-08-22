@@ -11,7 +11,7 @@ export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] =
       )
     }
 
-    const {version} = await import('@snek-at/jaen/package.json')
+    const {version} = await import('jaen/package.json')
 
     if (stage === 'build-html' || stage === 'develop-html') {
       actions.setWebpackConfig({

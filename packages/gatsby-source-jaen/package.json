@@ -7,10 +7,10 @@
   },
   "devDependencies": {
     "typescript": "^5",
-    "@snek-at/jaen": "^3.0.0"
+    "jaen": "^3.0.0"
   },
   "peerDependencies": {
-    "@snek-at/jaen": "^3.0.0"
+    "jaen": "^3.0.0"
   },
   "scripts": {
     "develop": "gatsby develop",

@@ -1,5 +1,5 @@
 import {ChakraProvider} from '@chakra-ui/react'
-import {theme} from '@snek-at/jaen'
+import {theme} from 'jaen'
 
 import {OSGBackend, SnekFinderProvider} from '@snek-at/snek-finder'
 

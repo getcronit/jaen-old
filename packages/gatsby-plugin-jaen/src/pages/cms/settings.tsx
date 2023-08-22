@@ -1,5 +1,5 @@
 import {PageProps} from 'gatsby'
-import {PageConfig, useNotificationsContext} from '@snek-at/jaen'
+import {PageConfig, useNotificationsContext} from 'jaen'
 
 import {FormDataType, Settings} from '../../components/cms/Settings/Settings'
 import {CMSManagement, useCMSManagement} from '../../connectors/cms-management'
@@ -62,4 +62,4 @@ export const pageConfig: PageConfig = {
   }
 }
 
-export {Head} from '@snek-at/jaen'
+export {Head} from 'jaen'

@@ -4,7 +4,7 @@ import {
   PageConfig,
   useAuthenticationContext,
   withAuthentication
-} from '@snek-at/jaen'
+} from 'jaen'
 import {GatsbyBrowser, navigate, PageProps, Slice} from 'gatsby'
 import React, {useMemo} from 'react'
 

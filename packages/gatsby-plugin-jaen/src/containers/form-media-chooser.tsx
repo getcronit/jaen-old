@@ -1,4 +1,4 @@
-import {MediaNode, useMediaModal} from '@snek-at/jaen'
+import {MediaNode, useMediaModal} from 'jaen'
 
 import {FormMediaChooser} from '../components/shared/FormMediaChooser'
 

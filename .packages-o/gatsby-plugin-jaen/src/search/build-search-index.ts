@@ -1,5 +1,5 @@
 import slugify from '@sindresorhus/slugify'
-// import type {IJaenPage} from '@snek-at/jaen/dist/types.js'
+// import type {IJaenPage} from 'jaen/dist/types.js'
 import {Root as MdastRoot} from 'mdast'
 import {SearchIndex} from './types.js'
 

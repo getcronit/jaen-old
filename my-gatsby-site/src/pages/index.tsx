@@ -7,7 +7,7 @@ import {
   useMediaModal,
   useNotificationsContext,
   useSiteMetadataContext
-} from '@snek-at/jaen'
+} from 'jaen'
 import {useJaenFrameMenuContext} from 'gatsby-plugin-jaen'
 
 import {
@@ -289,4 +289,4 @@ export const query = graphql`
   }
 `
 
-export {Head} from '@snek-at/jaen'
+export {Head} from 'jaen'

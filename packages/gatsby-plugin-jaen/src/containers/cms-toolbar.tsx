@@ -1,4 +1,4 @@
-import {useNotificationsContext} from '@snek-at/jaen'
+import {useNotificationsContext} from 'jaen'
 import {ToolbarButtons} from '../components/cms/ToolbarButtons'
 import {useCMSManagement, withCMSManagement} from '../connectors/cms-management'
 

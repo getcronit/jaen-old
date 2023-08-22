@@ -15,7 +15,7 @@ import {
   Wrap,
   WrapItem
 } from '@chakra-ui/react'
-import {PageConfig} from '@snek-at/jaen'
+import {PageConfig} from 'jaen'
 import {LensService} from 'clients/lens/src/schema.generated'
 import {graphql, Link as GatsbyLink} from 'gatsby'
 import {useEffect, useState} from 'react'
@@ -149,4 +149,4 @@ export const query = graphql`
   }
 `
 
-export {Head} from '@snek-at/jaen'
+export {Head} from 'jaen'

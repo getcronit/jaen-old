@@ -50,7 +50,7 @@ npm manifest:
     },
     "peerDependencies": {
       "@chakra-ui/react": "^2.7.1",
-      "@snek-at/jaen": "*",
+      "jaen": "*",
       "gatsby": "^5",
       "gatsby-plugin-image": "^3",
       "gatsby-plugin-sharp": "^5",

@@ -1,7 +1,7 @@
 import {useLocation} from '@reach/router'
 import {navigate, PageProps} from 'gatsby'
 
-import {PageConfig, useNotificationsContext} from '@snek-at/jaen'
+import {PageConfig, useNotificationsContext} from 'jaen'
 import {useCallback, useEffect, useMemo, useState} from 'react'
 import {FaArrowRight, FaEdit, FaTrash} from 'react-icons/fa'
 import {Pages} from '../../../components/cms/Pages/Pages'
@@ -325,4 +325,4 @@ export const pageConfig: PageConfig = {
   }
 }
 
-export {Head} from '@snek-at/jaen'
+export {Head} from 'jaen'

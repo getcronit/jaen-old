@@ -1,4 +1,4 @@
-import type {IJaenPage} from '@snek-at/jaen/dist/types.js'
+import type {IJaenPage} from 'jaen/dist/types.js'
 import fs from 'fs'
 import {GatsbyNode, Node} from 'gatsby'
 import {convertToSlug, generatePageOriginPath, JaenSource} from 'jaen-utils'

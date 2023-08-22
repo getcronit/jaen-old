@@ -5,7 +5,7 @@ import {
   MediaModalProvider,
   NotificationsProvider,
   JaenUpdateModalProvider
-} from '@snek-at/jaen'
+} from 'jaen'
 import {GatsbyBrowser} from 'gatsby'
 import {lazy} from 'react'
 

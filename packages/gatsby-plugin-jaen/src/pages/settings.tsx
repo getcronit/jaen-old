@@ -2,7 +2,7 @@ import {
   PageConfig,
   useAuthenticationContext,
   useNotificationsContext
-} from '@snek-at/jaen'
+} from 'jaen'
 import {PageProps} from 'gatsby'
 import React from 'react'
 
@@ -121,4 +121,4 @@ export const pageConfig: PageConfig = {
   }
 }
 
-export {Head} from '@snek-at/jaen'
+export {Head} from 'jaen'

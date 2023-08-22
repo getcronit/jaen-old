@@ -9,7 +9,7 @@ import {
   TagCloseButton,
   Text
 } from '@chakra-ui/react'
-import {MediaNode} from '@snek-at/jaen'
+import {MediaNode} from 'jaen'
 import React, {useEffect, useMemo, useState} from 'react'
 
 import {BsLayoutSidebarInset} from 'react-icons/bs'

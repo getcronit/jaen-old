@@ -16,7 +16,7 @@ import {
   Spacer,
   Text
 } from '@chakra-ui/react'
-import {MediaNode} from '@snek-at/jaen'
+import {MediaNode} from 'jaen'
 import {useEffect} from 'react'
 import FilerobotImageEditor, {TABS} from 'react-filerobot-image-editor'
 import {

@@ -2,13 +2,13 @@ import {
   AuthenticationProvider,
   JaenThemeProvider,
   useAuthentication
-} from '@snek-at/jaen'
+} from 'jaen'
 import {GatsbyBrowser} from 'gatsby'
 import {FaCog, FaHome, FaImage, FaSignOutAlt, FaSitemap} from 'react-icons/fa'
 
 import {useTheme} from '@chakra-ui/react'
 
-// import '@snek-at/jaen/dist/index.css'
+// import 'jaen/dist/index.css'
 import 'vanilla-cookieconsent/dist/cookieconsent.css'
 
 import React from 'react'

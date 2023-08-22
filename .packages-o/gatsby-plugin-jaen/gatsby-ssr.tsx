@@ -1,8 +1,8 @@
 // import {GatsbySSR} from 'gatsby'
 
-// import {internal} from '@snek-at/jaen'
+// import {internal} from 'jaen'
 
-// import '@snek-at/jaen/dist/index.css'
+// import 'jaen/dist/index.css'
 
 // const {GatsbyRootWrapper, GatsbyPageWrapper} = internal
 

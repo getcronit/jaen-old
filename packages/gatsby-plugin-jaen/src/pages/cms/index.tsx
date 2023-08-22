@@ -1,4 +1,4 @@
-import {PageConfig, useAuthenticationContext} from '@snek-at/jaen'
+import {PageConfig, useAuthenticationContext} from 'jaen'
 import {graphql, PageProps, useStaticQuery} from 'gatsby'
 
 import {CMSManagement, useCMSManagement} from '../../connectors/cms-management'
@@ -80,4 +80,4 @@ export const pageConfig: PageConfig = {
   }
 }
 
-export {Head} from '@snek-at/jaen'
+export {Head} from 'jaen'

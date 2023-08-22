@@ -2,7 +2,7 @@ import type {
   IJaenFields,
   IJaenPage,
   IJaenSection
-} from '@snek-at/jaen/dist/types.js'
+} from 'jaen/dist/types.js'
 
 import {Reporter, Store} from 'gatsby'
 import {IGatsbyImageData} from 'gatsby-plugin-image'

@@ -1,4 +1,4 @@
-import {useAuthentication} from '@snek-at/jaen'
+import {useAuthentication} from 'jaen'
 import {PageProps} from 'gatsby'
 import React from 'react'
 

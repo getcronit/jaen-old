@@ -1,4 +1,4 @@
-import {LayoutProps} from '@snek-at/jaen'
+import {LayoutProps} from 'jaen'
 import {Box, Heading} from '@chakra-ui/react'
 
 const Layout: React.FC<LayoutProps> = ({children, pageProps}) => {

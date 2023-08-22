@@ -18,7 +18,7 @@ import {
   Tag,
   TagCloseButton
 } from '@chakra-ui/react'
-import {MediaNode} from '@snek-at/jaen'
+import {MediaNode} from 'jaen'
 import React, {useCallback, useEffect, useMemo, useState} from 'react'
 import {useDropzone} from 'react-dropzone'
 import {BsLayoutSidebarInset} from 'react-icons/bs'

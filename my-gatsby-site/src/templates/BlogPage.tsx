@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {Link, HeadFC, PageProps} from 'gatsby'
-import {Field, PageConfig} from '@snek-at/jaen'
+import {Field, PageConfig} from 'jaen'
 
 const BlogPage: React.FC<PageProps> = props => {
   return (
